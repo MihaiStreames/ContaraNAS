@@ -1,0 +1,86 @@
+[
+    {
+        "app_id": "291550",
+        "name": "Brawlhalla",
+        "location": "/home/mihai/.local/share/Steam",
+        "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/291550/header.jpg",
+        "store_page_url": "https://store.steampowered.com/app/291550/",
+        "size_on_disk": "1.08 GB",
+        "dlc_size": "0 B",
+        "shader_cache_size": "96.23 MB",
+        "workshop_content_size": "0 B",
+        "depots": {
+            "(291551) Brawlhalla Content": "1.08 GB"
+        }
+    },
+    {
+        "app_id": "1070560",
+        "name": "Steam Linux Runtime 1.0 (scout)",
+        "location": "/home/mihai/.local/share/Steam",
+        "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/1070560/header.jpg",
+        "store_page_url": null,
+        "size_on_disk": "12.70 KB",
+        "dlc_size": "0 B",
+        "shader_cache_size": "0 B",
+        "workshop_content_size": "0 B",
+        "depots": {
+            "(1070561) Steam Linux Runtime Content": "12.70 KB"
+        }
+    },
+    {
+        "app_id": "228980",
+        "name": "Steamworks Common Redistributables",
+        "location": "/home/mihai/.local/share/Steam",
+        "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/228980/header.jpg",
+        "store_page_url": null,
+        "size_on_disk": "27.86 MB",
+        "dlc_size": "0 B",
+        "shader_cache_size": "0 B",
+        "workshop_content_size": "0 B",
+        "depots": {
+            "(228988) VC 2019 Redist": "27.86 MB"
+        }
+    },
+    {
+        "app_id": "1391110",
+        "name": "Steam Linux Runtime 2.0 (soldier)",
+        "location": "/home/mihai/.local/share/Steam",
+        "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/1391110/header.jpg",
+        "store_page_url": null,
+        "size_on_disk": "619.00 MB",
+        "dlc_size": "0 B",
+        "shader_cache_size": "0 B",
+        "workshop_content_size": "0 B",
+        "depots": {
+            "(1391111) Steam Linux Runtime - Soldier Content": "619.00 MB"
+        }
+    },
+    {
+        "app_id": "1628350",
+        "name": "Steam Linux Runtime 3.0 (sniper)",
+        "location": "/home/mihai/.local/share/Steam",
+        "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/1628350/header.jpg",
+        "store_page_url": null,
+        "size_on_disk": "734.07 MB",
+        "dlc_size": "0 B",
+        "shader_cache_size": "0 B",
+        "workshop_content_size": "0 B",
+        "depots": {
+            "(1628351) Steam Linux Runtime - Sniper Content": "734.07 MB"
+        }
+    },
+    {
+        "app_id": "1493710",
+        "name": "Proton Experimental",
+        "location": "/home/mihai/.local/share/Steam",
+        "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/1493710/header.jpg",
+        "store_page_url": null,
+        "size_on_disk": "1.20 GB",
+        "dlc_size": "0 B",
+        "shader_cache_size": "0 B",
+        "workshop_content_size": "0 B",
+        "depots": {
+            "(1493711) Proton - Experimental Content": "1.20 GB"
+        }
+    }
+]

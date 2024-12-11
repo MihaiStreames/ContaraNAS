@@ -1,0 +1,14 @@
+{
+    "app_id": "1391110",
+    "name": "Steam Linux Runtime 2.0 (soldier)",
+    "location": "/home/mihai/.local/share/Steam",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/1391110/header.jpg",
+    "store_page_url": null,
+    "size_on_disk": "619.00 MB",
+    "dlc_size": "0 B",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(1391111) Steam Linux Runtime - Soldier Content": "619.00 MB"
+    }
+}

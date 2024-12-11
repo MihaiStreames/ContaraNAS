@@ -1,6 +1,7 @@
 import os
 import requests
 
+
 def check_url(url):
     """
     Verifies if a game's store page URL exists by performing an HTTP HEAD request.
