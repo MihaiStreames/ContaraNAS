@@ -102,12 +102,9 @@ def get_installed_games(library_paths):
                         formatted_depot_name = f"({depot_id}) {depot_name}"
 
                         if dlc_appid:
-                            dlc_name = next(
-                                (parse_span(d['details']) for d in depot_details if d['depot_id'] == dlc_appid),
-                                f"DLC {dlc_appid}"
-                            )
+                            dlc_name = f"DLC {dlc_appid}"
 
-                            depots_info[f"({dlc_appid}) {dlc_name}"] = format_size(depot_size)
+                            depots_info[f"({depot_id}) {dlc_name}"] = format_size(depot_size)
                             dlc_size += depot_size
                         else:
                             depots_info[formatted_depot_name] = format_size(depot_size)
