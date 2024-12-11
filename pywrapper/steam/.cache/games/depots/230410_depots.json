@@ -1,0 +1,273 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "238480",
+            "name": "Warframe: Gift Pack"
+        },
+        {
+            "dlc_id": "238481",
+            "name": "Warframe: Starter Pack"
+        },
+        {
+            "dlc_id": "238482",
+            "name": "Warframe: Tenno Pack"
+        },
+        {
+            "dlc_id": "252990",
+            "name": "Warframe: Initiate Pack"
+        },
+        {
+            "dlc_id": "338720",
+            "name": "Warframe: Honor Pack"
+        },
+        {
+            "dlc_id": "338721",
+            "name": "Warframe: Warrior Pack"
+        },
+        {
+            "dlc_id": "338722",
+            "name": "Warframe: Booster Pack"
+        },
+        {
+            "dlc_id": "338723",
+            "name": "Warframe: Lotus Pack"
+        },
+        {
+            "dlc_id": "403150",
+            "name": "Warframe: Mobilize Pack"
+        },
+        {
+            "dlc_id": "403151",
+            "name": "Warframe: Rush Pack"
+        },
+        {
+            "dlc_id": "403152",
+            "name": "Warframe: Firewalker Pack"
+        },
+        {
+            "dlc_id": "403153",
+            "name": "Warframe: Lightning Pack"
+        },
+        {
+            "dlc_id": "568010",
+            "name": "Warframe: Rending Turn Pack"
+        },
+        {
+            "dlc_id": "568011",
+            "name": "Warframe: Ice Spring Pack"
+        },
+        {
+            "dlc_id": "568012",
+            "name": "Warframe: Toxic Flight Pack"
+        },
+        {
+            "dlc_id": "568013",
+            "name": "Warframe: Crimson Dervish Pack"
+        },
+        {
+            "dlc_id": "602580",
+            "name": "Banshee Prime: Accessories Pack(Warframe Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "602581",
+            "name": "Banshee Prime: Sonar Pack(Warframe: Sonar Pack)"
+        },
+        {
+            "dlc_id": "602582",
+            "name": "Banshee Prime: Silence Pack(Warframe: Silence Pack)"
+        },
+        {
+            "dlc_id": "602583",
+            "name": "Banshee Prime: Sound Quake Pack(Warframe: Sound Quake Pack)"
+        },
+        {
+            "dlc_id": "602584",
+            "name": "Banshee Prime Common(Banshee Prime Access)"
+        },
+        {
+            "dlc_id": "646950",
+            "name": "Oberon Prime Common(Oberon Prime Access)"
+        },
+        {
+            "dlc_id": "646951",
+            "name": "Oberon Prime Accessories(Warframe Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "646952",
+            "name": "Oberon Prime Smite Pack(Warframe: Smite Pack)"
+        },
+        {
+            "dlc_id": "646953",
+            "name": "Oberon Prime Renewal Pack(Warframe: Renewal Pack)"
+        },
+        {
+            "dlc_id": "646970",
+            "name": "Oberon Prime Reckoning Pack(Warframe: Reckoning Pack)"
+        },
+        {
+            "dlc_id": "670740",
+            "name": "Warframe: Piercing Step(Warframe: Piercing Step Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "670741",
+            "name": "Warframe: Vigor(Warframe: Vigor Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "670742",
+            "name": "Warframe: Armoured Agility(Warframe: Armored Agility Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "670743",
+            "name": "Warframe: Stealth Drift(Warframe: Stealth Drift Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "691870",
+            "name": "Hydroid Prime Common(Warframe: Hydroid Prime Access)"
+        },
+        {
+            "dlc_id": "691871",
+            "name": "Hydroid Prime: Accessories Pack(Warframe Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "691872",
+            "name": "Hydroid Prime: Tempest Barrage Pack(Warframe Prime Access: Tempest Barrage Pack)"
+        },
+        {
+            "dlc_id": "691873",
+            "name": "Hydroid Prime: Tidal Surge Pack(Warframe Prime Access: Tidal Surge Pack)"
+        },
+        {
+            "dlc_id": "691874",
+            "name": "Hydroid Prime: Tentacle Swarm Pack(Warframe Prime Access: Tentacle Swarm Pack)"
+        },
+        {
+            "dlc_id": "742830",
+            "name": "Pinnacle Pack: Battering Maneuver(Warframe: Battering Maneuver Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "742890",
+            "name": "Pinnacle Pack: Speed Drift(Warframe: Speed Drift Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "742891",
+            "name": "Pinnacle Pack: Rapid Resilience(Warframe: Rapid Resilience Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "742892",
+            "name": "Pinnacle Pack: Sure Footed(Warframe: Sure Footed Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "759100",
+            "name": "Mirage Prime: Hall of Mirrors Pack(Warframe Mirage Prime Access: Hall of Mirrors Pack)"
+        },
+        {
+            "dlc_id": "759101",
+            "name": "Mirage Prime: Eclipse Pack(Warframe Mirage Prime Access: Eclipse Pack)"
+        },
+        {
+            "dlc_id": "759102",
+            "name": "Mirage Prime: Prism Pack(Warframe Mirage Prime Access: Prism Pack)"
+        },
+        {
+            "dlc_id": "759103",
+            "name": "Mirage Prime: Accessories Pack(Warframe Mirage Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "759104",
+            "name": "Warframe Starter Pack"
+        },
+        {
+            "dlc_id": "759110",
+            "name": "Mirage Prime Common(Warframe: Mirage Prime Access)"
+        },
+        {
+            "dlc_id": "820140",
+            "name": "TennoCon 2018 Digital Pack(Warframe: TennoCon 2018 Digital Pack)"
+        },
+        {
+            "dlc_id": "820150",
+            "name": "Zephyr Prime: Accessories Pack(Warframe Zephyr Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "820151",
+            "name": "Zephyr Prime: Airburst Pack(Warframe Zephyr Prime Access: Airburst Pack)"
+        },
+        {
+            "dlc_id": "820152",
+            "name": "Zephyr Prime: Turbulence Pack(Warframe Zephyr Prime Access: Turbulence Pack)"
+        },
+        {
+            "dlc_id": "820153",
+            "name": "Zephyr Prime: Tornado Pack(Warframe Zephyr Prime Access: Tornado Pack)"
+        },
+        {
+            "dlc_id": "820180",
+            "name": "Zephyr Prime Common(Warframe: Zephyr Prime Access)"
+        },
+        {
+            "dlc_id": "879730",
+            "name": "Limbo Prime: Accessories(Warframe Limbo Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "879731",
+            "name": "Limbo Prime: Banish(Warframe Limbo Prime Access: Banish Pack)"
+        },
+        {
+            "dlc_id": "879732",
+            "name": "Limbo Prime: Stasis(Warframe Limbo Prime Access: Stasis Pack)"
+        },
+        {
+            "dlc_id": "879733",
+            "name": "Limbo Prime: Cataclysm(Warframe Limbo Prime Access: Cataclysm Pack)"
+        },
+        {
+            "dlc_id": "908210",
+            "name": "Warframe Pinnacle 3: Heavy Impact(Warframe: Heavy Impact Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "908211",
+            "name": "Warframe Pinnacle 3: Reflex Guard(Warframe: Reflex Guard Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "908212",
+            "name": "Warframe Pinnacle 3: Retribution(Warframe: Retribution Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "908213",
+            "name": "Warframe Pinnacle 3: Shock Absorbers(Warframe: Shock Absorbers Pinnacle Pack)"
+        },
+        {
+            "dlc_id": "945480",
+            "name": "Chroma Prime: Spectral Scream(Warframe Chroma Prime Access: Spectral Scream Pack)"
+        },
+        {
+            "dlc_id": "945481",
+            "name": "Chroma Prime: Elemental Ward(Warframe Chroma Prime Access: Elemental Ward Pack)"
+        },
+        {
+            "dlc_id": "945482",
+            "name": "Chroma Prime: Effigy(Warframe Chroma Prime Access: Effigy Pack)"
+        },
+        {
+            "dlc_id": "945483",
+            "name": "Chroma Prime: Accessories(Warframe Chroma Prime Access: Accessories Pack)"
+        },
+        {
+            "dlc_id": "990730",
+            "name": "Warframe Pinnacle 4: Equilibrium(Warframe: Equilibrium Pinnacle Pack)"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "230411",
+            "packages": [
+                "21350",
+                "25343",
+                "199291",
+                "261665",
+                "302958"
+            ],
+            "details": "Warframe Content"
+        }
+    ]
+}

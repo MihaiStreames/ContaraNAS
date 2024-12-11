@@ -1,0 +1,14 @@
+{
+    "app_id": "275850",
+    "name": "No Man's Sky",
+    "location": "G:\\SteamLibrary",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/275850/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/275850/",
+    "size_on_disk": "18.89 GB",
+    "dlc_size": "0 B",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(275851) No Man's Sky Content": "18.89 GB"
+    }
+}

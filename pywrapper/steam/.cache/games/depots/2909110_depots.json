@@ -1,0 +1,26 @@
+{
+    "dlc": [],
+    "depots": [
+        {
+            "depot_id": "228989",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2022 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "2909111",
+            "packages": [
+                "1036634"
+            ],
+            "details": ""
+        }
+    ]
+}

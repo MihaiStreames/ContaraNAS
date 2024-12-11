@@ -1,0 +1,84 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "273300",
+            "name": "Outlast: Whistleblower DLC"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228983",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2010 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "238321",
+            "packages": [
+                "27474",
+                "30323",
+                "32793",
+                "51354",
+                "54851",
+                "376553",
+                "425760"
+            ],
+            "details": "Windows | Outlast"
+        },
+        {
+            "depot_id": "273300",
+            "packages": [],
+            "details": "Windows | DLC 273300 | Outlast: Whistleblower DLC (273300) Depot"
+        },
+        {
+            "depot_id": "238322",
+            "packages": [
+                "27474",
+                "30323",
+                "51354",
+                "54851",
+                "376553",
+                "425760"
+            ],
+            "details": "Linux | Outlast Linux"
+        },
+        {
+            "depot_id": "238323",
+            "packages": [
+                "27474",
+                "30323",
+                "51354",
+                "54851",
+                "376553",
+                "425760"
+            ],
+            "details": "macOS | Outlast Mac"
+        },
+        {
+            "depot_id": "238324",
+            "packages": [
+                "36861",
+                "36862",
+                "425760"
+            ],
+            "details": "macOS | DLC 273300 | Outlast: Whistleblower DLC Mac"
+        },
+        {
+            "depot_id": "238325",
+            "packages": [
+                "36861",
+                "36862",
+                "425760"
+            ],
+            "details": "Linux | DLC 273300 | Outlast: Whistleblower DLC Linux"
+        }
+    ]
+}

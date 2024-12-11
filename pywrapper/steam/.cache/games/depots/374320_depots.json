@@ -1,0 +1,115 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "435470",
+            "name": "DARK SOULS\u2122 III - Original Soundtrack"
+        },
+        {
+            "dlc_id": "455380",
+            "name": "DARK SOULS\u2122 III - Original Soundtrack"
+        },
+        {
+            "dlc_id": "506970",
+            "name": "DARK SOULS\u2122 III - Ashes of Ariandel"
+        },
+        {
+            "dlc_id": "506971",
+            "name": "DARK SOULS\u2122 III - The Ringed City"
+        },
+        {
+            "dlc_id": "442010",
+            "name": "DARK SOULS\u2122 III - Season Pass"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228984",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2012 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "374321",
+            "packages": [
+                "69022",
+                "69023",
+                "69024",
+                "92255",
+                "94165",
+                "94166",
+                "94167",
+                "94168",
+                "94169",
+                "94170",
+                "94171",
+                "94172",
+                "94173",
+                "94174",
+                "94175",
+                "94179",
+                "99089",
+                "99090",
+                "99460",
+                "99788",
+                "135129",
+                "142089",
+                "160150",
+                "338407",
+                "338408",
+                "353031",
+                "398251",
+                "425760",
+                "452128",
+                "452129"
+            ],
+            "details": "DARK SOULS III Content"
+        },
+        {
+            "depot_id": "435470",
+            "packages": [],
+            "details": "DLC 435470 | DARK SOULS\u2122 III - OST (435470) Depot WW DONOTUSE"
+        },
+        {
+            "depot_id": "374322",
+            "packages": [
+                "69022",
+                "69023",
+                "92255",
+                "94179",
+                "99089",
+                "99090",
+                "99787",
+                "135129",
+                "142089",
+                "160150",
+                "338407",
+                "338408",
+                "425760"
+            ],
+            "details": "Japanese | DARK SOULS III JP Depot"
+        },
+        {
+            "depot_id": "455380",
+            "packages": [],
+            "details": "DLC 455380 | DARK SOULS\u2122 III - Original Soundtrack"
+        },
+        {
+            "depot_id": "506970",
+            "packages": [],
+            "details": "DLC 506970 | DARK SOULS III - DLC1 (506970) Depot"
+        },
+        {
+            "depot_id": "506971",
+            "packages": [],
+            "details": "DLC 506971 | DARK SOULS III - DLC2 (506971) Depot"
+        }
+    ]
+}

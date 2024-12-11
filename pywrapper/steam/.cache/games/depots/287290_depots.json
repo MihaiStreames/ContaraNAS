@@ -1,0 +1,291 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "319810",
+            "name": "RER2/BHR2 Episode Two: Contemplation(RER2 Episode Two: Contemplation)"
+        },
+        {
+            "dlc_id": "320350",
+            "name": "RER2/BHR2 Episode Three: Judgment(RER2 Episode Three: Judgment)"
+        },
+        {
+            "dlc_id": "320351",
+            "name": "RER2/BHR2 Episode Four: Metamorphosis(RER2 Episode Four: Metamorphosis)"
+        },
+        {
+            "dlc_id": "320352",
+            "name": "RER2/BHR2 Extra Episode: The Struggle(RER2 Extra Episode: The Struggle)"
+        },
+        {
+            "dlc_id": "320353",
+            "name": "RER2/BHR2 Extra Episode: Little Miss(RER2 Extra Episode: Little Miss)"
+        },
+        {
+            "dlc_id": "320360",
+            "name": "Claire's Rodeo Costume"
+        },
+        {
+            "dlc_id": "320361",
+            "name": "Moira's Urban Ninja Costume"
+        },
+        {
+            "dlc_id": "320362",
+            "name": "Natalia's Lottie Suit Costume"
+        },
+        {
+            "dlc_id": "320363",
+            "name": "Barry's Commandant Costume"
+        },
+        {
+            "dlc_id": "320364",
+            "name": "Costume Pack"
+        },
+        {
+            "dlc_id": "320370",
+            "name": "Raid Mode Character: HUNK"
+        },
+        {
+            "dlc_id": "320371",
+            "name": "Raid Mode Character: Albert Wesker"
+        },
+        {
+            "dlc_id": "320372",
+            "name": "Raid Mode: Throwback Map Pack"
+        },
+        {
+            "dlc_id": "320373",
+            "name": "ALPHA SPECIAL STYLE  for C,REDFIELD"
+        },
+        {
+            "dlc_id": "320374",
+            "name": "ALPHA SPECIAL STYLE  for B,BURTON"
+        },
+        {
+            "dlc_id": "320380",
+            "name": "Raid Mode: Weapon Storage A"
+        },
+        {
+            "dlc_id": "320381",
+            "name": "Raid Mode: Weapon Storage B"
+        },
+        {
+            "dlc_id": "320382",
+            "name": "Raid Mode: Weapon Storage C"
+        },
+        {
+            "dlc_id": "320383",
+            "name": "Raid Mode: Parts Storage A"
+        },
+        {
+            "dlc_id": "320384",
+            "name": "Raid Mode: Parts Storage B"
+        },
+        {
+            "dlc_id": "320385",
+            "name": "Raid Mode: Parts Storage C"
+        },
+        {
+            "dlc_id": "320386",
+            "name": "Raid Mode: Album Storage A"
+        },
+        {
+            "dlc_id": "320387",
+            "name": "Raid Mode: Album Storage B"
+        },
+        {
+            "dlc_id": "320388",
+            "name": "Raid Mode: Album Storage C"
+        },
+        {
+            "dlc_id": "353310",
+            "name": "Resident Evil Revelations 2 - Soundtrack Selections"
+        },
+        {
+            "dlc_id": "353311",
+            "name": "Resident Evil Revelations 2 - mini Artbook"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "287291",
+            "packages": [
+                "317",
+                "26205",
+                "39967",
+                "39968",
+                "39969",
+                "55654",
+                "59540",
+                "59541",
+                "59542",
+                "59543",
+                "59544",
+                "59545",
+                "60472",
+                "60703",
+                "60704",
+                "60705",
+                "60706",
+                "60707",
+                "60708",
+                "60846",
+                "61606",
+                "61782",
+                "74069",
+                "74070",
+                "83357",
+                "84647",
+                "85415",
+                "316354",
+                "316396",
+                "967271",
+                "1044391",
+                "1044392",
+                "1044393",
+                "1044394",
+                "1044396",
+                "1044397",
+                "1044398",
+                "1044399"
+            ],
+            "details": "Windows | \u30d9\u30fc\u30b9\u30b3\u30f3\u30c6\u30f3\u30c4"
+        },
+        {
+            "depot_id": "319810",
+            "packages": [],
+            "details": "Windows | DLC 319810 | Episode 2 (319810) Depot"
+        },
+        {
+            "depot_id": "320350",
+            "packages": [],
+            "details": "Windows | DLC 320350 | Episode3 (320350) Depot"
+        },
+        {
+            "depot_id": "320351",
+            "packages": [],
+            "details": "Windows | DLC 320351 | Episode4 (320351) Depot"
+        },
+        {
+            "depot_id": "320352",
+            "packages": [],
+            "details": "Windows | DLC 320352 | Ex Episode1 (320352) Depot"
+        },
+        {
+            "depot_id": "320353",
+            "packages": [],
+            "details": "Windows | DLC 320353 | Ex Episode2 (320353) Depot"
+        },
+        {
+            "depot_id": "320360",
+            "packages": [],
+            "details": "Windows | DLC 320360 | Costume Claire (320360) Depot"
+        },
+        {
+            "depot_id": "320361",
+            "packages": [],
+            "details": "Windows | DLC 320361 | Costume Moira (320361) Depot"
+        },
+        {
+            "depot_id": "320362",
+            "packages": [],
+            "details": "Windows | DLC 320362 | Costume Nataria (320362) Depot"
+        },
+        {
+            "depot_id": "320363",
+            "packages": [],
+            "details": "Windows | DLC 320363 | Costume Barry (320363) Depot"
+        },
+        {
+            "depot_id": "320364",
+            "packages": [],
+            "details": "Windows | DLC 320364 | Costume Pack (320364) Depot"
+        },
+        {
+            "depot_id": "320370",
+            "packages": [],
+            "details": "Windows | DLC 320370 | Hunk (320370) Depot"
+        },
+        {
+            "depot_id": "320371",
+            "packages": [],
+            "details": "Windows | DLC 320371 | Wesker (320371) Depot"
+        },
+        {
+            "depot_id": "320372",
+            "packages": [],
+            "details": "Windows | DLC 320372 | RAID-MODE Stage Pack (320372) Depot"
+        },
+        {
+            "depot_id": "320373",
+            "packages": [],
+            "details": "Windows | DLC 320373 | Costume Claire alpha (320373) Depot"
+        },
+        {
+            "depot_id": "320374",
+            "packages": [],
+            "details": "Windows | DLC 320374 | Costume Barry alpha (320374) Depot"
+        },
+        {
+            "depot_id": "320380",
+            "packages": [],
+            "details": "Windows | DLC 320380 | Weapon Building Rank1 (320380) Depot"
+        },
+        {
+            "depot_id": "320381",
+            "packages": [],
+            "details": "Windows | DLC 320381 | Weapon Building Rank2 (320381) Depot"
+        },
+        {
+            "depot_id": "320382",
+            "packages": [],
+            "details": "Windows | DLC 320382 | Weapon Building Rank3 (320382) Depot"
+        },
+        {
+            "depot_id": "320383",
+            "packages": [],
+            "details": "Windows | DLC 320383 | Parts Building Rank1 (320383) Depot"
+        },
+        {
+            "depot_id": "320384",
+            "packages": [],
+            "details": "Windows | DLC 320384 | Parts Building Rank2 (320384) Depot"
+        },
+        {
+            "depot_id": "320385",
+            "packages": [],
+            "details": "Windows | DLC 320385 | Parts Building Rank3 (320385) Depot"
+        },
+        {
+            "depot_id": "320386",
+            "packages": [],
+            "details": "Windows | DLC 320386 | Unjudged Building Rank1 (320386) Depot"
+        },
+        {
+            "depot_id": "320387",
+            "packages": [],
+            "details": "Windows | DLC 320387 | Unjudged Building Rank2 (320387) Depot"
+        },
+        {
+            "depot_id": "320388",
+            "packages": [],
+            "details": "Windows | DLC 320388 | Unjudged Building Rank3 (320388) Depot"
+        },
+        {
+            "depot_id": "353310",
+            "packages": [],
+            "details": "DLC 353310 | Resident Evil Revelations 2 - Soundtrack Selections (353310) Depot"
+        },
+        {
+            "depot_id": "353311",
+            "packages": [],
+            "details": "DLC 353311 | Resident Evil Revelations 2 - mini Artbook (353311) Depot"
+        }
+    ]
+}

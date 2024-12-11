@@ -1,0 +1,77 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "513130",
+            "name": "Pre-Order Horizon Omega Ship"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228983",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2010 Redist"
+        },
+        {
+            "depot_id": "228985",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2013 Redist"
+        },
+        {
+            "depot_id": "228989",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2022 Redist"
+        },
+        {
+            "depot_id": "275851",
+            "packages": [
+                "37514",
+                "37515",
+                "37516",
+                "97032",
+                "129823",
+                "227811",
+                "227879",
+                "227909",
+                "228092",
+                "228436",
+                "230898",
+                "232835",
+                "232859",
+                "328797",
+                "331913",
+                "362391",
+                "394937",
+                "415403",
+                "415404",
+                "415405",
+                "415406",
+                "484977",
+                "511773",
+                "1014141"
+            ],
+            "details": "Windows | No Man's Sky Content"
+        },
+        {
+            "depot_id": "275852",
+            "packages": [
+                "37515",
+                "37516",
+                "97032",
+                "362391",
+                "415403",
+                "415404",
+                "415405",
+                "415406",
+                "511773",
+                "1014141"
+            ],
+            "details": "macOS | 64-bit"
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+{
+    "dlc": [],
+    "depots": [
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "238961",
+            "packages": [
+                "21357",
+                "27577",
+                "306042"
+            ],
+            "details": "Path of Exile Content"
+        },
+        {
+            "depot_id": "238962",
+            "packages": [
+                "21357",
+                "27577",
+                "306042"
+            ],
+            "details": "Windows | Path of Exile Windows Binaries"
+        },
+        {
+            "depot_id": "238963",
+            "packages": [
+                "21357",
+                "27577",
+                "306042"
+            ],
+            "details": "macOS | Path of Exile macOS Binaries"
+        }
+    ]
+}

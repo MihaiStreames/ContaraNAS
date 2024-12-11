@@ -1,0 +1,16 @@
+{
+    "app_id": "374320",
+    "name": "DARK SOULS\u2122 III",
+    "location": "G:\\SteamLibrary",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/374320/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/374320/",
+    "size_on_disk": "24.82 GB",
+    "dlc_size": "4.50 GB",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(374321) DARK SOULS III Content": "20.32 GB",
+        "(506970) DARK SOULS\u2122 III - Ashes of Ariandel": "1.57 GB",
+        "(506971) DARK SOULS\u2122 III - The Ringed City": "2.93 GB"
+    }
+}

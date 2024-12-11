@@ -1,0 +1,30 @@
+{
+    "app_id": "239140",
+    "name": "Dying Light",
+    "location": "G:\\SteamLibrary",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/239140/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/239140/",
+    "size_on_disk": "37.36 GB",
+    "dlc_size": "13.87 GB",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "6.63 GB",
+    "depots": {
+        "(239153) Binaries_Release": "78.36 MB",
+        "(239141) Content": "3.57 GB",
+        "(239154) DataPaks": "95.31 MB",
+        "(239144) Game_Sounds": "2.31 GB",
+        "(239145) Common_Content": "16.71 GB",
+        "(302100) Dying Light - Be the Zombie": "43.23 MB",
+        "(239143) Loc_EN": "873.90 MB",
+        "(239156) Workshop": "151.19 MB",
+        "(239159) Workshop_Data": "4.15 GB",
+        "(325723) Dying Light - The Bozak Horde": "757.74 MB",
+        "(302106) Dying Light - The Bozak Horde": "230.46 KB",
+        "(325724) Dying Light - The Following(Dying Light: The Following)": "2.44 GB",
+        "(412922) Dying Light - The Following(Dying Light: The Following)": "4.04 GB",
+        "(302108) Dying Light - The Following(Dying Light: The Following)": "4.56 GB",
+        "(412920) Dying Light - Custom Maps": "14.35 MB",
+        "(415370) Dying Light - Custom Maps 2": "8.54 MB",
+        "(335819) Dying Light - Hellraid": "2.03 GB"
+    }
+}

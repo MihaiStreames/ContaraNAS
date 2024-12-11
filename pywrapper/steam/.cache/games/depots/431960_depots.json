@@ -1,0 +1,28 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "1790230",
+            "name": "Wallpaper Engine - Editor Extensions"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "431961",
+            "packages": [
+                "89781",
+                "89782",
+                "89783",
+                "331913"
+            ],
+            "details": "Wallpaper Engine Content"
+        },
+        {
+            "depot_id": "431966",
+            "packages": [
+                "89782",
+                "89783"
+            ],
+            "details": "steamchina | Wallpaper Engine Localization SC"
+        }
+    ]
+}

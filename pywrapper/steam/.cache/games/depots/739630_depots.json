@@ -1,0 +1,23 @@
+{
+    "dlc": [],
+    "depots": [
+        {
+            "depot_id": "228988",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2019 Redist"
+        },
+        {
+            "depot_id": "739631",
+            "packages": [
+                "216520",
+                "216521",
+                "216522",
+                "481884",
+                "495904"
+            ],
+            "details": "VR_Project Content"
+        }
+    ]
+}

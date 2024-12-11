@@ -1,0 +1,160 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "1284710",
+            "name": "Need for Speed Deluxe Edition - Key"
+        },
+        {
+            "dlc_id": "1284712",
+            "name": "Need for Speed Standard Edition - Key"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228985",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2013 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "1262541",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "Need for Speed - Content"
+        },
+        {
+            "depot_id": "1262542",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "English | Need for Speed - en_US"
+        },
+        {
+            "depot_id": "1262543",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "French | Need for Speed - fr_FR"
+        },
+        {
+            "depot_id": "1262544",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "German | Need for Speed - de_DE"
+        },
+        {
+            "depot_id": "1262545",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "Spanish - Spain | Need for Speed - es_ES"
+        },
+        {
+            "depot_id": "1262546",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "Italian | Need for Speed - it_IT"
+        },
+        {
+            "depot_id": "1262547",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "Russian | Need for Speed - ru_RU"
+        },
+        {
+            "depot_id": "1262548",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "Japanese | Need for Speed - ja_JP"
+        },
+        {
+            "depot_id": "1262549",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "Polish | Need for Speed - pl_PL"
+        },
+        {
+            "depot_id": "1284713",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "DLC 1284710 | Traditional Chinese | Need for Speed - zh_TW"
+        },
+        {
+            "depot_id": "1284714",
+            "packages": [
+                "438984",
+                "438985",
+                "438986",
+                "443129",
+                "447667",
+                "447996"
+            ],
+            "details": "DLC 1284710 | Portuguese - Brazil | Need for Speed - pt_BR"
+        }
+    ]
+}

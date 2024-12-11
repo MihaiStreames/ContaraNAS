@@ -1,0 +1,29 @@
+{
+    "dlc": [],
+    "depots": [
+        {
+            "depot_id": "228989",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2022 Redist"
+        },
+        {
+            "depot_id": "229007",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | .NET 4.8 Redist"
+        },
+        {
+            "depot_id": "993091",
+            "packages": [
+                "327339",
+                "327340",
+                "327341",
+                "330299"
+            ],
+            "details": "Lossless Scaling Content"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "app_id": "10190",
+    "name": "Call of Duty: Modern Warfare 2 (2009) - Multiplayer",
+    "location": "G:\\SteamLibrary",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/10190/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/10190/",
+    "size_on_disk": "4.61 MB",
+    "dlc_size": "0 B",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(10184) Call of Duty Modern Warfare 2 mp binaries": "4.61 MB"
+    }
+}

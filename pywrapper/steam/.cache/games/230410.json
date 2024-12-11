@@ -1,0 +1,14 @@
+{
+    "app_id": "230410",
+    "name": "Warframe",
+    "location": "E:\\SteamLibrary",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/230410/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/230410/",
+    "size_on_disk": "42.80 GB",
+    "dlc_size": "0 B",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(230411) Warframe Content": "42.80 GB"
+    }
+}

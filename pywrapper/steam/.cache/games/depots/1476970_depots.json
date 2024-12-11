@@ -1,0 +1,20 @@
+{
+    "dlc": [],
+    "depots": [
+        {
+            "depot_id": "1476971",
+            "packages": [
+                "520109",
+                "567451"
+            ],
+            "details": "Windows | 64-bit | Legends of Idleon MMO Content"
+        },
+        {
+            "depot_id": "1476972",
+            "packages": [
+                "520109"
+            ],
+            "details": "Windows | 32-bit | Legends of Idleon MMO win32 Depot"
+        }
+    ]
+}

@@ -1,0 +1,236 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "271940",
+            "name": "Dark Souls II - Pre-Order DLC ROW"
+        },
+        {
+            "dlc_id": "271941",
+            "name": "Dark Souls II - Digital Extras"
+        },
+        {
+            "dlc_id": "287360",
+            "name": "Dark Souls II - Pre-Order DLC JP"
+        },
+        {
+            "dlc_id": "287770",
+            "name": "Darks Souls II JP Retail Pre-Order DLC 1"
+        },
+        {
+            "dlc_id": "287771",
+            "name": "Darks Souls II JP Retail Pre-Order DLC 2"
+        },
+        {
+            "dlc_id": "289120",
+            "name": "Darks Souls II JP Retail Pre-Order DLC 3"
+        },
+        {
+            "dlc_id": "289121",
+            "name": "Darks Souls II JP Retail Pre-Order DLC 4"
+        },
+        {
+            "dlc_id": "289122",
+            "name": "Darks Souls II JP Retail Pre-Order DLC 5"
+        },
+        {
+            "dlc_id": "271942",
+            "name": "Dark Souls\u2122 II Crown of the Sunken King"
+        },
+        {
+            "dlc_id": "271943",
+            "name": "DARK SOULS\u2122 II Crown of the Old Iron King"
+        },
+        {
+            "dlc_id": "271944",
+            "name": "DARK SOULS\u2122 II Crown of the Ivory King"
+        },
+        {
+            "dlc_id": "284450",
+            "name": "DARK SOULS\u2122 II - Season Pass"
+        },
+        {
+            "dlc_id": "355700",
+            "name": "Dark Souls II Upgrade to DX11 (no content)"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228982",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2008 Redist"
+        },
+        {
+            "depot_id": "228983",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2010 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "236431",
+            "packages": [
+                "26856",
+                "36517",
+                "38753",
+                "39489",
+                "39547",
+                "39746",
+                "39747",
+                "39834",
+                "39835",
+                "40206",
+                "40600",
+                "40601",
+                "40602",
+                "40603",
+                "40604",
+                "40986",
+                "41057",
+                "41058",
+                "41059",
+                "41060",
+                "41061",
+                "41062",
+                "41063",
+                "41134",
+                "41135",
+                "41136",
+                "41137",
+                "41170",
+                "41171",
+                "41234",
+                "42664",
+                "44362",
+                "53156",
+                "58134",
+                "58135",
+                "74029",
+                "99089",
+                "99090",
+                "338407",
+                "338408"
+            ],
+            "details": "Windows | Unused | ValveTestApp236430 Content"
+        },
+        {
+            "depot_id": "236432",
+            "packages": [
+                "26856",
+                "36517",
+                "39489",
+                "39547",
+                "39747",
+                "39834",
+                "39835",
+                "40206",
+                "41134",
+                "41135",
+                "41136",
+                "41137",
+                "41170",
+                "41171",
+                "41234",
+                "42664",
+                "44362",
+                "53156",
+                "58135",
+                "74029",
+                "99089",
+                "99090",
+                "338407",
+                "338408"
+            ],
+            "details": "Windows | DARK SOULS\u2122 II TechDev Depot"
+        },
+        {
+            "depot_id": "236434",
+            "packages": [
+                "38753",
+                "39746",
+                "40600",
+                "40601",
+                "40602",
+                "40603",
+                "40604",
+                "40986",
+                "41057",
+                "41058",
+                "41059",
+                "41060",
+                "41061",
+                "41062",
+                "41063",
+                "58134",
+                "99089",
+                "99090",
+                "338407",
+                "338408"
+            ],
+            "details": "Windows | DARK SOULS\u2122 II JP Depot"
+        },
+        {
+            "depot_id": "271940",
+            "packages": [],
+            "details": "Windows | DLC 271940 | Dark Souls II - Pre-Order DLC (271940) Depot"
+        },
+        {
+            "depot_id": "271941",
+            "packages": [],
+            "details": "Windows | DLC 271941 | Dark Souls II - Digital Extras (271941) Depot"
+        },
+        {
+            "depot_id": "287360",
+            "packages": [],
+            "details": "DLC 287360 | Dark Souls II - Pre-Order DLC JP (287360) Depot"
+        },
+        {
+            "depot_id": "287770",
+            "packages": [],
+            "details": "DLC 287770 | Darks Souls II JP Retail Pre-Order DLC 1 (287770) Depot"
+        },
+        {
+            "depot_id": "287771",
+            "packages": [],
+            "details": "DLC 287771 | Darks Souls II JP Retail Pre-Order DLC 2 (287771) Depot"
+        },
+        {
+            "depot_id": "289120",
+            "packages": [],
+            "details": "DLC 289120 | Darks Souls II JP Retail Pre-Order DLC 3 (289120) Depot"
+        },
+        {
+            "depot_id": "289121",
+            "packages": [],
+            "details": "DLC 289121 | Darks Souls II JP Retail Pre-Order DLC 4 (289121) Depot"
+        },
+        {
+            "depot_id": "289122",
+            "packages": [],
+            "details": "DLC 289122 | Darks Souls II JP Retail Pre-Order DLC 5 (289122) Depot"
+        },
+        {
+            "depot_id": "271942",
+            "packages": [],
+            "details": "DLC 271942 | Dark Souls II - DLC 1 (271942) Depot"
+        },
+        {
+            "depot_id": "271943",
+            "packages": [],
+            "details": "DLC 271943 | Dark Souls II - DLC 2 (271943) Depot"
+        },
+        {
+            "depot_id": "271944",
+            "packages": [],
+            "details": "DLC 271944 | Dark Souls II - DLC 3 (271944) Depot"
+        }
+    ]
+}

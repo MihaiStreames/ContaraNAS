@@ -1,0 +1,45 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "3349410",
+            "name": "Path of Exile 2 - Path of Exile 2 Early Access Supporter Pack"
+        },
+        {
+            "dlc_id": "3349420",
+            "name": "Path of Exile 2 - Lord of Ogham Supporter Pack"
+        },
+        {
+            "dlc_id": "3349430",
+            "name": "Path of Exile 2 - King of the Faridun Supporter Pack"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "2694491",
+            "packages": [
+                "964922",
+                "1185527",
+                "1185530",
+                "1185533"
+            ],
+            "details": ""
+        },
+        {
+            "depot_id": "2694492",
+            "packages": [
+                "964922",
+                "1185527",
+                "1185530",
+                "1185533"
+            ],
+            "details": "Windows"
+        },
+        {
+            "depot_id": "2694493",
+            "packages": [
+                "964922"
+            ],
+            "details": "macOS"
+        }
+    ]
+}

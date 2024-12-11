@@ -1,0 +1,14 @@
+{
+    "app_id": "993090",
+    "name": "Lossless Scaling",
+    "location": "C:\\Program Files (x86)\\Steam",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/993090/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/993090/",
+    "size_on_disk": "5.77 MB",
+    "dlc_size": "0 B",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(993091) Lossless Scaling Content": "5.77 MB"
+    }
+}

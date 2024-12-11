@@ -1,0 +1,293 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "1238870",
+            "name": "Battlefield 4\u2122 Premium Membership"
+        },
+        {
+            "dlc_id": "1238871",
+            "name": "Battlefield 4\u2122 Ultimate Shortcut Bundle"
+        },
+        {
+            "dlc_id": "1272640",
+            "name": "Battlefield 4\u2122 Premium Edition - Key"
+        },
+        {
+            "dlc_id": "1272641",
+            "name": "Battlefield 4\u2122 China Rising"
+        },
+        {
+            "dlc_id": "1272642",
+            "name": "Battlefield 4\u2122 Second Assault"
+        },
+        {
+            "dlc_id": "1272643",
+            "name": "Battlefield 4\u2122 Final Stand"
+        },
+        {
+            "dlc_id": "1272644",
+            "name": "Battlefield 4\u2122 Naval Strike"
+        },
+        {
+            "dlc_id": "1272645",
+            "name": "Battlefield 4\u2122 Dragon's Teeth"
+        },
+        {
+            "dlc_id": "1272650",
+            "name": "Battlefield 4\u2122 Community Operations"
+        },
+        {
+            "dlc_id": "1272654",
+            "name": "Battlefield 4\u2122 Night Operations"
+        },
+        {
+            "dlc_id": "1272657",
+            "name": "Battlefield 4\u2122 Legacy Operations"
+        },
+        {
+            "dlc_id": "1276020",
+            "name": "Battlefield 4 Standard Edition - Key"
+        },
+        {
+            "dlc_id": "1315430",
+            "name": "Battlefield 4\u2122 DMR Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315431",
+            "name": "Battlefield 4\u2122 Handgun Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315432",
+            "name": "Battlefield 4\u2122 Shotgun Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315433",
+            "name": "Battlefield 4\u2122 Grenade Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315434",
+            "name": "Battlefield 4\u2122 Carbine Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315435",
+            "name": "Battlefield 4\u2122 Engineer Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315440",
+            "name": "Battlefield 4\u2122 Ground & Sea Vehicle Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315441",
+            "name": "Battlefield 4\u2122 Air Vehicle Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315442",
+            "name": "Battlefield 4\u2122 Weapon Shortcut Bundle"
+        },
+        {
+            "dlc_id": "1315443",
+            "name": "Battlefield 4\u2122 Vehicle Shortcut Bundle"
+        },
+        {
+            "dlc_id": "1315470",
+            "name": "Battlefield 4\u2122 Assault Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315471",
+            "name": "Battlefield 4\u2122 Recon Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315472",
+            "name": "Battlefield 4\u2122 Support Shortcut Kit"
+        },
+        {
+            "dlc_id": "1315480",
+            "name": "Battlefield 4\u2122 Soldier Shortcut Bundle"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228984",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2012 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "1238861",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Battlefield 4 - Content"
+        },
+        {
+            "depot_id": "1238862",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "English | Battlefield 4 - en_US"
+        },
+        {
+            "depot_id": "1238863",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "French | Battlefield 4 - fr_FR"
+        },
+        {
+            "depot_id": "1238864",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Italian | Battlefield 4 - it_IT"
+        },
+        {
+            "depot_id": "1238865",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "German | Battlefield 4 - de_DE"
+        },
+        {
+            "depot_id": "1238866",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Spanish - Spain | Battlefield 4 - es_ES"
+        },
+        {
+            "depot_id": "1238867",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Polish | Battlefield 4 - pl_PL"
+        },
+        {
+            "depot_id": "1238868",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Russian | Battlefield 4 - ru_RU"
+        },
+        {
+            "depot_id": "1238869",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Portuguese - Brazil | Battlefield 4 - pt_BR"
+        },
+        {
+            "depot_id": "1238872",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Japanese | Battlefield 4 - ja_JP"
+        },
+        {
+            "depot_id": "1238873",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Czech | Battlefield 4 - cs_CZ"
+        },
+        {
+            "depot_id": "1238874",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Korean | Battlefield 4 - ko_KR"
+        },
+        {
+            "depot_id": "1238875",
+            "packages": [
+                "429733",
+                "429734",
+                "429735",
+                "432910",
+                "443222",
+                "443223",
+                "616501"
+            ],
+            "details": "Traditional Chinese | Battlefield 4 - zh_TW"
+        }
+    ]
+}

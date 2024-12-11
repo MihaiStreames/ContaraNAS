@@ -1,0 +1,66 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "946430",
+            "name": "Among Us - Hamster Pet Bundle"
+        },
+        {
+            "dlc_id": "971924",
+            "name": "Among Us - Bedcrab Pet Bundle"
+        },
+        {
+            "dlc_id": "971925",
+            "name": "Among Us - Polus Map(Among Us - Polus Skins)"
+        },
+        {
+            "dlc_id": "971995",
+            "name": "Among Us - Brainslug Pet Bundle"
+        },
+        {
+            "dlc_id": "971996",
+            "name": "Among Us - Mini Crewmate Bundle"
+        },
+        {
+            "dlc_id": "971998",
+            "name": "Among Us - MIRA HQ Map(Among Us - MIRA HQ Skins)"
+        },
+        {
+            "dlc_id": "971999",
+            "name": "Among Us - Stickmin Pet Bundle"
+        },
+        {
+            "dlc_id": "1579150",
+            "name": "Among Us - Airship Skins"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228988",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2019 Redist"
+        },
+        {
+            "depot_id": "945361",
+            "packages": [
+                "307389",
+                "307390",
+                "307391",
+                "322328",
+                "484977",
+                "511773",
+                "518028",
+                "542699"
+            ],
+            "details": "Windows | Among Us Content"
+        },
+        {
+            "depot_id": "945362",
+            "packages": [
+                "511773"
+            ],
+            "details": "macOS | Unused | Mac Depot"
+        }
+    ]
+}

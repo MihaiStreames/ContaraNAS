@@ -1,0 +1,26 @@
+{
+    "app_id": "1238860",
+    "name": "Battlefield 4\u2122 ",
+    "location": "E:\\SteamLibrary",
+    "cover_image_url": "https://steamcdn-a.akamaihd.net/steam/apps/1238860/header.jpg",
+    "store_page_url": "https://store.steampowered.com/app/1238860/",
+    "size_on_disk": "61.48 GB",
+    "dlc_size": "29.07 GB",
+    "shader_cache_size": "0 B",
+    "workshop_content_size": "0 B",
+    "depots": {
+        "(1238861) Battlefield 4 - Content": "31.52 GB",
+        "(1238862) Battlefield 4 - en_US": "907.68 MB",
+        "(1272641) Battlefield 4\u2122 China Rising": "4.44 GB",
+        "(1276900) Battlefield 4\u2122 China Rising": "203 B",
+        "(1272642) Battlefield 4\u2122 Second Assault": "5.34 GB",
+        "(1276920) Battlefield 4\u2122 Second Assault": "207 B",
+        "(1272643) Battlefield 4\u2122 Final Stand": "7.10 GB",
+        "(1276940) Battlefield 4\u2122 Final Stand": "207 B",
+        "(1272644) Battlefield 4\u2122 Naval Strike": "4.96 GB",
+        "(1276960) Battlefield 4\u2122 Naval Strike": "205 B",
+        "(1276967) Battlefield 4\u2122 Naval Strike": "205 B",
+        "(1272645) Battlefield 4\u2122 Dragon's Teeth": "7.23 GB",
+        "(1276980) Battlefield 4\u2122 Dragon's Teeth": "207 B"
+    }
+}

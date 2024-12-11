@@ -1,0 +1,1085 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "227310",
+            "name": "Euro Truck Simulator 2 - Going East!"
+        },
+        {
+            "dlc_id": "258460",
+            "name": "Euro Truck Simulator 2 - Halloween Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "266930",
+            "name": "Euro Truck Simulator 2 - Ice Cold Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "292320",
+            "name": "Euro Truck Simulator 2 - Force of Nature Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "297790",
+            "name": "Euro Truck Simulator 2 - Metallic Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "297791",
+            "name": "Euro Truck Simulator 2 - UK Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "297792",
+            "name": "Euro Truck Simulator 2 - Irish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "297793",
+            "name": "Euro Truck Simulator 2 - Scottish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "301180",
+            "name": "Euro Truck Simulator 2 - Flip Paint Designs"
+        },
+        {
+            "dlc_id": "304020",
+            "name": "Euro Truck Simulator 2 - Polish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "304140",
+            "name": "Euro Truck Simulator 2 - Brazilian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "304210",
+            "name": "Euro Truck Simulator 2 - Fantasy Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "304213",
+            "name": "Euro Truck Simulator 2 - Canadian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "304211",
+            "name": "Euro Truck Simulator 2 - USA Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "304214",
+            "name": "Euro Truck Simulator 2 - High Power Cargo Pack"
+        },
+        {
+            "dlc_id": "318500",
+            "name": "Euro Truck Simulator 2 - German Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "318510",
+            "name": "Euro Truck Simulator 2 - French Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "318511",
+            "name": "Euro Truck Simulator 2 - Czech Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "318520",
+            "name": "Euro Truck Simulator 2 - Christmas Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "318521",
+            "name": "Euro Truck Simulator 2 - Raven Truck Design Pack"
+        },
+        {
+            "dlc_id": "304212",
+            "name": "Euro Truck Simulator 2 - Scandinavia"
+        },
+        {
+            "dlc_id": "347210",
+            "name": "Euro Truck Simulator 2 - Danish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "347190",
+            "name": "Euro Truck Simulator 2 - Norwegian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "347211",
+            "name": "Euro Truck Simulator 2 - Swedish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "347212",
+            "name": "Euro Truck Simulator 2 - Viking Legends"
+        },
+        {
+            "dlc_id": "347213",
+            "name": "Euro Truck Simulator 2 - Russian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "266931",
+            "name": "Euro Truck Simulator 2 - Prehistoric Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "388470",
+            "name": "Euro Truck Simulator 2 - Cabin Accessories"
+        },
+        {
+            "dlc_id": "388471",
+            "name": "Euro Truck Simulator 2 - Michelin Fan Pack"
+        },
+        {
+            "dlc_id": "388472",
+            "name": "Euro Truck Simulator 2 - Japanese Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "388473",
+            "name": "Euro Truck Simulator 2 - PC Gamer DLC"
+        },
+        {
+            "dlc_id": "388474",
+            "name": "Euro Truck Simulator 2 - Turkish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "388475",
+            "name": "Euro Truck Simulator 2 - Wheel Tuning Pack"
+        },
+        {
+            "dlc_id": "388476",
+            "name": "Euro Truck Simulator 2 - Italian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "388477",
+            "name": "Euro Truck Simulator 2 - Schwarzm\u00fcller Trailer Pack"
+        },
+        {
+            "dlc_id": "388478",
+            "name": "Euro Truck Simulator 2 - Rocket League Promo"
+        },
+        {
+            "dlc_id": "388479",
+            "name": "Euro Truck Simulator 2 - Hungarian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461240",
+            "name": "Euro Truck Simulator 2 - Slovak Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461241",
+            "name": "Euro Truck Simulator 2 - Spanish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461243",
+            "name": "Euro Truck Simulator 2 - Austrian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461242",
+            "name": "Euro Truck Simulator 2 - Window Flags"
+        },
+        {
+            "dlc_id": "461244",
+            "name": "Euro Truck Simulator 2 - Mighty Griffin Tuning Pack"
+        },
+        {
+            "dlc_id": "461245",
+            "name": "Euro Truck Simulator 2 - South Korean Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461246",
+            "name": "Euro Truck Simulator 2 - Swiss Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461247",
+            "name": "Euro Truck Simulator 2 - Chinese Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461248",
+            "name": "Euro Truck Simulator 2 - Pirate Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "461249",
+            "name": "Euro Truck Simulator 2 - XF Tuning Pack"
+        },
+        {
+            "dlc_id": "526950",
+            "name": "Euro Truck Simulator 2 - Lunar New Year Pack"
+        },
+        {
+            "dlc_id": "531131",
+            "name": "Euro Truck Simulator 2 - Heavy Cargo Pack"
+        },
+        {
+            "dlc_id": "531130",
+            "name": "Euro Truck Simulator 2 - Vive la France !"
+        },
+        {
+            "dlc_id": "540721",
+            "name": "Euro Truck Simulator 2 - Belgian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "540720",
+            "name": "Euro Truck Simulator 2 - Finnish Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "558240",
+            "name": "Euro Truck Simulator 2 - Dragon Truck Design Pack"
+        },
+        {
+            "dlc_id": "558241",
+            "name": "Euro Truck Simulator 2 - Romanian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "558242",
+            "name": "Euro Truck Simulator 2 - Australian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "558243",
+            "name": "Euro Truck Simulator 2 - Valentine's Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "558244",
+            "name": "Euro Truck Simulator 2 - Italia"
+        },
+        {
+            "dlc_id": "558245",
+            "name": "Euro Truck Simulator 2 - Special Transport"
+        },
+        {
+            "dlc_id": "876980",
+            "name": "Euro Truck Simulator 2 - Portuguese Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "909640",
+            "name": "Euro Truck Simulator 2 - Dutch Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "925650",
+            "name": "Euro Truck Simulator 2 - Space Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "933610",
+            "name": "Euro Truck Simulator 2 - Krone Trailer Pack"
+        },
+        {
+            "dlc_id": "925580",
+            "name": "Euro Truck Simulator 2 - Beyond the Baltic Sea"
+        },
+        {
+            "dlc_id": "980592",
+            "name": "Euro Truck Simulator 2 - Lithuanian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "980590",
+            "name": "Euro Truck Simulator 2 - Estonian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "980591",
+            "name": "Euro Truck Simulator 2 - Latvian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "1117140",
+            "name": "Euro Truck Simulator 2 - Goodyear Tyres Pack"
+        },
+        {
+            "dlc_id": "1056761",
+            "name": "Euro Truck Simulator 2 - Actros Tuning Pack"
+        },
+        {
+            "dlc_id": "1056760",
+            "name": "Euro Truck Simulator 2 - Road to the Black Sea"
+        },
+        {
+            "dlc_id": "1068290",
+            "name": "Euro Truck Simulator 2 - Pink Ribbon Charity Pack"
+        },
+        {
+            "dlc_id": "1159030",
+            "name": "Euro Truck Simulator 2 - Bulgarian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "1209461",
+            "name": "Euro Truck Simulator 2 - HS-Schoch Tuning Pack"
+        },
+        {
+            "dlc_id": "1299530",
+            "name": "Euro Truck Simulator 2 - FH Tuning Pack"
+        },
+        {
+            "dlc_id": "1415700",
+            "name": "Euro Truck Simulator 2 - Super Stripes Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "1456860",
+            "name": "SteamDB Unknown App 1456860(Euro Truck Simulator 2 - al)"
+        },
+        {
+            "dlc_id": "1209460",
+            "name": "Euro Truck Simulator 2 - Iberia"
+        },
+        {
+            "dlc_id": "1650650",
+            "name": "Euro Truck Simulator 2 - DAF XG/XG+"
+        },
+        {
+            "dlc_id": "1704460",
+            "name": "Euro Truck Simulator 2 - Volvo Construction Equipment"
+        },
+        {
+            "dlc_id": "1536500",
+            "name": "Euro Truck Simulator 2 - Heart of Russia"
+        },
+        {
+            "dlc_id": "1918370",
+            "name": "Euro Truck Simulator 2 - Ukrainian Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "1967640",
+            "name": "Euro Truck Simulator 2 - Renault Trucks T Tuning Pack"
+        },
+        {
+            "dlc_id": "2004210",
+            "name": "Euro Truck Simulator 2 - West Balkans"
+        },
+        {
+            "dlc_id": "1967650",
+            "name": "Euro Truck Simulator 2 - Street Art Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "2193220",
+            "name": "Euro Truck Simulator 2 - Feldbinder Trailer Pack"
+        },
+        {
+            "dlc_id": "2371170",
+            "name": "Euro Truck Simulator 2 - MAN TGX"
+        },
+        {
+            "dlc_id": "2455690",
+            "name": "Euro Truck Simulator 2 - Wielton Trailer Pack"
+        },
+        {
+            "dlc_id": "2569750",
+            "name": "Euro Truck Simulator 2 - Tirsan Trailer Pack"
+        },
+        {
+            "dlc_id": "2579670",
+            "name": "Euro Truck Simulator 2 - Modern Lines Paint Jobs Pack"
+        },
+        {
+            "dlc_id": "2611740",
+            "name": "Euro Truck Simulator 2 - DAF XD"
+        },
+        {
+            "dlc_id": "2780800",
+            "name": "Euro Truck Simulator 2 - JCB Equipment Pack"
+        },
+        {
+            "dlc_id": "2833100",
+            "name": "Euro Truck Simulator 2 - Schmitz Cargobull Trailer Pack"
+        },
+        {
+            "dlc_id": "2932420",
+            "name": "Euro Truck Simulator 2 - Renault Trucks E-Tech T"
+        },
+        {
+            "dlc_id": "3035040",
+            "name": "Euro Truck Simulator 2 - Scania S BEV"
+        },
+        {
+            "dlc_id": "2604420",
+            "name": "Euro Truck Simulator 2 - Greece"
+        },
+        {
+            "dlc_id": "3034940",
+            "name": "Euro Truck Simulator 2 - K\u00f6gel Trailer Pack"
+        },
+        {
+            "dlc_id": "2780810",
+            "name": "Euro Truck Simulator 2 - Nordic Horizons"
+        },
+        {
+            "dlc_id": "3034950",
+            "name": "Euro Truck Simulator 2 - K\u00e4ssbohrer Trailer Pack"
+        },
+        {
+            "dlc_id": "3323350",
+            "name": "SteamDB Unknown App 3323350"
+        },
+        {
+            "dlc_id": "3323360",
+            "name": "SteamDB Unknown App 3323360"
+        },
+        {
+            "dlc_id": "3335300",
+            "name": "SteamDB Unknown App 3335300"
+        },
+        {
+            "dlc_id": "3354860",
+            "name": "Euro Truck Simulator 2 - Iveco S-Way"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "227301",
+            "packages": [
+                "18469",
+                "19007",
+                "19008",
+                "25207",
+                "31562",
+                "34473",
+                "36071",
+                "39221",
+                "43363",
+                "43625",
+                "43626",
+                "51072",
+                "51164",
+                "51165",
+                "51166",
+                "55395",
+                "64900",
+                "64901",
+                "64902",
+                "64903",
+                "64904",
+                "64905",
+                "100624",
+                "116708",
+                "128478",
+                "141215",
+                "204419",
+                "222728",
+                "223851",
+                "229912",
+                "283171",
+                "329087",
+                "329088",
+                "329089",
+                "331913",
+                "353416",
+                "704215"
+            ],
+            "details": "Euro Truck Simulator 2 - Content"
+        },
+        {
+            "depot_id": "227302",
+            "packages": [
+                "18469",
+                "19007",
+                "19008",
+                "25207",
+                "31562",
+                "34473",
+                "36071",
+                "39221",
+                "43363",
+                "43625",
+                "43626",
+                "51072",
+                "51164",
+                "51165",
+                "51166",
+                "55395",
+                "64900",
+                "64901",
+                "64902",
+                "64903",
+                "64904",
+                "64905",
+                "100624",
+                "116708",
+                "128478",
+                "141215",
+                "204419",
+                "222728",
+                "223851",
+                "229912",
+                "283171",
+                "329087",
+                "329088",
+                "329089",
+                "331913",
+                "353416",
+                "704215"
+            ],
+            "details": "Windows | Euro Truck Simulator 2 - Windows"
+        },
+        {
+            "depot_id": "227303",
+            "packages": [
+                "18469",
+                "19007",
+                "19008",
+                "25207",
+                "31562",
+                "34473",
+                "36071",
+                "39221",
+                "43363",
+                "43625",
+                "43626",
+                "51072",
+                "51164",
+                "51165",
+                "51166",
+                "55395",
+                "64900",
+                "64901",
+                "64902",
+                "64903",
+                "64904",
+                "64905",
+                "100624",
+                "116708",
+                "128478",
+                "141215",
+                "204419",
+                "222728",
+                "223851",
+                "229912",
+                "283171",
+                "329087",
+                "329088",
+                "329089",
+                "331913",
+                "353416",
+                "704215"
+            ],
+            "details": "Linux | Euro Truck Simulator 2 - GNU/Linux"
+        },
+        {
+            "depot_id": "227304",
+            "packages": [
+                "18469",
+                "19007",
+                "19008",
+                "25207",
+                "31562",
+                "34473",
+                "43363",
+                "43625",
+                "43626",
+                "51072",
+                "51164",
+                "51165",
+                "51166",
+                "55395",
+                "64900",
+                "64901",
+                "64902",
+                "64903",
+                "64904",
+                "64905",
+                "100624",
+                "116708",
+                "128478",
+                "141215",
+                "204419",
+                "222728",
+                "223851",
+                "229912",
+                "283171",
+                "329087",
+                "329088",
+                "329089",
+                "331913",
+                "353416",
+                "704215"
+            ],
+            "details": "macOS | Euro Truck Simulator 2 - macOS"
+        },
+        {
+            "depot_id": "227310",
+            "packages": [],
+            "details": "DLC 227310 | Euro Truck Simulator 2 - Going East! (227310) Depot"
+        },
+        {
+            "depot_id": "258460",
+            "packages": [],
+            "details": "DLC 258460 | Euro Truck Simulator 2 - Halloween Paint Jobs DLC (258460) Depot"
+        },
+        {
+            "depot_id": "266930",
+            "packages": [],
+            "details": "DLC 266930 | Euro Truck Simulator 2 - Ice Cold Paint Jobs DLC (266930) Depot"
+        },
+        {
+            "depot_id": "292320",
+            "packages": [],
+            "details": "DLC 292320 | Euro Truck Simulator 2 - Force of Nature Paint Jobs DLC (292320) Depot"
+        },
+        {
+            "depot_id": "297790",
+            "packages": [],
+            "details": "DLC 297790 | Euro Truck Simulator 2 - Metallic Paint Jobs DLC (297790) Depot"
+        },
+        {
+            "depot_id": "297791",
+            "packages": [],
+            "details": "DLC 297791 | Euro Truck Simulator 2 - UK Paint Jobs DLC (297791) Depot"
+        },
+        {
+            "depot_id": "297792",
+            "packages": [],
+            "details": "DLC 297792 | Euro Truck Simulator 2 - Irish Paint Jobs DLC (297792) Depot"
+        },
+        {
+            "depot_id": "297793",
+            "packages": [],
+            "details": "DLC 297793 | Euro Truck Simulator 2 - Scottish Paint Jobs DLC (297793) Depot"
+        },
+        {
+            "depot_id": "301180",
+            "packages": [],
+            "details": "DLC 301180 | Euro Truck Simulator 2 - Flip Paint Designs DLC (301180) Depot"
+        },
+        {
+            "depot_id": "304020",
+            "packages": [],
+            "details": "DLC 304020 | Euro Truck Simulator 2 - Polish Paint Jobs Pack (304020) Depot"
+        },
+        {
+            "depot_id": "304140",
+            "packages": [],
+            "details": "DLC 304140 | Euro Truck Simulator 2 - Brazilian Paint Jobs Pack (304140) Depot"
+        },
+        {
+            "depot_id": "304210",
+            "packages": [],
+            "details": "DLC 304210 | Euro Truck Simulator 2 - Fantasy Paint Jobs Pack (304210) Depot"
+        },
+        {
+            "depot_id": "304213",
+            "packages": [],
+            "details": "DLC 304213 | Euro Truck Simulator 2 - Canadian Paint Jobs Pack (304213) Depot"
+        },
+        {
+            "depot_id": "304211",
+            "packages": [],
+            "details": "DLC 304211 | Euro Truck Simulator 2 - USA Paint Jobs Pack (304211) Depot"
+        },
+        {
+            "depot_id": "304214",
+            "packages": [],
+            "details": "DLC 304214 | Euro Truck Simulator 2 - High Power Cargo Pack (304214) Depot"
+        },
+        {
+            "depot_id": "318500",
+            "packages": [],
+            "details": "DLC 318500 | Euro Truck Simulator 2 - German Paint Jobs Pack (318500) Depot"
+        },
+        {
+            "depot_id": "318510",
+            "packages": [],
+            "details": "DLC 318510 | Euro Truck Simulator 2 - French Paint Jobs Pack (318510) Depot"
+        },
+        {
+            "depot_id": "318511",
+            "packages": [],
+            "details": "DLC 318511 | Euro Truck Simulator 2 - Czech Paint Jobs Pack (318511) Depot"
+        },
+        {
+            "depot_id": "318520",
+            "packages": [],
+            "details": "DLC 318520 | Euro Truck Simulator 2 - Christmas Paint Jobs Pack (318520) Depot"
+        },
+        {
+            "depot_id": "318521",
+            "packages": [],
+            "details": "DLC 318521 | Euro Truck Simulator 2 - Raven Truck Design Pack (318521) Depot"
+        },
+        {
+            "depot_id": "304212",
+            "packages": [],
+            "details": "DLC 304212 | Euro Truck Simulator 2 - Scandinavia (304212) Depot"
+        },
+        {
+            "depot_id": "347210",
+            "packages": [],
+            "details": "DLC 347210 | Euro Truck Simulator 2 - Danish Paint Jobs Pack (347210) Depot"
+        },
+        {
+            "depot_id": "347190",
+            "packages": [],
+            "details": "DLC 347190 | Euro Truck Simulator 2 - Norwegian Paint Jobs Pack (347190) Depot"
+        },
+        {
+            "depot_id": "347211",
+            "packages": [],
+            "details": "DLC 347211 | Euro Truck Simulator 2 - Swedish Paint Jobs Pack (347211) Depot"
+        },
+        {
+            "depot_id": "347212",
+            "packages": [],
+            "details": "DLC 347212 | Euro Truck Simulator 2 - Viking Legends (347212) Depot"
+        },
+        {
+            "depot_id": "347213",
+            "packages": [],
+            "details": "DLC 347213 | Euro Truck Simulator 2 - Russian Paint Jobs Pack (347213) Depot"
+        },
+        {
+            "depot_id": "266931",
+            "packages": [],
+            "details": "DLC 266931 | Euro Truck Simulator 2 - Prehistoric Paint Jobs Pack (266931) Depot"
+        },
+        {
+            "depot_id": "388470",
+            "packages": [],
+            "details": "DLC 388470 | Euro Truck Simulator 2 - Cabin Accessories (388470) Depot"
+        },
+        {
+            "depot_id": "388471",
+            "packages": [],
+            "details": "DLC 388471 | Euro Truck Simulator 2 - Michelin Fan Pack (388471) Depot"
+        },
+        {
+            "depot_id": "388472",
+            "packages": [],
+            "details": "DLC 388472 | Euro Truck Simulator 2 - Japanese Paint Jobs Pack (388472) Depot"
+        },
+        {
+            "depot_id": "388473",
+            "packages": [],
+            "details": "DLC 388473 | Euro Truck Simulator 2 - PC Gamer DLC (388473) Depot"
+        },
+        {
+            "depot_id": "388474",
+            "packages": [],
+            "details": "DLC 388474 | Euro Truck Simulator 2 - Turkish Paint Jobs Pack (388474) Depot"
+        },
+        {
+            "depot_id": "388475",
+            "packages": [],
+            "details": "DLC 388475 | Euro Truck Simulator 2 - Wheel Tuning Pack (388475) Depot"
+        },
+        {
+            "depot_id": "388476",
+            "packages": [],
+            "details": "DLC 388476 | Euro Truck Simulator 2 - Italian Paint Jobs Pack (388476) Depot"
+        },
+        {
+            "depot_id": "388477",
+            "packages": [],
+            "details": "DLC 388477 | Euro Truck Simulator 2 - Schwarzm\u00fcller Trailer Pack (388477) Depot"
+        },
+        {
+            "depot_id": "388478",
+            "packages": [],
+            "details": "DLC 388478 | Euro Truck Simulator 2 - Rocket League Promo (388478) Depot"
+        },
+        {
+            "depot_id": "388479",
+            "packages": [],
+            "details": "DLC 388479 | Euro Truck Simulator 2 - Hungarian Paint Jobs Pack (388479) Depot"
+        },
+        {
+            "depot_id": "461240",
+            "packages": [],
+            "details": "DLC 461240 | Euro Truck Simulator 2 - Slovak Paint Jobs Pack (461240) Depot"
+        },
+        {
+            "depot_id": "461241",
+            "packages": [],
+            "details": "DLC 461241 | Euro Truck Simulator 2 - Spanish Paint Jobs Pack (461241) Depot"
+        },
+        {
+            "depot_id": "461243",
+            "packages": [],
+            "details": "DLC 461243 | Euro Truck Simulator 2 - Austrian Paint Jobs Pack (461243) Depot"
+        },
+        {
+            "depot_id": "461242",
+            "packages": [],
+            "details": "DLC 461242 | Euro Truck Simulator 2 - National Window Flags (461242) Depot"
+        },
+        {
+            "depot_id": "461244",
+            "packages": [],
+            "details": "DLC 461244 | Euro Truck Simulator 2 - Mighty Griffin Tuning Pack (461244) Depot"
+        },
+        {
+            "depot_id": "461245",
+            "packages": [],
+            "details": "DLC 461245 | Euro Truck Simulator 2 - South Korean Paint Jobs Pack (461245) Depot"
+        },
+        {
+            "depot_id": "461246",
+            "packages": [],
+            "details": "DLC 461246 | Euro Truck Simulator 2 - Swiss Paint Jobs Pack (461246) Depot"
+        },
+        {
+            "depot_id": "461247",
+            "packages": [],
+            "details": "DLC 461247 | Euro Truck Simulator 2 - Chinese Paint Jobs Pack (461247) Depot"
+        },
+        {
+            "depot_id": "461248",
+            "packages": [],
+            "details": "DLC 461248 | Euro Truck Simulator 2 - Pirate Paint Jobs Pack (461248) Depot"
+        },
+        {
+            "depot_id": "461249",
+            "packages": [],
+            "details": "DLC 461249 | Euro Truck Simulator 2 - XF Tuning Pack (461249) Depot"
+        },
+        {
+            "depot_id": "526950",
+            "packages": [],
+            "details": "DLC 526950 | Euro Truck Simulator 2 - Lunar New Year Pack (526950) Depot"
+        },
+        {
+            "depot_id": "531131",
+            "packages": [],
+            "details": "DLC 531131 | Euro Truck Simulator 2 - Heavy Cargo Pack (531131) Depot"
+        },
+        {
+            "depot_id": "531130",
+            "packages": [],
+            "details": "DLC 531130 | Euro Truck Simulator 2 - Vive la France ! (531130) Depot"
+        },
+        {
+            "depot_id": "540721",
+            "packages": [],
+            "details": "DLC 540721 | Euro Truck Simulator 2 - Belgian Paint Job Pack (540721) Depot"
+        },
+        {
+            "depot_id": "540720",
+            "packages": [],
+            "details": "DLC 540720 | Euro Truck Simulator 2 - Finnish Paint Jobs Pack (540720) Depot"
+        },
+        {
+            "depot_id": "558240",
+            "packages": [],
+            "details": "DLC 558240 | Euro Truck Simulator 2 - Dragon Truck Design Pack (558240) Depot"
+        },
+        {
+            "depot_id": "558241",
+            "packages": [],
+            "details": "DLC 558241 | Euro Truck Simulator 2 - Romanian Paint Jobs Pack(558241) Depot"
+        },
+        {
+            "depot_id": "558242",
+            "packages": [],
+            "details": "DLC 558242 | Euro Truck Simulator 2 - Australian Paint Jobs Pack (558242) Depot"
+        },
+        {
+            "depot_id": "558243",
+            "packages": [],
+            "details": "DLC 558243 | Euro Truck Simulator 2 - Valentine's Paint Jobs Pack (558243) Depot"
+        },
+        {
+            "depot_id": "558244",
+            "packages": [],
+            "details": "DLC 558244 | Euro Truck Simulator 2 - Italia (558244) Depot"
+        },
+        {
+            "depot_id": "558245",
+            "packages": [],
+            "details": "DLC 558245 | Euro Truck Simulator 2 - Special Transport (558245) Depot"
+        },
+        {
+            "depot_id": "876980",
+            "packages": [],
+            "details": "DLC 876980 | Euro Truck Simulator 2 - Portuguese Paint Jobs Pack (876980) Depot"
+        },
+        {
+            "depot_id": "909640",
+            "packages": [],
+            "details": "DLC 909640 | Euro Truck Simulator 2 - Dutch Paint Jobs Pack (909640) Depot"
+        },
+        {
+            "depot_id": "925650",
+            "packages": [],
+            "details": "DLC 925650 | Euro Truck Simulator 2 - Space Paint Jobs Pack (925650) Depot"
+        },
+        {
+            "depot_id": "933610",
+            "packages": [],
+            "details": "DLC 933610 | Euro Truck Simulator 2 - Krone Trailer Pack (933610) Depot"
+        },
+        {
+            "depot_id": "925580",
+            "packages": [],
+            "details": "DLC 925580 | Euro Truck Simulator 2 - Beyond the Baltic Sea (925580) Depot"
+        },
+        {
+            "depot_id": "980592",
+            "packages": [],
+            "details": "DLC 980592 | Euro Truck Simulator 2 - Lithuanian Paint Jobs Pack (980592) Depot"
+        },
+        {
+            "depot_id": "980590",
+            "packages": [],
+            "details": "DLC 980590 | Euro Truck Simulator 2 - Estonian Paint Jobs Pack (980590) Depot"
+        },
+        {
+            "depot_id": "980591",
+            "packages": [],
+            "details": "DLC 980591 | Euro Truck Simulator 2 - Latvian Paint Jobs Pack (980591) Depot"
+        },
+        {
+            "depot_id": "1117140",
+            "packages": [],
+            "details": "DLC 1117140 | Euro Truck Simulator 2 - Goodyear Tyres Pack (1117140) Depot"
+        },
+        {
+            "depot_id": "1056761",
+            "packages": [],
+            "details": "DLC 1056761 | Euro Truck Simulator 2 - Actros Tuning Pack (1056761) Depot"
+        },
+        {
+            "depot_id": "1056760",
+            "packages": [],
+            "details": "DLC 1056760 | Euro Truck Simulator 2 -  Road to the Black Sea (1056760) Depot"
+        },
+        {
+            "depot_id": "1068290",
+            "packages": [],
+            "details": "DLC 1068290 | Euro Truck Simulator 2 - Pink Ribbon Pack (1068290) Depot"
+        },
+        {
+            "depot_id": "1159030",
+            "packages": [],
+            "details": "DLC 1159030 | Euro Truck Simulator 2 - Bulgarian Paint Jobs Pack (1159030) Depot"
+        },
+        {
+            "depot_id": "1209461",
+            "packages": [],
+            "details": "DLC 1209461 | Euro Truck Simulator 2 - HS-Schoch Tuning Pack (1209461) Depot"
+        },
+        {
+            "depot_id": "1299530",
+            "packages": [],
+            "details": "DLC 1299530 | Euro Truck Simulator 2 - FH Tuning Pack (1299530) Depot"
+        },
+        {
+            "depot_id": "1415700",
+            "packages": [],
+            "details": "DLC 1415700 | Euro Truck Simulator 2 - Super Stripes Paint Jobs Pack (1415700) Depot"
+        },
+        {
+            "depot_id": "1456860",
+            "packages": [],
+            "details": "Unused | DLC 1456860 | Euro Truck Simulator 2 - al (1456860) Depot"
+        },
+        {
+            "depot_id": "1209460",
+            "packages": [],
+            "details": "DLC 1209460 | Euro Truck Simulator 2 - Iberia (1209460) Depot"
+        },
+        {
+            "depot_id": "1650650",
+            "packages": [],
+            "details": "DLC 1650650 | Euro Truck Simulator 2 - DAF XG/XG+ (1650650) Depot"
+        },
+        {
+            "depot_id": "1704460",
+            "packages": [],
+            "details": "DLC 1704460 | Euro Truck Simulator 2 - Volvo Construction Equipment (1704460) Depot"
+        },
+        {
+            "depot_id": "1536500",
+            "packages": [],
+            "details": "DLC 1536500 | Euro Truck Simulator 2 - Heart of Russia (1536500) Depot"
+        },
+        {
+            "depot_id": "1918370",
+            "packages": [],
+            "details": "DLC 1918370 | Euro Truck Simulator 2 - Ukrainian Paint Jobs Pack (1918370) Depot"
+        },
+        {
+            "depot_id": "1967640",
+            "packages": [],
+            "details": "DLC 1967640 | Euro Truck Simulator 2 - Renault Trucks T Tuning Pack (1967640) Depot"
+        },
+        {
+            "depot_id": "2004210",
+            "packages": [],
+            "details": "DLC 2004210 | Euro Truck Simulator 2 - WB (2004210) Depot"
+        },
+        {
+            "depot_id": "1967650",
+            "packages": [],
+            "details": "DLC 1967650 | Euro Truck Simulator 2 - Street Art Paint Jobs Pack (1967650) Depot"
+        },
+        {
+            "depot_id": "2193220",
+            "packages": [],
+            "details": "DLC 2193220 | Euro Truck Simulator 2 - Feldbinder Trailer Pack (2193220) Depot"
+        },
+        {
+            "depot_id": "2371170",
+            "packages": [],
+            "details": "DLC 2371170 | Euro Truck Simulator 2 - MAN TGX"
+        },
+        {
+            "depot_id": "2455690",
+            "packages": [],
+            "details": "DLC 2455690 | Euro Truck Simulator 2 - Wielton Trailer Pack"
+        },
+        {
+            "depot_id": "2569750",
+            "packages": [],
+            "details": "DLC 2569750 | Euro Truck Simulator 2 - Tirsan Trailer Pack"
+        },
+        {
+            "depot_id": "2579670",
+            "packages": [],
+            "details": "DLC 2579670 | Euro Truck Simulator 2 - Modern Lines Paint Jobs Pack"
+        },
+        {
+            "depot_id": "2611740",
+            "packages": [],
+            "details": "DLC 2611740 | Euro Truck Simulator 2 - DAF XD"
+        },
+        {
+            "depot_id": "2780800",
+            "packages": [],
+            "details": "DLC 2780800 | Euro Truck Simulator 2 - JCB Equipment Pack"
+        },
+        {
+            "depot_id": "2833100",
+            "packages": [],
+            "details": "DLC 2833100 | Euro Truck Simulator 2 - Schmitz Cargobull Trailer Pack"
+        },
+        {
+            "depot_id": "2932420",
+            "packages": [],
+            "details": "DLC 2932420 | Euro Truck Simulator 2 - Renault Trucks E-Tech T"
+        },
+        {
+            "depot_id": "3035040",
+            "packages": [],
+            "details": "DLC 3035040 | Euro Truck Simulator 2 - Scania S BEV"
+        },
+        {
+            "depot_id": "2604420",
+            "packages": [],
+            "details": "DLC 2604420 | Euro Truck Simulator 2 - Greece"
+        },
+        {
+            "depot_id": "3034940",
+            "packages": [],
+            "details": "DLC 3034940 | Euro Truck Simulator 2 - K\u00f6gel Trailer Pack"
+        },
+        {
+            "depot_id": "2780810",
+            "packages": [],
+            "details": "Unused | DLC 2780810 | Euro Truck Simulator 2 - Nordic Horizons"
+        },
+        {
+            "depot_id": "3034950",
+            "packages": [],
+            "details": "DLC 3034950 | Euro Truck Simulator 2 - K\u00e4ssbohrer Trailer Pack"
+        },
+        {
+            "depot_id": "3323350",
+            "packages": [],
+            "details": "DLC 3323350 | SteamDB Unknown App 3323350"
+        },
+        {
+            "depot_id": "3323360",
+            "packages": [],
+            "details": "DLC 3323360 | SteamDB Unknown App 3323360"
+        },
+        {
+            "depot_id": "3335300",
+            "packages": [],
+            "details": "DLC 3335300 | SteamDB Unknown App 3335300"
+        },
+        {
+            "depot_id": "3354860",
+            "packages": [],
+            "details": "DLC 3354860 | Euro Truck Simulator 2 - Iveco S-Way"
+        }
+    ]
+}

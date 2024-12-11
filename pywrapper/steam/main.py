@@ -15,7 +15,7 @@ from PyQt6.QtWidgets import (
     QTextBrowser
 )
 
-from pywrapper.steam.manager import SteamGameManager
+from manager import SteamGameManager
 
 
 class MainWindow(QMainWindow):

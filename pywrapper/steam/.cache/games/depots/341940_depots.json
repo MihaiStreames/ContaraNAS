@@ -1,0 +1,79 @@
+{
+    "dlc": [
+        {
+            "dlc_id": "1171890",
+            "name": "Hatred: Subscribe or Die(Hatred: Subscribe or Die - comic book)"
+        },
+        {
+            "dlc_id": "1580880",
+            "name": "Hatred: Black Label - comic book"
+        }
+    ],
+    "depots": [
+        {
+            "depot_id": "228983",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2010 Redist"
+        },
+        {
+            "depot_id": "228984",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2012 Redist"
+        },
+        {
+            "depot_id": "228985",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | VC 2013 Redist"
+        },
+        {
+            "depot_id": "228990",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | DirectX Jun 2010 Redist"
+        },
+        {
+            "depot_id": "229002",
+            "packages": [
+                "0"
+            ],
+            "details": "Windows | Shared Install | Depot from 228980 | .NET 4.0 Redist"
+        },
+        {
+            "depot_id": "341941",
+            "packages": [
+                "57620",
+                "57621",
+                "57622",
+                "69703"
+            ],
+            "details": "Windows | Hatred Content"
+        },
+        {
+            "depot_id": "341942",
+            "packages": [
+                "57620",
+                "57621",
+                "57622",
+                "69703"
+            ],
+            "details": "Linux | Hatred linux"
+        },
+        {
+            "depot_id": "341943",
+            "packages": [
+                "57620",
+                "57621",
+                "57622",
+                "69703"
+            ],
+            "details": "Windows | Unused | HatredEditorTestContent"
+        }
+    ]
+}
