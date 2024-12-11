@@ -18,17 +18,27 @@ def check_url(url):
     except requests.RequestException:
         return False
 
-def parse_span(details):
+
+def parse_output(entry_id, data):
     """
-    Extracts the last segment (depot name) from a '|' separated string collected from SteamDB.
+    Returns DLC name if entry_id is a DLC ID, or Depot name if it's a Depot ID.
 
     Args:
-        details (str): String containing multiple segments separated by '|'.
+        entry_id (str): ID to search for (either DLC ID or Depot ID).
+        data (dict): Dictionary with 'dlc' and 'depots' from SteamDB.
 
     Returns:
-        str: Last segment (depot name).
+        str: The name of the DLC or the depot name.
     """
-    return details.split('|')[-1].strip() if details else details
+    for dlc in data.get("dlc", []):
+        if dlc["dlc_id"] == entry_id:
+            return dlc["name"]
+
+    for depot in data.get("depots", []):
+        if depot["depot_id"] == entry_id:
+            return depot["details"].split("|")[-1].strip()
+
+    return f"ID {entry_id} not found"
 
 def format_size(size_in_bytes):
     """

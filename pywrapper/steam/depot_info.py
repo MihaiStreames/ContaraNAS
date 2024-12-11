@@ -7,18 +7,22 @@ from dotenv import load_dotenv
 
 load_dotenv() # <- PROVIDE YOUR OWN HEADER
 
-def get_depot_details(app_id):
+def get_game_details(app_id):
     """
-    Fetches and parses depot details for a given Steam application from SteamDB.
+    Fetches and parses details (DLCs and depots for now) for a given Steam application from SteamDB.
 
     Args:
-        app_id (str or int): Steam application ID for which depot details are to be fetched.
+        app_id (str or int): Steam application ID for which details are to be fetched.
 
     Returns:
-        list[dict] or None: List of dictionaries containing depot details with the following keys:
-            - 'depot_id' (str): DepotID.
-            - 'packages' (list[str]): Package IDs associated with the depot.
-            - 'details' (str): Depot details.
+        dict: A dictionary with two keys:
+            - 'dlc': List of dictionaries containing DLC details with keys:
+                - 'dlc_id' (str): DLC AppID.
+                - 'name' (str): DLC name.
+            - 'depots': List of dictionaries containing depot details with keys:
+                - 'depot_id' (str): DepotID.
+                - 'packages' (list[str]): Package IDs associated with the depot.
+                - 'details' (str): Depot details.
 
         Returns None if the request fails or the necessary HTML elements are not found.
     """
@@ -52,41 +56,59 @@ def get_depot_details(app_id):
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    # Locate the depots section in the HTML
-    depots_section = soup.select_one(
-        "div.container div.tabbable div.tab-content[role='tabpanel'] div.tab-pane.selected#depots"
-    )
-    if not depots_section:
-        print(f"Depots section not found in the HTML for App ID {app_id}.")
-        return None
+    # --- DLC Extraction ---
+    dlc_section = soup.select_one("div#dlc")
+    dlcs = []
 
-    # Locate the depot table within the depots section
-    table = depots_section.select_one(
-        "table.table.table-bordered.table-hover.table-sortable.table-responsive-flex tbody"
-    )
-    if not table:
-        print(f"Depot table not found in the HTML for App ID {app_id}.")
-        return None
+    if dlc_section:
+        tbody = dlc_section.select_one("tbody")
+        if tbody:
+            for row in tbody.select("tr.app"):
+                dlc_id = row.get("data-appid")
+                name_cell = row.select_one("td:nth-of-type(2)")
+                name = name_cell.get_text(strip=True) if name_cell else "Unknown DLC"
+                if dlc_id:
+                    dlcs.append({"dlc_id": dlc_id, "name": name})
+    else:
+        print(f"No DLC section found for App ID {app_id}.")
 
-    # Extract depot rows from the table
-    depot_rows = table.select("tr.depot")
-    if not depot_rows:
-        print(f"No depot rows found in the depot table for App ID {app_id}.")
-        return None
-
-    ### Parse depot details
+    # --- Depot Extraction ---
+    depots_section = soup.select_one("div#depots")
     depots = []
-    for row in depot_rows:
-        depot_id = row.get("data-depotid")
-        packages = row.get("data-packages", "")
 
-        spans = row.select("td.depot-config span")
-        details = " | ".join(span.get_text(separator=" ", strip=True) for span in spans)
+    if depots_section:
+        table = depots_section.select_one("tbody")
+        if table:
+            for row in table.select("tr.depot"):
+                depot_id = row.get("data-depotid")
+                packages = row.get("data-packages", "")
+                spans = row.select("td.depot-config span")
+                details = " | ".join(span.get_text(separator=" ", strip=True) for span in spans)
 
-        depots.append({
-            "depot_id": depot_id,
-            "packages": packages.split(",") if packages else [],
-            "details": details
-        })
+                if depot_id:
+                    depots.append({
+                        "depot_id": depot_id,
+                        "packages": packages.split(",") if packages else [],
+                        "details": details
+                    })
+    else:
+        print(f"No depots section found for App ID {app_id}.")
 
-    return depots
+    return {
+        "dlc": dlcs,
+        "depots": depots
+    }
+
+### Usage
+if __name__ == "__main__":
+    app_id = "appid"
+    result = get_game_details(app_id)
+
+    if result:
+        print("DLC Details:")
+        for dlc in result['dlc']:
+            print(f"ID: {dlc['dlc_id']}, Name: {dlc['name']}")
+
+        print("\nDepot Details:")
+        for depot in result['depots']:
+            print(f"Depot ID: {depot['depot_id']}, Packages: {', '.join(depot['packages'])}, Details: {depot['details']}")

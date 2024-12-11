@@ -3,8 +3,8 @@ import platform
 import vdf
 import json
 
-from steam_helpers import format_size, get_size, check_url, parse_span
-from depot_info import get_depot_details
+from steam_helpers import format_size, get_size, check_url, parse_output
+from depot_info import get_game_details
 
 def get_steam_libraries(steam_path):
     """
@@ -70,7 +70,7 @@ def get_installed_games(library_paths):
 
                 # Depot details from SteamDB (! do not overuse !)
                 try:
-                    depot_details = get_depot_details(app_id)
+                    depot_details = get_game_details(app_id)
                     if depot_details is None:
                         raise Exception("No depot details returned.")
 
@@ -83,27 +83,22 @@ def get_installed_games(library_paths):
 
                 for depot_id, depot_data in installed_depots.items():
                     depot_size = int(depot_data.get('size', 0))
-                    dlc_appid = depot_data.get('dlcappid')
+                    dlc_id = depot_data.get('dlcappid')
 
                     if rate_limited:
                         # Fallback case if rate-limited
-                        if dlc_appid:
-                            depots_info[f"(DLC ID {dlc_appid}) (DEPOT ID {depot_id})"] = format_size(depot_size)
+                        if dlc_id:
+                            depots_info[f"(DLC ID {dlc_id}) (DEPOT ID {depot_id})"] = format_size(depot_size)
                             dlc_size += depot_size
                         else:
                             depots_info[f"(DEPOT ID {depot_id})"] = format_size(depot_size)
                     else:
                         # Normal case
-                        depot_name = next(
-                            (parse_span(d['details']) for d in depot_details if d['depot_id'] == depot_id),
-                            f"Depot {depot_id}"
-                        )
-
+                        depot_name = parse_output(depot_id, depot_details)
                         formatted_depot_name = f"({depot_id}) {depot_name}"
 
-                        if dlc_appid:
-                            dlc_name = f"DLC {dlc_appid}"
-
+                        if dlc_id:
+                            dlc_name = parse_output(dlc_id, depot_details)
                             depots_info[f"({depot_id}) {dlc_name}"] = format_size(depot_size)
                             dlc_size += depot_size
                         else:
