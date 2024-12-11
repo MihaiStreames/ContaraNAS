@@ -1,5 +1,7 @@
 import os
 import requests
+import cloudscraper
+
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
@@ -37,12 +39,12 @@ def get_depot_details(app_id):
         "Sec-Fetch-Dest": os.getenv("SEC_FETCH_DEST"),
         "Sec-Fetch-Mode": os.getenv("SEC_FETCH_MODE"),
         "Sec-Fetch-Site": os.getenv("SEC_FETCH_SITE"),
-        "Sec-Fetch-User": os.getenv("SEC_FETCH_USER"),
         "Priority": os.getenv("PRIORITY").strip("'")
     }
 
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get(url, headers=headers, timeout=10)
         response.raise_for_status()
     except requests.RequestException as e:
         print(f"Failed to fetch the page for App ID {app_id}: {e}")

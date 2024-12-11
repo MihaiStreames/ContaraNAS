@@ -88,10 +88,10 @@ def get_installed_games(library_paths):
                     if rate_limited:
                         # Fallback case if rate-limited
                         if dlc_appid:
-                            depots_info[f"{dlc_appid} ({depot_id})"] = format_size(depot_size)
+                            depots_info[f"(DLC ID {dlc_appid}) (DEPOT ID {depot_id})"] = format_size(depot_size)
                             dlc_size += depot_size
                         else:
-                            depots_info[f"{depot_id}"] = format_size(depot_size)
+                            depots_info[f"(DEPOT ID {depot_id})"] = format_size(depot_size)
                     else:
                         # Normal case
                         depot_name = next(
