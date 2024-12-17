@@ -48,8 +48,7 @@ class MainWindow(QMainWindow):
         image_dir = "resources/images"
 
         for game_name, game_data in self.data.items():
-            image_path = os.path.join(image_dir, f"{game_data['app_id']}.jpg")
-
+            image_path = os.path.normpath(os.path.join(image_dir, f"{game_data['app_id']}.jpg"))
             button = SteamGameButton(image_path)
             button.setProperty("element_data", game_data)
             button.clicked.connect(self.on_element_clicked)
