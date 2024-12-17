@@ -16,13 +16,12 @@ from .steam_game_button import SteamGameButton
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, data, image_dir):
+    def __init__(self, data):
         super().__init__()
         self.setWindowTitle("NAS.Manager")
         self.setMinimumSize(800, 600)
 
         self.data = data
-        self.image_dir = image_dir
 
         # Create main widget and layout
         main_widget = QWidget()
@@ -46,8 +45,10 @@ class MainWindow(QMainWindow):
         button_layout = QVBoxLayout(button_widget)
         button_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+        image_dir = "resources/images"
+
         for game_name, game_data in self.data.items():
-            image_path = os.path.join(self.image_dir, f"{game_data['app_id']}.jpg")
+            image_path = os.path.join(image_dir, f"{game_data['app_id']}.jpg")
 
             button = SteamGameButton(image_path)
             button.setProperty("element_data", game_data)
