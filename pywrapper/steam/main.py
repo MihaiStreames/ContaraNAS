@@ -28,8 +28,10 @@ def main():
         serialized_games = loader.manager.serialize_games()
         data = {game["name"]: game for game in serialized_games}
 
-        global main_window
-        main_window = MainWindow(data)
+        image_dir = os.path.join(os.path.dirname(__file__), "resources", "images")
+
+        global main_windowg
+        main_window = MainWindow(data, image_dir)
         main_window.show()
         main_window.raise_()
         main_window.activateWindow()
