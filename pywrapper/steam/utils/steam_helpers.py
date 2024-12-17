@@ -1,7 +1,6 @@
 import os
 import requests
 
-
 def check_url(url):
     try:
         response = requests.head(url, allow_redirects=True, timeout=5)
@@ -9,7 +8,6 @@ def check_url(url):
         return final_url != "https://store.steampowered.com/"
     except requests.RequestException:
         return False
-
 
 def parse_output(entry_id, data):
     for dlc in data.get("dlc", []):

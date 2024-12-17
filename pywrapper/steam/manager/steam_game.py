@@ -1,21 +1,9 @@
 import os
 import vdf
 
-from utils import load_json, save_json
-from utils import SteamDBScraper
-from utils import format_size, get_size, check_url, parse_output
+from utils import load_json, save_json, SteamDBScraper, format_size, get_size, check_url, parse_output, get_logger
 
-
-import logging
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)  # Set to DEBUG to see all messages
-
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
+logger = get_logger(__name__)
 
 
 class SteamGame:
@@ -51,10 +39,10 @@ class SteamGame:
             return False
         else:
             logger.debug(f"Cache found for {self.name} (AppID: {self.app_id}). Using cached data.")
-            self._load_attributes_from_data(data)
+            self._load_attrs_from_data(data)
             return True
 
-    def _load_attributes_from_data(self, data):
+    def _load_attrs_from_data(self, data):
         self.cover_image_url = data.get("cover_image_url", self.cover_image_url)
         self.store_page_url = data.get("store_page_url", self._get_store_page_url())
         self.size_on_disk = data.get("size_on_disk", "0 B")
@@ -65,8 +53,10 @@ class SteamGame:
 
     def load_from_manifest(self):
         if not os.path.exists(self.manifest_path):
-            print(f"Manifest file not found for App ID {self.app_id}")
+            logger.warning(f"Manifest file not found for App ID {self.app_id}")
             return
+
+        logger.info(f"Loading manifest for {self.name} (AppID: {self.app_id})")
 
         with open(self.manifest_path, 'r', encoding='utf-8') as f:
             acf_data = vdf.load(f).get('AppState', {})
@@ -80,11 +70,13 @@ class SteamGame:
 
     def _load_shader_cache_size(self):
         logger.debug(f"Calculating shader cache size for {self.name} (AppID: {self.app_id})")
+
         shader_cache_path = os.path.join(self.library_path, 'steamapps', 'shadercache', self.app_id)
         self.shader_cache_size = format_size(get_size(shader_cache_path) if os.path.exists(shader_cache_path) else 0)
 
     def _load_workshop_content_size(self):
         logger.debug(f"Calculating workshop content size for {self.name} (AppID: {self.app_id})")
+
         workshop_content_path = os.path.join(self.library_path, 'steamapps', 'workshop', 'content', self.app_id)
         self.workshop_content_size = format_size(get_size(workshop_content_path) if os.path.exists(workshop_content_path) else 0)
 
@@ -110,6 +102,7 @@ class SteamGame:
 
     def has_new_depots(self):
         depot_data = load_json(self.depot_cache_path)
+
         if depot_data is None:
             logger.debug(f"No depot cache for {self.name} (AppID: {self.app_id}), needs scraping.")
             return True
@@ -196,6 +189,14 @@ class SteamGame:
     def _get_store_page_url(self):
         url = f"https://store.steampowered.com/app/{self.app_id}/"
         return url if check_url(url) else None
+
+    def quick_size_check(self):
+        if not os.path.exists(self.manifest_path):
+            return "N/A"
+
+        with open(self.manifest_path, 'r', encoding='utf-8') as f:
+            data = vdf.load(f).get('AppState', {})
+            return format_size(int(data.get('SizeOnDisk', 0)))
 
     def save_to_cache(self):
         data = {
