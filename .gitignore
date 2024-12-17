@@ -5,5 +5,5 @@
 /.cache
 /.idea
 __pycache__
-/pywrapper/steam/.cache
+.cache
 /venv
