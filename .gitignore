@@ -2,6 +2,7 @@
 *.log
 *.jpg
 
+/.cache
 /.idea
 __pycache__
 /pywrapper/steam/.cache
