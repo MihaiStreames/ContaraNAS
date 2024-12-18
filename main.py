@@ -3,8 +3,8 @@ import platform
 import sys
 
 from PySide6.QtWidgets import QApplication
-from utils import CacheLoader, get_logger
-from gui import LoadingScreen, MainWindow
+from core.utils import CacheLoader, get_logger
+from modules.steam.gui import LoadingScreen, MainWindow
 
 logger = get_logger(__name__)
 

@@ -1,8 +1,9 @@
 .env
 *.log
-*.jpg
 
-/.idea
 __pycache__
+.idea
 .cache
-/venv
+resources
+.venv
+venv

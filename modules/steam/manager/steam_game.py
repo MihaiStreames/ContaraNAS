@@ -1,7 +1,8 @@
 import os
 import vdf
 
-from utils import load_json, save_json, SteamDBScraper, format_size, get_size, check_url, parse_output, get_logger
+from core.utils import load_json, save_json, get_logger
+from modules.steam.utils import SteamDBScraper, format_size, get_size, check_url, parse_output
 
 logger = get_logger(__name__)
 

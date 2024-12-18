@@ -1,6 +1,6 @@
 from PySide6.QtCore import QThread, Signal
-from manager import SteamGameManager
-from utils import get_logger
+from modules.steam.manager import SteamGameManager
+from core.utils import get_logger
 
 logger = get_logger(__name__)
 
