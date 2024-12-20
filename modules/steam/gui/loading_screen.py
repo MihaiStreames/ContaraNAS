@@ -1,16 +1,18 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QProgressBar
 
 
-class LoadingScreen(QWidget):
+class LoadingScreen(QDialog):
     def __init__(self, loader, callback):
         super().__init__()
         self.setWindowTitle("Loading...")
         self.setFixedSize(400, 200)
+
         self.layout = QVBoxLayout(self)
 
         self.label = QLabel("Initializing game cache...", self)
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setRange(0, 100)
         self.progress_bar.setValue(0)
@@ -20,7 +22,6 @@ class LoadingScreen(QWidget):
 
         loader.progress.connect(self.update_progress)
         loader.finished.connect(self.on_finished)
-
         self.finished_callback = callback
 
     def update_progress(self, value):

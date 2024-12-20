@@ -1,5 +1,5 @@
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QPushButton
-from PySide6.QtGui import QPixmap, Qt
 
 
 class SteamGameButton(QPushButton):
@@ -9,11 +9,12 @@ class SteamGameButton(QPushButton):
         self.set_style()
 
     def set_style(self):
-        pixmap = QPixmap(self.image_path)
+        max_w = 460 / 2
+        max_h = 215 / 2
 
-        max_size = 400
-        scaled_pixmap = pixmap.scaled(max_size, max_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        self.setFixedSize(scaled_pixmap.size())
+        pixmap = QPixmap(self.image_path)
+        pixmap = pixmap.scaled(max_w, max_h)
+        self.setFixedSize(pixmap.width(), pixmap.height())
 
         if pixmap.isNull():
             return

@@ -2,39 +2,35 @@ import os
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QMainWindow,
-    QWidget,
-    QHBoxLayout,
-    QScrollArea,
-    QVBoxLayout,
-    QPushButton,
-    QFrame,
-    QTextBrowser
+    QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QPushButton, QFrame, QTextBrowser, QToolButton
 )
+from .components.steam_game_button import SteamGameButton
 
-from .steam_game_button import SteamGameButton
 
-
-class MainWindow(QMainWindow):
-    def __init__(self, data):
+class SteamPage(QWidget):
+    def __init__(self, data, main_window):
         super().__init__()
-        self.setWindowTitle("NAS.Manager")
-        self.setMinimumSize(800, 600)
-
         self.data = data
+        self.main_window = main_window
 
-        # Create main widget and layout
-        main_widget = QWidget()
-        self.setCentralWidget(main_widget)
-        main_layout = QHBoxLayout(main_widget)
+        self.init_ui()
 
-        # Create left panel (buttons with images)
+    def init_ui(self):
+        layout = QHBoxLayout(self)
+
+        # Create left panel (game buttons)
         left_panel = self.create_left_panel()
-        main_layout.addWidget(left_panel, 1)
+        layout.addWidget(left_panel, 1)
 
-        # Create right panel (details view)
+        # Create right panel (game details)
         self.right_panel = self.create_right_panel()
-        main_layout.addWidget(self.right_panel, 2)
+        layout.addWidget(self.right_panel, 2)
+
+        # Back button
+        back_button = QToolButton(self)
+        back_button.setText("← Back to Modules")
+        back_button.clicked.connect(self.main_window.go_back_to_selection)
+        layout.addWidget(back_button)
 
     def create_left_panel(self):
         scroll = QScrollArea()
@@ -77,7 +73,7 @@ class MainWindow(QMainWindow):
         button = self.sender()
         element_data = button.property("element_data")
 
-        # Extract known fields
+        # Display game details
         name = element_data.get("name", "Unknown Game")
         app_id = element_data.get("app_id", "")
         store_page_url = element_data.get("store_page_url", None)

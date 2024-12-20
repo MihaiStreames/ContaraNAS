@@ -1,5 +1,5 @@
 from PySide6.QtCore import QThread, Signal
-from modules.steam.manager import SteamGameManager
+from ..manager.steam_game_manager import SteamGameManager
 from core.utils import get_logger
 
 logger = get_logger(__name__)
@@ -22,8 +22,8 @@ class CacheLoader(QThread):
             logger.error(f"Error in CacheLoader: {e}")
         finally:
             logger.info("CacheLoader thread quitting.")
-            self.finished.emit()
-            self.quit()
+            #self.finished.emit() - lmfao i was emitting 2 signals
+            self.quit() # This guy can handle himself like a big boy
 
     def emit_progress(self, value):
         self.progress.emit(value)

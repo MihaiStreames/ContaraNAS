@@ -1,7 +1,6 @@
 import os
 import requests
 import cloudscraper
-
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 

@@ -2,9 +2,8 @@ import os
 import vdf
 import requests
 import threading
-
 from concurrent.futures import ThreadPoolExecutor
-from modules.steam.manager import SteamGame
+from .steam_game import SteamGame
 from core.utils import get_logger
 
 logger = get_logger(__name__)
