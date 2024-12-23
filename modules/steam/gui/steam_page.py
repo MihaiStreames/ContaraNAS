@@ -2,7 +2,7 @@ import os
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QPushButton, QFrame, QTextBrowser, QToolButton
+    QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QFrame, QTextBrowser, QToolButton
 )
 from .components.steam_game_button import SteamGameButton
 
@@ -12,7 +12,7 @@ class SteamPage(QWidget):
         super().__init__()
         self.data = data
         self.main_window = main_window
-
+        self.selected_button = None
         self.init_ui()
 
     def init_ui(self):
@@ -41,13 +41,11 @@ class SteamPage(QWidget):
         button_layout = QVBoxLayout(button_widget)
         button_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        image_dir = "resources/images"
+        image_dir = os.path.join('resources', 'images', 'steam')
 
         for game_name, game_data in self.data.items():
             image_path = os.path.normpath(os.path.join(image_dir, f"{game_data['app_id']}.jpg"))
-            button = SteamGameButton(image_path)
-            button.setProperty("element_data", game_data)
-            button.clicked.connect(self.on_element_clicked)
+            button = SteamGameButton(image_path, game_data, self)
             button_layout.addWidget(button)
 
         scroll.setWidget(button_widget)
@@ -69,11 +67,20 @@ class SteamPage(QWidget):
         scroll.setWidget(details_widget)
         return scroll
 
-    def on_element_clicked(self):
-        button = self.sender()
-        element_data = button.property("element_data")
+    def update_selected_game(self, button):
+        if self.selected_button:
+            # Reset the previous button's style
+            self.selected_button.update_style(highlight=False)
 
-        # Display game details
+        # Highlight the selected button
+        button.update_style(highlight=True)
+        self.selected_button = button
+
+        # Update the right panel with game details
+        game_data = button.game_data
+        self.details_text.setHtml(self.format_game_details(game_data))
+
+    def format_game_details(self, element_data):
         name = element_data.get("name", "Unknown Game")
         app_id = element_data.get("app_id", "")
         store_page_url = element_data.get("store_page_url", None)
@@ -107,20 +114,4 @@ class SteamPage(QWidget):
         else:
             html += "<p><i>No depots available</i></p>"
 
-        self.details_text.setHtml(html)
-
-        for btn in self.findChildren(QPushButton):
-            btn.setStyleSheet("""
-                QPushButton {
-                    border-radius: 15px;
-                    background-color: #f0f0f0;
-                    border: 2px solid #ccc;
-                }
-            """)
-        button.setStyleSheet("""
-            QPushButton {
-                border-radius: 15px;
-                background-color: lightblue;
-                border: 2px solid #0078d7;
-            }
-        """)
+        return html

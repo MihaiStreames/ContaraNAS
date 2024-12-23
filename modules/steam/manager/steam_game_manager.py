@@ -78,7 +78,7 @@ class SteamGameManager:
         logger.info("All games have been loaded successfully.")
 
     def cache_cover(self, game):
-        images_dir = os.path.join('resources', 'images')
+        images_dir = os.path.join('resources', 'images', 'steam')
         os.makedirs(images_dir, exist_ok=True)
         image_path = os.path.join(images_dir, f"{game.app_id}.jpg")
 
