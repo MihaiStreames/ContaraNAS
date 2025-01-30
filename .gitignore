@@ -7,3 +7,5 @@ __pycache__
 resources
 .venv
 venv
+Cargo.lock
+rust_translation/nas_manager/target
