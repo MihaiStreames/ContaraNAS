@@ -1,6 +1,7 @@
 import logging
 import os
 
+
 def get_logger(name):
     print(f"get_logger called for: {name}")
     logger = logging.getLogger(name)

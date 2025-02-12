@@ -1,8 +1,8 @@
-import platform
 import os
+import platform
 
-from core.utils import get_logger
 from core.module import Module
+from core.utils import get_logger
 
 logger = get_logger(__name__)
 
@@ -16,7 +16,8 @@ class SteamModule(Module):
         self.loading_screen = None
         self.initialized = False
 
-    def get_steam_path(self):
+    @staticmethod
+    def get_steam_path():
         if platform.system() == 'Windows':
             return r'C:\Program Files (x86)\Steam'
         else:

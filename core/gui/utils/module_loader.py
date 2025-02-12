@@ -1,7 +1,8 @@
 import importlib.util
 import os
-from core.utils import get_logger
+
 from core.module import Module
+from core.utils import get_logger
 
 logger = get_logger(__name__)
 

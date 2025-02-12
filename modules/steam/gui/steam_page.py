@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget, QHBoxLayout, QScrollArea, QVBoxLayout, QFrame, QTextBrowser, QToolButton
 )
+
 from .components.steam_game_button import SteamGameButton
 
 
@@ -80,7 +81,8 @@ class SteamPage(QWidget):
         game_data = button.game_data
         self.details_text.setHtml(self.format_game_details(game_data))
 
-    def format_game_details(self, element_data):
+    @staticmethod
+    def format_game_details(element_data):
         name = element_data.get("name", "Unknown Game")
         app_id = element_data.get("app_id", "")
         store_page_url = element_data.get("store_page_url", None)

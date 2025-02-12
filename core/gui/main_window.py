@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget
 )
+
 from core.utils import get_logger
 
 logger = get_logger(__name__)

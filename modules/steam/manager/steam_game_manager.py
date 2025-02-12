@@ -1,10 +1,12 @@
 import os
-import vdf
-import requests
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from .steam_game import SteamGame
+
+import requests
+import vdf
+
 from core.utils import get_logger
+from .steam_game import SteamGame
 
 logger = get_logger(__name__)
 
@@ -77,7 +79,8 @@ class SteamGameManager:
 
         logger.info("All games have been loaded successfully.")
 
-    def cache_cover(self, game):
+    @staticmethod
+    def cache_cover(game):
         images_dir = os.path.join('resources', 'images', 'steam')
         os.makedirs(images_dir, exist_ok=True)
         image_path = os.path.join(images_dir, f"{game.app_id}.jpg")

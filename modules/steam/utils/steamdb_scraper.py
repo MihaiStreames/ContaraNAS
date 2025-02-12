@@ -1,10 +1,11 @@
 import os
-import requests
+
 import cloudscraper
+import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-load_dotenv() # <- SUPPLY YOUR OWN
+load_dotenv()  # <- SUPPLY YOUR OWN
 
 
 class SteamDBScraper:

@@ -1,5 +1,7 @@
 import os
+
 import vdf
+
 from core.utils import load_json, save_json, get_logger
 from ..utils.steam_helpers import format_size, get_size, check_url, parse_output
 from ..utils.steamdb_scraper import SteamDBScraper
@@ -79,7 +81,8 @@ class SteamGame:
         logger.debug(f"Calculating workshop content size for {self.name} (AppID: {self.app_id})")
 
         workshop_content_path = os.path.join(self.library_path, 'steamapps', 'workshop', 'content', self.app_id)
-        self.workshop_content_size = format_size(get_size(workshop_content_path) if os.path.exists(workshop_content_path) else 0)
+        self.workshop_content_size = format_size(
+            get_size(workshop_content_path) if os.path.exists(workshop_content_path) else 0)
 
     def _load_depot_ids_from_manifest(self, acf_data):
         installed_depots = acf_data.get('InstalledDepots', {})

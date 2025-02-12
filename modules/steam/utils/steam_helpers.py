@@ -1,5 +1,7 @@
 import os
+
 import requests
+
 
 def check_url(url):
     try:
@@ -9,16 +11,16 @@ def check_url(url):
     except requests.RequestException:
         return False
 
+
 def parse_output(entry_id, data):
     for dlc in data.get("dlc", []):
         if dlc["dlc_id"] == entry_id:
             return dlc["name"]
-
     for depot in data.get("depots", []):
         if depot["depot_id"] == entry_id:
             return depot["details"].split("|")[-1].strip()
-
     return f"ID {entry_id} not found"
+
 
 def format_size(size_in_bytes):
     if size_in_bytes >= 1024 ** 3:
@@ -29,6 +31,7 @@ def format_size(size_in_bytes):
         return f"{size_in_bytes / 1024:.2f} KB"
     else:
         return f"{size_in_bytes} B"
+
 
 def get_size(path):
     total_size = 0
