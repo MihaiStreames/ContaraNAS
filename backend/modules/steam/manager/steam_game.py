@@ -2,7 +2,7 @@ import os
 
 import vdf
 
-from core.utils import load_json, save_json, get_logger
+from backend.core.utils import load_json, save_json, get_logger
 from ..utils.steam_helpers import format_size, get_size, check_url
 
 logger = get_logger(__name__)
@@ -130,14 +130,6 @@ class SteamGame:
     def _get_store_page_url(self):
         url = f"https://store.steampowered.com/app/{self.app_id}/"
         return url if check_url(url) else None
-
-    def quick_size_check(self):
-        if not os.path.exists(self.manifest_path):
-            return "N/A"
-
-        with open(self.manifest_path, 'r', encoding='utf-8') as f:
-            data = vdf.load(f).get('AppState', {})
-            return format_size(int(data.get('SizeOnDisk', 0)))
 
     def save_to_cache(self):
         data = {

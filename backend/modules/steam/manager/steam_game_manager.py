@@ -1,11 +1,9 @@
 import os
-import threading
-from concurrent.futures import ThreadPoolExecutor
 
 import requests
 import vdf
 
-from core.utils import get_logger
+from backend.core.utils import get_logger
 from .steam_game import SteamGame
 
 logger = get_logger(__name__)
@@ -56,29 +54,6 @@ class SteamGameManager:
                     if game:
                         self.games.append(game)
 
-    def load_games_progress(self, progress_callback):
-        library_paths = self.get_steam_libs()
-        logger.info("Loading installed games with progress tracking.")
-
-        with ThreadPoolExecutor() as executor:
-            futures = []
-
-            for library in library_paths:
-                steamapps_path = os.path.join(library, 'steamapps')
-
-                for file in os.listdir(steamapps_path):
-                    if file.startswith('appmanifest_') and file.endswith('.acf'):
-                        futures.append(executor.submit(self._process_manifest, library, file))
-
-            for i, future in enumerate(futures):
-                game = future.result()
-
-                if game:
-                    self.games.append(game)
-                progress_callback(int((i + 1) / len(futures) * 100))
-
-        logger.info("All games have been loaded successfully.")
-
     @staticmethod
     def cache_cover(game):
         images_dir = os.path.join('resources', 'images', 'steam')
@@ -109,36 +84,6 @@ class SteamGameManager:
         except (FileNotFoundError, KeyError):
             logger.error(f"Error: Unable to load library folders from {library_folders_file}")
             return []
-
-    def check_new_games(self):
-        current_game_ids = {game.app_id for game in self.games}
-        library_paths = self.get_steam_libs()
-
-        for library in library_paths:
-            steamapps_path = os.path.join(library, 'steamapps')
-
-            for file in os.listdir(steamapps_path):
-                if file.startswith('appmanifest_') and file.endswith('.acf'):
-                    app_id = file.split('_')[1].split('.')[0]
-
-                    if app_id not in current_game_ids:
-                        logger.info(f"New game detected: AppID {app_id}")
-                        self.load_games()
-                        break
-
-    def periodic_check(self, interval=3600):
-        logger.info("Starting periodic update checks.")
-
-        self.check_new_games()
-
-        for game in self.games:
-            game.quick_size_check()
-
-            if game.has_new_depots():
-                game.update_depots()
-                game.save_to_cache()
-
-        threading.Timer(interval, self.periodic_check).start()
 
     def serialize_games(self):
         serialized = []

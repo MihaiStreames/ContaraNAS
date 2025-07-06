@@ -1,11 +1,17 @@
+# Files
 .env
 *.log
 
+# Python
 __pycache__
+.venv
+venv
+
+# Rust
+Cargo.lock
+rust_translation/nas_manager/target
+
+# Directories
 .idea
 .cache
 resources
-.venv
-venv
-Cargo.lock
-rust_translation/nas_manager/target
