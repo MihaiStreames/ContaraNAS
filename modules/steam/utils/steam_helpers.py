@@ -12,16 +12,6 @@ def check_url(url):
         return False
 
 
-def parse_output(entry_id, data):
-    for dlc in data.get("dlc", []):
-        if dlc["dlc_id"] == entry_id:
-            return dlc["name"]
-    for depot in data.get("depots", []):
-        if depot["depot_id"] == entry_id:
-            return depot["details"].split("|")[-1].strip()
-    return f"ID {entry_id} not found"
-
-
 def format_size(size_in_bytes):
     if size_in_bytes >= 1024 ** 3:
         return f"{size_in_bytes / (1024 ** 3):.2f} GB"

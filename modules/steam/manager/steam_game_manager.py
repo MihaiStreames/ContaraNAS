@@ -31,7 +31,7 @@ class SteamGameManager:
 
         if app_id and name:
             game = SteamGame(app_id, name, library, self.cache_dir)
-            logger.debug(f"Checking for new depots for {name} (AppID: {app_id})")
+            logger.debug(f"Checking for updates for {name} (AppID: {app_id})")
 
             if game.has_new_depots():
                 game.update_depots()
