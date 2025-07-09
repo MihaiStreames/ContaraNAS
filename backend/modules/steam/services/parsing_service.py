@@ -122,10 +122,8 @@ class SteamParsingService:
         workshop_path = library_path / 'steamapps' / 'workshop' / 'content' / str(app_id)
         return get_size(str(workshop_path)) if workshop_path.exists() else 0
 
-    def _parse_depots(self, acf_data: dict, app_id: int) -> tuple[dict[str, str], int]:
+    def _parse_depots(self, acf_data: dict, app_id: int) -> tuple[dict[str, int], int]:
         """Parse depot information from manifest data"""
-        from ..utils.steam_helpers import format_size
-
         installed_depots = acf_data.get('InstalledDepots', {})
         depots_info = {}
         dlc_size_total = 0
@@ -142,6 +140,6 @@ class SteamParsingService:
                 # Main game depot: show as "GAME_ID: DEPOT_ID"
                 depot_name = f"{app_id}: {depot_id}"
 
-            depots_info[depot_name] = format_size(depot_size)
+            depots_info[depot_name] = depot_size
 
         return depots_info, dlc_size_total

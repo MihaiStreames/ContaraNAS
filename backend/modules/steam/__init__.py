@@ -3,8 +3,6 @@ from datetime import datetime
 
 from backend.core.module import Module
 from backend.core.utils import get_logger
-from backend.modules.steam.controllers.steam_controller import SteamController
-from backend.modules.steam.utils.steam_helpers import format_size
 
 logger = get_logger(__name__)
 
@@ -16,7 +14,18 @@ class SteamModule(Module):
         super().__init__("steam")
         self.steam_path = self._get_steam_path()
         self.library_stats = {}
-        self.controller = SteamController(self.steam_path)
+        self.cache_dir = ".cache/games"
+
+        # Duplicate prevention
+        self._controller = None
+
+    @property
+    def controller(self):
+        """Lazy load controller to prevent duplicate initialization"""
+        if self._controller is None:
+            from backend.modules.steam.controllers.steam_controller import SteamController
+            self._controller = SteamController(self.steam_path)
+        return self._controller
 
     async def initialize(self):
         """One-time setup"""
@@ -40,15 +49,12 @@ class SteamModule(Module):
     def get_tile_data(self):
         """Data for dashboard tile"""
         total_size_bytes = sum(game.total_size for game in self.controller.games)
-        total_size_gb = total_size_bytes / (1024 ** 3)  # Convert to GB
 
         return {
             "total_games": len(self.controller.games),
-            "total_size_gb": round(total_size_gb, 2),
             "total_size_bytes": total_size_bytes,
             "libraries": len(self.library_stats.get("by_drive", {})),
-            "status": "running" if self.enabled else "stopped",
-            "last_update": self.last_update.isoformat() if self.last_update else None
+            "status": "running" if self.enabled else "stopped"
         }
 
     def get_detailed_data(self):
@@ -67,7 +73,7 @@ class SteamModule(Module):
         logger.info("Starting initial Steam library scan...")
         self.controller.load_games()
         self.state["last_full_scan"] = datetime.now()
-        logger.info(f"Initial scan completed. Found {len(self.controller.games)} games.")
+        logger.info(f"Initial scan completed. Found {len(self.controller.games)} games")
 
     async def _rescan_library(self):
         """Rescan when changes detected"""
@@ -89,18 +95,15 @@ class SteamModule(Module):
         """Update internal statistics"""
         logger.debug("Updating Steam library statistics...")
 
-        total_size = sum(game.total_size for game in self.controller.games)
+        total_size_bytes = sum(game.total_size for game in self.controller.games)
 
         self.library_stats = {
             "total_games": len(self.controller.games),
-            "total_size_bytes": total_size,
-            "total_size_formatted": format_size(total_size),
+            "total_size_bytes": total_size_bytes,
             "by_drive": self._group_by_drive()
         }
 
-        logger.debug(
-            f"Updated stats: {self.library_stats['total_games']} games, {self.library_stats['total_size_formatted']} total"
-        )
+        logger.debug(f"Updated stats: {self.library_stats['total_games']} games, {total_size_bytes} bytes total")
 
     def _group_by_drive(self):
         """Group games by drive"""
@@ -109,18 +112,17 @@ class SteamModule(Module):
         for game in self.controller.games:
             location = str(game.library_path)
 
-            # Extract drive letter
-            if os.name == 'nt':
+            # Extract drive letter (works for both Windows and Unix paths)
+            if os.name == 'nt':  # Windows
                 drive = location[0:2] if len(location) >= 2 else "Unknown"
-            else:
+            else:  # Unix-like systems
                 drive = "/"
 
             if drive not in drives:
-                drives[drive] = {"games": 0, "size_bytes": 0, "size_formatted": "0 B"}
+                drives[drive] = {"games": 0, "size_bytes": 0}
 
             drives[drive]["games"] += 1
             drives[drive]["size_bytes"] += game.total_size
-            drives[drive]["size_formatted"] = format_size(drives[drive]["size_bytes"])
 
         return drives
 

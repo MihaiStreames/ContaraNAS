@@ -23,7 +23,7 @@ class SteamGame(BaseModel):
     workshop_content_size: int = Field(default=0, description="Workshop content size")
 
     # Depot information
-    depots: Dict[str, str] = Field(default_factory=dict, description="Depot information (depot_id: size_string)")
+    depots: Dict[str, int] = Field(default_factory=dict, description="Depot information (depot_id: size_bytes)")
 
     class Config:
         # Allow Path objects
