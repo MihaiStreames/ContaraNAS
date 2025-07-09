@@ -41,25 +41,25 @@ class SteamGame(BaseModel):
     @computed_field
     @property
     def manifest_path(self) -> Path:
-        """Get the path to the game's manifest file"""
+        """Get the path to the game's manifest file."""
         return self.library_path / 'steamapps' / f'appmanifest_{self.app_id}.acf'
 
     @computed_field
     @property
     def shader_cache_path(self) -> Path:
-        """Get the path to the game's shader cache directory"""
+        """Get the path to the game's shader cache directory."""
         return self.library_path / 'steamapps' / 'shadercache' / str(self.app_id)
 
     @computed_field
     @property
     def workshop_path(self) -> Path:
-        """Get the path to the game's workshop content directory"""
+        """Get the path to the game's workshop content directory."""
         return self.library_path / 'steamapps' / 'workshop' / 'content' / str(self.app_id)
 
     @computed_field
     @property
     def total_size(self) -> int:
-        """Calculate total game size"""
+        """Calculate total game size."""
         return (
                 self.size_on_disk +
                 self.dlc_size +
@@ -68,7 +68,7 @@ class SteamGame(BaseModel):
         )
 
     def to_dict(self) -> Dict:
-        """Convert to dictionary for serialization"""
+        """Convert to dictionary for serialization."""
         return {
             "app_id": self.app_id,
             "name": self.name,

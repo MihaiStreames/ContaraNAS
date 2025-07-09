@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 
 
 class SteamCachingService:
-    """Service responsible for caching Steam game data and cover images"""
+    """Service responsible for caching Steam game data and cover images."""
 
     def __init__(self):
         self.cache_dir = Path(".cache/games")
@@ -21,7 +21,7 @@ class SteamCachingService:
         self.images_dir.mkdir(parents=True, exist_ok=True)
 
     def load_game(self, app_id: int) -> Optional[Dict[str, Any]]:
-        """Load game data from cache file"""
+        """Load game data from cache file."""
         cache_path = self.cache_dir / f"{app_id}.json"
 
         if not cache_path.exists():
@@ -29,7 +29,7 @@ class SteamCachingService:
             return None
 
         try:
-            data = load_json(str(cache_path))
+            data = load_json(cache_path)
             if data:
                 logger.debug(f"Loaded cached data for AppID: {app_id}")
                 return data
@@ -39,26 +39,12 @@ class SteamCachingService:
         return None
 
     def cache_game(self, game: SteamGame) -> bool:
-        """Save game data to cache file"""
+        """Save game data to cache file."""
         cache_path = self.cache_dir / f"{game.app_id}.json"
 
         try:
-            # Convert SteamGame DTO to dictionary for caching
-            cache_data = {
-                "app_id": game.app_id,
-                "name": game.name,
-                "location": str(game.library_path),
-                "cover_image_url": game.cover_image_url,
-                "store_page_url": game.store_page_url,
-                "size_on_disk": game.size_on_disk,
-                "dlc_size": game.dlc_size,
-                "shader_cache_size": game.shader_cache_size,
-                "workshop_content_size": game.workshop_content_size,
-                "depots": game.depots,
-                "total_size": game.total_size
-            }
-
-            save_json(str(cache_path), cache_data)
+            cache_data = game.to_dict()
+            save_json(cache_path, cache_data)
             logger.debug(f"Saved cache for {game.name} (AppID: {game.app_id})")
             return True
 
@@ -67,7 +53,7 @@ class SteamCachingService:
             return False
 
     def cache_cover(self, game: SteamGame) -> bool:
-        """Download and cache cover image for a game"""
+        """Download and cache cover image for a game."""
         image_path = self.images_dir / f"{game.app_id}.jpg"
 
         if image_path.exists():
@@ -99,7 +85,7 @@ class SteamCachingService:
             return False
 
     def is_cache_valid(self, app_id: int, manifest_file: Path) -> bool:
-        """Check if cached data is still valid compared to manifest file"""
+        """Check if cached data is still valid compared to manifest file."""
         cache_path = Path(self.cache_dir) / f"{app_id}.json"
 
         if not cache_path.exists():
