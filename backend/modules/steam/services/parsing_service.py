@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 
 class SteamParsingService:
-    """Service responsible for parsing Steam manifests and library folders"""
+    """Service responsible for parsing Steam manifests and library folders."""
 
     def __init__(self, steam_path: str):
         self.steam_path = Path(steam_path)

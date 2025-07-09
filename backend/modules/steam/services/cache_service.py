@@ -47,7 +47,6 @@ class SteamCachingService:
             save_json(cache_path, cache_data)
             logger.debug(f"Saved cache for {game.name} (AppID: {game.app_id})")
             return True
-
         except Exception as e:
             logger.error(f"Error saving cache for {game.name} (AppID: {game.app_id}): {e}")
             return False

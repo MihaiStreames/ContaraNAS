@@ -72,7 +72,7 @@ class SteamGame(BaseModel):
         return {
             "app_id": self.app_id,
             "name": self.name,
-            "location": str(self.library_path),
+            "library_path": str(self.library_path),
             "cover_image_url": self.cover_image_url,
             "store_page_url": self.store_page_url,
             "size_on_disk": self.size_on_disk,

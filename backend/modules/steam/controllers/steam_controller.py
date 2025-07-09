@@ -79,7 +79,7 @@ class SteamController:
         game_data = {
             'app_id': cache_data['app_id'],
             'name': cache_data['name'],
-            'library_path': Path(cache_data['location']),
+            'library_path': Path(cache_data['library_path']),
             'cover_image_url': cache_data.get('cover_image_url', ''),
             'store_page_url': cache_data.get('store_page_url'),
             'size_on_disk': cache_data.get('size_on_disk', 0),
