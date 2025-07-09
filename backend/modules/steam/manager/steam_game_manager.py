@@ -47,12 +47,18 @@ class SteamGameManager:
         for library in library_paths:
             steamapps_path = os.path.join(library, 'steamapps')
 
+            if not os.path.exists(steamapps_path):
+                logger.warning(f"Steam library path does not exist: {steamapps_path}")
+                continue
+
             for file in os.listdir(steamapps_path):
                 if file.startswith('appmanifest_') and file.endswith('.acf'):
-                    game = self._process_manifest(library, file)
-
-                    if game:
-                        self.games.append(game)
+                    try:
+                        game = self._process_manifest(library, file)
+                        if game:
+                            self.games.append(game)
+                    except Exception as e:
+                        logger.error(f"Error processing manifest {file}: {e}")
 
     @staticmethod
     def cache_cover(game):
@@ -71,6 +77,9 @@ class SteamGameManager:
             if response.status_code == 200:
                 with open(image_path, 'wb') as f:
                     f.write(requests.get(game.cover_image_url).content)
+                logger.debug(f"Successfully cached cover image for {game.name}")
+            else:
+                logger.warning(f"Cover image not available for {game.name} (HTTP {response.status_code})")
         except requests.RequestException as e:
             logger.warning(f"Failed to cache cover image for {game.name} (AppID: {game.app_id}): {e}")
 
@@ -80,9 +89,11 @@ class SteamGameManager:
         try:
             with open(library_folders_file, 'r', encoding='utf-8') as f:
                 libraries = vdf.load(f).get('libraryfolders', {})
-                return [lib['path'] for lib in libraries.values() if 'path' in lib]
-        except (FileNotFoundError, KeyError):
-            logger.error(f"Error: Unable to load library folders from {library_folders_file}")
+                paths = [lib['path'] for lib in libraries.values() if 'path' in lib]
+                logger.info(f"Found {len(paths)} Steam library paths: {paths}")
+                return paths
+        except (FileNotFoundError, KeyError) as e:
+            logger.error(f"Error: Unable to load library folders from {library_folders_file}: {e}")
             return []
 
     def serialize_games(self):
@@ -99,7 +110,15 @@ class SteamGameManager:
                 "dlc_size": game.dlc_size,
                 "shader_cache_size": game.shader_cache_size,
                 "workshop_content_size": game.workshop_content_size,
-                "depots": game.depots
+                "total_size": game.get_total_size(),
+                "depots": game.depots,
+                # Formatted versions for display
+                "formatted_size_on_disk": game.get_formatted_size_on_disk(),
+                "formatted_dlc_size": game.get_formatted_dlc_size(),
+                "formatted_shader_cache_size": game.get_formatted_shader_cache_size(),
+                "formatted_workshop_content_size": game.get_formatted_workshop_content_size(),
+                "formatted_total_size": game.get_formatted_size_on_disk()
             })
 
+        logger.info(f"Serialized {len(serialized)} games")
         return serialized

@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.modules import router as modules_router
-from api.steam import router as steam_router
+from api.dashboard import router as dashboard_router
 from core.utils import get_logger
 
 logger = get_logger(__name__)
@@ -27,15 +26,14 @@ app.add_middleware(
 @app.get("/api/health")
 async def health_check():
     return {
-        "status": "healthy",
+        "status": "Healthy",
         "version": "1.0.0",
         "api": "NAS Manager"
     }
 
 
 # Include routers
-app.include_router(modules_router, prefix="/api/modules", tags=["modules"])
-app.include_router(steam_router, prefix="/api/steam", tags=["steam"])
+app.include_router(dashboard_router, prefix="/api", tags=["dashboard"])
 
 if __name__ == "__main__":
     import uvicorn

@@ -20,10 +20,10 @@ class SteamGame:
         # Attributes to be filled during loading
         self.cover_image_url = f"https://steamcdn-a.akamaihd.net/steam/apps/{app_id}/header.jpg"
         self.store_page_url = None
-        self.size_on_disk = "0 B"
-        self.dlc_size = "0 B"
-        self.shader_cache_size = "0 B"
-        self.workshop_content_size = "0 B"
+        self.size_on_disk = 0
+        self.dlc_size = 0
+        self.shader_cache_size = 0
+        self.workshop_content_size = 0
         self.depots = {}
 
         if not self.load_from_cache():
@@ -44,10 +44,10 @@ class SteamGame:
     def _load_attrs_from_data(self, data):
         self.cover_image_url = data.get("cover_image_url", self.cover_image_url)
         self.store_page_url = data.get("store_page_url", self._get_store_page_url())
-        self.size_on_disk = data.get("size_on_disk", "0 B")
-        self.dlc_size = data.get("dlc_size", "0 B")
-        self.shader_cache_size = data.get("shader_cache_size", "0 B")
-        self.workshop_content_size = data.get("workshop_content_size", "0 B")
+        self.size_on_disk = data.get("size_on_disk", 0)
+        self.dlc_size = data.get("dlc_size", 0)
+        self.shader_cache_size = data.get("shader_cache_size", 0)
+        self.workshop_content_size = data.get("workshop_content_size", 0)
         self.depots = data.get("depots", {})
 
     def load_from_manifest(self):
@@ -59,7 +59,7 @@ class SteamGame:
 
         with open(self.manifest_path, 'r', encoding='utf-8') as f:
             acf_data = vdf.load(f).get('AppState', {})
-            self.size_on_disk = format_size(int(acf_data.get('SizeOnDisk', 0)))
+            self.size_on_disk = int(acf_data.get('SizeOnDisk', 0))
             self.store_page_url = self._get_store_page_url()
             self._load_shader_cache_size()
             self._load_workshop_content_size()
@@ -69,14 +69,13 @@ class SteamGame:
         logger.debug(f"Calculating shader cache size for {self.name} (AppID: {self.app_id})")
 
         shader_cache_path = os.path.join(self.library_path, 'steamapps', 'shadercache', self.app_id)
-        self.shader_cache_size = format_size(get_size(shader_cache_path) if os.path.exists(shader_cache_path) else 0)
+        self.shader_cache_size = get_size(shader_cache_path) if os.path.exists(shader_cache_path) else 0
 
     def _load_workshop_content_size(self):
         logger.debug(f"Calculating workshop content size for {self.name} (AppID: {self.app_id})")
 
         workshop_content_path = os.path.join(self.library_path, 'steamapps', 'workshop', 'content', self.app_id)
-        self.workshop_content_size = format_size(
-            get_size(workshop_content_path) if os.path.exists(workshop_content_path) else 0)
+        self.workshop_content_size = get_size(workshop_content_path) if os.path.exists(workshop_content_path) else 0
 
     def _load_depots_from_manifest(self, acf_data):
         installed_depots = acf_data.get('InstalledDepots', {})
@@ -98,7 +97,7 @@ class SteamGame:
             depots_info[depot_name] = format_size(depot_size)
 
         self.depots = depots_info
-        self.dlc_size = format_size(dlc_size_total)
+        self.dlc_size = dlc_size_total
 
     def has_new_depots(self):
         """Check if manifest has been updated since last cache"""
@@ -146,3 +145,20 @@ class SteamGame:
         }
 
         save_json(self.cache_path, data)
+
+    # Convenience methods for formatted display
+    def get_formatted_size_on_disk(self):
+        return format_size(self.size_on_disk)
+
+    def get_formatted_dlc_size(self):
+        return format_size(self.dlc_size)
+
+    def get_formatted_shader_cache_size(self):
+        return format_size(self.shader_cache_size)
+
+    def get_formatted_workshop_content_size(self):
+        return format_size(self.workshop_content_size)
+
+    def get_total_size(self):
+        """Get total size including all components"""
+        return self.size_on_disk + self.dlc_size + self.shader_cache_size + self.workshop_content_size
