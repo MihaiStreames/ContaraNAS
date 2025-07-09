@@ -28,7 +28,6 @@ class SteamModule(Module):
         return self._controller
 
     async def initialize(self):
-        """One-time setup"""
         logger.info("Initializing Steam module...")
         await self._initial_scan()
 
@@ -47,7 +46,6 @@ class SteamModule(Module):
         self._update_stats()
 
     def get_tile_data(self):
-        """Data for dashboard tile"""
         total_size_bytes = sum(game.total_size for game in self.controller.games)
 
         return {
@@ -58,7 +56,6 @@ class SteamModule(Module):
         }
 
     def get_detailed_data(self):
-        """Data for modal popup"""
         return {
             "games": self.controller.serialize_games(),
             "library_stats": self.library_stats,
@@ -112,10 +109,10 @@ class SteamModule(Module):
         for game in self.controller.games:
             location = str(game.library_path)
 
-            # Extract drive letter (works for both Windows and Unix paths)
-            if os.name == 'nt':  # Windows
+            # Extract drive letter
+            if os.name == 'nt':
                 drive = location[0:2] if len(location) >= 2 else "Unknown"
-            else:  # Unix-like systems
+            else:
                 drive = "/"
 
             if drive not in drives:
@@ -131,8 +128,7 @@ class SteamModule(Module):
         return self.library_stats.get("by_drive", {})
 
     # TODO: This has to be replaced with a more robust method
-    @staticmethod
-    def _get_steam_path():
+    def _get_steam_path(self):
         import platform
         if platform.system() == 'Windows':
             return r'C:\Program Files (x86)\Steam'

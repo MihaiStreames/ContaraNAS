@@ -33,6 +33,11 @@ class Module(ABC):
         """Get data for dashboard tile display"""
         pass
 
+    @abstractmethod
+    def get_detailed_data(self):
+        """Get detailed data for the module"""
+        pass
+
     async def enable(self):
         """Enable the module and monitor"""
         if self.enabled:
