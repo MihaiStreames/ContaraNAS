@@ -1,6 +1,6 @@
 from typing import Dict, Optional, Any
 
-from backend.core.module import Module
+from src.core.module import Module
 
 
 class ModuleManager:
@@ -13,7 +13,6 @@ class ModuleManager:
         """
         Register a module with the manager.
         If a module with the same name already exists, it will be replaced.
-
         :param module: The Module instance to register
         """
         self.modules[module.name] = module
@@ -22,7 +21,6 @@ class ModuleManager:
         """
         Enable a registered module.
         If the module name doesn't exist, this method does nothing.
-
         :param name: Name of the module to enable
         :raises Exception: If the module fails to enable
         """
@@ -33,7 +31,6 @@ class ModuleManager:
         """
         Disable a registered module.
         If the module name doesn't exist, this method does nothing.
-
         :param name: Name of the module to disable
         """
         if name in self.modules:

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from backend.core.utils import get_logger
+from src.core.utils import get_logger
 from ..dtos.steam_game import SteamGame
 from ..services.cache_service import SteamCachingService
 from ..services.parsing_service import SteamParsingService

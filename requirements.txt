@@ -1,7 +1,13 @@
-psutil~=7.0.0
-vdf~=3.4
-requests~=2.32.3
-fastapi~=0.115.12
-uvicorn~=0.34.2
-pathlib~=1.0.1
-pydantic~=2.10.6
+# Core dependencies
+pathlib>=1.0.1
+pydantic>=2.10.6
+nicegui>=2.21.1
+pywebview>=5.4
+qtpy>=2.4.3
+
+# Steam module dependencies
+vdf>=3.4
+requests>=2.32.3
+
+# System module dependencies
+psutil>=7.0.0

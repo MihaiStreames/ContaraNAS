@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import vdf
 
-from backend.core.utils import get_logger
+from src.core.utils import get_logger
 from ..dtos.steam_game import SteamGame
 from ..utils.steam_helpers import get_size, check_url
 

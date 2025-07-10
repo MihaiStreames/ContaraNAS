@@ -2,8 +2,8 @@ import os
 from datetime import datetime
 from typing import Dict, Any, Optional
 
-from backend.core.module import Module
-from backend.core.utils import get_logger
+from src.core.module import Module
+from src.core.utils import get_logger
 
 logger = get_logger(__name__)
 
@@ -24,7 +24,7 @@ class SteamModule(Module):
     def controller(self) -> 'SteamController':
         """Lazy-loaded Steam controller instance"""
         if self._controller is None:
-            from backend.modules.steam.controllers.steam_controller import SteamController
+            from src.modules.steam.controllers.steam_controller import SteamController
             self._controller = SteamController(self.steam_path)
         return self._controller
 

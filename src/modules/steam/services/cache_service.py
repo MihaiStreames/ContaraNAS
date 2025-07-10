@@ -3,7 +3,7 @@ from typing import Optional, Dict, Any
 
 import requests
 
-from backend.core.utils import load_json, save_json, get_logger
+from src.core.utils import load_json, save_json, get_logger
 from ..dtos.steam_game import SteamGame
 
 logger = get_logger(__name__)
