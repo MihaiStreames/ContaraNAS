@@ -1,13 +1,16 @@
+from abc import ABC, abstractmethod
 from typing import Callable
+
+from nicegui import ui
 
 from src.core.module import Module
 from src.core.utils import get_logger
-from nicegui import ui
 
 logger = get_logger(__name__)
 
-class ModuleTile:
-    """A tile component for displaying module information and controls"""
+
+class ModuleTile(ABC):
+    """Abstract base class for module tiles"""
 
     def __init__(
             self,
@@ -114,10 +117,21 @@ class ModuleTile:
             tile_data = self.module.get_tile_data()
 
             with self.stats_container:
-                # TODO: Render data via OOP
-                pass
+                self._render_stats(tile_data)
 
         except Exception as e:
             logger.error(f"Error updating stats for {self.name}: {e}")
             with self.stats_container:
                 ui.label("Error loading stats").classes('text-red-500')
+
+    @abstractmethod
+    def _render_stats(self, tile_data: dict):
+        """Render module-specific stats in the tile. Must be implemented by subclasses"""
+        pass
+
+    @staticmethod
+    def create_tile(name: str, module: Module, on_enable, on_disable, on_details) -> 'ModuleTile':
+        """Factory method to create the appropriate tile based on module type"""
+        if module.name == "steam":
+            from src.gui.components.steam.steam_tile import SteamTile
+            return SteamTile(name, module, on_enable, on_disable, on_details)

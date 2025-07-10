@@ -4,7 +4,7 @@ from nicegui import ui
 
 from src.core.module_manager import ModuleManager
 from src.core.utils import get_logger
-from src.gui.components.base.module_detail_dialog import ModuleDetailDialog
+from src.gui.components.base.module_dialog import ModuleDialog
 from src.gui.components.base.module_tile import ModuleTile
 
 logger = get_logger(__name__)
@@ -38,7 +38,8 @@ class DashboardView:
 
         with self.tiles_container:
             for name, module in self.manager.modules.items():
-                tile = ModuleTile(
+                # Use factory method to create appropriate tile type
+                tile = ModuleTile.create_tile(
                     name=name,
                     module=module,
                     on_enable=self._enable_module,
@@ -87,6 +88,7 @@ class DashboardView:
 
         if name in self.manager.modules:
             module = self.manager.modules[name]
-            ModuleDetailDialog(name, module)
+            # Use factory method to create appropriate dialog type
+            ModuleDialog.create_dialog(name, module)
         else:
             ui.notify(f"Module '{name}' not found", type='negative')
