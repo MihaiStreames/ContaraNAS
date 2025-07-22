@@ -38,19 +38,19 @@ def setup_gui():
 
 
 def main():
-    logger.info("Starting NAS Manager...")
+    logger.info("Starting ContaraNAS...")
 
     # Setup components
     setup_modules()
     setup_gui()
 
     # Configure app
-    app.on_startup(lambda: logger.info("NAS Manager started successfully"))
-    app.on_shutdown(lambda: logger.info("NAS Manager shutting down"))
+    app.on_startup(lambda: logger.info("ContaraNAS started successfully"))
+    app.on_shutdown(lambda: logger.info("ContaraNAS shutting down"))
 
     # Run the application
     ui.run(
-        title="NAS Manager",
+        title="ContaraNAS",
         native=True,
         window_size=(1200, 800),
         fullscreen=False,

@@ -24,7 +24,7 @@ class DashboardView:
         logger.info("Setting up dashboard UI...")
 
         with ui.header():
-            ui.label("NAS Manager").classes('text-h4 font-bold')
+            ui.label("ContaraNAS").classes('text-h4 font-bold')
 
         with ui.column().classes('p-4 w-full'):
             ui.label("Modules").classes('text-h5 mb-4')
