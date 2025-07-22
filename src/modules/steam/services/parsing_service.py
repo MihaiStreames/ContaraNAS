@@ -1,179 +1,116 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, Dict, Any
 
 import vdf
 
 from src.core.utils import get_logger
 from ..dtos.steam_game import SteamGame
-from ..utils.steam_helpers import get_size, check_url
+from ..utils.steam_helpers import get_size
 
 logger = get_logger(__name__)
 
 
 class SteamParsingService:
-    """Service responsible for parsing Steam manifests and library folders"""
+    """Service for parsing Steam VDF and ACF files"""
 
-    def __init__(
-            self,
-            steam_path: str
-    ):
-        self.steam_path = Path(steam_path)
+    def __init__(self, steam_path: Path):
+        self.steam_path = steam_path
 
-    def get_library_paths(
-            self
-    ) -> List[Path]:
-        """Parse Steam library folders and return all library paths"""
+    def parse_library_folders(self) -> Dict[str, Dict[str, Any]]:
+        """Parse libraryfolders.vdf file"""
         library_folders_file = self.steam_path / 'steamapps' / 'libraryfolders.vdf'
 
         try:
             with open(library_folders_file, 'r', encoding='utf-8') as f:
-                libraries = vdf.load(f).get('libraryfolders', {})
-                paths = [Path(lib['path']) for lib in libraries.values() if 'path' in lib]
-                logger.info(f"Found {len(paths)} Steam library paths: {paths}")
-                return paths
-        except (FileNotFoundError, KeyError) as e:
-            logger.error(f"Error: Unable to load library folders from {library_folders_file}: {e}")
-            return []
+                data = vdf.load(f)
+                libraries_data = data.get('libraryfolders', {})
 
-    @staticmethod
-    def get_manifest_files(
-            library_path: Path
-    ) -> List[Path]:
-        """Get all manifest files in a library path"""
-        steamapps_path = library_path / 'steamapps'
+                libraries = {}
+                for lib_id, lib_data in libraries_data.items():
+                    if isinstance(lib_data, dict) and 'path' in lib_data:
+                        path = lib_data['path']
+                        libraries[path] = {
+                            'id': lib_id,
+                            'label': lib_data.get('label', ''),
+                            'contentid': lib_data.get('contentid', ''),
+                            'totalsize': int(lib_data.get('totalsize', 0)),
+                            'apps': lib_data.get('apps', {})
+                        }
 
-        if not steamapps_path.exists():
-            logger.warning(f"Steam library path does not exist: {steamapps_path}")
-            return []
+                logger.debug(f"Parsed {len(libraries)} libraries from libraryfolders.vdf")
+                return libraries
 
-        manifest_files = []
-        for file in steamapps_path.iterdir():
-            if file.name.startswith('appmanifest_') and file.name.endswith('.acf'):
-                manifest_files.append(file)
+        except Exception as e:
+            logger.error(f"Error parsing libraryfolders.vdf: {e}")
+            return {}
 
-        return manifest_files
-
-    def parse_manifest_file(
-            self,
-            manifest_path: Path,
-            library_path: Path
-    ) -> Optional[SteamGame]:
-        """Parse a single manifest file and return a SteamGame DTO"""
+    def parse_app_manifest(self, manifest_path: Path) -> Optional[Dict[str, Any]]:
+        """Parse an app manifest (ACF) file"""
         try:
-            # Extract app_id from filename
-            app_id = int(manifest_path.stem.split('_')[1])
-
-            logger.debug(f"Parsing manifest: {manifest_path}")
-
             with open(manifest_path, 'r', encoding='utf-8') as f:
-                data = vdf.load(f).get('AppState', {})
-                name = data.get('name')
+                data = vdf.load(f)
+                app_state = data.get('AppState', {})
 
-                if not name:
-                    logger.warning(f"No name found in manifest {manifest_path}")
+                if not app_state:
+                    logger.warning(f"No AppState in manifest: {manifest_path}")
                     return None
 
-                # Create base SteamGame with required fields
-                game_data = {
-                    'app_id': app_id,
-                    'name': name,
-                    'library_path': library_path,
-                    'cover_image_url': f"https://steamcdn-a.akamaihd.net/steam/apps/{app_id}/header.jpg"
-                }
-
-                # Parse manifest data
-                self._parse_manifest_data(game_data, data, library_path, app_id)
-
-                # Create and return SteamGame DTO
-                return SteamGame(**game_data)
+                return app_state
 
         except Exception as e:
             logger.error(f"Error parsing manifest {manifest_path}: {e}")
             return None
 
-    def check_manifest_changes(
-            self,
-            library_paths: List[Path],
-            last_scan_time: float
-    ) -> bool:
-        """Check if any manifest files have been modified since last scan"""
-        for library_path in library_paths:
-            manifest_files = self.get_manifest_files(library_path)
+    def create_game_from_manifest(self, manifest_path: Path, library_path: Path) -> Optional[SteamGame]:
+        """Create a SteamGame instance from a manifest file"""
+        app_state = self.parse_app_manifest(manifest_path)
+        if not app_state:
+            return None
 
-            for manifest_file in manifest_files:
-                try:
-                    if manifest_file.stat().st_mtime > last_scan_time:
-                        logger.debug(f"Manifest file changed: {manifest_file.name}")
-                        return True
-                except OSError as e:
-                    logger.error(f"Error checking manifest file {manifest_file}: {e}")
+        # Extract relevant fields
+        app_id = int(app_state.get('appid', 0))
+        name = app_state.get('name', '')
 
-        return False
-
-    def _parse_manifest_data(
-            self,
-            game_data: dict,
-            acf_data: dict,
-            library_path: Path,
-            app_id: int
-    ):
-        """Parse manifest ACF data and populate game_data dictionary"""
-        # Basic size information
-        game_data['size_on_disk'] = int(acf_data.get('SizeOnDisk', 0))
-
-        # Store page URL (with validation)
-        store_url = f"https://store.steampowered.com/app/{app_id}/"
-        game_data['store_page_url'] = store_url if check_url(store_url) else None
+        if not app_id or not name:
+            logger.warning(f"Missing required fields in manifest: {manifest_path}")
+            return None
 
         # Calculate additional sizes
-        game_data['shader_cache_size'] = self._get_shader_cache_size(library_path, app_id)
-        game_data['workshop_content_size'] = self._get_workshop_content_size(library_path, app_id)
+        shader_cache_size = self._calculate_shader_cache_size(library_path, app_id)
+        workshop_size = self._calculate_workshop_size(library_path, app_id)
 
-        # Parse depots and calculate DLC size
-        depots_info, dlc_size = self._parse_depots(acf_data, app_id)
-        game_data['depots'] = depots_info
-        game_data['dlc_size'] = dlc_size
+        # Create game instance
+        try:
+            game = SteamGame(
+                app_id=app_id,
+                name=name,
+                install_dir=app_state.get('installdir', ''),
+                library_path=library_path,
+                size_on_disk=int(app_state.get('SizeOnDisk', 0)),
+                last_updated=int(app_state.get('lastupdated', 0)),
+                last_played=int(app_state.get('LastPlayed', 0)),
+                build_id=app_state.get('buildid', ''),
+                bytes_to_download=int(app_state.get('BytesToDownload', 0)),
+                bytes_downloaded=int(app_state.get('BytesDownloaded', 0)),
+                installed_depots=app_state.get('InstalledDepots', {}),
+                shader_cache_size=shader_cache_size,
+                workshop_content_size=workshop_size
+            )
+
+            return game
+
+        except Exception as e:
+            logger.error(f"Error creating game from manifest {manifest_path}: {e}")
+            return None
 
     @staticmethod
-    def _get_shader_cache_size(
-            library_path: Path,
-            app_id: int
-    ) -> int:
+    def _calculate_shader_cache_size(library_path: Path, app_id: int) -> int:
         """Calculate shader cache size for a game"""
-        shader_cache_path = library_path / 'steamapps' / 'shadercache' / str(app_id)
-        return get_size(shader_cache_path) if shader_cache_path.exists() else 0
+        shader_path = library_path / 'steamapps' / 'shadercache' / str(app_id)
+        return get_size(shader_path) if shader_path.exists() else 0
 
     @staticmethod
-    def _get_workshop_content_size(
-            library_path: Path,
-            app_id: int
-    ) -> int:
+    def _calculate_workshop_size(library_path: Path, app_id: int) -> int:
         """Calculate workshop content size for a game"""
         workshop_path = library_path / 'steamapps' / 'workshop' / 'content' / str(app_id)
         return get_size(workshop_path) if workshop_path.exists() else 0
-
-    @staticmethod
-    def _parse_depots(
-            acf_data: dict,
-            app_id: int
-    ) -> tuple[dict[str, int], int]:
-        """Parse depot information from manifest data"""
-        installed_depots = acf_data.get('InstalledDepots', {})
-        depots_info = {}
-        dlc_size_total = 0
-
-        for depot_id, depot_data in installed_depots.items():
-            depot_size = int(depot_data.get('size', 0))
-            dlc_id = depot_data.get('dlcappid')
-
-            if dlc_id:
-                # DLC depot: show as "DLC_ID: DEPOT_ID"
-                depot_name = f"{dlc_id}: {depot_id}"
-                dlc_size_total += depot_size
-            else:
-                # Main game depot: show as "GAME_ID: DEPOT_ID"
-                depot_name = f"{app_id}: {depot_id}"
-
-            depots_info[depot_name] = depot_size
-
-        return depots_info, dlc_size_total

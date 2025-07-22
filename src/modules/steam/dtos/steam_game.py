@@ -1,5 +1,6 @@
+from datetime import datetime
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 from pydantic import BaseModel, Field, computed_field
 
@@ -7,91 +8,102 @@ from pydantic import BaseModel, Field, computed_field
 class SteamGame(BaseModel):
     """Steam Game Data Transfer Object (DTO)"""
 
-    # Core attributes
+    # Core identifiers
     app_id: int = Field(..., description="Steam App ID")
     name: str = Field(..., description="Game name")
-    library_path: Path = Field(..., description="Steam library path where game is installed")
+    install_dir: str = Field(..., description="Installation directory name")
 
-    # URLs
-    cover_image_url: str = Field(default="", description="URL to game's cover image")
-    store_page_url: Optional[str] = Field(default=None, description="Steam store page URL")
+    # Paths
+    library_path: Path = Field(..., description="Steam library path")
 
-    # Size information (in bytes)
-    size_on_disk: int = Field(default=0, description="Main game files size")
-    dlc_size: int = Field(default=0, description="DLC content size")
-    shader_cache_size: int = Field(default=0, description="Shader cache size")
-    workshop_content_size: int = Field(default=0, description="Workshop content size")
+    # Size information
+    size_on_disk: int = Field(default=0, description="Size from ACF in bytes")
 
-    # Depot information
-    depots: Dict[str, int] = Field(default_factory=dict, description="Depot information (depot_id: size_bytes)")
+    # Timestamps
+    last_updated: int = Field(default=0, description="Last update timestamp")
+    last_played: int = Field(default=0, description="Last played timestamp")
+
+    # Build info
+    build_id: str = Field(default="", description="Current build ID")
+
+    # Update status
+    bytes_to_download: int = Field(default=0, description="Bytes still to download")
+    bytes_downloaded: int = Field(default=0, description="Bytes already downloaded")
+
+    # Installed depots
+    installed_depots: Dict[str, Dict[str, str]] = Field(default_factory=dict)
+
+    # Additional calculated sizes
+    shader_cache_size: int = Field(default=0, description="Calculated shader cache size")
+    workshop_content_size: int = Field(default=0, description="Calculated workshop size")
 
     class Config:
-        # Allow Path objects
         arbitrary_types_allowed = True
-        # Enable validation on assignment
-        validate_assignment = True
-
-    def __init__(
-            self,
-            **data
-    ):
-        super().__init__(**data)
-
-        # Set default cover image URL if not provided
-        if not self.cover_image_url:
-            self.cover_image_url = f"https://steamcdn-a.akamaihd.net/steam/apps/{self.app_id}/header.jpg"
 
     @computed_field
     @property
-    def manifest_path(
-            self
-    ) -> Path:
-        """Get the path to the game's manifest file"""
+    def manifest_path(self) -> Path:
+        """Path to the game's manifest file"""
         return self.library_path / 'steamapps' / f'appmanifest_{self.app_id}.acf'
 
     @computed_field
     @property
-    def shader_cache_path(
-            self
-    ) -> Path:
-        """Get the path to the game's shader cache directory"""
-        return self.library_path / 'steamapps' / 'shadercache' / str(self.app_id)
+    def install_path(self) -> Path:
+        """Full installation path"""
+        return self.library_path / 'steamapps' / 'common' / self.install_dir
 
     @computed_field
     @property
-    def workshop_path(
-            self
-    ) -> Path:
-        """Get the path to the game's workshop content directory."""
-        return self.library_path / 'steamapps' / 'workshop' / 'content' / str(self.app_id)
+    def total_size(self) -> int:
+        """Total size including shader cache and workshop content"""
+        return self.size_on_disk + self.shader_cache_size + self.workshop_content_size
 
     @computed_field
     @property
-    def total_size(
-            self
-    ) -> int:
-        """Calculate total game size"""
-        return (
-                self.size_on_disk +
-                self.dlc_size +
-                self.shader_cache_size +
-                self.workshop_content_size
-        )
+    def is_updating(self) -> bool:
+        """Check if game is currently updating"""
+        return self.bytes_to_download > 0 and self.bytes_downloaded < self.bytes_to_download
 
-    def to_dict(
-            self
-    ) -> Dict:
+    @computed_field
+    @property
+    def last_played_date(self) -> Optional[datetime]:
+        """Convert timestamp to datetime"""
+        return datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
+
+    @computed_field
+    @property
+    def last_updated_date(self) -> Optional[datetime]:
+        """Convert timestamp to datetime"""
+        return datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
+
+    @computed_field
+    @property
+    def store_url(self) -> str:
+        """Steam store page URL"""
+        return f"https://store.steampowered.com/app/{self.app_id}/"
+
+    @computed_field
+    @property
+    def cover_url(self) -> str:
+        """Cover image URL"""
+        return f"https://steamcdn-a.akamaihd.net/steam/apps/{self.app_id}/header.jpg"
+
+    def to_dict(self) -> Dict:
         """Convert to dictionary for serialization"""
         return {
             "app_id": self.app_id,
             "name": self.name,
+            "install_dir": self.install_dir,
             "library_path": str(self.library_path),
-            "cover_image_url": self.cover_image_url,
-            "store_page_url": self.store_page_url,
             "size_on_disk": self.size_on_disk,
-            "dlc_size": self.dlc_size,
             "shader_cache_size": self.shader_cache_size,
             "workshop_content_size": self.workshop_content_size,
             "total_size": self.total_size,
-            "depots": self.depots
+            "last_updated": self.last_updated,
+            "last_played": self.last_played,
+            "build_id": self.build_id,
+            "is_updating": self.is_updating,
+            "store_url": self.store_url,
+            "cover_url": self.cover_url,
+            "installed_depots": self.installed_depots
         }

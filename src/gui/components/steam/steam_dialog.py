@@ -7,10 +7,7 @@ from src.gui.utils.gui_utils import format_bytes
 class SteamDialog(ModuleDialog):
     """Steam-specific module detail dialog implementation"""
 
-    def _render_details(
-            self,
-            detailed_data: dict
-    ):
+    def _render_details(self, detailed_data: dict):
         """Render Steam-specific details"""
         total_games = detailed_data.get("total_games", 0)
         libraries = detailed_data.get("libraries", {})

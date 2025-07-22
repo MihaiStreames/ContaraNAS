@@ -20,26 +20,26 @@ class Module(ABC):
 
     @abstractmethod
     def initialize(self):
-        """One-time setup when module is enabled."""
+        """One-time setup when module is enabled"""
         pass
 
     @abstractmethod
     def update(self):
-        """Periodic update logic for the module."""
+        """Periodic update logic for the module"""
         pass
 
     @abstractmethod
     def get_tile_data(self):
-        """Get data for dashboard tile display."""
+        """Get data for dashboard tile display"""
         pass
 
     @abstractmethod
     def get_detailed_data(self):
-        """Get detailed data for the module."""
+        """Get detailed data for the module"""
         pass
 
     async def enable(self):
-        """Enable the module and monitor."""
+        """Enable the module and monitor"""
         if self.enabled:
             self.logger.debug(f"Module {self.name} is already enabled")
             return
@@ -54,7 +54,7 @@ class Module(ABC):
             raise
 
     async def disable(self):
-        """Disable the module and stop monitoring."""
+        """Disable the module and stop monitoring"""
         if not self.enabled:
             self.logger.debug(f"Module {self.name} is already disabled")
             return
@@ -69,7 +69,7 @@ class Module(ABC):
         self.logger.info(f"Module {self.name} disabled successfully")
 
     async def _monitor_loop(self):
-        """Background monitoring loop."""
+        """Background monitoring loop"""
         self.logger.debug(f"Starting monitor loop for module {self.name}")
 
         while self.enabled:
@@ -86,5 +86,5 @@ class Module(ABC):
 
     @staticmethod
     def get_update_interval() -> int:
-        """Get the update interval in seconds."""
+        """Get the update interval in seconds"""
         return 30

@@ -5,9 +5,7 @@ from typing import Union
 import requests
 
 
-def check_url(
-        url: str
-) -> bool:
+def check_url(url: str) -> bool:
     """Check if the given URL is valid and doesn't redirect to the default Steam store page"""
     try:
         response = requests.head(url, allow_redirects=True)
@@ -17,9 +15,7 @@ def check_url(
         return False
 
 
-def get_size(
-        directory: Union[str, Path]
-) -> int:
+def get_size(directory: Union[str, Path]) -> int:
     """Calculate the total size of files in a directory"""
     total_size = 0
     for root, _, files in os.walk(directory):

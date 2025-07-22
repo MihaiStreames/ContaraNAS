@@ -3,7 +3,7 @@ import os
 
 
 def get_logger(name: str) -> logging.Logger:
-    """Create and configure a logger with both file and console handlers."""
+    """Create and configure a logger with both file and console handlers"""
     print(f"get_logger called for: {name}")
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)

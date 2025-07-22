@@ -70,9 +70,6 @@ class ComponentFactory:
         }
 
     @classmethod
-    def is_registered(
-            cls,
-            module_name: str
-    ) -> bool:
+    def is_registered(cls, module_name: str) -> bool:
         """Check if a module type has registered components"""
         return module_name in cls._tile_classes and module_name in cls._dialog_classes

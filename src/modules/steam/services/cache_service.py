@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, Any
 
@@ -10,107 +11,128 @@ logger = get_logger(__name__)
 
 
 class SteamCachingService:
-    """Service responsible for caching Steam game data and cover images"""
+    """Service for caching Steam game data"""
 
-    def __init__(
-            self
-    ):
-        self.cache_dir = Path(".cache/games")
-        self.images_dir = Path("resources/images/steam")
+    def __init__(self):
+        self.cache_dir = Path(".cache/steam/games")
+        self.images_dir = Path(".cache/steam/images")
 
-        # Ensure directories exist
+        # Create directories
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.images_dir.mkdir(parents=True, exist_ok=True)
 
-    def load_game(
-            self,
-            app_id: int
-    ) -> Optional[Dict[str, Any]]:
-        """Load game data from cache file"""
-        cache_path = self.cache_dir / f"{app_id}.json"
+    def cache_game(self, game: SteamGame) -> bool:
+        """Save game data to cache"""
+        cache_file = self.cache_dir / f"{game.app_id}.json"
 
-        if not cache_path.exists():
-            logger.debug(f"No cache found for AppID: {app_id}")
+        try:
+            cache_data = {
+                'data': game.to_dict(),
+                'cached_at': datetime.now().isoformat(),
+                'manifest_mtime': None
+            }
+
+            # Store manifest modification time if available
+            if game.manifest_path.exists():
+                cache_data['manifest_mtime'] = game.manifest_path.stat().st_mtime
+
+            save_json(cache_file, cache_data)
+            logger.debug(f"Cached game: {game.name} ({game.app_id})")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to cache game {game.name}: {e}")
+            return False
+
+    def load_game(self, app_id: int) -> Optional[SteamGame]:
+        """Load game from cache"""
+        cache_file = self.cache_dir / f"{app_id}.json"
+
+        if not cache_file.exists():
             return None
 
         try:
-            data = load_json(cache_path)
-            if data:
-                logger.debug(f"Loaded cached data for AppID: {app_id}")
-                return data
+            cache_data = load_json(cache_file)
+            if not cache_data or 'data' not in cache_data:
+                return None
+
+            game_data = cache_data['data']
+            # Convert library_path back to Path
+            game_data['library_path'] = Path(game_data['library_path'])
+
+            return SteamGame(**game_data)
+
         except Exception as e:
-            logger.error(f"Error loading cache for AppID {app_id}: {e}")
+            logger.error(f"Failed to load game {app_id} from cache: {e}")
+            return None
 
-        return None
+    def is_cache_valid(self, app_id: int, manifest_path: Path) -> bool:
+        """Check if cached data is still valid"""
+        cache_file = self.cache_dir / f"{app_id}.json"
 
-    def cache_game(
-            self,
-            game: SteamGame
-    ) -> bool:
-        """Save game data to cache file"""
-        cache_path = self.cache_dir / f"{game.app_id}.json"
-
-        try:
-            cache_data = game.to_dict()
-            save_json(cache_path, cache_data)
-            logger.debug(f"Saved cache for {game.name} (AppID: {game.app_id})")
-            return True
-        except Exception as e:
-            logger.error(f"Error saving cache for {game.name} (AppID: {game.app_id}): {e}")
+        if not cache_file.exists():
             return False
 
-    def cache_cover(
-            self,
-            game: SteamGame
-    ) -> bool:
-        """Download and cache cover image for a game"""
-        image_path = self.images_dir / f"{game.app_id}.jpg"
-
-        if image_path.exists():
-            logger.debug(f"Cover image already exists for {game.name} (AppID: {game.app_id})")
-            return True
-
-        logger.debug(f"Downloading cover image for {game.name} (AppID: {game.app_id})")
-
         try:
-            # Check if image exists before downloading
-            response = requests.head(game.cover_image_url, timeout=5)
-            if response.status_code != 200:
-                logger.warning(f"Cover image not available for {game.name} (HTTP {response.status_code})")
+            cache_data = load_json(cache_file)
+            if not cache_data:
                 return False
 
-            # Download and save image
-            image_response = requests.get(game.cover_image_url, timeout=10)
-            if image_response.status_code == 200:
-                with open(image_path, 'wb') as f:
-                    f.write(image_response.content)
-                logger.debug(f"Successfully cached cover image for {game.name}")
+            # Check if manifest has been modified
+            if manifest_path.exists() and 'manifest_mtime' in cache_data:
+                current_mtime = manifest_path.stat().st_mtime
+                cached_mtime = cache_data['manifest_mtime']
+
+                if current_mtime > cached_mtime:
+                    logger.debug(f"Manifest updated for app {app_id}")
+                    return False
+
+            # Optional: Check cache age
+            cached_at = datetime.fromisoformat(cache_data.get('cached_at', '2000-01-01'))
+            age_days = (datetime.now() - cached_at).days
+
+            if age_days > 7:  # Refresh after a week
+                logger.debug(f"Cache too old for app {app_id}: {age_days} days")
+                return False
+
+            return True
+
+        except Exception as e:
+            logger.error(f"Error validating cache for app {app_id}: {e}")
+            return False
+
+    def cache_image(self, app_id: int, image_url: str) -> bool:
+        """Download and cache game cover image"""
+        image_file = self.images_dir / f"{app_id}.jpg"
+
+        if image_file.exists():
+            return True
+
+        try:
+            response = requests.get(image_url, timeout=10)
+            if response.status_code == 200:
+                image_file.write_bytes(response.content)
+                logger.debug(f"Cached image for app {app_id}")
                 return True
             else:
-                logger.warning(f"Failed to download cover image for {game.name}")
+                logger.warning(f"Failed to download image for app {app_id}: HTTP {response.status_code}")
                 return False
 
-        except requests.RequestException as e:
-            logger.warning(f"Failed to cache cover image for {game.name} (AppID: {game.app_id}): {e}")
+        except Exception as e:
+            logger.warning(f"Error caching image for app {app_id}: {e}")
             return False
 
-    def is_cache_valid(
-            self,
-            app_id: int,
-            manifest_file: Path
-    ) -> bool:
-        """Check if cached data is still valid compared to manifest file"""
-        cache_path = Path(self.cache_dir) / f"{app_id}.json"
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get cache statistics"""
+        cache_files = list(self.cache_dir.glob("*.json"))
+        image_files = list(self.images_dir.glob("*.jpg"))
 
-        if not cache_path.exists():
-            return False
+        total_size = sum(f.stat().st_size for f in cache_files)
+        total_size += sum(f.stat().st_size for f in image_files)
 
-        if not manifest_file.exists():
-            return True  # If manifest doesn't exist, cache is still valid
-
-        try:
-            cache_mtime = cache_path.stat().st_mtime
-            manifest_mtime = manifest_file.stat().st_mtime
-            return cache_mtime >= manifest_mtime
-        except OSError:
-            return False
+        return {
+            'cached_games': len(cache_files),
+            'cached_images': len(image_files),
+            'total_size_mb': total_size / (1024 * 1024),
+            'cache_directory': str(self.cache_dir)
+        }
