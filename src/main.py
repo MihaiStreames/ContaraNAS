@@ -1,4 +1,5 @@
 import os
+import src.gui.factories  # This triggers register_all_components()
 
 from nicegui import ui, app
 

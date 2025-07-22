@@ -4,8 +4,8 @@ from nicegui import ui
 
 from src.core.module_manager import ModuleManager
 from src.core.utils import get_logger
-from src.gui.components.base.module_dialog import ModuleDialog
 from src.gui.components.base.module_tile import ModuleTile
+from src.gui.factories import ComponentFactory
 
 logger = get_logger(__name__)
 
@@ -13,13 +13,18 @@ logger = get_logger(__name__)
 class DashboardView:
     """Main dashboard view for managing modules"""
 
-    def __init__(self, module_manager: ModuleManager):
+    def __init__(
+            self,
+            module_manager: ModuleManager
+    ):
         self.manager = module_manager
         self.tiles: Dict[str, ModuleTile] = {}
 
         self._setup_ui()
 
-    def _setup_ui(self):
+    def _setup_ui(
+            self
+    ):
         """Setup the main dashboard UI"""
         logger.info("Setting up dashboard UI...")
 
@@ -32,25 +37,33 @@ class DashboardView:
             self.tiles_container = ui.row().classes('gap-4 w-full')
             self._create_module_tiles()
 
-    def _create_module_tiles(self):
+    def _create_module_tiles(
+            self
+    ):
         """Create tiles for all registered modules"""
         logger.debug("Creating module tiles...")
 
         with self.tiles_container:
             for name, module in self.manager.modules.items():
-                # Use factory method to create appropriate tile type
-                tile = ModuleTile.create_tile(
-                    name=name,
-                    module=module,
-                    on_enable=self._enable_module,
-                    on_disable=self._disable_module,
-                    on_details=self._show_module_details
-                )
-                self.tiles[name] = tile
+                try:
+                    tile = ComponentFactory.create_tile(
+                        name=name,
+                        module=module,
+                        on_enable=self._enable_module,
+                        on_disable=self._disable_module,
+                        on_details=self._show_module_details
+                    )
+                    self.tiles[name] = tile
+
+                except ValueError as e:
+                    logger.error(f"Failed to create tile for {name}: {e}")
 
         logger.debug(f"Created {len(self.tiles)} module tiles")
 
-    async def _enable_module(self, name: str):
+    async def _enable_module(
+            self,
+            name: str
+    ):
         """Enable a module"""
         logger.info(f"Enabling module: {name}")
 
@@ -88,7 +101,10 @@ class DashboardView:
 
         if name in self.manager.modules:
             module = self.manager.modules[name]
-            # Use factory method to create appropriate dialog type
-            ModuleDialog.create_dialog(name, module)
+            try:
+                ComponentFactory.create_dialog(name, module)
+            except ValueError as e:
+                logger.error(f"Failed to create dialog for {name}: {e}")
+                ui.notify(f"Failed to show details for '{name}': {str(e)}", type='negative')
         else:
             ui.notify(f"Module '{name}' not found", type='negative')

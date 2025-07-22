@@ -11,7 +11,10 @@ logger = get_logger(__name__)
 class SteamController:
     """Controller that orchestrates Steam services to manage game data"""
 
-    def __init__(self, steam_path: str):
+    def __init__(
+            self,
+            steam_path: str
+    ):
         self.steam_path = steam_path
         self.games = []
 
@@ -21,8 +24,10 @@ class SteamController:
 
         logger.info("SteamController initialized")
 
-    def load_games(self):
-        """Load all games from Steam libraries."""
+    def load_games(
+            self
+    ):
+        """Load all games from Steam libraries"""
         library_paths = self.parsing_service.get_library_paths()
         logger.info("Loading installed games from libraries.")
 
@@ -39,8 +44,10 @@ class SteamController:
                 except Exception as e:
                     logger.error(f"Error processing manifest {manifest_file.name}: {e}")
 
-    def serialize_games(self):
-        """Serialize games to dictionary format."""
+    def serialize_games(
+            self
+    ):
+        """Serialize games to dictionary format"""
         serialized = []
 
         for game in self.games:
@@ -49,8 +56,12 @@ class SteamController:
         logger.info(f"Serialized {len(serialized)} games")
         return serialized
 
-    def _process_manifest(self, library_path: Path, manifest_file: Path) -> SteamGame | None:
-        """Process a single manifest file."""
+    def _process_manifest(
+            self,
+            library_path: Path,
+            manifest_file: Path
+    ) -> SteamGame | None:
+        """Process a single manifest file"""
         app_id = int(manifest_file.stem.split('_')[1])
 
         logger.debug(f"Processing manifest: {manifest_file}")
@@ -74,8 +85,11 @@ class SteamController:
 
         return None
 
-    def _create_game_from_cache(self, cache_data: dict) -> SteamGame:
-        """Create a SteamGame DTO from cached data."""
+    @staticmethod
+    def _create_game_from_cache(
+            cache_data: dict
+    ) -> SteamGame:
+        """Create a SteamGame DTO from cached data"""
         game_data = {
             'app_id': cache_data['app_id'],
             'name': cache_data['name'],

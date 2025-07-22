@@ -16,9 +16,9 @@ class ModuleTile(ABC):
             self,
             name: str,
             module: Module,
-            on_enable: Callable[[str], None],
-            on_disable: Callable[[str], None],
-            on_details: Callable[[str], None]
+            on_enable: Callable,
+            on_disable: Callable,
+            on_details: Callable
     ):
         self.name = name
         self.module = module
@@ -35,7 +35,7 @@ class ModuleTile(ABC):
         self._create_tile()
 
     def update_state(self):
-        """Update the tile's state to reflect current module status."""
+        """Update the tile's state to reflect current module status"""
         try:
             # Update status badge
             self.status_badge.set_text(self._get_status_text())
@@ -128,10 +128,3 @@ class ModuleTile(ABC):
     def _render_stats(self, tile_data: dict):
         """Render module-specific stats in the tile. Must be implemented by subclasses"""
         pass
-
-    @staticmethod
-    def create_tile(name: str, module: Module, on_enable, on_disable, on_details) -> 'ModuleTile':
-        """Factory method to create the appropriate tile based on module type"""
-        if module.name == "steam":
-            from src.gui.components.steam.steam_tile import SteamTile
-            return SteamTile(name, module, on_enable, on_disable, on_details)

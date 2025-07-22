@@ -11,13 +11,18 @@ logger = get_logger(__name__)
 
 
 class SteamParsingService:
-    """Service responsible for parsing Steam manifests and library folders."""
+    """Service responsible for parsing Steam manifests and library folders"""
 
-    def __init__(self, steam_path: str):
+    def __init__(
+            self,
+            steam_path: str
+    ):
         self.steam_path = Path(steam_path)
 
-    def get_library_paths(self) -> List[Path]:
-        """Parse Steam library folders and return all library paths."""
+    def get_library_paths(
+            self
+    ) -> List[Path]:
+        """Parse Steam library folders and return all library paths"""
         library_folders_file = self.steam_path / 'steamapps' / 'libraryfolders.vdf'
 
         try:
@@ -31,8 +36,10 @@ class SteamParsingService:
             return []
 
     @staticmethod
-    def get_manifest_files(library_path: Path) -> List[Path]:
-        """Get all manifest files in a library path."""
+    def get_manifest_files(
+            library_path: Path
+    ) -> List[Path]:
+        """Get all manifest files in a library path"""
         steamapps_path = library_path / 'steamapps'
 
         if not steamapps_path.exists():
@@ -46,8 +53,12 @@ class SteamParsingService:
 
         return manifest_files
 
-    def parse_manifest_file(self, manifest_path: Path, library_path: Path) -> Optional[SteamGame]:
-        """Parse a single manifest file and return a SteamGame DTO."""
+    def parse_manifest_file(
+            self,
+            manifest_path: Path,
+            library_path: Path
+    ) -> Optional[SteamGame]:
+        """Parse a single manifest file and return a SteamGame DTO"""
         try:
             # Extract app_id from filename
             app_id = int(manifest_path.stem.split('_')[1])
@@ -80,8 +91,12 @@ class SteamParsingService:
             logger.error(f"Error parsing manifest {manifest_path}: {e}")
             return None
 
-    def check_manifest_changes(self, library_paths: List[Path], last_scan_time: float) -> bool:
-        """Check if any manifest files have been modified since last scan."""
+    def check_manifest_changes(
+            self,
+            library_paths: List[Path],
+            last_scan_time: float
+    ) -> bool:
+        """Check if any manifest files have been modified since last scan"""
         for library_path in library_paths:
             manifest_files = self.get_manifest_files(library_path)
 
@@ -95,8 +110,14 @@ class SteamParsingService:
 
         return False
 
-    def _parse_manifest_data(self, game_data: dict, acf_data: dict, library_path: Path, app_id: int):
-        """Parse manifest ACF data and populate game_data dictionary."""
+    def _parse_manifest_data(
+            self,
+            game_data: dict,
+            acf_data: dict,
+            library_path: Path,
+            app_id: int
+    ):
+        """Parse manifest ACF data and populate game_data dictionary"""
         # Basic size information
         game_data['size_on_disk'] = int(acf_data.get('SizeOnDisk', 0))
 
@@ -114,20 +135,29 @@ class SteamParsingService:
         game_data['dlc_size'] = dlc_size
 
     @staticmethod
-    def _get_shader_cache_size(library_path: Path, app_id: int) -> int:
-        """Calculate shader cache size for a game."""
+    def _get_shader_cache_size(
+            library_path: Path,
+            app_id: int
+    ) -> int:
+        """Calculate shader cache size for a game"""
         shader_cache_path = library_path / 'steamapps' / 'shadercache' / str(app_id)
         return get_size(shader_cache_path) if shader_cache_path.exists() else 0
 
     @staticmethod
-    def _get_workshop_content_size(library_path: Path, app_id: int) -> int:
-        """Calculate workshop content size for a game."""
+    def _get_workshop_content_size(
+            library_path: Path,
+            app_id: int
+    ) -> int:
+        """Calculate workshop content size for a game"""
         workshop_path = library_path / 'steamapps' / 'workshop' / 'content' / str(app_id)
         return get_size(workshop_path) if workshop_path.exists() else 0
 
     @staticmethod
-    def _parse_depots(acf_data: dict, app_id: int) -> tuple[dict[str, int], int]:
-        """Parse depot information from manifest data."""
+    def _parse_depots(
+            acf_data: dict,
+            app_id: int
+    ) -> tuple[dict[str, int], int]:
+        """Parse depot information from manifest data"""
         installed_depots = acf_data.get('InstalledDepots', {})
         depots_info = {}
         dlc_size_total = 0

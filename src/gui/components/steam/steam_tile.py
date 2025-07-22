@@ -7,7 +7,10 @@ from src.gui.utils.gui_utils import format_bytes
 class SteamTile(ModuleTile):
     """Steam-specific module tile implementation"""
 
-    def _render_stats(self, tile_data: dict):
+    def _render_stats(
+            self,
+            tile_data: dict
+    ):
         """Render Steam-specific stats in the tile"""
         total_games = tile_data.get("total_games", 0)
         total_size = tile_data.get("total_size", 0)

@@ -31,7 +31,10 @@ class SteamGame(BaseModel):
         # Enable validation on assignment
         validate_assignment = True
 
-    def __init__(self, **data):
+    def __init__(
+            self,
+            **data
+    ):
         super().__init__(**data)
 
         # Set default cover image URL if not provided
@@ -40,26 +43,34 @@ class SteamGame(BaseModel):
 
     @computed_field
     @property
-    def manifest_path(self) -> Path:
-        """Get the path to the game's manifest file."""
+    def manifest_path(
+            self
+    ) -> Path:
+        """Get the path to the game's manifest file"""
         return self.library_path / 'steamapps' / f'appmanifest_{self.app_id}.acf'
 
     @computed_field
     @property
-    def shader_cache_path(self) -> Path:
-        """Get the path to the game's shader cache directory."""
+    def shader_cache_path(
+            self
+    ) -> Path:
+        """Get the path to the game's shader cache directory"""
         return self.library_path / 'steamapps' / 'shadercache' / str(self.app_id)
 
     @computed_field
     @property
-    def workshop_path(self) -> Path:
+    def workshop_path(
+            self
+    ) -> Path:
         """Get the path to the game's workshop content directory."""
         return self.library_path / 'steamapps' / 'workshop' / 'content' / str(self.app_id)
 
     @computed_field
     @property
-    def total_size(self) -> int:
-        """Calculate total game size."""
+    def total_size(
+            self
+    ) -> int:
+        """Calculate total game size"""
         return (
                 self.size_on_disk +
                 self.dlc_size +
@@ -67,8 +78,10 @@ class SteamGame(BaseModel):
                 self.workshop_content_size
         )
 
-    def to_dict(self) -> Dict:
-        """Convert to dictionary for serialization."""
+    def to_dict(
+            self
+    ) -> Dict:
+        """Convert to dictionary for serialization"""
         return {
             "app_id": self.app_id,
             "name": self.name,

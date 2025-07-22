@@ -16,11 +16,10 @@ class ModuleDialog(ABC):
         self.module = module
         self.dialog = None
 
-        # Create and show the dialog
         self._create_dialog()
 
     def _create_dialog(self):
-        """Create the detail dialog."""
+        """Create the detail dialog"""
         with ui.dialog() as self.dialog:
             with ui.card().classes('w-[800px] max-h-[600px] p-4'):
                 # Header
@@ -39,7 +38,7 @@ class ModuleDialog(ABC):
         self.dialog.open()
 
     def _render_content(self):
-        """Render the detailed content based on module type."""
+        """Render the detailed content based on module type"""
         try:
             detailed_data = self.module.get_detailed_data()
             self._render_details(detailed_data)
@@ -52,10 +51,3 @@ class ModuleDialog(ABC):
     def _render_details(self, detailed_data: dict):
         """Render module-specific details. Must be implemented by subclasses"""
         pass
-
-    @staticmethod
-    def create_dialog(name: str, module: Module) -> 'ModuleDialog':
-        """Factory method to create the appropriate dialog based on module type"""
-        if module.name == "steam":
-            from src.gui.components.steam.steam_dialog import SteamDialog
-            return SteamDialog(name, module)
