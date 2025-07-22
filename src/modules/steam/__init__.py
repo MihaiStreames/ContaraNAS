@@ -66,51 +66,33 @@ class SteamModule(Module):
         """Get summary data for dashboard tile"""
         stats = self.controller.get_library_stats()
 
+        # Collect per-library size breakdowns
+        lib_sizes = [
+            {
+                "lib_path": lib['path'],
+                "size_breakdown": lib['size_breakdown']
+            }
+            for lib in stats['libraries']
+        ]
+
         return {
             "total_games": stats['total_games'],
             "total_size": stats['total_size'],
-            "library_count": len(stats['libraries']),
+            "lib_count": len(stats['libraries']),
+            "lib_sizes": lib_sizes,
             "status": "running" if self.enabled else "stopped",
             "last_update": self.last_update.isoformat() if self.last_update else None
         }
 
     def get_detailed_data(self) -> Dict[str, Any]:
         """Get detailed library data"""
-        games_by_library = self.controller.get_games_by_library()
-        stats = self.controller.get_library_stats()
-        cache_stats = self.controller.caching_service.get_cache_stats()
-
-        # Build detailed response
-        libraries = {}
-
-        for lib_stats in stats['libraries']:
-            lib_path = lib_stats['path']
-            games = games_by_library.get(lib_path, [])
-
-            libraries[lib_path] = {
-                **lib_stats,
-                'games': [
-                    {
-                        'app_id': game.app_id,
-                        'name': game.name,
-                        'total_size': game.total_size,
-                        'size_on_disk': game.size_on_disk,
-                        'install_dir': game.install_dir,
-                        'last_played': game.last_played_date.isoformat() if game.last_played_date else None,
-                        'last_updated': game.last_updated_date.isoformat() if game.last_updated_date else None,
-                        'is_updating': game.is_updating,
-                        'cover_url': game.cover_url,
-                        'store_url': game.store_url
-                    }
-                    for game in games
-                ]
-            }
+        lib_data = self.controller.get_library_data()
+        lib_stats = self.controller.get_library_stats()
 
         return {
-            'total_games': stats['total_games'],
-            'total_size': stats['total_size'],
-            'libraries': libraries,
-            'cache_stats': cache_stats,
+            'total_games': lib_stats['total_games'],
+            'total_size': lib_stats['total_size'],
+            'libraries': lib_data,
             'module_state': self.state
         }
 

@@ -17,7 +17,7 @@ class SteamGame(BaseModel):
     library_path: Path = Field(..., description="Steam library path")
 
     # Size information
-    size_on_disk: int = Field(default=0, description="Size from ACF in bytes")
+    size_on_disk: int = Field(default=0, description="Size on disk in bytes")
 
     # Timestamps
     last_updated: int = Field(default=0, description="Last update timestamp")
@@ -33,7 +33,7 @@ class SteamGame(BaseModel):
     # Installed depots
     installed_depots: Dict[str, Dict[str, str]] = Field(default_factory=dict)
 
-    # Additional calculated sizes
+    # Calculated sizes
     shader_cache_size: int = Field(default=0, description="Calculated shader cache size")
     workshop_content_size: int = Field(default=0, description="Calculated workshop size")
 

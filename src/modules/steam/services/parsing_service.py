@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 import vdf
 
@@ -14,37 +14,37 @@ class SteamParsingService:
     """Service for parsing Steam VDF and ACF files"""
 
     def __init__(self, steam_path: Path):
+        self.libraries: List[Path] = []
         self.steam_path = steam_path
 
-    def parse_library_folders(self) -> Dict[str, Dict[str, Any]]:
-        """Parse libraryfolders.vdf file"""
-        library_folders_file = self.steam_path / 'steamapps' / 'libraryfolders.vdf'
+    def get_library_paths(self) -> List[Path]:
+        """Get all Steam library paths from libraryfolders.vdf"""
+        if not self.libraries:
+            libraryfolders_file = self.steam_path / 'steamapps' / 'libraryfolders.vdf'
+            if not libraryfolders_file.exists():
+                logger.error(f"libraryfolders.vdf not found at {libraryfolders_file}")
+                return []
 
-        try:
-            with open(library_folders_file, 'r', encoding='utf-8') as f:
-                data = vdf.load(f)
-                libraries_data = data.get('libraryfolders', {})
+            try:
+                with open(libraryfolders_file, 'r', encoding='utf-8') as f:
+                    data = vdf.load(f)
+                    libraries_data = data.get('libraryfolders', {})
 
-                libraries = {}
-                for lib_id, lib_data in libraries_data.items():
-                    if isinstance(lib_data, dict) and 'path' in lib_data:
-                        path = lib_data['path']
-                        libraries[path] = {
-                            'id': lib_id,
-                            'label': lib_data.get('label', ''),
-                            'contentid': lib_data.get('contentid', ''),
-                            'totalsize': int(lib_data.get('totalsize', 0)),
-                            'apps': lib_data.get('apps', {})
-                        }
+                    for lib_id, lib_data in libraries_data.items():
+                        if isinstance(lib_data, dict) and 'path' in lib_data:
+                            path = lib_data['path']
+                            self.libraries.append(Path(path))
 
-                logger.debug(f"Parsed {len(libraries)} libraries from libraryfolders.vdf")
-                return libraries
+                    if not self.libraries:
+                        logger.warning("No library folders found in libraryfolders.vdf")
+            except Exception as e:
+                logger.error(f"Error reading libraryfolders.vdf: {e}")
+                return []
 
-        except Exception as e:
-            logger.error(f"Error parsing libraryfolders.vdf: {e}")
-            return {}
+        return self.libraries
 
-    def parse_app_manifest(self, manifest_path: Path) -> Optional[Dict[str, Any]]:
+    @staticmethod
+    def parse_app_manifest(manifest_path: Path) -> Optional[Dict[str, Any]]:
         """Parse an app manifest (ACF) file"""
         try:
             with open(manifest_path, 'r', encoding='utf-8') as f:

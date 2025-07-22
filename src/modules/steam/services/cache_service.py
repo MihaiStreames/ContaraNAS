@@ -1,138 +1,56 @@
-from datetime import datetime
+import os
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Dict, Any, List
 
-import requests
-
-from src.core.utils import load_json, save_json, get_logger
-from ..dtos.steam_game import SteamGame
+from src.core.utils import save_json, load_json, get_logger
 
 logger = get_logger(__name__)
 
 
 class SteamCachingService:
-    """Service for caching Steam game data"""
+    """Service for caching important data for faster access"""
 
     def __init__(self):
-        self.cache_dir = Path(".cache/steam/games")
-        self.images_dir = Path(".cache/steam/images")
-
-        # Create directories
+        self.cache_dir = Path(".cache/steam/libraries")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
-        self.images_dir.mkdir(parents=True, exist_ok=True)
 
-    def cache_game(self, game: SteamGame) -> bool:
-        """Save game data to cache"""
-        cache_file = self.cache_dir / f"{game.app_id}.json"
-
+    def cache_library(
+            self,
+            library_path: Path,
+            manifests: List[Path],
+            size_breakdown: Dict[str, int],
+            game_count: int
+    ) -> bool:
+        """Cache library stats and manifest mtimes"""
+        cache_file = self.cache_dir / f"{library_path.name}.json"
         try:
-            cache_data = {
-                'data': game.to_dict(),
-                'cached_at': datetime.now().isoformat(),
-                'manifest_mtime': None
+            manifest_info = {
+                str(m): os.stat(m).st_mtime for m in manifests if m.exists()
             }
-
-            # Store manifest modification time if available
-            if game.manifest_path.exists():
-                cache_data['manifest_mtime'] = game.manifest_path.stat().st_mtime
-
+            cache_data = {
+                "library_path": str(library_path),
+                "last_modified": max(manifest_info.values(), default=0),
+                "size_breakdown": size_breakdown,
+                "game_count": game_count,
+                "manifests": manifest_info
+            }
             save_json(cache_file, cache_data)
-            logger.debug(f"Cached game: {game.name} ({game.app_id})")
+            logger.debug(f"Cached library: {library_path}")
             return True
-
         except Exception as e:
-            logger.error(f"Failed to cache game {game.name}: {e}")
+            logger.error(f"Failed to cache library {library_path}: {e}")
             return False
 
-    def load_game(self, app_id: int) -> Optional[SteamGame]:
-        """Load game from cache"""
-        cache_file = self.cache_dir / f"{app_id}.json"
-
+    def load_library_cache(
+            self,
+            library_path: Path
+    ) -> Dict[str, Any]:
+        """Load cached library info"""
+        cache_file = self.cache_dir / f"{library_path.name}.json"
         if not cache_file.exists():
-            return None
-
+            return {}
         try:
-            cache_data = load_json(cache_file)
-            if not cache_data or 'data' not in cache_data:
-                return None
-
-            game_data = cache_data['data']
-            # Convert library_path back to Path
-            game_data['library_path'] = Path(game_data['library_path'])
-
-            return SteamGame(**game_data)
-
+            return load_json(cache_file)
         except Exception as e:
-            logger.error(f"Failed to load game {app_id} from cache: {e}")
-            return None
-
-    def is_cache_valid(self, app_id: int, manifest_path: Path) -> bool:
-        """Check if cached data is still valid"""
-        cache_file = self.cache_dir / f"{app_id}.json"
-
-        if not cache_file.exists():
-            return False
-
-        try:
-            cache_data = load_json(cache_file)
-            if not cache_data:
-                return False
-
-            # Check if manifest has been modified
-            if manifest_path.exists() and 'manifest_mtime' in cache_data:
-                current_mtime = manifest_path.stat().st_mtime
-                cached_mtime = cache_data['manifest_mtime']
-
-                if current_mtime > cached_mtime:
-                    logger.debug(f"Manifest updated for app {app_id}")
-                    return False
-
-            # Optional: Check cache age
-            cached_at = datetime.fromisoformat(cache_data.get('cached_at', '2000-01-01'))
-            age_days = (datetime.now() - cached_at).days
-
-            if age_days > 7:  # Refresh after a week
-                logger.debug(f"Cache too old for app {app_id}: {age_days} days")
-                return False
-
-            return True
-
-        except Exception as e:
-            logger.error(f"Error validating cache for app {app_id}: {e}")
-            return False
-
-    def cache_image(self, app_id: int, image_url: str) -> bool:
-        """Download and cache game cover image"""
-        image_file = self.images_dir / f"{app_id}.jpg"
-
-        if image_file.exists():
-            return True
-
-        try:
-            response = requests.get(image_url, timeout=10)
-            if response.status_code == 200:
-                image_file.write_bytes(response.content)
-                logger.debug(f"Cached image for app {app_id}")
-                return True
-            else:
-                logger.warning(f"Failed to download image for app {app_id}: HTTP {response.status_code}")
-                return False
-
-        except Exception as e:
-            logger.warning(f"Error caching image for app {app_id}: {e}")
-            return False
-
-    def get_cache_stats(self) -> Dict[str, Any]:
-        """Get cache statistics"""
-        cache_files = list(self.cache_dir.glob("*.json"))
-        image_files = list(self.images_dir.glob("*.jpg"))
-
-        total_size = sum(f.stat().st_size for f in cache_files)
-        total_size += sum(f.stat().st_size for f in image_files)
-
-        return {
-            'cached_games': len(cache_files),
-            'cached_images': len(image_files),
-            'total_size_mb': total_size / (1024 * 1024),
-            'cache_directory': str(self.cache_dir)
-        }
+            logger.error(f"Failed to load cache for {library_path}: {e}")
+            return {}

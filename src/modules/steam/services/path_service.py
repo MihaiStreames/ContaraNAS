@@ -53,9 +53,7 @@ class SteamPathService:
         return None
 
     @staticmethod
-    def validate_steam_path(
-            steam_path: Path
-    ) -> bool:
+    def validate_steam_path(steam_path: Path) -> bool:
         """Validate that a path is a valid Steam installation"""
         required_items = [
             steam_path / 'steamapps',

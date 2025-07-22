@@ -18,7 +18,6 @@ class SteamController:
         self.steam_path = steam_path
         self.games: List[SteamGame] = []
 
-        # Initialize services
         self.parsing_service = SteamParsingService(steam_path)
         self.caching_service = SteamCachingService()
         self.monitoring_service = SteamMonitoringService(steam_path)
@@ -26,124 +25,44 @@ class SteamController:
         logger.info(f"SteamController initialized with path: {steam_path}")
 
     def load_games(self) -> None:
-        """Load all games from Steam libraries"""
+        """Load all games from manifest files in Steam libraries"""
         logger.info("Loading Steam games...")
         start_time = datetime.now()
 
-        # Parse library folders
-        libraries = self.parsing_service.parse_library_folders()
+        libraries = self.parsing_service.get_library_paths()
         if not libraries:
             logger.error("No Steam libraries found")
             return
 
         self.games = []
-        cached_count = 0
-        parsed_count = 0
+        manifest_files = self.monitoring_service.get_manifest_files(libraries)
 
-        # Get app locations from libraryfolders.vdf
-        app_locations = self.monitoring_service.get_app_locations(libraries)
-
-        # Process each app
-        for app_id, library_path_str in app_locations.items():
-            library_path = Path(library_path_str)
-            manifest_path = library_path / 'steamapps' / f'appmanifest_{app_id}.acf'
-
-            if not manifest_path.exists():
-                logger.warning(f"Manifest not found for app {app_id}")
-                continue
-
-            # Try cache first
-            if self.caching_service.is_cache_valid(app_id, manifest_path):
-                game = self.caching_service.load_game(app_id)
-                if game:
-                    self.games.append(game)
-                    cached_count += 1
-                    continue
-
-            # Parse from manifest
+        for manifest_path in manifest_files:
+            library_path = manifest_path.parent.parent  # steamapps/../library
             game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
             if game:
                 self.games.append(game)
-                parsed_count += 1
-
-                # Cache the game
-                self.caching_service.cache_game(game)
-                self.caching_service.cache_image(game.app_id, game.cover_url)
 
         duration = (datetime.now() - start_time).total_seconds()
-        logger.info(
-            f"Loaded {len(self.games)} games in {duration:.2f}s "
-            f"(cached: {cached_count}, parsed: {parsed_count})"
-        )
+        logger.info(f"Loaded {len(self.games)} games in {duration:.2f}s")
 
-        # Reset monitoring state after full load
         self.monitoring_service.reset_state()
 
     def check_for_changes(self) -> Optional[Dict[str, Any]]:
-        """Check for library changes using monitoring service"""
-        if not self.monitoring_service.check_for_changes():
+        """Check for manifest changes using monitoring service"""
+        libraries = self.parsing_service.get_library_paths()
+        if not self.monitoring_service.check_for_changes(libraries):
             return None
 
-        logger.info("Library changes detected")
+        logger.info("Manifest changes detected")
 
-        # Get current library state
-        libraries = self.parsing_service.parse_library_folders()
-        if not libraries:
-            return None
+        # Reload games from manifests
+        self.load_games()
 
-        # Analyze changes
-        changes = self.monitoring_service.analyze_changes(libraries)
-
-        # Process changes
-        if changes['added_apps'] or changes['removed_apps'] or changes['size_changes']:
-            self._process_changes(changes)
-
-            return {
-                'timestamp': datetime.now().isoformat(),
-                'added': len(changes['added_apps']),
-                'removed': len(changes['removed_apps']),
-                'updated': len(changes['size_changes'])
-            }
-
-        return None
-
-    def _process_changes(self, changes: Dict[str, Any]) -> None:
-        """Process detected changes"""
-        # Remove games
-        for app_id, library_path in changes['removed_apps']:
-            self.games = [g for g in self.games if g.app_id != app_id]
-            logger.info(f"Removed game: {app_id}")
-
-        # Add new games
-        for app_id, library_path_str in changes['added_apps']:
-            library_path = Path(library_path_str)
-            manifest_path = library_path / 'steamapps' / f'appmanifest_{app_id}.acf'
-
-            if manifest_path.exists():
-                game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
-                if game:
-                    self.games.append(game)
-                    self.caching_service.cache_game(game)
-                    self.caching_service.cache_image(game.app_id, game.cover_url)
-                    logger.info(f"Added game: {game.name}")
-
-        # Handle size changes (potential updates)
-        for app_id, old_size, new_size in changes['size_changes']:
-            # Find the game
-            game = next((g for g in self.games if g.app_id == app_id), None)
-            if game:
-                # Reload from manifest to get updated info
-                manifest_path = game.manifest_path
-                if manifest_path.exists():
-                    updated_game = self.parsing_service.create_game_from_manifest(
-                        manifest_path,
-                        game.library_path
-                    )
-                    if updated_game:
-                        # Replace in list
-                        self.games = [g if g.app_id != app_id else updated_game for g in self.games]
-                        self.caching_service.cache_game(updated_game)
-                        logger.info(f"Updated game: {updated_game.name}")
+        return {
+            'timestamp': datetime.now().isoformat(),
+            'total_games': len(self.games)
+        }
 
     def get_games_by_library(self) -> Dict[str, List[SteamGame]]:
         """Group games by library path"""
@@ -151,19 +70,16 @@ class SteamController:
 
         for game in self.games:
             lib_path = str(game.library_path)
-            if lib_path not in grouped:
-                grouped[lib_path] = []
-            grouped[lib_path].append(game)
+            grouped.setdefault(lib_path, []).append(game)
 
-        # Sort games in each library by name
         for games in grouped.values():
             games.sort(key=lambda g: g.name.lower())
 
         return grouped
 
     def get_library_stats(self) -> Dict[str, Any]:
-        """Get statistics for all libraries"""
-        libraries = self.parsing_service.parse_library_folders()
+        """Get statistics for all libraries and cache them"""
+        libs = self.parsing_service.get_library_paths()
         games_by_lib = self.get_games_by_library()
 
         stats = {
@@ -172,21 +88,50 @@ class SteamController:
             'libraries': []
         }
 
-        for lib_path, lib_data in libraries.items():
-            games = games_by_lib.get(lib_path, [])
+        for lib_path in libs:
+            games = games_by_lib.get(str(lib_path), [])
+
+            size_breakdown = {
+                'games': sum(g.size_on_disk for g in games),
+                'shader_cache': sum(g.shader_cache_size for g in games),
+                'workshop': sum(g.workshop_content_size for g in games)
+            }
+
+            manifest_files = [g.manifest_path for g in games]
+
+            self.caching_service.cache_library(
+                lib_path, manifest_files, size_breakdown, len(games)
+            )
 
             lib_stats = {
-                'path': lib_path,
-                'label': lib_data.get('label', ''),
+                'path': str(lib_path),
                 'game_count': len(games),
                 'total_size': sum(g.total_size for g in games),
-                'size_breakdown': {
-                    'games': sum(g.size_on_disk for g in games),
-                    'shader_cache': sum(g.shader_cache_size for g in games),
-                    'workshop': sum(g.workshop_content_size for g in games)
-                }
+                'size_breakdown': size_breakdown
             }
 
             stats['libraries'].append(lib_stats)
 
         return stats
+
+    def get_library_data(self) -> Dict[str, Any]:
+        """For each library, parse manifests and return SteamGame DTOs as dicts"""
+        games_by_library = self.get_games_by_library()
+        stats = self.get_library_stats()
+
+        libs = {}
+
+        for lib_stats in stats['libraries']:
+            lib_path = lib_stats['path']
+            games = []
+
+            for game in games_by_library.get(lib_path, []):
+                # Use already loaded SteamGame DTOs
+                games.append(game.to_dict())
+
+            libs[lib_path] = {
+                **lib_stats,
+                'games': games
+            }
+
+        return libs
