@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Literal
 
 from pydantic import BaseModel, Field, computed_field
 
@@ -30,6 +30,9 @@ class SteamGame(BaseModel):
     bytes_to_download: int = Field(default=0, description="Bytes still to download")
     bytes_downloaded: int = Field(default=0, description="Bytes already downloaded")
 
+    # Install state
+    state_flags: int = Field(default=4, description="State flags from manifest")  # 4 = fully installed
+
     # Installed depots
     installed_depots: Dict[str, Dict[str, str]] = Field(default_factory=dict)
 
@@ -39,6 +42,23 @@ class SteamGame(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+    @computed_field
+    @property
+    def install_state(self) -> Literal['installed', 'updating', 'downloading', 'paused', 'uninstalled']:
+        """Determine current install state"""
+        if self.state_flags == 4:  # StateFlags "4" = fully installed
+            if self.bytes_to_download > 0:
+                return 'updating'
+            return 'installed'
+        elif self.state_flags == 1026:  # Update required
+            return 'updating'
+        elif 0 < self.bytes_downloaded < self.bytes_to_download:
+            return 'downloading'
+        elif self.bytes_to_download > 0:
+            return 'paused'
+        else:
+            return 'uninstalled'
 
     @computed_field
     @property
@@ -60,9 +80,15 @@ class SteamGame(BaseModel):
 
     @computed_field
     @property
+    def update_size(self) -> int:
+        """Size of pending updates"""
+        return max(0, self.bytes_to_download - self.bytes_downloaded)
+
+    @computed_field
+    @property
     def is_updating(self) -> bool:
         """Check if game is currently updating"""
-        return self.bytes_to_download > 0 and self.bytes_downloaded < self.bytes_to_download
+        return self.install_state in ['updating', 'downloading']
 
     @computed_field
     @property
@@ -99,6 +125,8 @@ class SteamGame(BaseModel):
             "shader_cache_size": self.shader_cache_size,
             "workshop_content_size": self.workshop_content_size,
             "total_size": self.total_size,
+            "update_size": self.update_size,
+            "install_state": self.install_state,
             "last_updated": self.last_updated,
             "last_played": self.last_played,
             "build_id": self.build_id,

@@ -38,10 +38,28 @@ class SteamController:
         manifest_files = self.monitoring_service.get_manifest_files(libraries)
 
         for manifest_path in manifest_files:
-            library_path = manifest_path.parent.parent  # steamapps/../library
+            library_path = manifest_path.parent.parent
             game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
+
             if game:
                 self.games.append(game)
+
+        # Update cache for each library
+        games_by_lib = self.get_games_by_library()
+
+        for lib_path in libraries:
+            games = games_by_lib.get(str(lib_path), [])
+            size_breakdown = {
+                'games': sum(g.size_on_disk for g in games),
+                'updates': sum(g.bytes_to_download for g in games),
+                'shader_cache': sum(g.shader_cache_size for g in games),
+                'workshop': sum(g.workshop_content_size for g in games)
+            }
+            manifest_files = [g.manifest_path for g in games]
+
+            self.caching_service.cache_library(
+                lib_path, manifest_files, size_breakdown, len(games)
+            )
 
         duration = (datetime.now() - start_time).total_seconds()
         logger.info(f"Loaded {len(self.games)} games in {duration:.2f}s")
@@ -89,13 +107,18 @@ class SteamController:
         }
 
         for lib_path in libs:
+            cache = self.caching_service.load_library_cache(lib_path)
             games = games_by_lib.get(str(lib_path), [])
 
-            size_breakdown = {
-                'games': sum(g.size_on_disk for g in games),
-                'shader_cache': sum(g.shader_cache_size for g in games),
-                'workshop': sum(g.workshop_content_size for g in games)
-            }
+            if cache and len(games) == cache.get('game_count', 0):
+                size_breakdown = cache.get('size_breakdown', {})
+            else:
+                size_breakdown = {
+                    'games': sum(g.size_on_disk for g in games),
+                    'updates': sum(g.bytes_to_download for g in games),
+                    'shader_cache': sum(g.shader_cache_size for g in games),
+                    'workshop': sum(g.workshop_content_size for g in games)
+                }
 
             manifest_files = [g.manifest_path for g in games]
 
@@ -123,11 +146,7 @@ class SteamController:
 
         for lib_stats in stats['libraries']:
             lib_path = lib_stats['path']
-            games = []
-
-            for game in games_by_library.get(lib_path, []):
-                # Use already loaded SteamGame DTOs
-                games.append(game.to_dict())
+            games = [game.to_dict() for game in games_by_library.get(lib_path, [])]
 
             libs[lib_path] = {
                 **lib_stats,

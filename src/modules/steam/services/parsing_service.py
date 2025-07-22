@@ -92,6 +92,7 @@ class SteamParsingService:
                 build_id=app_state.get('buildid', ''),
                 bytes_to_download=int(app_state.get('BytesToDownload', 0)),
                 bytes_downloaded=int(app_state.get('BytesDownloaded', 0)),
+                state_flags=int(app_state.get('StateFlags', 4)),
                 installed_depots=app_state.get('InstalledDepots', {}),
                 shader_cache_size=shader_cache_size,
                 workshop_content_size=workshop_size

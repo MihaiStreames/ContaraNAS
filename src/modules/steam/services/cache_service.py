@@ -23,10 +23,12 @@ class SteamCachingService:
     ) -> bool:
         """Cache library stats and manifest mtimes"""
         cache_file = self.cache_dir / f"{library_path.name}.json"
+
         try:
             manifest_info = {
                 str(m): os.stat(m).st_mtime for m in manifests if m.exists()
             }
+
             cache_data = {
                 "library_path": str(library_path),
                 "last_modified": max(manifest_info.values(), default=0),
@@ -34,9 +36,12 @@ class SteamCachingService:
                 "game_count": game_count,
                 "manifests": manifest_info
             }
+
             save_json(cache_file, cache_data)
             logger.debug(f"Cached library: {library_path}")
+
             return True
+
         except Exception as e:
             logger.error(f"Failed to cache library {library_path}: {e}")
             return False
@@ -47,8 +52,10 @@ class SteamCachingService:
     ) -> Dict[str, Any]:
         """Load cached library info"""
         cache_file = self.cache_dir / f"{library_path.name}.json"
+
         if not cache_file.exists():
             return {}
+
         try:
             return load_json(cache_file)
         except Exception as e:
