@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Any
+from typing import Dict, Any
 
 from src.core.module import Module
 
@@ -29,13 +29,6 @@ class ModuleManager:
             name: {
                 "enabled": module.enabled,
                 "tile_data": module.get_tile_data(),
-                "last_update": module.last_update
             }
             for name, module in self.modules.items()
         }
-
-    def get_module_details(self, name: str) -> Optional[Dict[str, Any]]:
-        """Get detailed data for a specific module"""
-        if name in self.modules:
-            return self.modules[name].get_detailed_data()
-        return None

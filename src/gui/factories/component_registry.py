@@ -19,9 +19,8 @@ def _register_steam_components() -> None:
     """Register Steam module components"""
     try:
         from src.gui.components.steam.steam_tile import SteamTile
-        from src.gui.components.steam.steam_dialog import SteamDialog
 
-        ComponentFactory.register_components("steam", SteamTile, SteamDialog)
+        ComponentFactory.register_components("steam", SteamTile)
         logger.debug("Registered Steam components")
 
     except ImportError as e:

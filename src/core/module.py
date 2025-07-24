@@ -1,6 +1,4 @@
-import asyncio
 from abc import ABC, abstractmethod
-from datetime import datetime
 
 from src.core.utils import get_logger
 
@@ -13,19 +11,23 @@ class Module(ABC):
     def __init__(self, name: str):
         self.name = name
         self.enabled = False
-        self.task = None
-        self.last_update = None
         self.state = {}
         self.logger = get_logger(f"backend.modules.{name}")
+        self.event_handlers = []
 
     @abstractmethod
-    def initialize(self):
+    async def initialize(self):
         """One-time setup when module is enabled"""
         pass
 
     @abstractmethod
-    def update(self):
-        """Periodic update logic for the module"""
+    async def start_monitoring(self):
+        """Start event handlers/watchers"""
+        pass
+
+    @abstractmethod
+    async def stop_monitoring(self):
+        """Stop all event handlers/watchers"""
         pass
 
     @abstractmethod
@@ -33,25 +35,20 @@ class Module(ABC):
         """Get data for dashboard tile display"""
         pass
 
-    @abstractmethod
-    def get_detailed_data(self):
-        """Get detailed data for the module"""
-        pass
-
     async def enable(self):
-        """Enable the module and monitor"""
+        """Enable the module and start monitoring"""
         if self.enabled:
             self.logger.debug(f"Module {self.name} is already enabled")
             return
 
-        try:
-            await self.initialize()
-            self.enabled = True
-            self.task = asyncio.create_task(self._monitor_loop())
-            self.logger.info(f"Module {self.name} enabled successfully")
-        except Exception as e:
-            self.logger.error(f"Failed to enable module {self.name}: {e}")
-            raise
+        # Unsure if this should be here
+        # a better implementation would be to have a separate
+        # initialization step that is called when the module is registered
+        await self.initialize()
+
+        await self.start_monitoring()
+        self.enabled = True
+        self.logger.info(f"Module {self.name} enabled successfully")
 
     async def disable(self):
         """Disable the module and stop monitoring"""
@@ -59,32 +56,11 @@ class Module(ABC):
             self.logger.debug(f"Module {self.name} is already disabled")
             return
 
+        await self.stop_monitoring()
         self.enabled = False
-        if self.task:
-            self.task.cancel()
-            try:
-                await self.task
-            except asyncio.CancelledError:
-                pass
         self.logger.info(f"Module {self.name} disabled successfully")
 
-    async def _monitor_loop(self):
-        """Background monitoring loop"""
-        self.logger.debug(f"Starting monitor loop for module {self.name}")
-
-        while self.enabled:
-            try:
-                await self.update()
-                self.last_update = datetime.now()
-                await asyncio.sleep(self.get_update_interval())
-            except asyncio.CancelledError:
-                self.logger.debug(f"Monitor loop for module {self.name} cancelled")
-                break
-            except Exception as e:
-                self.logger.error(f"Error in module {self.name}: {e}")
-                await asyncio.sleep(30)  # Backoff on error
-
-    @staticmethod
-    def get_update_interval() -> int:
-        """Get the update interval in seconds"""
-        return 30
+    def update_state(self, **kwargs):
+        """Helper method for modules to update their state"""
+        self.state.update(kwargs)
+        self.logger.debug(f"Module {self.name} state updated: {kwargs}")

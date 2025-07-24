@@ -16,7 +16,6 @@ class DashboardView:
     def __init__(self, module_manager: ModuleManager):
         self.manager = module_manager
         self.tiles: Dict[str, ModuleTile] = {}
-
         self._setup_ui()
 
     def _setup_ui(self):
@@ -43,8 +42,7 @@ class DashboardView:
                         name=name,
                         module=module,
                         on_enable=self._enable_module,
-                        on_disable=self._disable_module,
-                        on_details=self._show_module_details
+                        on_disable=self._disable_module
                     )
                     self.tiles[name] = tile
 
@@ -84,17 +82,3 @@ class DashboardView:
         except Exception as e:
             logger.error(f"Failed to disable module {name}: {e}")
             ui.notify(f"Failed to disable '{name}': {str(e)}", type='negative')
-
-    def _show_module_details(self, name: str):
-        """Show detailed information about a module"""
-        logger.debug(f"Showing details for module: {name}")
-
-        if name in self.manager.modules:
-            module = self.manager.modules[name]
-            try:
-                ComponentFactory.create_dialog(name, module)
-            except ValueError as e:
-                logger.error(f"Failed to create dialog for {name}: {e}")
-                ui.notify(f"Failed to show details for '{name}': {str(e)}", type='negative')
-        else:
-            ui.notify(f"Module '{name}' not found", type='negative')

@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Callable
 
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
@@ -9,29 +8,39 @@ logger = get_logger(__name__)
 
 
 class SteamManifestHandler(FileSystemEventHandler):
-    """Watchdog handler for Steam manifest files"""
+    """Watchdog handler for Steam manifest file changes"""
 
-    def __init__(self, callback: Callable[[str, Path], None]):
+    def __init__(self, callback):
         super().__init__()
         self.callback = callback
 
+    def _handle_manifest_event(self, event_type: str, event_path: str):
+        """Common handler for manifest events"""
+        if not event_path.endswith('.acf'):
+            return
+
+        path = Path(event_path)
+        if not path.name.startswith('appmanifest_'):
+            return
+
+        logger.debug(f"Watchdog event: {event_type} -> {path.name}")
+
+        self.callback(event_type, path)
+
     def on_created(self, event: FileSystemEvent):
-        if not event.is_directory and event.src_path.endswith('.acf'):
-            path = Path(event.src_path)
-            if path.name.startswith('appmanifest_'):
-                logger.debug(f"Manifest created: {path}")
-                self.callback('created', path)
+        if not event.is_directory:
+            self._handle_manifest_event('created', event.src_path)
 
     def on_deleted(self, event: FileSystemEvent):
-        if not event.is_directory and event.src_path.endswith('.acf'):
-            path = Path(event.src_path)
-            if path.name.startswith('appmanifest_'):
-                logger.debug(f"Manifest deleted: {path}")
-                self.callback('deleted', path)
+        if not event.is_directory:
+            self._handle_manifest_event('deleted', event.src_path)
 
     def on_modified(self, event: FileSystemEvent):
-        if not event.is_directory and event.src_path.endswith('.acf'):
-            path = Path(event.src_path)
-            if path.name.startswith('appmanifest_'):
-                logger.debug(f"Manifest modified: {path}")
-                self.callback('modified', path)
+        if not event.is_directory:
+            self._handle_manifest_event('modified', event.src_path)
+
+    def on_moved(self, event: FileSystemEvent):
+        if not event.is_directory:
+            # Handle moves as delete + create
+            self._handle_manifest_event('deleted', event.src_path)
+            self._handle_manifest_event('created', event.dest_path)

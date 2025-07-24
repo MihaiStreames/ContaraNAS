@@ -1,3 +1,4 @@
+import asyncio
 import os
 import src.gui.factories  # This triggers register_all_components()
 
@@ -37,6 +38,21 @@ def setup_gui():
     logger.info("GUI setup complete")
 
 
+async def cleanup_on_shutdown():
+    """Clean up all modules on app shutdown"""
+    logger.info("ContaraNAS shutting down, cleaning up modules...")
+
+    for name, module in manager.modules.items():
+        if module.enabled:
+            try:
+                await module.disable()
+                logger.info(f"Disabled module: {name}")
+            except Exception as e:
+                logger.error(f"Error disabling module {name}: {e}")
+
+    logger.info("Module cleanup complete")
+
+
 def main():
     logger.info("Starting ContaraNAS...")
 
@@ -46,7 +62,7 @@ def main():
 
     # Configure app
     app.on_startup(lambda: logger.info("ContaraNAS started successfully"))
-    app.on_shutdown(lambda: logger.info("ContaraNAS shutting down"))
+    app.on_shutdown(lambda: asyncio.create_task(cleanup_on_shutdown()))
 
     # Run the application
     ui.run(

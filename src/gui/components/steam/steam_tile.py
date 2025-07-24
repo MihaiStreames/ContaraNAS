@@ -1,7 +1,8 @@
+from datetime import datetime
+
 from nicegui import ui
 
 from src.gui.components.base.module_tile import ModuleTile
-from src.gui.utils.gui_utils import format_bytes
 
 
 class SteamTile(ModuleTile):
@@ -10,26 +11,43 @@ class SteamTile(ModuleTile):
     def _render_stats(self, tile_data: dict):
         """Render Steam-specific stats in the tile"""
         total_games = tile_data.get("total_games", 0)
-        total_size = tile_data.get("total_size", 0)
-        libraries = tile_data.get("libraries", {})
+        library_count = tile_data.get("library_count", 0)
+        last_change = tile_data.get("last_change")
 
-        # Basic stats
         ui.label(f"Games: {total_games}").classes('text-sm')
-        ui.label(f"Total Size: {format_bytes(total_size)}").classes('text-sm')
-        ui.label(f"Libraries: {len(libraries)}").classes('text-sm')
+        ui.label(f"Libraries: {library_count}").classes('text-sm')
 
-        # Show size breakdown if available
-        if total_games > 0:
-            with ui.expansion("Size Breakdown").classes('w-full'):
-                # Calculate totals for breakdown
-                total_game_size = sum(lib.get("size_breakdown", {}).get("games", 0) for lib in libraries.values())
-                total_dlc_size = sum(lib.get("size_breakdown", {}).get("dlc", 0) for lib in libraries.values())
-                total_shader_size = sum(
-                    lib.get("size_breakdown", {}).get("shader_cache", 0) for lib in libraries.values())
-                total_workshop_size = sum(
-                    lib.get("size_breakdown", {}).get("workshop", 0) for lib in libraries.values())
+        if not self.module.enabled:
+            ui.label("Enable to monitor changes").classes('text-xs text-gray-500')
+        else:
+            ui.label("Monitoring for changes...").classes('text-xs text-green-600')
 
-                ui.label(f"Games: {format_bytes(total_game_size)}").classes('text-xs ml-4')
-                ui.label(f"DLC: {format_bytes(total_dlc_size)}").classes('text-xs ml-4')
-                ui.label(f"Shader Cache: {format_bytes(total_shader_size)}").classes('text-xs ml-4')
-                ui.label(f"Workshop: {format_bytes(total_workshop_size)}").classes('text-xs ml-4')
+            # Show last change info if available
+            if last_change:
+                if isinstance(last_change, str):
+                    change_time = datetime.fromisoformat(last_change.replace('Z', '+00:00'))
+                else:
+                    change_time = last_change
+
+                # Show relative time
+                time_diff = datetime.now() - change_time.replace(tzinfo=None)
+
+                if time_diff.total_seconds() < 60:
+                    time_str = "Just now"
+                elif time_diff.total_seconds() < 3600:
+                    minutes = int(time_diff.total_seconds() / 60)
+                    time_str = f"{minutes}m ago"
+                elif time_diff.total_seconds() < 86400:
+                    hours = int(time_diff.total_seconds() / 3600)
+                    time_str = f"{hours}h ago"
+                else:
+                    days = int(time_diff.total_seconds() / 86400)
+                    time_str = f"{days}d ago"
+
+                last_change_type = self.module.state.get('last_change_type', '')
+                last_change_file = self.module.state.get('last_change_file', '')
+
+                if last_change_type and last_change_file:
+                    ui.label(f"Last: {last_change_type} - {time_str}").classes('text-xs text-blue-600')
+                else:
+                    ui.label(f"Last change: {time_str}").classes('text-xs text-blue-600')
