@@ -13,10 +13,7 @@ class SteamPathService:
 
     @staticmethod
     def find_steam_path() -> Optional[Path]:
-        """
-        Find Steam installation path based on the platform.
-        Returns None if Steam is not found.
-        """
+        """Find Steam installation path based on the platform"""
         system = platform.system()
 
         if system == 'Windows':

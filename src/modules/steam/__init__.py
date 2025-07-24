@@ -7,6 +7,7 @@ from watchdog.observers import Observer
 from src.core.module import Module
 from src.core.utils import get_logger
 from src.modules.steam.services.manifest_handler import SteamManifestHandler
+from src.modules.steam.utils.steam_helpers import extract_app_id
 
 logger = get_logger(__name__)
 
@@ -127,13 +128,24 @@ class SteamModule(Module):
 
     def _on_manifest_change(self, event_type, manifest_path):
         """Handle manifest file changes"""
-        self.logger.info(f"Manifest {event_type}: {manifest_path.name}")
+        app_id = extract_app_id(manifest_path)
+
+        # Use more descriptive logging
+        if app_id:
+            self.logger.info(f"Steam app {app_id} {event_type}: {manifest_path.name}")
+        else:
+            self.logger.info(f"Manifest {event_type}: {manifest_path.name}")
+
+        cache_action = None
+        old_count = len(self.manifest_cache)
 
         if event_type == 'deleted':
             # Remove from cache
             if manifest_path in self.manifest_cache:
                 del self.manifest_cache[manifest_path]
-                self.logger.debug(f"Removed from cache: {manifest_path.name}")
+                cache_action = "removed"
+            else:
+                self.logger.debug(f"Attempted to remove non-cached manifest: {manifest_path.name}")
 
         elif event_type in ['created', 'modified']:
             # Update cache with new mtime
@@ -143,18 +155,33 @@ class SteamModule(Module):
 
                 if old_mtime != mtime:
                     self.manifest_cache[manifest_path] = mtime
-                    action = "updated" if old_mtime else "added"
-                    self.logger.debug(f"Cache {action}: {manifest_path.name}")
+                    cache_action = "updated" if old_mtime else "added"
+                else:
+                    # No actual change in mtime, skip update
+                    return
             else:
                 self.logger.warning(f"Manifest file doesn't exist during {event_type}: {manifest_path}")
+                return
 
-        # Update module state
-        self.update_state(
-            game_count=len(self.manifest_cache),
-            last_change_type=event_type,
-            last_change_file=manifest_path.name,
-            last_change_time=datetime.now()
-        )
+        # Only log cache actions if there was an actual change
+        if cache_action:
+            new_count = len(self.manifest_cache)
+            count_change = new_count - old_count
+
+            if count_change != 0:
+                self.logger.debug(
+                    f"Cache {cache_action}: {manifest_path.name} (total: {new_count}, change: {count_change:+d})")
+            else:
+                self.logger.debug(f"Cache {cache_action}: {manifest_path.name}")
+
+            # Update module state
+            self.update_state(
+                game_count=len(self.manifest_cache),
+                last_change_type=event_type,
+                last_change_file=manifest_path.name,
+                last_change_time=datetime.now(),
+                last_change_app_id=app_id
+            )
 
     async def _cache_initial_manifests(self) -> None:
         """Cache initial manifest file states"""

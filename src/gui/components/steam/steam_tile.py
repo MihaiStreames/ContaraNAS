@@ -1,14 +1,26 @@
-from datetime import datetime
-
 from nicegui import ui
 
+from src.core.event_bus import event_bus
 from src.gui.components.base.module_tile import ModuleTile
+from src.gui.utils.gui_utils import format_relative_time
 
 
 class SteamTile(ModuleTile):
     """Steam-specific module tile implementation"""
 
-    def _render_stats(self, tile_data: dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._setup_event_listeners()
+
+    def _setup_event_listeners(self):
+        """Set up event listeners for real-time updates"""
+        event_bus.subscribe(f'module.{self.name}.state_changed', self.update_state)
+
+    def update_state(self, event_data=None):
+        """Update the tile's state"""
+        super().update_state(event_data)
+
+    def render(self, tile_data: dict):
         """Render Steam-specific stats in the tile"""
         total_games = tile_data.get("total_games", 0)
         library_count = tile_data.get("library_count", 0)
@@ -24,30 +36,19 @@ class SteamTile(ModuleTile):
 
             # Show last change info if available
             if last_change:
-                if isinstance(last_change, str):
-                    change_time = datetime.fromisoformat(last_change.replace('Z', '+00:00'))
-                else:
-                    change_time = last_change
-
-                # Show relative time
-                time_diff = datetime.now() - change_time.replace(tzinfo=None)
-
-                if time_diff.total_seconds() < 60:
-                    time_str = "Just now"
-                elif time_diff.total_seconds() < 3600:
-                    minutes = int(time_diff.total_seconds() / 60)
-                    time_str = f"{minutes}m ago"
-                elif time_diff.total_seconds() < 86400:
-                    hours = int(time_diff.total_seconds() / 3600)
-                    time_str = f"{hours}h ago"
-                else:
-                    days = int(time_diff.total_seconds() / 86400)
-                    time_str = f"{days}d ago"
+                time_str = format_relative_time(last_change)
 
                 last_change_type = self.module.state.get('last_change_type', '')
                 last_change_file = self.module.state.get('last_change_file', '')
+                last_change_app_id = self.module.state.get('last_change_app_id', '')
 
-                if last_change_type and last_change_file:
-                    ui.label(f"Last: {last_change_type} - {time_str}").classes('text-xs text-blue-600')
+                if last_change_type and last_change_app_id:
+                    ui.label(f"Last: {last_change_type} App {last_change_app_id} - {time_str}").classes(
+                        'text-xs text-blue-600')
+                elif last_change_type and last_change_file:
+                    ui.label(f"Last: {last_change_type} {last_change_file} - {time_str}").classes(
+                        'text-xs text-blue-600')
                 else:
                     ui.label(f"Last change: {time_str}").classes('text-xs text-blue-600')
+            else:
+                ui.label("No recent changes").classes('text-xs text-gray-500')

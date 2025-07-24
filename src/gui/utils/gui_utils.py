@@ -41,22 +41,3 @@ def format_relative_time(timestamp: Union[datetime, str, None]) -> str:
     else:
         days = int(total_seconds / 86400)
         return f"{days}d ago"
-
-
-def format_absolute_time(timestamp: Union[datetime, str, None], format_str: str = "%Y-%m-%d %H:%M:%S") -> str:
-    """Format timestamp as absolute time string"""
-    if not timestamp:
-        return "Never"
-
-    # Handle string timestamps
-    if isinstance(timestamp, str):
-        try:
-            timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-        except ValueError:
-            return "Invalid time"
-
-    # Ensure timezone-naive datetime
-    if timestamp.tzinfo is not None:
-        timestamp = timestamp.replace(tzinfo=None)
-
-    return timestamp.strftime(format_str)

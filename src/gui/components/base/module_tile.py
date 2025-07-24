@@ -12,13 +12,7 @@ logger = get_logger(__name__)
 class ModuleTile(ABC):
     """Abstract base class for module tiles"""
 
-    def __init__(
-            self,
-            name: str,
-            module: Module,
-            on_enable: Callable,
-            on_disable: Callable
-    ):
+    def __init__(self, name: str, module: Module, on_enable: Callable, on_disable: Callable):
         self.name = name
         self.module = module
         self.on_enable = on_enable
@@ -32,17 +26,18 @@ class ModuleTile(ABC):
 
         self._create_tile()
 
-    def update_state(self):
+    def update_state(self, event_data=None):
         """Update the tile's state to reflect current module status"""
-        # Update status badge
         self.status_badge.set_text(self._get_status_text())
         self.status_badge.props(f'color={self._get_status_color()}')
 
-        # Update basic info
         self._update_info()
-
-        # Update button states
         self._update_buttons()
+
+    @abstractmethod
+    def render(self, tile_data: dict):
+        """Render module-specific data in the tile"""
+        pass
 
     def _create_tile(self):
         """Create the tile UI"""
@@ -50,12 +45,13 @@ class ModuleTile(ABC):
             # Header with name and status
             with ui.row().classes('w-full items-center justify-between mb-4'):
                 ui.label(self.name.title()).classes('text-lg font-bold')
+
                 self.status_badge = ui.badge(
                     self._get_status_text(),
                     color=self._get_status_color()
                 )
 
-            # Basic info container
+            # Info container
             self.info_container = ui.column().classes('w-full mb-4 flex-1')
             self._update_info()
 
@@ -73,7 +69,6 @@ class ModuleTile(ABC):
                     on_click=lambda: self.on_disable(self.name)
                 ).props('size=sm color=warning')
 
-            # Update button states
             self._update_buttons()
 
     def _get_status_text(self) -> str:
@@ -102,14 +97,9 @@ class ModuleTile(ABC):
 
             with self.info_container:
                 # Show module-specific basic stats
-                self._render_stats(tile_data)
+                self.render(tile_data)
 
         except Exception as e:
             logger.error(f"Error updating info for {self.name}: {e}")
             with self.info_container:
                 ui.label("Error loading info").classes('text-red-500 text-sm')
-
-    @abstractmethod
-    def _render_stats(self, tile_data: dict):
-        """Render module-specific stats in the tile"""
-        pass
