@@ -49,25 +49,21 @@ def generate_progress_bar_html(percentages: Dict[str, float]) -> str:
             background-color: #1976d2; 
             width: {percentages['games']}%; 
             height: 100%;
-            transition: width 0.3s ease;
         " title="Games: {format_bytes(int(percentages['games_size']))}"></div>
         <div style="
             background-color: #388e3c; 
             width: {percentages['shaders']}%; 
             height: 100%;
-            transition: width 0.3s ease;
         " title="Shaders: {format_bytes(int(percentages['shader_size']))}"></div>
         <div style="
             background-color: #f57c00; 
             width: {percentages['workshop']}%; 
             height: 100%;
-            transition: width 0.3s ease;
         " title="Workshop: {format_bytes(int(percentages['workshop_size']))}"></div>
         <div style="
             background-color: #fdd835; 
             width: {percentages['non_steam']}%; 
             height: 100%;
-            transition: width 0.3s ease;
         " title="Non-Steam files: {format_bytes(int(percentages['non_steam_size']))}"></div>
     </div>
     """
