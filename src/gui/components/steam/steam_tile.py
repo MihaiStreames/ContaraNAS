@@ -1,6 +1,7 @@
 from nicegui import ui
 
 from src.gui.components.base.base_tile import BaseTile
+from .steam_tile_helper import render_library_header, render_progress_section, render_color_legend, render_drive_info
 
 
 class SteamTile(BaseTile):
@@ -8,13 +9,21 @@ class SteamTile(BaseTile):
 
     def render(self, tile_data: dict):
         """Render Steam-specific stats in the tile"""
-        total_games = tile_data.get("total_games", 0)
-        library_count = tile_data.get("library_count", 0)
+        libraries = tile_data.get("libraries", [])
 
-        ui.label(f"Games: {total_games}").classes('text-sm')
-        ui.label(f"Libraries: {library_count}").classes('text-sm')
+        if not libraries:
+            ui.label("No Steam libraries found").classes('text-sm text-gray-500')
+            return
 
-        if not self.view_model.enabled:
-            ui.label("Enable to monitor changes").classes('text-xs text-gray-500')
-        else:
-            ui.label("Monitoring for changes...").classes('text-xs text-green-600')
+        # Library progress bars
+        for library in libraries:
+            self._render_library_bar(library)
+
+    @staticmethod
+    def _render_library_bar(library: dict):
+        """Render a segmented progress bar for a single library"""
+        with ui.column().classes('w-full mb-3 p-2 border rounded'):
+            render_library_header(library["path"], library["game_count"])
+            render_progress_section(library)
+            render_color_legend(library)
+            render_drive_info(library)

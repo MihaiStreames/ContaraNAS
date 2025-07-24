@@ -5,7 +5,6 @@ import vdf
 
 from src.core.utils import get_logger
 from ..dtos.steam_game import SteamGame
-from ..utils.steam_helpers import get_size
 
 logger = get_logger(__name__)
 

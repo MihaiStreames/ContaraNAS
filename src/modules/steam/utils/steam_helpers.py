@@ -1,6 +1,9 @@
-import os
+import platform
+import re
+import shutil
+import subprocess
 from pathlib import Path
-from typing import Union
+from typing import Union, Dict
 
 import requests
 
@@ -15,12 +18,36 @@ def check_url(url: str) -> bool:
         return False
 
 
-def get_size(directory: Union[str, Path]) -> int:
+def get_dir_size(directory: Union[str, Path]) -> int | None:
     """Calculate the total size of files in a directory"""
-    total_size = 0
-    for root, _, files in os.walk(directory):
-        total_size += sum(os.path.getsize(os.path.join(root, f)) for f in files)
-    return total_size
+    system = platform.system()
+
+    if system in ['Linux', 'Darwin']:
+        return _get_dir_size_unix(directory)
+    elif system == 'Windows':
+        return _get_dir_size_win(directory)
+    return None
+
+
+def _get_dir_size_unix(directory: Union[str, Path]) -> int:
+    """Calculate directory size for Unix-like systems"""
+    result = subprocess.run(['du', '-sb', directory], capture_output=True, text=True, check=True)
+    size_bytes = int(result.stdout.split()[0])
+    return size_bytes
+
+
+def _get_dir_size_win(directory: Union[str, Path]) -> int | None:
+    """Get directory size using dir command (Windows)"""
+    result = subprocess.run(['dir', directory, '/s', '/-c'], capture_output=True, text=True, shell=True, check=True)
+    lines = result.stdout.split('\n')
+
+    for line in reversed(lines):
+        if 'bytes' in line and 'Total Files Listed:' in line:
+            # Extract number before "bytes"
+            match = re.search(r'([\d,]+) bytes', line)
+            if match:
+                return int(match.group(1).replace(',', ''))
+    return None
 
 
 def is_manifest_file(path: str) -> bool:
@@ -38,3 +65,13 @@ def extract_app_id(manifest_path: Path) -> str | None:
     if filename.startswith('appmanifest_') and filename.endswith('.acf'):
         return filename[12:-4]  # Remove 'appmanifest_' and '.acf'
     return None
+
+
+def get_drive_info(path: Path) -> Dict[str, int]:
+    """Get drive size information for a path"""
+    stat = shutil.disk_usage(path)
+    return {
+        "total": stat.total,
+        "free": stat.free,
+        "used": stat.total - stat.free
+    }

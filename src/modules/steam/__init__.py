@@ -31,9 +31,10 @@ class SteamModule(Module):
 
     def get_tile_data(self) -> Dict[str, Any]:
         """Get data for dashboard tile"""
-        return {
-            "total_games": self.state.get('game_count', 0),
-            "library_count": self.state.get('library_count', 0),
-            "status": "monitoring" if self.enable_flag else "idle",
-            "steam_path": self.state.get('steam_path'),
-        }
+        if not self.controller:
+            return {
+                "libraries": [],
+                "error": "Module not initialized"
+            }
+
+        return self.controller.get_tile_data()
