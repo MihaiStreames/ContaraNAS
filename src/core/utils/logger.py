@@ -4,7 +4,6 @@ import os
 
 def get_logger(name: str) -> logging.Logger:
     """Create and configure a logger with both file and console handlers"""
-    print(f"get_logger called for: {name}")
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
@@ -18,18 +17,11 @@ def get_logger(name: str) -> logging.Logger:
         file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setLevel(logging.DEBUG)
 
-        # Real-time monitoring
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
-
-        # Consistent formatting for both handlers
+        # Consistent formatting
         formatter = logging.Formatter(
             "[%(asctime)s] [%(levelname)s] %(name)s: %(message)s"
         )
         file_handler.setFormatter(formatter)
-        console_handler.setFormatter(formatter)
-
         logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
 
     return logger

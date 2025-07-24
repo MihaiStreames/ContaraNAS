@@ -4,7 +4,7 @@ from pathlib import Path
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
 from src.core.utils import get_logger
-from src.modules.steam.utils.steam_helpers import is_manifest_file
+from ..utils.steam_helpers import is_manifest_file
 
 logger = get_logger(__name__)
 

@@ -16,9 +16,13 @@ class Module(ABC):
         self.logger = get_logger(f"backend.modules.{name}")
         self.event_handlers = []
 
+        self.initialized = False
+        self._initialization_lock = False
+        self._perform_initialization()
+
     @abstractmethod
-    async def initialize(self):
-        """One-time setup when module is enabled"""
+    def initialize(self):
+        """One-time setup when module is created"""
         pass
 
     @abstractmethod
@@ -42,10 +46,11 @@ class Module(ABC):
             self.logger.debug(f"Module {self.name} is already enabled")
             return
 
-        # Unsure if this should be here
-        # a better implementation would be to have a separate
-        # initialization step that is called when the module is registered
-        await self.initialize()
+        # Check if module was initialized successfully
+        if not self.initialized:
+            error_msg = f"Cannot enable module {self.name}: not initialized"
+            self.logger.error(error_msg)
+            raise RuntimeError(error_msg)
 
         await self.start_monitoring()
         self.enabled = True
@@ -93,3 +98,25 @@ class Module(ABC):
 
         # Emit specific module event
         event_bus.emit(f'module.{self.name}.state_changed', event_data)
+
+    def _perform_initialization(self):
+        """Perform module initialization"""
+        if self._initialization_lock:
+            self.logger.warning(f"Module {self.name} initialization already in progress")
+            return
+
+        if self.initialized:
+            self.logger.debug(f"Module {self.name} already initialized")
+            return
+
+        self._initialization_lock = True
+        try:
+            self.logger.info(f"Initializing module {self.name}...")
+            self.initialize()
+            self.initialized = True
+            self.logger.info(f"Module {self.name} initialized successfully")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize module {self.name}: {e}")
+            raise
+        finally:
+            self._initialization_lock = False
