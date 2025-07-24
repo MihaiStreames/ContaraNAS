@@ -29,7 +29,7 @@ class SteamTile(ModuleTile):
         ui.label(f"Games: {total_games}").classes('text-sm')
         ui.label(f"Libraries: {library_count}").classes('text-sm')
 
-        if not self.module.enabled:
+        if not self.module.enable_flag:
             ui.label("Enable to monitor changes").classes('text-xs text-gray-500')
         else:
             ui.label("Monitoring for changes...").classes('text-xs text-green-600')

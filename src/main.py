@@ -43,7 +43,7 @@ async def cleanup_on_shutdown():
     logger.info("ContaraNAS shutting down, cleaning up modules...")
 
     for name, module in manager.modules.items():
-        if module.enabled:
+        if module.enable_flag:
             try:
                 await module.disable()
                 logger.info(f"Disabled module: {name}")

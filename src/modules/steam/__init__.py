@@ -14,7 +14,7 @@ class SteamModule(Module):
         self.controller: Optional[SteamController] = None
         super().__init__("steam")
 
-    def initialize(self) -> None:
+    async def initialize(self) -> None:
         """Initialize the Steam module"""
         self.controller = SteamController(self.update_state)
         self.controller.initialize()
@@ -22,12 +22,12 @@ class SteamModule(Module):
     async def start_monitoring(self) -> None:
         """Start Steam library monitoring"""
         self.controller.start_monitoring()
-        self.logger.info("Steam monitoring started")
+        logger.info("Steam monitoring started")
 
     async def stop_monitoring(self) -> None:
         """Stop Steam library monitoring"""
         self.controller.stop_monitoring()
-        self.logger.info("Steam monitoring stopped")
+        logger.info("Steam monitoring stopped")
 
     def get_tile_data(self) -> Dict[str, Any]:
         """Get data for dashboard tile"""

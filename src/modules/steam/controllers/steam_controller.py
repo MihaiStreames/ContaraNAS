@@ -16,13 +16,10 @@ class SteamController:
 
     def __init__(self, state_update_callback):
         self.state_update_callback = state_update_callback
-
-        # Services
+        self.monitor_flag = False
         self.library_service = SteamLibraryService()
         self.cache_service = SteamCacheService()
         self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
-
-        self.monitoring = False
 
     def initialize(self) -> None:
         """Initialize the controller and its services"""
@@ -47,28 +44,28 @@ class SteamController:
 
     def start_monitoring(self) -> None:
         """Start monitoring Steam libraries"""
-        if self.monitoring:
+        if self.monitor_flag:
             logger.debug("Monitoring already started")
             return
 
         self.monitoring_service.start_monitoring(self.library_service.get_library_paths())
-        self.monitoring = True
+        self.monitor_flag = True
 
     def stop_monitoring(self) -> None:
         """Stop monitoring Steam libraries"""
-        if not self.monitoring:
+        if not self.monitor_flag:
             logger.debug("Monitoring already stopped")
             return
 
         self.monitoring_service.stop_monitoring()
-        self.monitoring = False
+        self.monitor_flag = False
 
     def get_tile_data(self) -> Dict[str, Any]:
         """Get data for the dashboard tile"""
         return {
             "total_games": self.cache_service.get_game_count(),
             "library_count": len(self.library_service.get_library_paths()),
-            "status": "monitoring" if self.monitoring else "idle",
+            "status": "monitoring" if self.monitor_flag else "idle",
             "steam_path": str(self.library_service.get_steam_path()) if self.library_service.get_steam_path() else None,
         }
 

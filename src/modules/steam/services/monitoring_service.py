@@ -14,13 +14,13 @@ class SteamMonitoringService:
 
     def __init__(self, change_callback: Callable):
         self.change_callback = change_callback
+        self.monitor_flag = False
         self.observer: Optional[Observer] = None
         self.manifest_handler: Optional[SteamManifestHandler] = None
-        self.is_monitoring = False
 
     def start_monitoring(self, library_paths: List[Path]) -> None:
         """Start monitoring Steam libraries for changes"""
-        if self.is_monitoring:
+        if self.monitor_flag:
             logger.debug("Monitoring already started")
             return
 
@@ -41,12 +41,12 @@ class SteamMonitoringService:
                 logger.debug(f"Watching: {steamapps_path}")
 
         self.observer.start()
-        self.is_monitoring = True
+        self.monitor_flag = True
         logger.info("Steam file monitoring started")
 
     def stop_monitoring(self) -> None:
         """Stop monitoring Steam libraries"""
-        if not self.is_monitoring:
+        if not self.monitor_flag:
             logger.debug("Monitoring already stopped")
             return
 
@@ -58,5 +58,5 @@ class SteamMonitoringService:
             self.observer = None
 
         self.manifest_handler = None
-        self.is_monitoring = False
+        self.monitor_flag = False
         logger.info("Steam file monitoring stopped")

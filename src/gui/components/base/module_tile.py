@@ -73,15 +73,15 @@ class ModuleTile(ABC):
 
     def _get_status_text(self) -> str:
         """Get the status text for the module"""
-        return "Running" if self.module.enabled else "Stopped"
+        return "Running" if self.module.enable_flag else "Stopped"
 
     def _get_status_color(self) -> str:
         """Get the status color for the module"""
-        return "positive" if self.module.enabled else "grey"
+        return "positive" if self.module.enable_flag else "grey"
 
     def _update_buttons(self):
         """Update the enable/disable button states"""
-        if self.module.enabled:
+        if self.module.enable_flag:
             self.enable_button.set_visibility(False)
             self.disable_button.set_visibility(True)
         else:

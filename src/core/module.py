@@ -11,18 +11,14 @@ class Module(ABC):
 
     def __init__(self, name: str):
         self.name = name
-        self.enabled = False
+        self.enable_flag = False
+        self.init_flag = False
         self.state = {}
-        self.logger = get_logger(f"backend.modules.{name}")
         self.event_handlers = []
 
-        self.initialized = False
-        self._initialization_lock = False
-        self._perform_initialization()
-
     @abstractmethod
-    def initialize(self):
-        """One-time setup when module is created"""
+    async def initialize(self):
+        """One-time setup when module is enabled"""
         pass
 
     @abstractmethod
@@ -42,31 +38,36 @@ class Module(ABC):
 
     async def enable(self):
         """Enable the module and start monitoring"""
-        if self.enabled:
-            self.logger.debug(f"Module {self.name} is already enabled")
+        if self.enable_flag:
+            logger.debug(f"Module {self.name} is already enabled")
             return
 
+        # Lazy initialization: only initialize if not already done
+        if not self.init_flag:
+            await self.initialize()
+            self.init_flag = True
+
         # Check if module was initialized successfully
-        if not self.initialized:
+        if not self.init_flag:
             error_msg = f"Cannot enable module {self.name}: not initialized"
-            self.logger.error(error_msg)
+            logger.error(error_msg)
             raise RuntimeError(error_msg)
 
         await self.start_monitoring()
-        self.enabled = True
-        self.logger.info(f"Module {self.name} enabled successfully")
+        self.enable_flag = True
+        logger.info(f"Module {self.name} enabled successfully")
 
         self._emit_event('enabled')
 
     async def disable(self):
         """Disable the module and stop monitoring"""
-        if not self.enabled:
-            self.logger.debug(f"Module {self.name} is already disabled")
+        if not self.enable_flag:
+            logger.debug(f"Module {self.name} is already disabled")
             return
 
         await self.stop_monitoring()
-        self.enabled = False
-        self.logger.info(f"Module {self.name} disabled successfully")
+        self.enable_flag = False
+        logger.info(f"Module {self.name} disabled successfully")
 
         self._emit_event('disabled')
 
@@ -74,7 +75,7 @@ class Module(ABC):
         """Helper method for modules to update their state"""
         old_state = self.state.copy()
         self.state.update(kwargs)
-        self.logger.debug(f"Module {self.name} state updated: {kwargs}")
+        logger.debug(f"Module {self.name} state updated: {kwargs}")
 
         self._emit_event('state_updated', {
             'module_name': self.name,
@@ -88,7 +89,7 @@ class Module(ABC):
         event_data = {
             'module_name': self.name,
             'change_type': change_type,
-            'enabled': self.enabled,
+            'enabled': self.enable_flag,
             'state': self.state,
             'tile_data': self.get_tile_data()
         }
@@ -98,25 +99,3 @@ class Module(ABC):
 
         # Emit specific module event
         event_bus.emit(f'module.{self.name}.state_changed', event_data)
-
-    def _perform_initialization(self):
-        """Perform module initialization"""
-        if self._initialization_lock:
-            self.logger.warning(f"Module {self.name} initialization already in progress")
-            return
-
-        if self.initialized:
-            self.logger.debug(f"Module {self.name} already initialized")
-            return
-
-        self._initialization_lock = True
-        try:
-            self.logger.info(f"Initializing module {self.name}...")
-            self.initialize()
-            self.initialized = True
-            self.logger.info(f"Module {self.name} initialized successfully")
-        except Exception as e:
-            self.logger.error(f"Failed to initialize module {self.name}: {e}")
-            raise
-        finally:
-            self._initialization_lock = False

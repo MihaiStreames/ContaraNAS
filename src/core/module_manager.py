@@ -27,7 +27,7 @@ class ModuleManager:
         """Get dashboard data for all registered modules"""
         return {
             name: {
-                "enabled": module.enabled,
+                "enabled": module.enable_flag,
                 "tile_data": module.get_tile_data(),
             }
             for name, module in self.modules.items()
