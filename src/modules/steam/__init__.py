@@ -32,5 +32,4 @@ class SteamModule(Module):
     def get_tile_data(self) -> Dict[str, Any]:
         """Get data for dashboard tile"""
         tile_data = self.controller.get_tile_data()
-        tile_data["last_change"] = self.state.get('last_change_time')
         return tile_data

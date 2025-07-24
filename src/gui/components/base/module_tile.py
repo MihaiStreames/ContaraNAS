@@ -94,9 +94,7 @@ class ModuleTile(ABC):
 
         try:
             tile_data = self.module.get_tile_data()
-
             with self.info_container:
-                # Show module-specific basic stats
                 self.render(tile_data)
 
         except Exception as e:

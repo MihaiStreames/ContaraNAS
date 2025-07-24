@@ -24,4 +24,6 @@ def get_logger(name: str) -> logging.Logger:
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
+        logger.propagate = False
+
     return logger
