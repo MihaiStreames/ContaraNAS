@@ -53,7 +53,6 @@ class ModuleTile(ABC):
 
             # Info container
             self.info_container = ui.column().classes('w-full mb-4 flex-1')
-            self._update_info()
 
             # Action buttons
             with ui.row().classes('w-full justify-end gap-2'):
@@ -96,7 +95,6 @@ class ModuleTile(ABC):
             tile_data = self.module.get_tile_data()
             with self.info_container:
                 self.render(tile_data)
-
         except Exception as e:
             logger.error(f"Error updating info for {self.name}: {e}")
             with self.info_container:
