@@ -75,10 +75,6 @@ class SteamParsingService:
             logger.warning(f"Missing required fields in manifest: {manifest_path}")
             return None
 
-        # Calculate additional sizes
-        shader_cache_size = self._calculate_shader_cache_size(library_path, app_id)
-        workshop_size = self._calculate_workshop_size(library_path, app_id)
-
         # Create game instance
         try:
             game = SteamGame(
@@ -93,9 +89,7 @@ class SteamParsingService:
                 bytes_to_download=int(app_state.get('BytesToDownload', 0)),
                 bytes_downloaded=int(app_state.get('BytesDownloaded', 0)),
                 state_flags=int(app_state.get('StateFlags', 4)),
-                installed_depots=app_state.get('InstalledDepots', {}),
-                shader_cache_size=shader_cache_size,
-                workshop_content_size=workshop_size
+                installed_depots=app_state.get('InstalledDepots', {})
             )
 
             return game
@@ -103,15 +97,3 @@ class SteamParsingService:
         except Exception as e:
             logger.error(f"Error creating game from manifest {manifest_path}: {e}")
             return None
-
-    @staticmethod
-    def _calculate_shader_cache_size(library_path: Path, app_id: int) -> int:
-        """Calculate shader cache size for a game"""
-        shader_path = library_path / 'steamapps' / 'shadercache' / str(app_id)
-        return get_size(shader_path) if shader_path.exists() else 0
-
-    @staticmethod
-    def _calculate_workshop_size(library_path: Path, app_id: int) -> int:
-        """Calculate workshop content size for a game"""
-        workshop_path = library_path / 'steamapps' / 'workshop' / 'content' / str(app_id)
-        return get_size(workshop_path) if workshop_path.exists() else 0

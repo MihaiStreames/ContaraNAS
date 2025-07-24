@@ -31,5 +31,9 @@ class SteamModule(Module):
 
     def get_tile_data(self) -> Dict[str, Any]:
         """Get data for dashboard tile"""
-        tile_data = self.controller.get_tile_data()
-        return tile_data
+        return {
+            "total_games": self.state.get('game_count', 0),
+            "library_count": self.state.get('library_count', 0),
+            "status": "monitoring" if self.enable_flag else "idle",
+            "steam_path": self.state.get('steam_path'),
+        }

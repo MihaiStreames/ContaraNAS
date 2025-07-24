@@ -4,6 +4,8 @@ from typing import Dict, Optional, Literal
 
 from pydantic import BaseModel, Field, computed_field
 
+from src.modules.steam.utils.steam_helpers import get_size
+
 
 class SteamGame(BaseModel):
     """Steam Game Data Transfer Object (DTO)"""
@@ -35,10 +37,6 @@ class SteamGame(BaseModel):
 
     # Installed depots
     installed_depots: Dict[str, Dict[str, str]] = Field(default_factory=dict)
-
-    # Calculated sizes
-    shader_cache_size: int = Field(default=0, description="Calculated shader cache size")
-    workshop_content_size: int = Field(default=0, description="Calculated workshop size")
 
     class Config:
         arbitrary_types_allowed = True
@@ -86,21 +84,15 @@ class SteamGame(BaseModel):
 
     @computed_field
     @property
-    def is_updating(self) -> bool:
-        """Check if game is currently updating"""
-        return self.install_state in ['updating', 'downloading']
+    def last_updated_date(self) -> Optional[datetime]:
+        """Convert timestamp to datetime"""
+        return datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
 
     @computed_field
     @property
     def last_played_date(self) -> Optional[datetime]:
         """Convert timestamp to datetime"""
         return datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
-
-    @computed_field
-    @property
-    def last_updated_date(self) -> Optional[datetime]:
-        """Convert timestamp to datetime"""
-        return datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
 
     @computed_field
     @property
@@ -113,6 +105,20 @@ class SteamGame(BaseModel):
     def cover_url(self) -> str:
         """Cover image URL"""
         return f"https://steamcdn-a.akamaihd.net/steam/apps/{self.app_id}/header.jpg"
+
+    @computed_field
+    @property
+    def shader_cache_size(self) -> int:
+        """Calculate shader cache size"""
+        shader_path = self.library_path / 'steamapps' / 'shadercache' / str(self.app_id)
+        return get_size(shader_path) if shader_path.exists() else 0
+
+    @computed_field
+    @property
+    def workshop_content_size(self) -> int:
+        """Calculate workshop content size"""
+        workshop_path = self.library_path / 'steamapps' / 'workshop' / 'content' / str(self.app_id)
+        return get_size(workshop_path) if workshop_path.exists() else 0
 
     def to_dict(self) -> Dict:
         """Convert to dictionary for serialization"""

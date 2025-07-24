@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from src.core.module import Module
 
@@ -9,8 +9,8 @@ class ModuleManager:
     def __init__(self) -> None:
         self.modules: Dict[str, Module] = {}
 
-    def register(self, module: Module) -> None:
-        """Register a module with the manager (if a module with the same name already exists, it will be replaced)"""
+    def register(self, module: Module):
+        """Register a module"""
         self.modules[module.name] = module
 
     async def enable_module(self, name: str) -> None:
@@ -23,12 +23,23 @@ class ModuleManager:
         if name in self.modules:
             await self.modules[name].disable()
 
-    def get_dashboard_data(self) -> Dict[str, Dict[str, Any]]:
-        """Get dashboard data for all registered modules"""
+    def get_module_state(self, module_name: str) -> Optional[Dict[str, Any]]:
+        """Get current state of a specific module"""
+        if module_name not in self.modules:
+            return None
+
+        module = self.modules[module_name]
         return {
-            name: {
-                "enabled": module.enable_flag,
-                "tile_data": module.get_tile_data(),
-            }
-            for name, module in self.modules.items()
+            'name': module_name,
+            'enabled': module.enable_flag,
+            'initialized': module.init_flag,
+            'state': module.state.copy(),
+            'tile_data': module.get_tile_data()
+        }
+
+    def get_all_states(self) -> Dict[str, Dict[str, Any]]:
+        """Get states of all modules"""
+        return {
+            name: self.get_module_state(name)
+            for name in self.modules.keys()
         }

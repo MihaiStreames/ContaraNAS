@@ -62,15 +62,6 @@ class SteamController:
         self.monitoring_service.stop_monitoring()
         self.monitor_flag = False
 
-    def get_tile_data(self) -> Dict[str, Any]:
-        """Get data for the dashboard tile"""
-        return {
-            "total_games": self.cache_service.get_game_count(),
-            "library_count": len(self.library_service.get_library_paths()),
-            "status": "monitoring" if self.monitor_flag else "idle",
-            "steam_path": str(self.library_service.get_steam_path()) if self.library_service.get_steam_path() else None,
-        }
-
     def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:
         """Handle manifest file changes from the monitoring service"""
         app_id = extract_app_id(manifest_path)

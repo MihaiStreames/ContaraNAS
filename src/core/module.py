@@ -87,11 +87,12 @@ class Module(ABC):
     def _emit_event(self, change_type: str, data: dict = None):
         """Emit a state change event for GUI components to listen to"""
         event_data = {
-            'module_name': self.name,
-            'change_type': change_type,
+            'name': self.name,
             'enabled': self.enable_flag,
-            'state': self.state,
-            'tile_data': self.get_tile_data()
+            'initialized': self.init_flag,
+            'state': self.state.copy(),
+            'tile_data': self.get_tile_data(),
+            'change_type': change_type
         }
 
         if data:
