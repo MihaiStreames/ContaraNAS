@@ -18,6 +18,29 @@ def check_url(url: str) -> bool:
         return False
 
 
+def is_manifest_file(path: str) -> bool:
+    """Check if the path is a Steam manifest file"""
+    if not path.endswith(".acf"):
+        return False
+    filename = Path(path).name
+    return filename.startswith("appmanifest_")
+
+
+def extract_app_id(manifest_path: Path) -> str | None:
+    """Extract Steam App ID from manifest file path"""
+    # appmanifest_1942280.acf -> 1942280
+    filename = manifest_path.name
+    if filename.startswith("appmanifest_") and filename.endswith(".acf"):
+        return filename[12:-4]  # Remove 'appmanifest_' and '.acf'
+    return None
+
+
+def get_drive_info(path: Path) -> Dict[str, int]:
+    """Get drive size information for a path"""
+    stat = shutil.disk_usage(path)
+    return {"total": stat.total, "free": stat.free, "used": stat.total - stat.free}
+
+
 def get_dir_size(directory: Union[str, Path]) -> int | None:
     """Calculate the total size of files in a directory"""
     system = platform.system()
@@ -56,26 +79,3 @@ def _get_dir_size_win(directory: Union[str, Path]) -> int | None:
             if match:
                 return int(match.group(1).replace(",", ""))
     return None
-
-
-def is_manifest_file(path: str) -> bool:
-    """Check if the path is a Steam manifest file"""
-    if not path.endswith(".acf"):
-        return False
-    filename = Path(path).name
-    return filename.startswith("appmanifest_")
-
-
-def extract_app_id(manifest_path: Path) -> str | None:
-    """Extract Steam App ID from manifest file path"""
-    # appmanifest_1942280.acf -> 1942280
-    filename = manifest_path.name
-    if filename.startswith("appmanifest_") and filename.endswith(".acf"):
-        return filename[12:-4]  # Remove 'appmanifest_' and '.acf'
-    return None
-
-
-def get_drive_info(path: Path) -> Dict[str, int]:
-    """Get drive size information for a path"""
-    stat = shutil.disk_usage(path)
-    return {"total": stat.total, "free": stat.free, "used": stat.total - stat.free}
