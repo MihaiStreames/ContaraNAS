@@ -1,6 +1,6 @@
 # ContaraNAS
 
-A modular desktop application for monitoring and managing NAS at home.
+A modular desktop application for monitoring and managing NAS systems at home.
 
 ## Features
 
