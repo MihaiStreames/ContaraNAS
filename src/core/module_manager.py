@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from src.core.module import Module
 
@@ -30,16 +30,13 @@ class ModuleManager:
 
         module = self.modules[module_name]
         return {
-            'name': module_name,
-            'enabled': module.enable_flag,
-            'initialized': module.init_flag,
-            'state': module.state.copy(),
-            'tile_data': module.get_tile_data()
+            "name": module_name,
+            "enabled": module.enable_flag,
+            "initialized": module.init_flag,
+            "state": module.state.copy(),
+            "tile_data": module.get_tile_data(),
         }
 
     def get_all_states(self) -> Dict[str, Dict[str, Any]]:
         """Get states of all modules"""
-        return {
-            name: self.get_module_state(name)
-            for name in self.modules.keys()
-        }
+        return {name: self.get_module_state(name) for name in self.modules.keys()}

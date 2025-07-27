@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional, Literal
+from typing import Dict, Literal, Optional
 
 from pydantic import BaseModel, Field, computed_field
 
@@ -33,7 +33,9 @@ class SteamGame(BaseModel):
     bytes_downloaded: int = Field(default=0, description="Bytes already downloaded")
 
     # Install state
-    state_flags: int = Field(default=4, description="State flags from manifest")  # 4 = fully installed
+    state_flags: int = Field(
+        default=4, description="State flags from manifest"
+    )  # 4 = fully installed
 
     # Installed depots
     installed_depots: Dict[str, Dict[str, str]] = Field(default_factory=dict)
@@ -43,45 +45,49 @@ class SteamGame(BaseModel):
 
     @computed_field
     @property
-    def install_state(self) -> Literal['installed', 'updating', 'downloading', 'paused', 'uninstalled']:
+    def install_state(
+        self,
+    ) -> Literal["installed", "updating", "downloading", "paused", "uninstalled"]:
         """Determine current install state"""
         if self.state_flags == 4:  # StateFlags "4" = fully installed
             if self.bytes_to_download > 0:
-                return 'updating'
-            return 'installed'
+                return "updating"
+            return "installed"
         elif self.state_flags == 1026:  # Update required
-            return 'updating'
+            return "updating"
         elif 0 < self.bytes_downloaded < self.bytes_to_download:
-            return 'downloading'
+            return "downloading"
         elif self.bytes_to_download > 0:
-            return 'paused'
+            return "paused"
         else:
-            return 'uninstalled'
+            return "uninstalled"
 
     @computed_field
     @property
     def manifest_path(self) -> Path:
         """Path to the game's manifest file"""
-        return self.library_path / 'steamapps' / f'appmanifest_{self.app_id}.acf'
+        return self.library_path / "steamapps" / f"appmanifest_{self.app_id}.acf"
 
     @computed_field
     @property
     def install_path(self) -> Path:
         """Full installation path"""
-        return self.library_path / 'steamapps' / 'common' / self.install_dir
+        return self.library_path / "steamapps" / "common" / self.install_dir
 
     @computed_field
     @property
     def shader_cache_size(self) -> int:
         """Calculate shader cache size for this game"""
-        shader_path = self.library_path / 'steamapps' / 'shadercache' / str(self.app_id)
+        shader_path = self.library_path / "steamapps" / "shadercache" / str(self.app_id)
         return get_dir_size(shader_path) if shader_path.exists() else 0
 
     @computed_field
     @property
     def workshop_content_size(self) -> int:
         """Calculate workshop content size for this game"""
-        workshop_path = self.library_path / 'steamapps' / 'workshop' / 'content' / str(self.app_id)
+        workshop_path = (
+            self.library_path / "steamapps" / "workshop" / "content" / str(self.app_id)
+        )
         return get_dir_size(workshop_path) if workshop_path.exists() else 0
 
     @computed_field
@@ -100,13 +106,17 @@ class SteamGame(BaseModel):
     @property
     def last_played_date(self) -> Optional[datetime]:
         """Convert timestamp to datetime"""
-        return datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
+        return (
+            datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
+        )
 
     @computed_field
     @property
     def last_updated_date(self) -> Optional[datetime]:
         """Convert timestamp to datetime"""
-        return datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
+        return (
+            datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
+        )
 
     @computed_field
     @property
@@ -138,5 +148,5 @@ class SteamGame(BaseModel):
             "build_id": self.build_id,
             "store_url": self.store_url,
             "cover_url": self.cover_url,
-            "installed_depots": self.installed_depots
+            "installed_depots": self.installed_depots,
         }

@@ -11,5 +11,5 @@ __all__ = [
     "SteamManifestHandler",
     "SteamMonitoringService",
     "SteamParsingService",
-    "SteamPathService"
+    "SteamPathService",
 ]

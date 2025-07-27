@@ -1,4 +1,5 @@
 from src.core.utils import get_logger
+
 from .component_factory import ComponentFactory
 
 logger = get_logger(__name__)
@@ -12,7 +13,9 @@ def register_all_components() -> None:
     _register_steam_components()
 
     registered = ComponentFactory.get_registered_modules()
-    logger.info(f"Registered components for {len(registered)} module types: {list(registered.keys())}")
+    logger.info(
+        f"Registered components for {len(registered)} module types: {list(registered.keys())}"
+    )
 
 
 def _register_steam_components() -> None:

@@ -24,12 +24,12 @@ class DashboardView:
     def _setup_ui(self):
         """Setup dashboard UI"""
         with ui.header():
-            ui.label("ContaraNAS").classes('text-h4 font-bold')
+            ui.label("ContaraNAS").classes("text-h4 font-bold")
 
-        with ui.column().classes('p-4 w-full'):
-            ui.label("Modules").classes('text-h5 mb-4')
+        with ui.column().classes("p-4 w-full"):
+            ui.label("Modules").classes("text-h5 mb-4")
 
-            self.tiles_container = ui.row().classes('gap-4 w-full')
+            self.tiles_container = ui.row().classes("gap-4 w-full")
             self._create_tiles()
 
     def _create_tiles(self):

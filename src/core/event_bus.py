@@ -1,4 +1,4 @@
-from typing import Dict, List, Callable, Any
+from typing import Any, Callable, Dict, List
 
 from src.core.utils import get_logger
 
@@ -31,9 +31,13 @@ class EventBus:
     def emit(self, event_type: str, data: Any = None):
         """Emit an event to all subscribers"""
         if event_type in self._listeners:
-            logger.debug(f"Emitting event: {event_type} to {len(self._listeners[event_type])} listeners")
+            logger.debug(
+                f"Emitting event: {event_type} to {len(self._listeners[event_type])} listeners"
+            )
 
-            for callback in self._listeners[event_type][:]:  # Copy list to avoid modification during iteration
+            for callback in self._listeners[event_type][
+                :
+            ]:  # Copy list to avoid modification during iteration
                 try:
                     callback(data)
                 except Exception as e:

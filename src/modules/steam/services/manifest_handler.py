@@ -1,9 +1,10 @@
 import traceback
 from pathlib import Path
 
-from watchdog.events import FileSystemEventHandler, FileSystemEvent
+from watchdog.events import FileSystemEvent, FileSystemEventHandler
 
 from src.core.utils import get_logger
+
 from ..utils.steam_helpers import is_manifest_file
 
 logger = get_logger(__name__)
@@ -18,15 +19,15 @@ class SteamManifestHandler(FileSystemEventHandler):
 
     def on_created(self, event: FileSystemEvent):
         if not event.is_directory:
-            self._handle_manifest_event('created', event.src_path)
+            self._handle_manifest_event("created", event.src_path)
 
     def on_deleted(self, event: FileSystemEvent):
         if not event.is_directory:
-            self._handle_manifest_event('deleted', event.src_path)
+            self._handle_manifest_event("deleted", event.src_path)
 
     def on_modified(self, event: FileSystemEvent):
         if not event.is_directory:
-            self._handle_manifest_event('modified', event.src_path)
+            self._handle_manifest_event("modified", event.src_path)
 
     def on_moved(self, event: FileSystemEvent):
         # Seems like Steam uses temp files for updates
@@ -38,13 +39,13 @@ class SteamManifestHandler(FileSystemEventHandler):
             if is_manifest_file(event.dest_path):
                 # Determine if this is a new file or an update
                 if dest_path.exists():
-                    self._handle_manifest_event('modified', event.dest_path)
+                    self._handle_manifest_event("modified", event.dest_path)
                 else:
-                    self._handle_manifest_event('created', event.dest_path)
+                    self._handle_manifest_event("created", event.dest_path)
 
             # If moving FROM a manifest file (to backup/temp), treat as delete
             elif is_manifest_file(event.src_path):
-                self._handle_manifest_event('deleted', event.src_path)
+                self._handle_manifest_event("deleted", event.src_path)
 
     def _handle_manifest_event(self, event_type: str, event_path: str):
         """Common handler for manifest events"""

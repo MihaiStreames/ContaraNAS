@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from src.core.event_bus import event_bus
+from src.core.exceptions import ModuleError, ModuleInitializationError
 from src.core.utils import get_logger
 
 logger = get_logger(__name__)
@@ -42,22 +43,25 @@ class Module(ABC):
             logger.debug(f"Module {self.name} is already enabled")
             return
 
-        # Lazy initialization: only initialize if not already done
-        if not self.init_flag:
-            await self.initialize()
-            self.init_flag = True
+        try:
+            # Lazy initialization: only initialize if not already done
+            if not self.init_flag:
+                await self.initialize()
+                self.init_flag = True
 
-        # Check if module was initialized successfully
-        if not self.init_flag:
-            error_msg = f"Cannot enable module {self.name}: not initialized"
-            logger.error(error_msg)
-            raise RuntimeError(error_msg)
+            # Check if module was initialized successfully
+            if not self.init_flag:
+                error_msg = f"Cannot enable module {self.name}: not initialized"
+                logger.error(error_msg)
+                raise RuntimeError(error_msg)
 
-        await self.start_monitoring()
-        self.enable_flag = True
-        logger.info(f"Module {self.name} enabled successfully")
+            await self.start_monitoring()
+            self.enable_flag = True
+            logger.info(f"Module {self.name} enabled successfully")
+        except Exception as e:
+            raise ModuleInitializationError(self.name, str(e)) from e
 
-        self._emit_event('enabled')
+        self._emit_event("enabled")
 
     async def disable(self):
         """Disable the module and stop monitoring"""
@@ -65,11 +69,15 @@ class Module(ABC):
             logger.debug(f"Module {self.name} is already disabled")
             return
 
-        await self.stop_monitoring()
-        self.enable_flag = False
-        logger.info(f"Module {self.name} disabled successfully")
+        try:
+            await self.stop_monitoring()
+            self.enable_flag = False
+            logger.info(f"Module {self.name} disabled successfully")
 
-        self._emit_event('disabled')
+            self._emit_event("disabled")
+        except Exception as e:
+            logger.error(f"Failed to disable module {self.name}: {str(e)}")
+            raise ModuleError(self.name, str(e)) from e
 
     def update_state(self, **kwargs):
         """Helper method for modules to update their state"""
@@ -77,26 +85,29 @@ class Module(ABC):
         self.state.update(kwargs)
         logger.debug(f"Module {self.name} state updated: {kwargs}")
 
-        self._emit_event('state_updated', {
-            'module_name': self.name,
-            'old_state': old_state,
-            'new_state': self.state,
-            'changes': kwargs
-        })
+        self._emit_event(
+            "state_updated",
+            {
+                "module_name": self.name,
+                "old_state": old_state,
+                "new_state": self.state,
+                "changes": kwargs,
+            },
+        )
 
     def _emit_event(self, change_type: str, data: dict = None):
         """Emit a state change event for GUI components to listen to"""
         event_data = {
-            'name': self.name,
-            'enabled': self.enable_flag,
-            'initialized': self.init_flag,
-            'state': self.state.copy(),
-            'tile_data': self.get_tile_data(),
-            'change_type': change_type
+            "name": self.name,
+            "enabled": self.enable_flag,
+            "initialized": self.init_flag,
+            "state": self.state.copy(),
+            "tile_data": self.get_tile_data(),
+            "change_type": change_type,
         }
 
         if data:
             event_data.update(data)
 
         # Emit specific module event
-        event_bus.emit(f'module.{self.name}.state_changed', event_data)
+        event_bus.emit(f"module.{self.name}.state_changed", event_data)

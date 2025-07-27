@@ -29,7 +29,7 @@ class ComponentFactory:
     def get_registered_modules(cls) -> Dict[str, Dict[str, Type]]:
         """Get all registered module types and their component classes"""
         return {
-            module_name: {'tile_class': cls._tile_classes[module_name]}
+            module_name: {"tile_class": cls._tile_classes[module_name]}
             for module_name in cls._tile_classes.keys()
         }
 

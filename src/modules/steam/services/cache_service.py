@@ -11,14 +11,16 @@ class SteamCacheService:
 
     def __init__(self):
         self.manifest_cache: Dict[str, float] = {}  # manifest_path -> mtime
-        self.cache_file = Path.home() / '.contaranas' / 'steam_cache.json'
+        self.cache_file = Path.home() / ".contaranas" / "steam_cache.json"
 
     def initialize_cache(self, library_paths: List[Path]) -> None:
         """Initialize cache with current manifest states"""
         logger.debug("Initializing manifest cache...")
 
         if self._load_cache():
-            logger.info(f"Loaded manifest cache from disk: {len(self.manifest_cache)} games")
+            logger.info(
+                f"Loaded manifest cache from disk: {len(self.manifest_cache)} games"
+            )
             self.update_cache(library_paths)
         else:
             logger.info("No cache found, performing fresh initialization...")
@@ -34,7 +36,7 @@ class SteamCacheService:
     def update_manifest(self, manifest_path: Path) -> str:
         """Update manifest in cache. Returns action taken: 'added', 'updated', or 'no_change'"""
         if not manifest_path.exists():
-            return 'no_change'
+            return "no_change"
 
         mtime = manifest_path.stat().st_mtime
         old_mtime = self.manifest_cache.get(str(manifest_path))
@@ -44,7 +46,7 @@ class SteamCacheService:
             self._save_cache()
             return "updated" if old_mtime else "added"
 
-        return 'no_change'
+        return "no_change"
 
     def remove_manifest(self, manifest_path: Path) -> bool:
         """Remove manifest from cache. Returns True if it was cached."""
@@ -72,7 +74,7 @@ class SteamCacheService:
 
     def _save_cache(self) -> None:
         """Save manifest cache to JSON file"""
-        cache_data = {'manifests': self.manifest_cache}
+        cache_data = {"manifests": self.manifest_cache}
         save_json(self.cache_file, cache_data)
         logger.debug(f"Saved cache to {self.cache_file}")
 
@@ -82,10 +84,10 @@ class SteamCacheService:
             return False
 
         cache_data = load_json(self.cache_file)
-        if not cache_data or 'manifests' not in cache_data:
+        if not cache_data or "manifests" not in cache_data:
             return False
 
-        self.manifest_cache = cache_data['manifests']
+        self.manifest_cache = cache_data["manifests"]
         logger.debug(f"Loaded cache from {self.cache_file}")
         return True
 
@@ -101,11 +103,11 @@ class SteamCacheService:
         current_manifests = {}
 
         for library_path in library_paths:
-            steamapps_path = library_path / 'steamapps'
+            steamapps_path = library_path / "steamapps"
             if not steamapps_path.exists():
                 continue
 
-            for manifest_path in steamapps_path.glob('appmanifest_*.acf'):
+            for manifest_path in steamapps_path.glob("appmanifest_*.acf"):
                 if manifest_path.exists():
                     mtime = manifest_path.stat().st_mtime
                     current_manifests[str(manifest_path)] = mtime
@@ -122,13 +124,20 @@ class SteamCacheService:
         existing = cached_paths & current_paths
 
         changed = {
-            path for path in existing
+            path
+            for path in existing
             if self.manifest_cache[path] != current_manifests[path]
         }
 
         return added, removed, changed
 
-    def _apply_changes(self, current_manifests: Dict[str, float], added: set, removed: set, changed: set) -> None:
+    def _apply_changes(
+        self,
+        current_manifests: Dict[str, float],
+        added: set,
+        removed: set,
+        changed: set,
+    ) -> None:
         """Apply the detected changes to the manifest cache"""
         # Remove missing manifests
         for manifest_path in removed:

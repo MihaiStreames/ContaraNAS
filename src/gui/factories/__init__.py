@@ -4,4 +4,4 @@ from .component_registry import register_all_components
 # Auto-register all components when this package is imported
 register_all_components()
 
-__all__ = ['ComponentFactory']
+__all__ = ["ComponentFactory"]

@@ -1,16 +1,16 @@
 import asyncio
 import os
+
+from nicegui import app, ui
+
 import src.gui.factories  # This triggers register_all_components()
-
-from nicegui import ui, app
-
 from core.module_manager import ModuleManager
 from core.utils import get_logger
 from modules.steam import SteamModule
 from src.gui.dashboard import DashboardView
 
 # Some fixes
-os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--disable-gpu --no-sandbox'
+os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
 
 logger = get_logger(__name__)
 
@@ -32,7 +32,7 @@ def setup_gui():
     """Setup the main GUI application"""
     logger.info("Setting up GUI...")
 
-    ui.colors(primary='#1976d2')
+    ui.colors(primary="#1976d2")
     dashboard = DashboardView(manager)
 
     logger.info("GUI setup complete")
@@ -70,7 +70,7 @@ def main():
         native=True,
         window_size=(1200, 800),
         fullscreen=False,
-        reload=False
+        reload=False,
     )
 
 

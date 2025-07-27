@@ -14,7 +14,7 @@ def get_logger(name: str) -> logging.Logger:
         log_file = os.path.join(log_dir, "app.log")
 
         # Persistent logging
-        file_handler = logging.FileHandler(log_file, encoding='utf-8')
+        file_handler = logging.FileHandler(log_file, encoding="utf-8")
         file_handler.setLevel(logging.DEBUG)
 
         # Consistent formatting

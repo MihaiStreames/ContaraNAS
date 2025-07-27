@@ -1,9 +1,10 @@
 from pathlib import Path
-from typing import List, Callable, Optional
+from typing import Callable, List, Optional
 
 from watchdog.observers import Observer
 
 from src.core.utils import get_logger
+
 from ..services.manifest_handler import SteamManifestHandler
 
 logger = get_logger(__name__)
@@ -31,12 +32,10 @@ class SteamMonitoringService:
 
         # Watch each library's steamapps folder
         for library_path in library_paths:
-            steamapps_path = library_path / 'steamapps'
+            steamapps_path = library_path / "steamapps"
             if steamapps_path.exists():
                 self.observer.schedule(
-                    self.manifest_handler,
-                    str(steamapps_path),
-                    recursive=False
+                    self.manifest_handler, str(steamapps_path), recursive=False
                 )
                 logger.debug(f"Watching: {steamapps_path}")
 

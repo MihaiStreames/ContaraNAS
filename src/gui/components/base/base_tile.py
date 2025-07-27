@@ -4,6 +4,7 @@ from nicegui import ui
 
 from src.core.event_bus import event_bus
 from src.core.utils import get_logger
+
 from .base_view_model import BaseTileViewModel
 
 logger = get_logger(__name__)
@@ -33,46 +34,47 @@ class BaseTile(ABC):
     def _setup_event_listeners(self):
         """Listen for state changes"""
         event_bus.subscribe(
-            f'module.{self.view_model.name}.state_changed',
-            self._handle_state_change
+            f"module.{self.view_model.name}.state_changed", self._handle_state_change
         )
 
     def _handle_state_change(self, event_data):
         """Update view model and refresh UI"""
         self.view_model = BaseTileViewModel.from_module_state(
-            self.view_model.name,
-            event_data
+            self.view_model.name, event_data
         )
         self._refresh_ui()
 
     def _create_tile(self):
         """Create the tile UI"""
-        with ui.card().classes('w-72 min-h-[180px] p-4'):
+        with ui.card().classes("w-72 min-h-[180px] p-4"):
             # Header
-            with ui.row().classes('w-full items-center justify-between mb-4'):
-                ui.label(self.view_model.name.title()).classes('text-lg font-bold')
+            with ui.row().classes("w-full items-center justify-between mb-4"):
+                ui.label(self.view_model.name.title()).classes("text-lg font-bold")
 
                 self.status_badge = ui.badge(
-                    self.view_model.status_text,
-                    color=self.view_model.status_color
+                    self.view_model.status_text, color=self.view_model.status_color
                 )
 
             # Info container
-            self.info_container = ui.column().classes('w-full mb-4 flex-1')
+            self.info_container = ui.column().classes("w-full mb-4 flex-1")
 
             # Buttons
-            with ui.row().classes('w-full justify-end gap-2'):
+            with ui.row().classes("w-full justify-end gap-2"):
                 self.enable_button = ui.button(
                     "Enable",
                     icon="play_arrow",
-                    on_click=lambda: self.controller.enable_module(self.view_model.name)
-                ).props('size=sm color=positive')
+                    on_click=lambda: self.controller.enable_module(
+                        self.view_model.name
+                    ),
+                ).props("size=sm color=positive")
 
                 self.disable_button = ui.button(
                     "Disable",
                     icon="stop",
-                    on_click=lambda: self.controller.disable_module(self.view_model.name)
-                ).props('size=sm color=warning')
+                    on_click=lambda: self.controller.disable_module(
+                        self.view_model.name
+                    ),
+                ).props("size=sm color=warning")
 
             self._refresh_ui()
 
@@ -80,7 +82,7 @@ class BaseTile(ABC):
         """Update UI to match current view model"""
         # Update status badge
         self.status_badge.set_text(self.view_model.status_text)
-        self.status_badge.props(f'color={self.view_model.status_color}')
+        self.status_badge.props(f"color={self.view_model.status_color}")
 
         # Update buttons
         if self.view_model.enabled:

@@ -13,14 +13,14 @@ class DashboardController:
         """Handle enable command"""
         try:
             await self.module_manager.enable_module(module_name)
-            ui.notify(f"Module '{module_name}' enabled successfully", type='positive')
+            ui.notify(f"Module '{module_name}' enabled successfully", type="positive")
         except Exception as e:
-            ui.notify(f"Failed to enable '{module_name}': {str(e)}", type='negative')
+            ui.notify(f"Failed to enable '{module_name}': {str(e)}", type="negative")
 
     async def disable_module(self, module_name: str):
         """Handle disable command"""
         try:
             await self.module_manager.disable_module(module_name)
-            ui.notify(f"Module '{module_name}' disabled successfully", type='warning')
+            ui.notify(f"Module '{module_name}' disabled successfully", type="warning")
         except Exception as e:
-            ui.notify(f"Failed to disable '{module_name}': {str(e)}", type='negative')
+            ui.notify(f"Failed to disable '{module_name}': {str(e)}", type="negative")

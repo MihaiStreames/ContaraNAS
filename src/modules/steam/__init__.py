@@ -1,7 +1,8 @@
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from src.core.module import Module
 from src.core.utils import get_logger
+
 from .controllers.steam_controller import SteamController
 
 logger = get_logger(__name__)
@@ -32,9 +33,6 @@ class SteamModule(Module):
     def get_tile_data(self) -> Dict[str, Any]:
         """Get data for dashboard tile"""
         if not self.controller:
-            return {
-                "libraries": [],
-                "error": "Module not initialized"
-            }
+            return {"libraries": [], "error": "Module not initialized"}
 
         return self.controller.get_tile_data()

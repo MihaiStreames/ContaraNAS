@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from src.core.utils import get_logger
+
 from ..services.parsing_service import SteamParsingService
 from ..services.path_service import SteamPathService
 
@@ -38,7 +39,9 @@ class SteamLibraryService:
             logger.error("No Steam libraries found")
             return False
 
-        logger.info(f"Steam library service initialized: {len(self.library_paths)} libraries")
+        logger.info(
+            f"Steam library service initialized: {len(self.library_paths)} libraries"
+        )
         return True
 
     def get_library_paths(self) -> List[Path]:
