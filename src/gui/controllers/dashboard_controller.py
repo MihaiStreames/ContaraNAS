@@ -1,5 +1,6 @@
 from nicegui import ui
 
+from src.core.exceptions import ModuleError, ModuleInitializationError
 from src.core.module_manager import ModuleManager
 
 
@@ -14,13 +15,13 @@ class DashboardController:
         try:
             await self.module_manager.enable_module(module_name)
             ui.notify(f"Module '{module_name}' enabled successfully", type="positive")
-        except Exception as e:
-            ui.notify(f"Failed to enable '{module_name}': {str(e)}", type="negative")
+        except ModuleInitializationError as e:
+            ui.notify(f"Failed to start {module_name}: {e.reason}", type="negative")
 
     async def disable_module(self, module_name: str):
         """Handle disable command"""
         try:
             await self.module_manager.disable_module(module_name)
             ui.notify(f"Module '{module_name}' disabled successfully", type="warning")
-        except Exception as e:
-            ui.notify(f"Failed to disable '{module_name}': {str(e)}", type="negative")
+        except ModuleError as e:
+            ui.notify(f"Failed to stop {module_name}: {e.reason}", type="negative")
