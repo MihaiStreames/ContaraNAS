@@ -12,11 +12,8 @@ class CpuInfo:
     total_usage: float
     current_speed_ghz: float
     max_speed_ghz: float
-    min_speed_ghz: Optional[float]
+    min_speed_ghz: float
     processes: int
     threads: int
     file_descriptors: int
     uptime: float
-    load_avg_1m: float
-    load_avg_5m: float
-    load_avg_15m: float

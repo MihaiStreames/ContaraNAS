@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Union
 
 
 @dataclass
@@ -11,14 +10,13 @@ class DiskInfo:
     used_gb: float
     free_gb: float
     usage_percent: float
-    read_bytes: Union[int, str]
-    write_bytes: Union[int, str]
-    read_speed_mb: Union[float, str]
-    write_speed_mb: Union[float, str]
-    read_time_ms: Union[int, str]
-    write_time_ms: Union[int, str]
-    io_time_ms: Union[int, str]
-    busy_time_percent: Union[float, str]
-    model: str = "Unknown"
-    type: str = "Unknown"
-    size_gb: float = 0.0
+    read_bytes: int
+    write_bytes: int
+    read_speed: float
+    write_speed: float
+    read_time: int
+    write_time: int
+    io_time: int
+    busy_time: float
+    model: str
+    type: str
