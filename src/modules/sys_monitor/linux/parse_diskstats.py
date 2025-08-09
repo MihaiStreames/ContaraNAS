@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, Dict
 
-from src.modules.sys_monitor.linux.read_file import read_file
+from read_file import read_file
 
 
 def parse_diskstats(path: Path, device_name: str) -> Dict[str, Any]:
