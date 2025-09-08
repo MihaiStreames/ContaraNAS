@@ -9,7 +9,7 @@ watchdog>=6.0.0
 
 # Steam module dependencies
 vdf>=3.4
-requests>=2.32.3
+requests>=2.32.4
 
 # System module dependencies
 psutil>=7.0.0
