@@ -1,0 +1,13 @@
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.csproj.AssemblyReference.cache
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.GeneratedMSBuildEditorConfig.editorconfig
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.AssemblyInfoInputs.cache
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.AssemblyInfo.cs
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.csproj.CoreCompileInputs.cache
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.sourcelink.json
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\bin\Debug\net9.0\SysInfoLib.deps.json
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\bin\Debug\net9.0\SysInfoLib.dll
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\bin\Debug\net9.0\SysInfoLib.pdb
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.dll
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\refint\SysInfoLib.dll
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\SysInfoLib.pdb
+D:\Github\NAS.Manager\src\modules\sys_monitor\windows\SysInfoLib\obj\Debug\net9.0\ref\SysInfoLib.dll
