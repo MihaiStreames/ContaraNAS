@@ -1,7 +1,15 @@
-PySide6~=6.8.1
-requests~=2.32.3
-cloudscraper~=1.2.71
-bs4~=0.0.2
-beautifulsoup4~=4.12.3
-python-dotenv~=1.0.1
-vdf~=3.4
+# Core dependencies
+pathlib>=1.0.1
+pydantic>=2.10.6
+nicegui>=2.21.1
+pywebview>=5.4
+pygobject>=3.52.3
+qtpy>=2.4.3
+watchdog>=6.0.0
+
+# Steam module dependencies
+vdf>=3.4
+requests>=2.32.4
+
+# System module dependencies
+psutil>=7.0.0
