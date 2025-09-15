@@ -2,28 +2,35 @@
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[project]
+[tool.poetry]
+authors = ["Sincos <optik@koolkdzonly.club>", "Alessandro Dorigo <dorigo.alessandro@gmail.com>"]
 name = "contaranas"
 version = "0.1.0"
 description = "A modular desktop application for monitoring gaming services"
-authors = [{ name = "Your Name", email = "your.email@example.com" }]
 readme = "README.md"
-requires-python = ">=3.9"
+packages= [{ include = "ContaraNAS"}]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.13",
 ]
-dependencies = [
-    "nicegui>=2.21.1",
-    "pydantic>=2.10.6",
-    "watchdog>=6.0.0",
-    "vdf>=3.4",
-    "requests>=2.32.3",
-]
 
-[project.urls]
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+pathlib = ">=1.0.1"
+pydantic = ">=2.10.6"
+pywebview = ">=5.4"
+pygobject = ">=3.52.3"
+nicegui = ">=2.21.1"
+qtpy = ">=2.4.3"
+watchdog = ">=6.0.0"
+vdf = ">=3.4"
+requests = ">=2.32.3"
+psutil = ">=7.0.0"
+
+
+[tool.poetry.urls]
 Homepage = "https://github.com/MihaiStreames/ContaraNAS"
 Repository = "https://github.com/MihaiStreames/ContaraNAS.git"
 Issues = "https://github.com/MihaiStreames/ContaraNAS/issues"

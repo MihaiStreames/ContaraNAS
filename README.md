@@ -19,10 +19,10 @@ git clone https://github.com/MihaiStreames/ContaraNAS
 cd ContaraNAS
 
 # Install dependencies
-pip install -r requirements.txt
+poetry install
 
 # Run the application
-python main.py
+poetry run python -m python ContaraNAS.main
 ```
 
 ### Requirements
@@ -38,3 +38,5 @@ ContaraNAS uses a modular architecture with the following components:
 - **Core**: Module management, event bus, utilities
 - **Modules**: Steam, Discord, etc. (pluggable)
 - **GUI**: NiceGUI-based dashboard with reactive components
+
+- **TODO**: make modules keep the status they had when app closed 
