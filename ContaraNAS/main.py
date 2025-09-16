@@ -6,8 +6,8 @@ from nicegui import app, ui
 import ContaraNAS.gui.factories  # This triggers register_all_components()
 from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.steam import SteamModule
 from ContaraNAS.gui.dashboard import DashboardView
+from ContaraNAS.modules.steam import SteamModule
 
 # Some fixes
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"

@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Dict, List
 
-from ContaraNAS.core.utils import get_logger, load_json, save_json
+from ContaraNAS.core.utils import (get_cache_dir, get_logger, load_json,
+                                   save_json)
 
 logger = get_logger(__name__)
 
@@ -11,7 +12,7 @@ class SteamCacheService:
 
     def __init__(self):
         self.manifest_cache: Dict[str, float] = {}  # manifest_path -> mtime
-        self.cache_file = Path.home() / ".contaranas" / "steam_cache.json"
+        self.cache_file = get_cache_dir() / "steam_cache.json"
 
     def initialize_cache(self, library_paths: List[Path]) -> None:
         """Initialize cache with current manifest states"""
