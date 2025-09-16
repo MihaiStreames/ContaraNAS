@@ -3,7 +3,7 @@ import os
 
 from nicegui import app, ui
 
-import ContaraNAS.gui.factories  # This triggers register_all_components()
+from ContaraNAS.gui.factories import register_all_components # This triggers register_all_components()
 from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.dashboard import DashboardView
@@ -14,27 +14,12 @@ os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
 
 logger = get_logger(__name__)
 
-manager = ModuleManager()
-
-
-def setup_modules():
-    """Register all available modules with the manager"""
-    logger.info("Registering modules...")
-
-    # Register modules
-    steam_module = SteamModule()
-    manager.register(steam_module)
-
-    logger.info(f"Registered {len(manager.modules)} modules")
-
-
-async def restore_module_states():
+async def restore_module_states(manager: ModuleManager):
     """Restore modules to their previous states"""
     logger.info("Restoring module states...")
     await manager.restore_module_states()
 
-
-def setup_gui():
+def setup_gui(manager: ModuleManager):
     """Setup the main GUI application"""
     logger.info("Setting up GUI...")
 
@@ -44,7 +29,7 @@ def setup_gui():
     logger.info("GUI setup complete")
 
 
-async def cleanup_on_shutdown():
+async def cleanup_on_shutdown(manager: ModuleManager):
     """Clean up all modules on app shutdown"""
     logger.info("ContaraNAS shutting down...")
     await manager.shutdown_all_modules()
@@ -53,14 +38,15 @@ async def cleanup_on_shutdown():
 
 def main():
     logger.info("Starting ContaraNAS...")
-
+    
     # Setup components
-    setup_modules()
-    setup_gui()
+    register_all_components()
+    manager = ModuleManager()
+    setup_gui(manager=manager)
 
     # Configure app
-    app.on_startup(lambda: asyncio.create_task(restore_module_states()))
-    app.on_shutdown(lambda: asyncio.create_task(cleanup_on_shutdown()))
+    app.on_startup(lambda: asyncio.create_task(restore_module_states(manager)))
+    app.on_shutdown(lambda: asyncio.create_task(cleanup_on_shutdown(manager)))
 
     # Run the application
     ui.run(

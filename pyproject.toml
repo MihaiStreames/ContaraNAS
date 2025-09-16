@@ -21,7 +21,7 @@ python = ">=3.9,<4.0"
 pathlib = ">=1.0.1"
 pydantic = ">=2.10.6"
 pywebview = ">=5.4"
-pygobject = ">=3.52.3"
+# pygobject = ">=3.52.3"
 nicegui = ">=2.21.1"
 qtpy = ">=2.4.3"
 watchdog = ">=6.0.0"
@@ -34,3 +34,9 @@ psutil = ">=7.0.0"
 Homepage = "https://github.com/MihaiStreames/ContaraNAS"
 Repository = "https://github.com/MihaiStreames/ContaraNAS.git"
 Issues = "https://github.com/MihaiStreames/ContaraNAS/issues"
+
+[tool.poetry.plugins."contaranas.modules"]
+steam_module = "ContaraNAS.modules.steam:SteamModule"
+
+[tool.poetry.plugins."contaranas.components"]
+steam_components = "ContaraNAS.gui.components.steam.steam_tile:SteamTile"

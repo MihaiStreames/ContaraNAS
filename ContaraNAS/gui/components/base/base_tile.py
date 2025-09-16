@@ -13,6 +13,8 @@ logger = get_logger(__name__)
 class BaseTile(ABC):
     """Abstract base class for module tiles"""
 
+    module_type = "base"
+
     def __init__(self, view_model: BaseTileViewModel, controller):
         self.view_model = view_model
         self.controller = controller
@@ -22,7 +24,6 @@ class BaseTile(ABC):
         self.enable_button = None
         self.disable_button = None
         self.info_container = None
-
         self._create_tile()
         self._setup_event_listeners()
 
