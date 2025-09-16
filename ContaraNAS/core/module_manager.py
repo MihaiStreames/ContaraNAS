@@ -1,4 +1,5 @@
 from typing import Any, Dict, Optional
+from importlib.metadata import entry_points
 
 from ContaraNAS.core.module import Module
 
@@ -8,6 +9,21 @@ class ModuleManager:
 
     def __init__(self) -> None:
         self.modules: Dict[str, Module] = {}
+        self.discover_modules()
+
+    def discover_modules(self):
+        try:
+            discovered = entry_points(group='contaranas.modules')
+            for entry_point in discovered:
+                try:
+                    module_class = entry_point.load()
+                    instance = module_class()
+                    self.register(instance)
+                    print(f"Loaded module: {entry_point.name}")
+                except Exception as e:
+                    print(f"Failed to load {entry_point.name}: {e}")
+        except Exception as e:
+            print(f"No plugins found: {e}")
 
     def register(self, module: Module):
         """Register a module"""

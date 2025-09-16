@@ -1,7 +1,7 @@
 from ContaraNAS.core.utils import get_logger
+from ContaraNAS.gui.components.base.base_tile import BaseTile
 
 from .component_factory import ComponentFactory
-
 logger = get_logger(__name__)
 
 
@@ -10,21 +10,22 @@ def register_all_components() -> None:
     logger.info("Registering GUI components...")
 
     # Register components
-    _register_steam_components()
+    _register_components_from_entry_points()
 
     registered = ComponentFactory.get_registered_modules()
     logger.info(
         f"Registered components for {len(registered)} module types: {list(registered.keys())}"
     )
 
-
-def _register_steam_components() -> None:
-    """Register Steam module components"""
+def _register_components_from_entry_points() -> None:
+    """Register components from entry points defined in pyproject.toml"""
+    from importlib.metadata import entry_points
     try:
-        from ContaraNAS.gui.components.steam.steam_tile import SteamTile
-
-        ComponentFactory.register_components("steam", SteamTile)
-        logger.debug("Registered Steam components")
-
-    except ImportError as e:
-        logger.warning(f"Failed to register Steam components: {e}")
+        discovered = entry_points(group='contaranas.components')
+        for entry_point in discovered:
+            component_class = entry_point.load()
+            assert issubclass(component_class, BaseTile), "Component class must have a module_type attribute"
+            module_name = entry_point.name
+            ComponentFactory.register_components(component_class.module_type, component_class)
+    except Exception as e:
+        logger.error(f"Error registering components from entry points: {e}")

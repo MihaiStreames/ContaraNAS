@@ -37,3 +37,6 @@ Issues = "https://github.com/MihaiStreames/ContaraNAS/issues"
 
 [tool.poetry.plugins."contaranas.modules"]
 steam_module = "ContaraNAS.modules.steam:SteamModule"
+
+[tool.poetry.plugins."contaranas.components"]
+steam_components = "ContaraNAS.gui.components.steam.steam_tile:SteamTile"
