@@ -28,6 +28,12 @@ def setup_modules():
     logger.info(f"Registered {len(manager.modules)} modules")
 
 
+async def restore_module_states():
+    """Restore modules to their previous states"""
+    logger.info("Restoring module states...")
+    await manager.restore_module_states()
+
+
 def setup_gui():
     """Setup the main GUI application"""
     logger.info("Setting up GUI...")
@@ -40,16 +46,8 @@ def setup_gui():
 
 async def cleanup_on_shutdown():
     """Clean up all modules on app shutdown"""
-    logger.info("ContaraNAS shutting down, cleaning up modules...")
-
-    for name, module in manager.modules.items():
-        if module.enable_flag:
-            try:
-                await module.disable()
-                logger.info(f"Disabled module: {name}")
-            except Exception as e:
-                logger.error(f"Error disabling module {name}: {e}")
-
+    logger.info("ContaraNAS shutting down, saving states and cleaning up modules...")
+    await manager.shutdown_all_modules()
     logger.info("Module cleanup complete")
 
 
@@ -61,7 +59,7 @@ def main():
     setup_gui()
 
     # Configure app
-    app.on_startup(lambda: logger.info("ContaraNAS started successfully"))
+    app.on_startup(lambda: asyncio.create_task(restore_module_states()))
     app.on_shutdown(lambda: asyncio.create_task(cleanup_on_shutdown()))
 
     # Run the application
