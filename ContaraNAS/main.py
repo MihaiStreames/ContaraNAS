@@ -46,7 +46,7 @@ def setup_gui():
 
 async def cleanup_on_shutdown():
     """Clean up all modules on app shutdown"""
-    logger.info("ContaraNAS shutting down, saving states and cleaning up modules...")
+    logger.info("ContaraNAS shutting down...")
     await manager.shutdown_all_modules()
     logger.info("Module cleanup complete")
 
