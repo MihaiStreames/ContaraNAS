@@ -8,9 +8,9 @@ from .steam_tile_helper import (render_color_legend, render_drive_info,
 
 class SteamTile(BaseTile):
     """Steam-specific module tile implementation"""
-    
+
     module_type = "steam"
-    
+
     def __init__(self, view_model, controller):
         super().__init__(view_model, controller)
 

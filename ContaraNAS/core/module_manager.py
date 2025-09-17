@@ -1,5 +1,5 @@
-from typing import Any, Dict, Optional
 from importlib.metadata import entry_points
+from typing import Any, Dict, Optional
 
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.state_manager import state_manager
@@ -18,7 +18,7 @@ class ModuleManager:
     def discover_modules(self):
         """Discover and load modules via entry points"""
         try:
-            discovered = entry_points(group='contaranas.modules')
+            discovered = entry_points(group="contaranas.modules")
             for entry_point in discovered:
                 try:
                     module_class = entry_point.load()

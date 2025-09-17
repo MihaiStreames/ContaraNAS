@@ -3,28 +3,29 @@ import os
 
 from nicegui import app, ui
 
-from ContaraNAS.gui.factories import register_all_components # This triggers register_all_components()
 from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.dashboard import DashboardView
-from ContaraNAS.modules.steam import SteamModule
+from ContaraNAS.gui.factories import register_all_components
 
 # Some fixes
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
 
 logger = get_logger(__name__)
 
+
 async def restore_module_states(manager: ModuleManager):
     """Restore modules to their previous states"""
     logger.info("Restoring module states...")
     await manager.restore_module_states()
+
 
 def setup_gui(manager: ModuleManager):
     """Setup the main GUI application"""
     logger.info("Setting up GUI...")
 
     ui.colors(primary="#1976d2")
-    dashboard = DashboardView(manager)
+    DashboardView(manager)
 
     logger.info("GUI setup complete")
 
@@ -38,7 +39,7 @@ async def cleanup_on_shutdown(manager: ModuleManager):
 
 def main():
     logger.info("Starting ContaraNAS...")
-    
+
     # Setup components
     register_all_components()
     manager = ModuleManager()
