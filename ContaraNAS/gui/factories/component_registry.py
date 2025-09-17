@@ -34,5 +34,6 @@ def _register_components_from_entry_points() -> None:
             ComponentFactory.register_components(
                 component_class.module_type, component_class
             )
+            logger.info(f"Registered component for module: {module_name}")
     except Exception as e:
         logger.error(f"Error registering components from entry points: {e}")
