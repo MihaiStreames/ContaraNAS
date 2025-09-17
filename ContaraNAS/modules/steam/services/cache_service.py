@@ -12,7 +12,7 @@ class SteamCacheService:
 
     def __init__(self):
         self.manifest_cache: Dict[str, float] = {}  # manifest_path -> mtime
-        self.cache_file = get_cache_dir() / "steam_cache.json"
+        self.cache_file = get_cache_dir() / "steam" / "steam_cache.json"
 
     def initialize_cache(self, library_paths: List[Path]) -> None:
         """Initialize cache with current manifest states"""
@@ -29,10 +29,6 @@ class SteamCacheService:
             self._save_cache()
 
         logger.info(f"Cache initialized: {len(self.manifest_cache)} manifest files")
-
-    def get_game_count(self) -> int:
-        """Get total number of cached games"""
-        return len(self.manifest_cache)
 
     def update_manifest(self, manifest_path: Path) -> str:
         """Update manifest in cache. Returns action taken: 'added', 'updated', or 'no_change'"""
