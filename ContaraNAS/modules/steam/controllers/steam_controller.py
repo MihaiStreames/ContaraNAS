@@ -6,6 +6,7 @@ from ContaraNAS.core.utils import get_logger
 
 from ..services import (SteamCacheService, SteamLibraryService,
                         SteamMonitoringService, SteamParsingService)
+from ..services.image_service import SteamImageService
 from ..utils.steam_helpers import extract_app_id, get_drive_info
 
 logger = get_logger(__name__)
@@ -23,6 +24,7 @@ class SteamController:
             self.library_service.get_steam_path()
         )
         self.cache_service = SteamCacheService()
+        self.image_service = SteamImageService()
         self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
 
     def initialize(self) -> None:
@@ -33,9 +35,13 @@ class SteamController:
         if not self.library_service.initialize():
             raise RuntimeError("Failed to initialize Steam library service")
 
-        # Initialize cache
+        # Initialize manifest cache
         library_paths = self.library_service.get_library_paths()
         self.cache_service.initialize_cache(library_paths)
+
+        # Sync image cache with manifest cache
+        installed_app_ids = self.cache_service.get_installed_app_ids()
+        self.image_service.sync_with_manifest_cache(installed_app_ids)
 
         self.state_update_callback(
             initialized_at=datetime.now(),
@@ -117,19 +123,26 @@ class SteamController:
 
     def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:
         """Handle manifest file changes from the monitoring service"""
-        app_id = extract_app_id(manifest_path)
+        app_id_str = extract_app_id(manifest_path)
+        if not app_id_str:
+            return
+
+        app_id = int(app_id_str)
         logger.info(f"Steam app {app_id} {event_type}: {manifest_path.name}")
 
-        # Update cache
+        # Update manifest cache
         cache_action = None
 
         if event_type == "deleted":
             if self.cache_service.remove_manifest(manifest_path):
                 cache_action = "removed"
+                self.image_service.remove_image(app_id)
         elif event_type in ["created", "modified"]:
             action = self.cache_service.update_manifest(manifest_path)
             if action != "no_change":
                 cache_action = action
+                if action == "added":
+                    self.image_service.download_image(app_id)
 
         # Update state if there was a change
         if cache_action:

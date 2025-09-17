@@ -4,6 +4,8 @@ from typing import Dict, List
 from ContaraNAS.core.utils import (get_cache_dir, get_logger, load_json,
                                    save_json)
 
+from ..utils.steam_helpers import extract_app_id
+
 logger = get_logger(__name__)
 
 
@@ -68,6 +70,15 @@ class SteamCacheService:
             f"(+{len(added)} added, -{len(removed)} removed, "
             f"{len(changed)} changed)"
         )
+
+    def get_installed_app_ids(self) -> List[int]:
+        """Get list of currently installed app IDs from manifest cache"""
+        app_ids = []
+        for manifest_path_str in self.manifest_cache.keys():
+            app_id_str = extract_app_id(Path(manifest_path_str))
+            if app_id_str:
+                app_ids.append(int(app_id_str))
+        return app_ids
 
     def _save_cache(self) -> None:
         """Save manifest cache to JSON file"""

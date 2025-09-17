@@ -124,12 +124,6 @@ class SteamGame(BaseModel):
         """Steam store page URL"""
         return f"https://store.steampowered.com/app/{self.app_id}/"
 
-    @computed_field
-    @property
-    def cover_url(self) -> str:
-        """Cover image URL"""
-        return f"https://steamcdn-a.akamaihd.net/steam/apps/{self.app_id}/header.jpg"
-
     def to_dict(self) -> Dict:
         """Convert to dictionary for serialization"""
         return {
@@ -147,6 +141,5 @@ class SteamGame(BaseModel):
             "last_played": self.last_played,
             "build_id": self.build_id,
             "store_url": self.store_url,
-            "cover_url": self.cover_url,
             "installed_depots": self.installed_depots,
         }
