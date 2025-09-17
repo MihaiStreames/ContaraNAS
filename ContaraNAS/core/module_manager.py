@@ -16,6 +16,7 @@ class ModuleManager:
         self.discover_modules()
 
     def discover_modules(self):
+        """Discover and load modules via entry points"""
         try:
             discovered = entry_points(group='contaranas.modules')
             for entry_point in discovered:
@@ -23,11 +24,11 @@ class ModuleManager:
                     module_class = entry_point.load()
                     instance = module_class()
                     self.register(instance)
-                    print(f"Loaded module: {entry_point.name}")
+                    logger.info(f"Loaded module: {entry_point.name}")
                 except Exception as e:
-                    print(f"Failed to load {entry_point.name}: {e}")
+                    logger.error(f"Failed to load {entry_point.name}: {e}")
         except Exception as e:
-            print(f"No plugins found: {e}")
+            logger.warning(f"No modules found: {e}")
 
     def register(self, module: Module):
         """Register a module"""

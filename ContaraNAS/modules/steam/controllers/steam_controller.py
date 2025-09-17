@@ -37,12 +37,9 @@ class SteamController:
         library_paths = self.library_service.get_library_paths()
         self.cache_service.initialize_cache(library_paths)
 
-        # Update state
         self.state_update_callback(
             initialized_at=datetime.now(),
             steam_path=str(self.library_service.get_steam_path()),
-            total_games=self.cache_service.get_game_count(),
-            total_libraries=len(library_paths),
             last_scan_completed=datetime.now(),
         )
 
@@ -79,6 +76,8 @@ class SteamController:
 
         return {
             "libraries": libraries_data,
+            "total_games": sum(lib["game_count"] for lib in libraries_data),
+            "total_libraries": len(libraries_data),
         }
 
     def _analyze_library(self, library_path: Path) -> Dict[str, Any]:
@@ -135,7 +134,6 @@ class SteamController:
         # Update state if there was a change
         if cache_action:
             self.state_update_callback(
-                total_games=self.cache_service.get_game_count(),
                 last_change_at=datetime.now(),
                 last_change_type=event_type,
                 last_change_app_id=app_id,
