@@ -12,7 +12,7 @@ class SteamModule(Module):
     """Module for managing Steam library"""
 
     def __init__(self) -> None:
-        self.controller: Optional[SteamController] = None
+        self.controller: SteamController | None = None
         super().__init__("steam")
 
     async def initialize(self) -> None:
@@ -30,7 +30,7 @@ class SteamModule(Module):
         self.controller.stop_monitoring()
         logger.info("Steam monitoring stopped")
 
-    def get_tile_data(self) -> Dict[str, Any]:
+    def get_tile_data(self) -> dict[str, Any]:
         """Get data for dashboard tile"""
         if not self.controller:
             return {"libraries": [], "error": "Module not initialized"}

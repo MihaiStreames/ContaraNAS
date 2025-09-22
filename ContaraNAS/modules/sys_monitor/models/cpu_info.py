@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List, Optional
 
 
 @dataclass
@@ -8,7 +7,7 @@ class CpuInfo:
     physical_cores: int
     logical_cores: int
     sockets: int
-    usage_per_core: List[float]
+    usage_per_core: list[float]
     total_usage: float
     current_speed_ghz: float
     max_speed_ghz: float

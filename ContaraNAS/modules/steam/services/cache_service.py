@@ -1,8 +1,6 @@
 from pathlib import Path
-from typing import Dict, List
 
-from ContaraNAS.core.utils import (get_cache_dir, get_logger, load_json,
-                                   save_json)
+from ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
 
 from ..utils.steam_helpers import extract_app_id
 
@@ -13,17 +11,15 @@ class SteamCacheService:
     """Service for caching Steam manifest file states"""
 
     def __init__(self):
-        self.manifest_cache: Dict[str, float] = {}  # manifest_path -> mtime
+        self.manifest_cache: dict[str, float] = {}  # manifest_path -> mtime
         self.cache_file = get_cache_dir() / "steam" / "steam_cache.json"
 
-    def initialize_cache(self, library_paths: List[Path]) -> None:
+    def initialize_cache(self, library_paths: list[Path]) -> None:
         """Initialize cache with current manifest states"""
         logger.debug("Initializing manifest cache...")
 
         if self._load_cache():
-            logger.info(
-                f"Loaded manifest cache from disk: {len(self.manifest_cache)} games"
-            )
+            logger.info(f"Loaded manifest cache from disk: {len(self.manifest_cache)} games")
             self.update_cache(library_paths)
         else:
             logger.info("No cache found, performing fresh initialization...")
@@ -55,7 +51,7 @@ class SteamCacheService:
             self._save_cache()
         return was_cached
 
-    def update_cache(self, library_paths: List[Path]) -> None:
+    def update_cache(self, library_paths: list[Path]) -> None:
         """Update cache with current manifest states"""
         logger.debug("Updating manifest cache...")
 
@@ -71,10 +67,10 @@ class SteamCacheService:
             f"{len(changed)} changed)"
         )
 
-    def get_installed_app_ids(self) -> List[int]:
+    def get_installed_app_ids(self) -> list[int]:
         """Get list of currently installed app IDs from manifest cache"""
         app_ids = []
-        for manifest_path_str in self.manifest_cache.keys():
+        for manifest_path_str in self.manifest_cache:
             app_id_str = extract_app_id(Path(manifest_path_str))
             if app_id_str:
                 app_ids.append(int(app_id_str))
@@ -99,14 +95,14 @@ class SteamCacheService:
         logger.debug(f"Loaded cache from {self.cache_file}")
         return True
 
-    def _scan(self, library_paths: List[Path]) -> None:
+    def _scan(self, library_paths: list[Path]) -> None:
         """Scan library paths and update cache"""
         self.manifest_cache.clear()
         self.manifest_cache.update(self._get_manifests(library_paths))
         logger.debug(f"Cached {len(self.manifest_cache)} manifest files")
 
     @staticmethod
-    def _get_manifests(library_paths: List[Path]) -> Dict[str, float]:
+    def _get_manifests(library_paths: list[Path]) -> dict[str, float]:
         """Get current manifest files"""
         current_manifests = {}
 
@@ -122,7 +118,7 @@ class SteamCacheService:
 
         return current_manifests
 
-    def _find_diff(self, current_manifests: Dict[str, float]) -> tuple:
+    def _find_diff(self, current_manifests: dict[str, float]) -> tuple:
         """Find manifests that were added, removed, or changed"""
         cached_paths = set(self.manifest_cache.keys())
         current_paths = set(current_manifests.keys())
@@ -132,16 +128,14 @@ class SteamCacheService:
         existing = cached_paths & current_paths
 
         changed = {
-            path
-            for path in existing
-            if self.manifest_cache[path] != current_manifests[path]
+            path for path in existing if self.manifest_cache[path] != current_manifests[path]
         }
 
         return added, removed, changed
 
     def _apply_changes(
         self,
-        current_manifests: Dict[str, float],
+        current_manifests: dict[str, float],
         added: set,
         removed: set,
         changed: set,

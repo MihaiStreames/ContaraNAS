@@ -2,13 +2,13 @@ import json
 import os
 import platform
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 
-def load_json(file_path: Path) -> Optional[dict]:
+def load_json(file_path: Path) -> dict | None:
     """Load JSON data from a file"""
     if os.path.exists(file_path):
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             return json.load(f)
     return None
 
@@ -27,8 +27,7 @@ def get_cache_dir() -> Path:
     if system == "Linux":
         return Path.home() / ".cache" / "contaranas"
 
-    elif system == "Windows":
+    if system == "Windows":
         return Path.home() / "AppData" / "Local" / "contaranas" / "cache"
-    else:
-        # Unknown platform, fallback to home directory
-        return Path.home() / ".contaranas"
+    # Unknown platform, fallback to home directory
+    return Path.home() / ".contaranas"

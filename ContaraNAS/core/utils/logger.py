@@ -9,11 +9,10 @@ def get_log_dir() -> Path:
 
     if system == "Linux":
         return Path.home() / ".local" / "share" / "contaranas" / "logs"
-    elif system == "Windows":
+    if system == "Windows":
         return Path.home() / "AppData" / "Local" / "contaranas" / "logs"
-    else:
-        # Unknown platform, fallback to home directory
-        return Path.home() / ".contaranas" / "logs"
+    # Unknown platform, fallback to home directory
+    return Path.home() / ".contaranas" / "logs"
 
 
 def get_logger(name: str) -> logging.Logger:
@@ -32,9 +31,7 @@ def get_logger(name: str) -> logging.Logger:
         file_handler.setLevel(logging.DEBUG)
 
         # Consistent formatting
-        formatter = logging.Formatter(
-            "[%(asctime)s] [%(levelname)s] %(name)s: %(message)s"
-        )
+        formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(name)s: %(message)s")
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 

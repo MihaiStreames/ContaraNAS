@@ -1,11 +1,9 @@
-from typing import Dict
-
 from nicegui import ui
 
 from ContaraNAS.gui.utils.gui_utils import format_bytes
 
 
-def calculate_drive_percentages(library: dict) -> Dict[str, float]:
+def calculate_drive_percentages(library: dict) -> dict[str, float]:
     """Calculate percentage breakdown of drive usage"""
     games_size = library["total_games_size"]
     shader_size = library["total_shader_size"]
@@ -33,36 +31,36 @@ def calculate_drive_percentages(library: dict) -> Dict[str, float]:
     }
 
 
-def generate_progress_bar_html(percentages: Dict[str, float]) -> str:
+def generate_progress_bar_html(percentages: dict[str, float]) -> str:
     """Generate HTML for the segmented progress bar"""
     return f"""
     <div style="
-        width: 100%; 
-        height: 20px; 
-        background-color: #e0e0e0; 
-        border-radius: 4px; 
+        width: 100%;
+        height: 20px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
         overflow: hidden;
         display: flex;
         position: relative;
     ">
         <div style="
-            background-color: #1976d2; 
-            width: {percentages['games']}%; 
+            background-color: #1976d2;
+            width: {percentages['games']}%;
             height: 100%;
         " title="Games: {format_bytes(int(percentages['games_size']))}"></div>
         <div style="
-            background-color: #388e3c; 
-            width: {percentages['shaders']}%; 
+            background-color: #388e3c;
+            width: {percentages['shaders']}%;
             height: 100%;
         " title="Shaders: {format_bytes(int(percentages['shader_size']))}"></div>
         <div style="
-            background-color: #f57c00; 
-            width: {percentages['workshop']}%; 
+            background-color: #f57c00;
+            width: {percentages['workshop']}%;
             height: 100%;
         " title="Workshop: {format_bytes(int(percentages['workshop_size']))}"></div>
         <div style="
-            background-color: #fdd835; 
-            width: {percentages['non_steam']}%; 
+            background-color: #fdd835;
+            width: {percentages['non_steam']}%;
             height: 100%;
         " title="Non-Steam files: {format_bytes(int(percentages['non_steam_size']))}"></div>
     </div>
@@ -90,9 +88,7 @@ def render_progress_section(library: dict) -> None:
             ui.html(progress_html).classes("flex-1")
 
             # Total Steam size label
-            ui.label(f"{format_bytes(total_steam_size)}").classes(
-                "text-xs font-bold min-w-fit"
-            )
+            ui.label(f"{format_bytes(total_steam_size)}").classes("text-xs font-bold min-w-fit")
 
 
 def render_color_legend(library: dict) -> None:
@@ -107,19 +103,11 @@ def render_color_legend(library: dict) -> None:
     non_steam_size = max(0, drive_used - total_steam_size)
 
     with ui.row().classes("w-full gap-4 mt-1 text-xs"):
-        ui.html(
-            f'<span style="color: #1976d2;">■</span> Games: {format_bytes(games_size)}'
-        )
-        ui.html(
-            f'<span style="color: #388e3c;">■</span> Shaders: {format_bytes(shader_size)}'
-        )
-        ui.html(
-            f'<span style="color: #f57c00;">■</span> Workshop: {format_bytes(workshop_size)}'
-        )
+        ui.html(f'<span style="color: #1976d2;">■</span> Games: {format_bytes(games_size)}')
+        ui.html(f'<span style="color: #388e3c;">■</span> Shaders: {format_bytes(shader_size)}')
+        ui.html(f'<span style="color: #f57c00;">■</span> Workshop: {format_bytes(workshop_size)}')
         if non_steam_size > 0:
-            ui.html(
-                f'<span style="color: #fdd835;">■</span> Other: {format_bytes(non_steam_size)}'
-            )
+            ui.html(f'<span style="color: #fdd835;">■</span> Other: {format_bytes(non_steam_size)}')
 
 
 def render_drive_info(library: dict) -> None:
@@ -129,6 +117,6 @@ def render_drive_info(library: dict) -> None:
 
     if drive_total > 0:
         free_percentage = (drive_free / drive_total) * 100
-        ui.label(
-            f"Drive: {format_bytes(drive_free)} free ({free_percentage:.1f}%)"
-        ).classes("text-xs text-gray-500")
+        ui.label(f"Drive: {format_bytes(drive_free)} free ({free_percentage:.1f}%)").classes(
+            "text-xs text-gray-500"
+        )

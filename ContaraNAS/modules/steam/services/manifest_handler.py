@@ -32,7 +32,7 @@ class SteamManifestHandler(FileSystemEventHandler):
     def on_moved(self, event: FileSystemEvent):
         # Seems like Steam uses temp files for updates
         if not event.is_directory:
-            src_path = Path(event.src_path)
+            Path(event.src_path)
             dest_path = Path(event.dest_path)
 
             # If moving TO a manifest file (from temp file), treat as create/update

@@ -1,11 +1,15 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from ContaraNAS.core.utils import get_logger
 
-from ..services import (SteamCacheService, SteamLibraryService,
-                        SteamMonitoringService, SteamParsingService)
+from ..services import (
+    SteamCacheService,
+    SteamLibraryService,
+    SteamMonitoringService,
+    SteamParsingService,
+)
 from ..services.image_service import SteamImageService
 from ..utils.steam_helpers import extract_app_id, get_drive_info
 
@@ -20,9 +24,7 @@ class SteamController:
         self.monitor_flag = False
 
         self.library_service = SteamLibraryService()
-        self.parsing_service = SteamParsingService(
-            self.library_service.get_steam_path()
-        )
+        self.parsing_service = SteamParsingService(self.library_service.get_steam_path())
         self.cache_service = SteamCacheService()
         self.image_service = SteamImageService()
         self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
@@ -58,9 +60,7 @@ class SteamController:
             return
 
         self.cache_service.update_cache(self.library_service.get_library_paths())
-        self.monitoring_service.start_monitoring(
-            self.library_service.get_library_paths()
-        )
+        self.monitoring_service.start_monitoring(self.library_service.get_library_paths())
         self.monitor_flag = True
 
     def stop_monitoring(self) -> None:
@@ -72,7 +72,7 @@ class SteamController:
         self.monitoring_service.stop_monitoring()
         self.monitor_flag = False
 
-    def get_tile_data(self) -> Dict[str, Any]:
+    def get_tile_data(self) -> dict[str, Any]:
         """Build tile data for display"""
         libraries_data = []
 
@@ -86,7 +86,7 @@ class SteamController:
             "total_libraries": len(libraries_data),
         }
 
-    def _analyze_library(self, library_path: Path) -> Dict[str, Any]:
+    def _analyze_library(self, library_path: Path) -> dict[str, Any]:
         """Analyze a single library"""
         steamapps_path = library_path / "steamapps"
         games = []
@@ -94,9 +94,7 @@ class SteamController:
         # Parse all games in this library
         if steamapps_path.exists():
             for manifest_path in steamapps_path.glob("appmanifest_*.acf"):
-                game = self.parsing_service.create_game_from_manifest(
-                    manifest_path, library_path
-                )
+                game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
                 if game:
                     games.append(game)
 

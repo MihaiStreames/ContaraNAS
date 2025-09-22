@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from read_file import read_file
 
 
-def parse_diskstats(path: Path, device_name: str) -> Dict[str, Any]:
+def parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:
     diskstats = {}
     content = read_file(path)
 

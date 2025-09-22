@@ -30,7 +30,6 @@ class BaseTile(ABC):
     @abstractmethod
     def render(self, tile_data: dict):
         """Render module-specific data in the tile"""
-        pass
 
     def _setup_event_listeners(self):
         """Listen for state changes"""
@@ -40,9 +39,7 @@ class BaseTile(ABC):
 
     def _handle_state_change(self, event_data):
         """Update view model and refresh UI"""
-        self.view_model = BaseTileViewModel.from_module_state(
-            self.view_model.name, event_data
-        )
+        self.view_model = BaseTileViewModel.from_module_state(self.view_model.name, event_data)
         self._refresh_ui()
 
     def _create_tile(self):
@@ -64,17 +61,13 @@ class BaseTile(ABC):
                 self.enable_button = ui.button(
                     "Enable",
                     icon="play_arrow",
-                    on_click=lambda: self.controller.enable_module(
-                        self.view_model.name
-                    ),
+                    on_click=lambda: self.controller.enable_module(self.view_model.name),
                 ).props("size=sm color=positive")
 
                 self.disable_button = ui.button(
                     "Disable",
                     icon="stop",
-                    on_click=lambda: self.controller.disable_module(
-                        self.view_model.name
-                    ),
+                    on_click=lambda: self.controller.disable_module(self.view_model.name),
                 ).props("size=sm color=warning")
 
             self._refresh_ui()

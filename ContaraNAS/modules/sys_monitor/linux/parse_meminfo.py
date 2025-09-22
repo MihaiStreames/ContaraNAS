@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from read_file import read_file
 
 
-def parse_meminfo(path: Path) -> Dict[str, Any]:
+def parse_meminfo(path: Path) -> dict[str, Any]:
     meminfo = {}
     content = read_file(path)
 

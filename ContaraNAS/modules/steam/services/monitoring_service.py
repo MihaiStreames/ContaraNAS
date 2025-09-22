@@ -1,5 +1,5 @@
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, List, Optional
 
 from watchdog.observers import Observer
 
@@ -16,10 +16,10 @@ class SteamMonitoringService:
     def __init__(self, change_callback: Callable):
         self.change_callback = change_callback
         self.monitor_flag = False
-        self.observer: Optional[Observer] = None
-        self.manifest_handler: Optional[SteamManifestHandler] = None
+        self.observer: Observer | None = None
+        self.manifest_handler: SteamManifestHandler | None = None
 
-    def start_monitoring(self, library_paths: List[Path]) -> None:
+    def start_monitoring(self, library_paths: list[Path]) -> None:
         """Start monitoring Steam libraries for changes"""
         if self.monitor_flag:
             logger.debug("Monitoring already started")
@@ -34,9 +34,7 @@ class SteamMonitoringService:
         for library_path in library_paths:
             steamapps_path = library_path / "steamapps"
             if steamapps_path.exists():
-                self.observer.schedule(
-                    self.manifest_handler, str(steamapps_path), recursive=False
-                )
+                self.observer.schedule(self.manifest_handler, str(steamapps_path), recursive=False)
                 logger.debug(f"Watching: {steamapps_path}")
 
         self.observer.start()

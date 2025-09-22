@@ -3,7 +3,6 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Dict, Union
 
 import requests
 
@@ -35,33 +34,30 @@ def extract_app_id(manifest_path: Path) -> str | None:
     return None
 
 
-def get_drive_info(path: Path) -> Dict[str, int]:
+def get_drive_info(path: Path) -> dict[str, int]:
     """Get drive size information for a path"""
     stat = shutil.disk_usage(path)
     return {"total": stat.total, "free": stat.free, "used": stat.total - stat.free}
 
 
-def get_dir_size(directory: Union[str, Path]) -> int | None:
+def get_dir_size(directory: str | Path) -> int | None:
     """Calculate the total size of files in a directory"""
     system = platform.system()
 
     if system in ["Linux", "Darwin"]:
         return _get_dir_size_unix(directory)
-    elif system == "Windows":
+    if system == "Windows":
         return _get_dir_size_win(directory)
     return None
 
 
-def _get_dir_size_unix(directory: Union[str, Path]) -> int:
+def _get_dir_size_unix(directory: str | Path) -> int:
     """Calculate directory size for Unix-like systems"""
-    result = subprocess.run(
-        ["du", "-sb", directory], capture_output=True, text=True, check=True
-    )
-    size_bytes = int(result.stdout.split()[0])
-    return size_bytes
+    result = subprocess.run(["du", "-sb", directory], capture_output=True, text=True, check=True)
+    return int(result.stdout.split()[0])
 
 
-def _get_dir_size_win(directory: Union[str, Path]) -> int | None:
+def _get_dir_size_win(directory: str | Path) -> int | None:
     """Get directory size using dir command (Windows)"""
     result = subprocess.run(
         ["dir", directory, "/s", "/-c"],

@@ -1,13 +1,9 @@
 class ContaraNASError(Exception):
     """Base exception for ContaraNAS application."""
 
-    pass
-
 
 class ModuleError(ContaraNASError):
     """Base exception for module-related errors"""
-
-    pass
 
 
 class ModuleInitializationError(ModuleError):
@@ -22,16 +18,10 @@ class ModuleInitializationError(ModuleError):
 class ServiceError(ContaraNASError):
     """Base exception for service-related errors"""
 
-    pass
-
 
 class SteamError(ServiceError):
     """Steam-specific errors"""
 
-    pass
-
 
 class SteamNotFoundError(SteamError):
     """Raised when Steam installation is not found"""
-
-    pass

@@ -1,5 +1,3 @@
-from typing import Dict, Type
-
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.components.base.base_tile import BaseTile
 from ContaraNAS.gui.components.base.base_view_model import BaseTileViewModel
@@ -11,10 +9,10 @@ class ComponentFactory:
     """Factory for creating module-specific GUI components"""
 
     # Type registries
-    _tile_classes: Dict[str, Type[BaseTile]] = {}
+    _tile_classes: dict[str, type[BaseTile]] = {}
 
     @classmethod
-    def register_components(cls, module_name: str, tile_class: Type[BaseTile]) -> None:
+    def register_components(cls, module_name: str, tile_class: type[BaseTile]) -> None:
         """Register tile and dialog classes for a module type"""
         cls._tile_classes[module_name] = tile_class
         logger.debug(f"Registered components for module: {module_name}")
@@ -26,11 +24,11 @@ class ComponentFactory:
         return tile_class(view_model, controller)
 
     @classmethod
-    def get_registered_modules(cls) -> Dict[str, Dict[str, Type]]:
+    def get_registered_modules(cls) -> dict[str, dict[str, type]]:
         """Get all registered module types and their component classes"""
         return {
             module_name: {"tile_class": cls._tile_classes[module_name]}
-            for module_name in cls._tile_classes.keys()
+            for module_name in cls._tile_classes
         }
 
     @classmethod

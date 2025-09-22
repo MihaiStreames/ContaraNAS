@@ -20,22 +20,18 @@ class Module(ABC):
     @abstractmethod
     async def initialize(self):
         """One-time setup when module is enabled"""
-        pass
 
     @abstractmethod
     async def start_monitoring(self):
         """Start event handlers/watchers"""
-        pass
 
     @abstractmethod
     async def stop_monitoring(self):
         """Stop all event handlers/watchers"""
-        pass
 
     @abstractmethod
     def get_tile_data(self):
         """Get data for dashboard tile display"""
-        pass
 
     async def enable(self):
         """Enable the module and start monitoring"""
@@ -76,7 +72,7 @@ class Module(ABC):
 
             self._emit_event("disabled")
         except Exception as e:
-            logger.error(f"Failed to disable module {self.name}: {str(e)}")
+            logger.error(f"Failed to disable module {self.name}: {e!s}")
             raise ModuleError(self.name, str(e)) from e
 
     def update_state(self, **kwargs):
@@ -95,7 +91,7 @@ class Module(ABC):
             },
         )
 
-    def _emit_event(self, change_type: str, data: dict = None):
+    def _emit_event(self, change_type: str, data: dict | None = None):
         """Emit a state change event for GUI components to listen to"""
         event_data = {
             "name": self.name,

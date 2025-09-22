@@ -1,3 +1,8 @@
-pipx install black isort mypy
+#!/usr/bin/env bash
+set -e
+
+# Format with black
 black ContaraNAS/
-isort ContaraNAS/
+
+# Lint & sort imports with ruff
+ruff check ContaraNAS/ --fix --unsafe-fixes

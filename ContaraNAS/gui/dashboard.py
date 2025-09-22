@@ -1,5 +1,3 @@
-from typing import Dict
-
 from nicegui import ui
 
 from ContaraNAS.core.module_manager import ModuleManager
@@ -18,7 +16,7 @@ class DashboardView:
     def __init__(self, module_manager: ModuleManager):
         self.module_manager = module_manager
         self.controller = DashboardController(module_manager)
-        self.tiles: Dict[str, BaseTile] = {}
+        self.tiles: dict[str, BaseTile] = {}
         self._setup_ui()
 
     def _setup_ui(self):

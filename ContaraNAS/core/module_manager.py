@@ -1,5 +1,5 @@
 from importlib.metadata import entry_points
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.state_manager import state_manager
@@ -12,7 +12,7 @@ class ModuleManager:
     """Central manager for all system modules"""
 
     def __init__(self) -> None:
-        self.modules: Dict[str, Module] = {}
+        self.modules: dict[str, Module] = {}
         self.discover_modules()
 
     def discover_modules(self):
@@ -55,9 +55,7 @@ class ModuleManager:
             logger.info("No modules to restore")
             return
 
-        logger.info(
-            f"Restoring {len(enabled_modules)} modules: {list(enabled_modules)}"
-        )
+        logger.info(f"Restoring {len(enabled_modules)} modules: {list(enabled_modules)}")
 
         # Enable modules that were previously enabled
         for module_name in enabled_modules:
@@ -70,9 +68,7 @@ class ModuleManager:
                     # Remove from enabled list if it fails to start
                     state_manager.mark_disabled(module_name)
             else:
-                logger.warning(
-                    f"Module '{module_name}' was enabled but is no longer registered"
-                )
+                logger.warning(f"Module '{module_name}' was enabled but is no longer registered")
                 # Clean up state for non-existent modules
                 state_manager.mark_disabled(module_name)
 
@@ -88,7 +84,7 @@ class ModuleManager:
                 except Exception as e:
                     logger.error(f"Error shutting down module {name}: {e}")
 
-    def get_module_state(self, module_name: str) -> Optional[Dict[str, Any]]:
+    def get_module_state(self, module_name: str) -> dict[str, Any] | None:
         """Get current state of a specific module"""
         if module_name not in self.modules:
             return None
@@ -102,6 +98,6 @@ class ModuleManager:
             "tile_data": module.get_tile_data(),
         }
 
-    def get_all_states(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_states(self) -> dict[str, dict[str, Any]]:
         """Get states of all modules"""
-        return {name: self.get_module_state(name) for name in self.modules.keys()}
+        return {name: self.get_module_state(name) for name in self.modules}

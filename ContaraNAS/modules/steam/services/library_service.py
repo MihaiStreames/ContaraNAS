@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List, Optional
 
 from ContaraNAS.core.utils import get_logger
 
@@ -13,9 +12,9 @@ class SteamLibraryService:
     """Service for managing Steam installation and libraries"""
 
     def __init__(self):
-        self.steam_path: Optional[Path] = None
-        self.library_paths: List[Path] = []
-        self.parsing_service: Optional[SteamParsingService] = None
+        self.steam_path: Path | None = None
+        self.library_paths: list[Path] = []
+        self.parsing_service: SteamParsingService | None = None
 
     def initialize(self) -> bool:
         """Initialize Steam path and libraries"""
@@ -39,15 +38,13 @@ class SteamLibraryService:
             logger.error("No Steam libraries found")
             return False
 
-        logger.info(
-            f"Steam library service initialized: {len(self.library_paths)} libraries"
-        )
+        logger.info(f"Steam library service initialized: {len(self.library_paths)} libraries")
         return True
 
-    def get_library_paths(self) -> List[Path]:
+    def get_library_paths(self) -> list[Path]:
         """Get all Steam library paths"""
         return self.library_paths.copy()
 
-    def get_steam_path(self) -> Optional[Path]:
+    def get_steam_path(self) -> Path | None:
         """Get Steam installation path"""
         return self.steam_path

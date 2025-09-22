@@ -1,5 +1,4 @@
 import asyncio
-from typing import List
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -26,7 +25,7 @@ class SteamImageService:
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 
-    def sync_with_manifest_cache(self, installed_app_ids: List[int]) -> None:
+    def sync_with_manifest_cache(self, installed_app_ids: list[int]) -> None:
         """Sync images with current manifest cache state"""
         installed_set = set(installed_app_ids)
 
@@ -88,13 +87,11 @@ class SteamImageService:
             image_path.unlink()
             logger.debug(f"Removed cached image for app {app_id}")
 
-    async def _download_images(self, app_ids: List[int]) -> None:
+    async def _download_images(self, app_ids: list[int]) -> None:
         """Download images in background"""
         for app_id in app_ids:
             try:
-                await asyncio.get_event_loop().run_in_executor(
-                    None, self.download_image, app_id
-                )
+                await asyncio.get_event_loop().run_in_executor(None, self.download_image, app_id)
                 # We're nice to Steam's servers
                 await asyncio.sleep(0.1)
             except Exception as e:

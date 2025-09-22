@@ -1,5 +1,4 @@
 import json
-from typing import Set
 
 from ContaraNAS.core.utils import get_cache_dir, get_logger
 
@@ -11,14 +10,14 @@ class StateManager:
 
     def __init__(self):
         self.state_file = get_cache_dir() / "module_states.json"
-        self._enabled_modules: Set[str] = set()
+        self._enabled_modules: set[str] = set()
         self._load_state()
 
     def _load_state(self) -> None:
         """Load module states from disk"""
         try:
             if self.state_file.exists():
-                with open(self.state_file, "r", encoding="utf-8") as f:
+                with open(self.state_file, encoding="utf-8") as f:
                     data = json.load(f)
                     self._enabled_modules = set(data.get("enabled_modules", []))
                     logger.info(
@@ -38,9 +37,7 @@ class StateManager:
             with open(self.state_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
 
-            logger.debug(
-                f"Saved module states: {len(self._enabled_modules)} enabled modules"
-            )
+            logger.debug(f"Saved module states: {len(self._enabled_modules)} enabled modules")
         except Exception as e:
             logger.error(f"Failed to save module states: {e}")
 
@@ -58,7 +55,7 @@ class StateManager:
             self._save_state()
             logger.debug(f"Marked module '{module_name}' as disabled")
 
-    def get_enabled_modules(self) -> Set[str]:
+    def get_enabled_modules(self) -> set[str]:
         """Get all modules that should be enabled on startup"""
         return self._enabled_modules.copy()
 

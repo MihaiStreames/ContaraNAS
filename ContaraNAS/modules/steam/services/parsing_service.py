@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import vdf
 
@@ -14,10 +14,10 @@ class SteamParsingService:
     """Service for parsing Steam VDF and ACF files"""
 
     def __init__(self, steam_path: Path):
-        self.libraries: List[Path] = []
+        self.libraries: list[Path] = []
         self.steam_path = steam_path
 
-    def get_library_paths(self) -> List[Path]:
+    def get_library_paths(self) -> list[Path]:
         """Get all Steam library paths from libraryfolders.vdf"""
         if not self.libraries:
             libraryfolders_file = self.steam_path / "steamapps" / "libraryfolders.vdf"
@@ -26,11 +26,11 @@ class SteamParsingService:
                 return []
 
             try:
-                with open(libraryfolders_file, "r", encoding="utf-8") as f:
+                with open(libraryfolders_file, encoding="utf-8") as f:
                     data = vdf.load(f)
                     libraries_data = data.get("libraryfolders", {})
 
-                    for lib_id, lib_data in libraries_data.items():
+                    for _lib_id, lib_data in libraries_data.items():
                         if isinstance(lib_data, dict) and "path" in lib_data:
                             path = lib_data["path"]
                             self.libraries.append(Path(path))
@@ -44,10 +44,10 @@ class SteamParsingService:
         return self.libraries
 
     @staticmethod
-    def parse_app_manifest(manifest_path: Path) -> Optional[Dict[str, Any]]:
+    def parse_app_manifest(manifest_path: Path) -> dict[str, Any] | None:
         """Parse an app manifest (ACF) file"""
         try:
-            with open(manifest_path, "r", encoding="utf-8") as f:
+            with open(manifest_path, encoding="utf-8") as f:
                 data = vdf.load(f)
                 app_state = data.get("AppState", {})
 
@@ -63,7 +63,7 @@ class SteamParsingService:
 
     def create_game_from_manifest(
         self, manifest_path: Path, library_path: Path
-    ) -> Optional[SteamGame]:
+    ) -> SteamGame | None:
         """Create a SteamGame instance from a manifest file"""
         app_state = self.parse_app_manifest(manifest_path)
         if not app_state:
@@ -79,7 +79,7 @@ class SteamParsingService:
 
         # Create game instance
         try:
-            game = SteamGame(
+            return SteamGame(
                 app_id=app_id,
                 name=name,
                 install_dir=app_state.get("installdir", ""),
@@ -93,8 +93,6 @@ class SteamParsingService:
                 state_flags=int(app_state.get("StateFlags", 4)),
                 installed_depots=app_state.get("InstalledDepots", {}),
             )
-
-            return game
 
         except Exception as e:
             logger.error(f"Error creating game from manifest {manifest_path}: {e}")

@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, List
+from collections.abc import Callable
+from typing import Any
 
 from ContaraNAS.core.utils import get_logger
 
@@ -9,7 +10,7 @@ class EventBus:
     """Simple event bus for Module -> GUI communication"""
 
     def __init__(self):
-        self._listeners: Dict[str, List[Callable]] = {}
+        self._listeners: dict[str, list[Callable]] = {}
 
     def subscribe(self, event_type: str, callback: Callable[[Any], None]):
         """Subscribe to an event type"""

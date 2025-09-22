@@ -1,7 +1,6 @@
 import os
 import platform
 from pathlib import Path
-from typing import Optional
 
 from ContaraNAS.core.utils import get_logger
 
@@ -12,7 +11,7 @@ class SteamPathService:
     """Service for detecting Steam installation path"""
 
     @staticmethod
-    def find_steam_path() -> Optional[Path]:
+    def find_steam_path() -> Path | None:
         """Find Steam installation path based on the platform"""
         system = platform.system()
 
@@ -29,9 +28,7 @@ class SteamPathService:
                 os.path.expanduser("~/.local/share/Steam"),
                 "/usr/share/steam",
                 # Flatpak
-                os.path.expanduser(
-                    "~/.var/app/com.valvesoftware.Steam/.local/share/Steam"
-                ),
+                os.path.expanduser("~/.var/app/com.valvesoftware.Steam/.local/share/Steam"),
             ]
         elif system == "Darwin":  # macOS
             paths = [os.path.expanduser("~/Library/Application Support/Steam")]

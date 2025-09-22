@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field, computed_field
 
@@ -38,7 +38,7 @@ class SteamGame(BaseModel):
     )  # 4 = fully installed
 
     # Installed depots
-    installed_depots: Dict[str, Dict[str, str]] = Field(default_factory=dict)
+    installed_depots: dict[str, dict[str, str]] = Field(default_factory=dict)
 
     class Config:
         arbitrary_types_allowed = True
@@ -53,14 +53,13 @@ class SteamGame(BaseModel):
             if self.bytes_to_download > 0:
                 return "updating"
             return "installed"
-        elif self.state_flags == 1026:  # Update required
+        if self.state_flags == 1026:  # Update required
             return "updating"
-        elif 0 < self.bytes_downloaded < self.bytes_to_download:
+        if 0 < self.bytes_downloaded < self.bytes_to_download:
             return "downloading"
-        elif self.bytes_to_download > 0:
+        if self.bytes_to_download > 0:
             return "paused"
-        else:
-            return "uninstalled"
+        return "uninstalled"
 
     @computed_field
     @property
@@ -85,9 +84,7 @@ class SteamGame(BaseModel):
     @property
     def workshop_content_size(self) -> int:
         """Calculate workshop content size for this game"""
-        workshop_path = (
-            self.library_path / "steamapps" / "workshop" / "content" / str(self.app_id)
-        )
+        workshop_path = self.library_path / "steamapps" / "workshop" / "content" / str(self.app_id)
         return get_dir_size(workshop_path) if workshop_path.exists() else 0
 
     @computed_field
@@ -104,19 +101,15 @@ class SteamGame(BaseModel):
 
     @computed_field
     @property
-    def last_played_date(self) -> Optional[datetime]:
+    def last_played_date(self) -> datetime | None:
         """Convert timestamp to datetime"""
-        return (
-            datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
-        )
+        return datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
 
     @computed_field
     @property
-    def last_updated_date(self) -> Optional[datetime]:
+    def last_updated_date(self) -> datetime | None:
         """Convert timestamp to datetime"""
-        return (
-            datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
-        )
+        return datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
 
     @computed_field
     @property
@@ -124,7 +117,7 @@ class SteamGame(BaseModel):
         """Steam store page URL"""
         return f"https://store.steampowered.com/app/{self.app_id}/"
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Convert to dictionary for serialization"""
         return {
             "app_id": self.app_id,
