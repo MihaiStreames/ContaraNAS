@@ -98,6 +98,6 @@ class ModuleManager:
             "tile_data": module.get_tile_data(),
         }
 
-    def get_all_states(self) -> dict[str, dict[str, Any]]:
+    def get_all_states(self) -> dict[str, dict[str, Any] | None]:
         """Get states of all modules"""
         return {name: self.get_module_state(name) for name in self.modules}

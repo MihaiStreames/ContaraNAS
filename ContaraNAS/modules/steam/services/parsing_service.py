@@ -4,8 +4,7 @@ from typing import Any
 import vdf
 
 from ContaraNAS.core.utils import get_logger
-
-from ..dtos.steam_game import SteamGame
+from ContaraNAS.modules.steam.dtos import SteamGame
 
 logger = get_logger(__name__)
 

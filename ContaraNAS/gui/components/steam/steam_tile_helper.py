@@ -1,6 +1,6 @@
 from nicegui import ui
 
-from ContaraNAS.gui.utils.gui_utils import format_bytes
+from ContaraNAS.gui.utils import format_bytes
 
 
 def calculate_drive_percentages(library: dict) -> dict[str, float]:

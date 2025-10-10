@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, computed_field
 
-from ..utils.steam_helpers import get_dir_size
+from ContaraNAS.modules.steam.utils import get_dir_size
 
 
 class SteamGame(BaseModel):

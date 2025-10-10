@@ -1,8 +1,7 @@
 from nicegui import ui
 
-from ContaraNAS.gui.components.base.base_tile import BaseTile
-
-from .steam_tile_helper import (
+from ContaraNAS.gui.components.base import BaseTile
+from ContaraNAS.gui.components.steam.steam_tile_helper import (
     render_color_legend,
     render_drive_info,
     render_library_header,

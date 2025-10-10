@@ -4,8 +4,7 @@ from pathlib import Path
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 
 from ContaraNAS.core.utils import get_logger
-
-from ..utils.steam_helpers import is_manifest_file
+from ContaraNAS.modules.steam.utils import is_manifest_file
 
 logger = get_logger(__name__)
 

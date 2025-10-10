@@ -1,7 +1,6 @@
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.components.base.base_tile import BaseTile
-
-from .component_factory import ComponentFactory
+from ContaraNAS.gui.factories import ComponentFactory
 
 logger = get_logger(__name__)
 

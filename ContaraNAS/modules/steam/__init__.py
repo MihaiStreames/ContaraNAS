@@ -1,9 +1,8 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.utils import get_logger
-
-from .controllers.steam_controller import SteamController
+from ContaraNAS.modules.steam.controllers import SteamController
 
 logger = get_logger(__name__)
 
