@@ -3,7 +3,7 @@ import time
 
 import psutil
 
-from ContaraNAS.modules.sys_monitor.models import CPUInfo
+from ContaraNAS.modules.sys_monitor.dtos import CPUInfo
 
 
 class CPUService:
