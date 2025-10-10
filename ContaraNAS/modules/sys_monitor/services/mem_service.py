@@ -1,12 +1,12 @@
 import platform
 import re
 import subprocess
-
-import psutil
 from pathlib import Path
 
-from ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
+import psutil
+
 from ContaraNAS.core.utils import get_cache_dir, save_json
+from ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
 
 
 class MemService:
@@ -87,10 +87,5 @@ class MemService:
             swap_used=swap_mem.used,
             swap_free=swap_mem.free,
             swap_usage=swap_mem.percent,
-            ram_sticks=self.ram_sticks
+            ram_sticks=self.ram_sticks,
         )
-
-
-if __name__ == "__main__":
-    mem_service = MemService()
-    print(mem_service.get_memory_info())
