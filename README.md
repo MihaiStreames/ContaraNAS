@@ -36,7 +36,5 @@ poetry run python -m python ContaraNAS.main
 ContaraNAS uses a modular architecture with the following components:
 
 - **Core**: Module management, event bus, utilities
-- **Modules**: Steam, Discord, etc. (pluggable)
+- **Modules**: Steam, System, etc. (pluggable)
 - **GUI**: NiceGUI-based dashboard with reactive components
-
-- **TODO**: make modules keep the status they had when app closed 
