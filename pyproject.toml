@@ -1,46 +1,50 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[tool.poetry]
-authors = ["Sincos <optik@koolkdzonly.club>", "Alessandro Dorigo <dorigo.alessandro@gmail.com>"]
+[project]
 name = "contaranas"
 version = "0.0.1"
 description = "A modular desktop application for monitoring gaming services"
 readme = "README.md"
-packages= [{ include = "ContaraNAS"}]
+authors = [
+    { name = "Sincos", email = "optik@koolkdzonly.club" },
+    { name = "Alessandro Dorigo", email = "dorigo.alessandro@gmail.com" }
+]
+requires-python = ">=3.9,<3.14"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.13",
 ]
+dependencies = [
+    "pathlib>=1.0.1",
+    "pydantic>=2.10.6",
+    "pywebview>=5.4",
+    "pygobject>=3.52.3",
+    "nicegui>=2.21.1",
+    "qtpy>=2.4.3",
+    "watchdog>=6.0.0",
+    "vdf>=3.4",
+    "requests>=2.32.3",
+    "psutil>=7.0.0",
+    "pyside6>=6.9.2",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.9,<3.14"
-pathlib = ">=1.0.1"
-pydantic = ">=2.10.6"
-pywebview = ">=5.4"
-pygobject = ">=3.52.3"
-nicegui = ">=2.21.1"
-qtpy = ">=2.4.3"
-watchdog = ">=6.0.0"
-vdf = ">=3.4"
-requests = ">=2.32.3"
-psutil = ">=7.0.0"
-pyside6 = "^6.9.2"
-
-
-[tool.poetry.urls]
+[project.urls]
 Homepage = "https://github.com/MihaiStreames/ContaraNAS"
 Repository = "https://github.com/MihaiStreames/ContaraNAS.git"
 Issues = "https://github.com/MihaiStreames/ContaraNAS/issues"
 
-[tool.poetry.plugins."contaranas.modules"]
+[project.entry-points."contaranas.modules"]
 steam_module = "ContaraNAS.modules.steam:SteamModule"
 
-[tool.poetry.plugins."contaranas.components"]
+[project.entry-points."contaranas.components"]
 steam_components = "ContaraNAS.gui.components.steam.steam_tile:SteamTile"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ContaraNAS"]
 
 # ========== BLACK (Formatter) ==========
 [tool.black]
@@ -85,7 +89,6 @@ select = [
     "RSE",  # flake8-raise
     "RUF",  # ruff-specific rules
 ]
-
 ignore = [
     "D100",    # Missing docstring in public module
     "D101",    # Missing docstring in public class
@@ -106,7 +109,6 @@ ignore = [
     "INP001",  # Implicit namespace packages
     "G004",    # Logging statement uses f-string
 ]
-
 fixable = ["ALL"]
 unfixable = []
 
