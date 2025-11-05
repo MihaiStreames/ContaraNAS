@@ -1,6 +1,6 @@
 import logging
-import platform
 from pathlib import Path
+import platform
 
 
 def get_log_dir() -> Path:

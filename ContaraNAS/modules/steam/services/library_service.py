@@ -5,6 +5,7 @@ from ContaraNAS.core.utils import get_logger
 from .parsing_service import SteamParsingService
 from .path_service import SteamPathService
 
+
 logger = get_logger(__name__)
 
 

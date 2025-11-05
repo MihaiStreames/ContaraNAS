@@ -5,6 +5,7 @@ from ContaraNAS.core.module import Module
 from ContaraNAS.core.state_manager import state_manager
 from ContaraNAS.core.utils import get_logger
 
+
 logger = get_logger(__name__)
 
 

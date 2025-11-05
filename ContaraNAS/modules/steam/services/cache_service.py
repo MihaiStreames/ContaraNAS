@@ -3,6 +3,7 @@ from pathlib import Path
 from ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
 from ContaraNAS.modules.steam.utils import extract_app_id
 
+
 logger = get_logger(__name__)
 
 

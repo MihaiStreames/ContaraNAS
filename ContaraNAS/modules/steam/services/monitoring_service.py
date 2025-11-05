@@ -7,6 +7,7 @@ from ContaraNAS.core.utils import get_logger
 
 from .manifest_handler import SteamManifestHandler
 
+
 logger = get_logger(__name__)
 
 

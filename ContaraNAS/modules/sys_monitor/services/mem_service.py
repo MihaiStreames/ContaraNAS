@@ -1,7 +1,7 @@
+from pathlib import Path
 import platform
 import re
 import subprocess
-from pathlib import Path
 
 import psutil
 
@@ -33,7 +33,7 @@ class MemService:
                 return m.group(1).strip() if m else ""
 
             size_str = get_field("Size")
-            if size_str == "No Module Installed" or size_str == "":
+            if size_str in {"No Module Installed", ""}:
                 continue
 
             size = (

@@ -6,6 +6,7 @@ from ContaraNAS.gui.components.base import BaseTile, BaseTileViewModel
 from ContaraNAS.gui.controllers import DashboardController
 from ContaraNAS.gui.factories import ComponentFactory
 
+
 logger = get_logger(__name__)
 
 

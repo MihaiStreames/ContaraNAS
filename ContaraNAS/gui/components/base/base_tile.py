@@ -7,6 +7,7 @@ from ContaraNAS.core.utils import get_logger
 
 from .base_view_model import BaseTileViewModel
 
+
 logger = get_logger(__name__)
 
 

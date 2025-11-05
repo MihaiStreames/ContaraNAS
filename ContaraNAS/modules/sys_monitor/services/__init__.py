@@ -1,3 +1,4 @@
-from cpu_service import CPUService
+from .cpu_service import CPUService
+
 
 __all__ = ["CPUService"]

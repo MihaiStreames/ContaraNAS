@@ -12,6 +12,7 @@ from ContaraNAS.modules.steam.services import (
 )
 from ContaraNAS.modules.steam.utils import extract_app_id, get_drive_info
 
+
 logger = get_logger(__name__)
 
 

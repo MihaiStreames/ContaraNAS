@@ -1,8 +1,8 @@
+from pathlib import Path
 import platform
 import re
 import shutil
 import subprocess
-from pathlib import Path
 
 import requests
 

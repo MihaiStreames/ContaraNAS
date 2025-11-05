@@ -4,6 +4,7 @@ from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
 from ContaraNAS.core.utils import get_logger
 
+
 logger = get_logger(__name__)
 
 

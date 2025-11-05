@@ -4,6 +4,7 @@ from ContaraNAS.core.module import Module
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.steam.controllers import SteamController
 
+
 logger = get_logger(__name__)
 
 

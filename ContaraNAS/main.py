@@ -8,6 +8,7 @@ from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.dashboard import DashboardView
 from ContaraNAS.gui.factories import register_all_components
 
+
 # Some fixes
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
 
