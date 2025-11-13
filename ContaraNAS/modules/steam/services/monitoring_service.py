@@ -5,7 +5,8 @@ from watchdog.observers import Observer
 
 from ContaraNAS.core.utils import get_logger
 
-from ..services.manifest_handler import SteamManifestHandler
+from .manifest_handler import SteamManifestHandler
+
 
 logger = get_logger(__name__)
 

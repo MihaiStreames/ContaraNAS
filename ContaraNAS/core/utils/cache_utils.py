@@ -1,7 +1,7 @@
 import json
 import os
-import platform
 from pathlib import Path
+import platform
 from typing import Any
 
 

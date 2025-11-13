@@ -2,10 +2,10 @@ from nicegui import ui
 
 from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
-from ContaraNAS.gui.components.base.base_tile import BaseTile
-from ContaraNAS.gui.components.base.base_view_model import BaseTileViewModel
-from ContaraNAS.gui.controllers.dashboard_controller import DashboardController
+from ContaraNAS.gui.components.base import BaseTile, BaseTileViewModel
+from ContaraNAS.gui.controllers import DashboardController
 from ContaraNAS.gui.factories import ComponentFactory
+
 
 logger = get_logger(__name__)
 

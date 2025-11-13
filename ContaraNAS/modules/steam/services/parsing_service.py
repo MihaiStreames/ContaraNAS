@@ -4,8 +4,8 @@ from typing import Any
 import vdf
 
 from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.steam.dtos import SteamGame
 
-from ..dtos.steam_game import SteamGame
 
 logger = get_logger(__name__)
 
@@ -30,7 +30,7 @@ class SteamParsingService:
                     data = vdf.load(f)
                     libraries_data = data.get("libraryfolders", {})
 
-                    for _lib_id, lib_data in libraries_data.items():
+                    for lib_data in libraries_data.values():
                         if isinstance(lib_data, dict) and "path" in lib_data:
                             path = lib_data["path"]
                             self.libraries.append(Path(path))

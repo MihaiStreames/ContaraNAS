@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-from read_file import read_file
+from .read_file import read_file
 
 
 def parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:

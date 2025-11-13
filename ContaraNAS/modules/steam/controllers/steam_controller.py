@@ -3,15 +3,15 @@ from pathlib import Path
 from typing import Any
 
 from ContaraNAS.core.utils import get_logger
-
-from ..services import (
+from ContaraNAS.modules.steam.services import (
     SteamCacheService,
+    SteamImageService,
     SteamLibraryService,
     SteamMonitoringService,
     SteamParsingService,
 )
-from ..services.image_service import SteamImageService
-from ..utils.steam_helpers import extract_app_id, get_drive_info
+from ContaraNAS.modules.steam.utils import extract_app_id, get_drive_info
+
 
 logger = get_logger(__name__)
 
