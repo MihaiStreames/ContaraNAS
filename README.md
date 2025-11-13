@@ -19,17 +19,16 @@ git clone https://github.com/MihaiStreames/ContaraNAS
 cd ContaraNAS
 
 # Install dependencies
-poetry install
+uv sync
 
 # Run the application
-poetry run python -m python ContaraNAS.main
+uv run -m ContaraNAS.main
 ```
 
 ### Requirements
 
 - Python 3.9+
 - Steam installed (for Steam module)
-- Windows/Linux/macOS support
 
 ## Architecture
 
