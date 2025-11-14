@@ -1,6 +1,10 @@
 from nicegui import ui
 
+from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.components.base import BaseTile
+
+
+logger = get_logger(__name__)
 
 
 class SysMonitorTile(BaseTile):
@@ -20,6 +24,8 @@ class SysMonitorTile(BaseTile):
         cpu = tile_data.get("cpu")
         memory = tile_data.get("memory")
         disks = tile_data.get("disks", [])
+
+        logger.debug(f"Rendering tile - CPU: {cpu is not None}, Memory: {memory is not None}, Disks: {len(disks) if disks else 0}")
 
         # CPU Section
         if cpu:

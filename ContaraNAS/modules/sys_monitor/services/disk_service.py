@@ -4,7 +4,11 @@ from typing import Any
 
 import psutil
 
+from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.sys_monitor.dtos import DiskInfo
+
+
+logger = get_logger(__name__)
 
 
 class DiskService:
@@ -117,8 +121,11 @@ class DiskService:
     def get_disk_info(self) -> list[DiskInfo]:
         """Get information for all disk partitions"""
         disks = []
+        partitions = psutil.disk_partitions()
 
-        for partition in psutil.disk_partitions():
+        logger.debug(f"Found {len(partitions)} disk partitions")
+
+        for partition in partitions:
             try:
                 usage = psutil.disk_usage(partition.mountpoint)
                 io_stats = self.__get_disk_io_stats(partition.device)
@@ -164,9 +171,12 @@ class DiskService:
                     type=self.__get_device_type(partition.device),
                 )
                 disks.append(disk_info)
+                logger.debug(f"Added disk: {partition.mountpoint} ({partition.device})")
 
             except (PermissionError, OSError) as e:
                 # Skip partitions that can't be accessed
+                logger.debug(f"Skipping partition {partition.mountpoint}: {e}")
                 continue
 
+        logger.debug(f"Returning {len(disks)} disk(s)")
         return disks
