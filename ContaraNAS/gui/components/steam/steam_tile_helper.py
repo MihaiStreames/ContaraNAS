@@ -85,7 +85,7 @@ def render_progress_section(library: dict) -> None:
         with ui.row().classes("w-full items-center gap-2"):
             # Progress bar
             progress_html = generate_progress_bar_html(percentages)
-            ui.html(progress_html).classes("flex-1")
+            ui.html(progress_html, sanitize=False).classes("flex-1")
 
             # Total Steam size label
             ui.label(f"{format_bytes(total_steam_size)}").classes("text-xs font-bold min-w-fit")
@@ -103,11 +103,11 @@ def render_color_legend(library: dict) -> None:
     non_steam_size = max(0, drive_used - total_steam_size)
 
     with ui.row().classes("w-full gap-4 mt-1 text-xs"):
-        ui.html(f'<span style="color: #1976d2;">■</span> Games: {format_bytes(games_size)}')
-        ui.html(f'<span style="color: #388e3c;">■</span> Shaders: {format_bytes(shader_size)}')
-        ui.html(f'<span style="color: #f57c00;">■</span> Workshop: {format_bytes(workshop_size)}')
+        ui.html(f'<span style="color: #1976d2;">■</span> Games: {format_bytes(games_size)}', sanitize=False)
+        ui.html(f'<span style="color: #388e3c;">■</span> Shaders: {format_bytes(shader_size)}', sanitize=False)
+        ui.html(f'<span style="color: #f57c00;">■</span> Workshop: {format_bytes(workshop_size)}', sanitize=False)
         if non_steam_size > 0:
-            ui.html(f'<span style="color: #fdd835;">■</span> Other: {format_bytes(non_steam_size)}')
+            ui.html(f'<span style="color: #fdd835;">■</span> Other: {format_bytes(non_steam_size)}', sanitize=False)
 
 
 def render_drive_info(library: dict) -> None:
