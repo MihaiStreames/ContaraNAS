@@ -1,3 +1,4 @@
+import asyncio
 from pathlib import Path
 import platform
 import re
@@ -75,3 +76,11 @@ def _get_dir_size_win(directory: str | Path) -> int | None:
             if match:
                 return int(match.group(1).replace(",", ""))
     return None
+
+
+async def get_dir_size_async(directory: str | Path) -> int | None:
+    """Calculate the total size of files in a directory (async version)
+
+    Runs the blocking get_dir_size operation in a thread pool to avoid blocking the event loop.
+    """
+    return await asyncio.to_thread(get_dir_size, directory)

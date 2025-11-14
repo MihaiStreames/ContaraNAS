@@ -5,6 +5,11 @@ from typing import Any
 import psutil
 
 from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.sys_monitor.constants import (
+    DEFAULT_IO_UPDATE_INTERVAL,
+    DISK_SECTOR_SIZE,
+    IO_TIME_MS_DIVISOR,
+)
 from ContaraNAS.modules.sys_monitor.dtos import DiskInfo
 
 
@@ -17,6 +22,26 @@ class DiskService:
     def __init__(self, os_name=None):
         self.os_name = os_name or platform.system()
         self.previous_stats = {}
+
+    @staticmethod
+    def _extract_base_device_name(device: str) -> str:
+        """Extract base device name from full device path
+
+        Examples:
+            /dev/sda1 -> sda
+            /dev/nvme0n1p1 -> nvme0n1
+            sdb2 -> sdb
+        """
+        base_device = device.split("/")[-1]
+        if base_device.startswith("nvme"):
+            # Handle NVMe devices: nvme0n1p1 -> nvme0n1
+            base_device = base_device.rstrip("0123456789p")
+            if base_device.endswith("p"):
+                base_device = base_device[:-1]
+        else:
+            # Handle regular devices: sda1 -> sda
+            base_device = base_device.rstrip("0123456789")
+        return base_device
 
     @staticmethod
     def __parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:
@@ -45,21 +70,13 @@ class DiskService:
         if self.os_name != "Linux":
             return "Unknown"
 
-        # Extract base device name (e.g., sda from sda1, nvme0n1 from nvme0n1p1)
-        base_device = device.split("/")[-1]
-        if base_device.startswith("nvme"):
-            base_device = base_device.rstrip("0123456789p")
-            if base_device.endswith("p"):
-                base_device = base_device[:-1]
-        else:
-            base_device = base_device.rstrip("0123456789")
-
+        base_device = self._extract_base_device_name(device)
         model_path = Path(f"/sys/block/{base_device}/device/model")
         if model_path.exists():
             try:
                 return model_path.read_text().strip()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to read device model for {device}: {e}")
         return "Unknown"
 
     def __get_device_type(self, device: str) -> str:
@@ -67,19 +84,18 @@ class DiskService:
         if self.os_name != "Linux":
             return "Unknown"
 
-        # Extract base device name
-        base_device = device.split("/")[-1]
+        base_device = self._extract_base_device_name(device)
+        # NVMe devices are always SSDs
         if base_device.startswith("nvme"):
             return "SSD"
 
-        base_device = base_device.rstrip("0123456789")
         rotational_path = Path(f"/sys/block/{base_device}/queue/rotational")
         if rotational_path.exists():
             try:
                 is_rotational = rotational_path.read_text().strip()
                 return "HDD" if is_rotational == "1" else "SSD"
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to read device type for {device}: {e}")
         return "Unknown"
 
     def __get_disk_io_stats(self, device: str) -> dict:
@@ -93,22 +109,12 @@ class DiskService:
                 "io_time": 0,
             }
 
-        # Extract base device name for diskstats lookup
-        base_device = device.split("/")[-1]
-        if base_device.startswith("nvme"):
-            base_device = base_device.rstrip("0123456789p")
-            if base_device.endswith("p"):
-                base_device = base_device[:-1]
-        else:
-            base_device = base_device.rstrip("0123456789")
-
+        base_device = self._extract_base_device_name(device)
         diskstats_path = Path("/proc/diskstats")
         stats = self.__parse_diskstats(diskstats_path, base_device)
 
-        # Sector size is typically 512 bytes
-        sector_size = 512
-        read_bytes = stats.get("reads", 0) * sector_size
-        write_bytes = stats.get("writes", 0) * sector_size
+        read_bytes = stats.get("reads", 0) * DISK_SECTOR_SIZE
+        write_bytes = stats.get("writes", 0) * DISK_SECTOR_SIZE
 
         return {
             "read_bytes": read_bytes,
@@ -142,11 +148,18 @@ class DiskService:
                     write_diff = io_stats["write_bytes"] - prev["write_bytes"]
                     io_time_diff = io_stats["io_time"] - prev["io_time"]
 
-                    # Assuming update interval of ~2 seconds (will be adjusted by monitoring service)
-                    time_interval = 2.0
-                    read_speed = read_diff / time_interval if read_diff > 0 else 0.0
-                    write_speed = write_diff / time_interval if write_diff > 0 else 0.0
-                    busy_time = (io_time_diff / 10.0) / time_interval if io_time_diff > 0 else 0.0
+                    # Calculate speeds based on default update interval
+                    read_speed = (
+                        read_diff / DEFAULT_IO_UPDATE_INTERVAL if read_diff > 0 else 0.0
+                    )
+                    write_speed = (
+                        write_diff / DEFAULT_IO_UPDATE_INTERVAL if write_diff > 0 else 0.0
+                    )
+                    busy_time = (
+                        (io_time_diff / IO_TIME_MS_DIVISOR) / DEFAULT_IO_UPDATE_INTERVAL
+                        if io_time_diff > 0
+                        else 0.0
+                    )
 
                 # Store current stats for next calculation
                 self.previous_stats[device_key] = io_stats.copy()

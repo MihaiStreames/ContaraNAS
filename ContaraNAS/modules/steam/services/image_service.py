@@ -6,6 +6,12 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from ContaraNAS.core.utils import get_cache_dir, get_logger
+from ContaraNAS.modules.steam.constants import (
+    HTTP_RETRY_COUNT,
+    HTTP_TIMEOUT_SECONDS,
+    IMAGE_DOWNLOAD_DELAY,
+    MIN_VALID_IMAGE_SIZE,
+)
 
 
 logger = get_logger(__name__)
@@ -21,7 +27,9 @@ class SteamImageService:
         # Setup requests session with retries
         self.session = requests.Session()
         retry_strategy = Retry(
-            total=3, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504]
+            total=HTTP_RETRY_COUNT,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("http://", adapter)
@@ -64,11 +72,11 @@ class SteamImageService:
 
         try:
             logger.debug(f"Downloading image for app {app_id}")
-            response = self.session.get(cover_url, timeout=10)
+            response = self.session.get(cover_url, timeout=HTTP_TIMEOUT_SECONDS)
             response.raise_for_status()
 
             # Check if we got a valid image
-            if len(response.content) < 1000:
+            if len(response.content) < MIN_VALID_IMAGE_SIZE:
                 logger.warning(f"Received small image for app {app_id}, skipping")
                 return
 
@@ -94,7 +102,7 @@ class SteamImageService:
         for app_id in app_ids:
             try:
                 await asyncio.get_event_loop().run_in_executor(None, self.download_image, app_id)
-                # We're nice to Steam's servers
-                await asyncio.sleep(0.1)
+                # Rate limit to be nice to Steam's servers
+                await asyncio.sleep(IMAGE_DOWNLOAD_DELAY)
             except Exception as e:
                 logger.error(f"Error in background download for app {app_id}: {e}")

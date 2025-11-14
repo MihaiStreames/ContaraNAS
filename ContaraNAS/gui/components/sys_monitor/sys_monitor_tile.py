@@ -3,6 +3,7 @@ from nicegui import ui
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.components.base import BaseTile
 from ContaraNAS.gui.components.sys_monitor import sys_monitor_tile_helper as helper
+from ContaraNAS.modules.sys_monitor.constants import MAX_HISTORY_POINTS
 from ContaraNAS.modules.sys_monitor.services import SysMonitorPreferenceService
 
 
@@ -19,7 +20,7 @@ class SysMonitorTile(BaseTile):
         self.cpu_core_history = {}  # Track history per core
         self.cpu_general_history = []  # Track general CPU history
         self.mem_history = []
-        self.max_history_points = 30
+        self.max_history_points = MAX_HISTORY_POINTS
 
         # Initialize preference service and load user preference for CPU view
         self.preference_service = SysMonitorPreferenceService()

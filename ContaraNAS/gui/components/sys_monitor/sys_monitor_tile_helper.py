@@ -1,6 +1,14 @@
 from nicegui import ui
 import plotly.graph_objects as go
 
+from ContaraNAS.modules.sys_monitor.constants import (
+    CPU_GRAPH_HEIGHT,
+    MAX_DISPLAYED_DISKS,
+    MAX_GRID_COLUMNS,
+    MEMORY_GRAPH_HEIGHT,
+    PER_CORE_GRAPH_HEIGHT,
+)
+
 
 def create_plotly_graph(
     history: list[float],
@@ -67,7 +75,7 @@ def render_cpu_details(physical_cores: int, logical_cores: int, speed_ghz: float
 def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int) -> dict:
     """Render individual graphs for each CPU core"""
     num_cores = len(cpu.usage_per_core)
-    cols = min(4, num_cores)  # Max 4 columns
+    cols = min(MAX_GRID_COLUMNS, num_cores)
 
     with ui.grid(columns=cols).classes("w-full gap-1"):
         for i, core_usage in enumerate(cpu.usage_per_core):
@@ -87,7 +95,7 @@ def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int)
                 fig = create_plotly_graph(
                     history=cpu_core_history[i],
                     color='#1976d2',
-                    height=50,
+                    height=PER_CORE_GRAPH_HEIGHT,
                     max_range=100
                 )
 
@@ -107,7 +115,7 @@ def render_general_cpu_graph(cpu_usage: float, cpu_general_history: list, max_hi
     fig = create_plotly_graph(
         history=cpu_general_history,
         color='#1976d2',
-        height=100,
+        height=CPU_GRAPH_HEIGHT,
         max_range=100
     )
 
@@ -133,7 +141,7 @@ def render_memory_section(memory, mem_history: list, max_history_points: int) ->
         fig = create_plotly_graph(
             history=mem_history,
             color='#388e3c',
-            height=80,
+            height=MEMORY_GRAPH_HEIGHT,
             max_range=100
         )
 
@@ -155,8 +163,8 @@ def render_disk_summary(disks: list) -> None:
     with ui.column().classes("w-full"):
         ui.label("Disks").classes("text-xs font-semibold text-black mb-1")
 
-        # Show only the first 3 disks in the tile
-        for disk in disks[:3]:
+        # Show only the first few disks in the tile
+        for disk in disks[:MAX_DISPLAYED_DISKS]:
             with ui.row().classes("w-full items-center gap-2 mb-1"):
                 # Mount point label
                 ui.label(disk.mountpoint).classes("text-xs w-20 truncate text-black")
@@ -169,7 +177,7 @@ def render_disk_summary(disks: list) -> None:
                 ui.label(f"{disk.usage_percent:.0f}%").classes("text-xs font-mono w-10 text-right text-black")
 
         # Show count if more disks exist
-        if len(disks) > 3:
-            ui.label(f"+ {len(disks) - 3} more disk(s)").classes(
+        if len(disks) > MAX_DISPLAYED_DISKS:
+            ui.label(f"+ {len(disks) - MAX_DISPLAYED_DISKS} more disk(s)").classes(
                 "text-xs text-gray-500 mt-1"
             )
