@@ -28,6 +28,9 @@ def setup_gui(manager: ModuleManager):
     ui.colors(primary="#1976d2")
     DashboardView(manager)
 
+    # Restore module states after UI is ready (using timer for native mode)
+    ui.timer(0.1, lambda: asyncio.create_task(restore_module_states(manager)), once=True)
+
     logger.info("GUI setup complete")
 
 
@@ -46,8 +49,7 @@ def main():
     manager = ModuleManager()
     setup_gui(manager=manager)
 
-    # Configure app
-    app.on_startup(lambda: asyncio.create_task(restore_module_states(manager)))
+    # Configure app shutdown handler
     app.on_shutdown(lambda: asyncio.create_task(cleanup_on_shutdown(manager)))
 
     # Run the application
