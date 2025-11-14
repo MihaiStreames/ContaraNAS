@@ -21,7 +21,7 @@ def create_plotly_graph(
         line={'color': color, 'width': 1},
         fillcolor=fillcolor,
         hovertemplate='%{y:.1f}%<extra></extra>',
-        name=''  # Empty name to remove legend
+        name=''
     ))
 
     fig.update_layout(

@@ -19,15 +19,16 @@ class SysMonitorTile(BaseTile):
 
     def __init__(self, view_model, controller):
         super().__init__(view_model, controller)
-        self.cpu_core_history = {}  # Track history per core
-        self.cpu_general_history = []  # Track general CPU history
+        self.cpu_core_history = {}
+        self.cpu_general_history = []
         self.mem_history = []
         self.max_history_points = 30
 
         # Load user preference for CPU view (default to per-core)
         self.show_per_core = self._load_cpu_view_preference()
 
-    def _load_cpu_view_preference(self) -> bool:
+    @staticmethod
+    def _load_cpu_view_preference() -> bool:
         """Load the user's CPU view preference from cache"""
         try:
             prefs = load_json(PREFERENCES_CACHE_FILE)
