@@ -111,12 +111,12 @@ class SteamController:
 
                 # Create async tasks for size calculations
                 if shader_path.exists():
-                    shader_task = get_dir_size(shader_path)
+                    shader_task = asyncio.create_task(get_dir_size(shader_path))
                 else:
                     shader_task = asyncio.create_task(asyncio.sleep(0, 0))
 
                 if workshop_path.exists():
-                    workshop_task = get_dir_size(workshop_path)
+                    workshop_task = asyncio.create_task(get_dir_size(workshop_path))
                 else:
                     workshop_task = asyncio.create_task(asyncio.sleep(0, 0))
 

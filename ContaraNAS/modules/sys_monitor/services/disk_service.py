@@ -24,39 +24,6 @@ class DiskService:
     def __init__(self, os_name=None):
         self.os_name = os_name or platform.system()
         self.previous_stats = {}
-        self.__device_models_cache = None
-
-    def __get_device_models_lsblk(self) -> dict[str, str]:
-        """Get device models using lsblk (Linux only)
-
-        Returns a dictionary mapping device names to their models.
-        Uses lsblk with JSON output for reliable parsing.
-        """
-        if self.os_name != "Linux":
-            return {}
-
-        try:
-            result = subprocess.run(
-                ["lsblk", "-d", "-J", "-o", "NAME,MODEL"],
-                capture_output=True,
-                text=True,
-                timeout=5,
-                check=False,
-            )
-
-            if result.returncode == 0:
-                data = json.loads(result.stdout)
-                models = {}
-                for device in data.get("blockdevices", []):
-                    name = device.get("name", "").strip()
-                    model = device.get("model", "").strip()
-                    if name and model:
-                        models[name] = model
-                return models
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError, OSError):
-            pass
-
-        return {}
 
     @staticmethod
     def __extract_base_device_name(device: str) -> str:
@@ -101,34 +68,28 @@ class DiskService:
         return diskstats
 
     def __get_device_model(self, device: str) -> str:
-        """Get the model name of the disk device"""
+        """Get the model name of the disk device using lsblk"""
         if self.os_name != "Linux":
             return "Unknown"
 
-        # Initialize cache on first call using lsblk
-        if self.__device_models_cache is None:
-            self.__device_models_cache = self.__get_device_models_lsblk()
-
         base_device = self.__extract_base_device_name(device)
 
-        # Check cache first (from lsblk)
-        if base_device in self.__device_models_cache:
-            return self.__device_models_cache[base_device]
+        # Use lsblk to get model name (works for all device types including NVMe)
+        try:
+            result = subprocess.run(
+                ["lsblk", "-d", "-n", "-o", "MODEL", f"/dev/{base_device}"],
+                capture_output=True,
+                text=True,
+                timeout=2,
+                check=False,
+            )
 
-        # Fall back to sysfs for devices not found by lsblk
-        model_paths = [
-            Path(f"/sys/block/{base_device}/device/model"),  # SATA/SCSI devices
-            Path(f"/sys/block/{base_device}/device/device/model"),  # Some devices
-        ]
-
-        for model_path in model_paths:
-            if model_path.exists():
-                try:
-                    model = model_path.read_text().strip()
-                    if model:
-                        return model
-                except Exception:
-                    pass
+            if result.returncode == 0:
+                model = result.stdout.strip()
+                if model:
+                    return model
+        except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+            pass
 
         return "Unknown"
 
