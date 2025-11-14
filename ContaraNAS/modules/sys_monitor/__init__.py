@@ -2,6 +2,9 @@ from typing import Any
 
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.sys_monitor.controllers.sys_monitor_controller import (
+    SysMonitorController,
+)
 
 
 logger = get_logger(__name__)
@@ -11,24 +14,27 @@ class SysMonitorModule(Module):
     """Module for monitoring your NAS system"""
 
     def __init__(self) -> None:
-        # controller later on
-        super().__init__("sys_monitor")
+        self.controller: SysMonitorController | None = None
+        super().__init__("sys_monitor", display_name="System Monitor")
 
     async def initialize(self) -> None:
         """Initialize the SysMonitor module"""
-        # self.controller = ...
-        # self.controller.initialize()
+        self.controller = SysMonitorController(self.update_state, update_interval=2.0)
+        self.controller.initialize()
 
     async def start_monitoring(self) -> None:
         """Start System monitoring"""
-        # self.controller.start_monitoring()
-        logger.info("Steam monitoring started")
+        await self.controller.start_monitoring()
+        logger.info("System monitoring started")
 
     async def stop_monitoring(self) -> None:
         """Stop System monitoring"""
-        # self.controller.stop_monitoring()
-        logger.info("Steam monitoring stopped")
+        await self.controller.stop_monitoring()
+        logger.info("System monitoring stopped")
 
     def get_tile_data(self) -> dict[str, Any]:
         """Get data for dashboard tile"""
-        # return self.controller.get_tile_data()
+        if not self.controller:
+            return {"error": "Module not initialized"}
+
+        return self.controller.get_tile_data()

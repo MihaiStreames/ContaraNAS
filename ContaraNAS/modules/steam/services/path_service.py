@@ -25,14 +25,10 @@ class SteamPathService:
             ]
         elif system == "Linux":
             paths = [
-                os.path.expanduser("~/.steam/steam"),
-                os.path.expanduser("~/.local/share/Steam"),
+                Path.expanduser(Path("~/.steam/steam")),
+                Path.expanduser(Path("~/.local/share/Steam")),
                 "/usr/share/steam",
-                # Flatpak
-                os.path.expanduser("~/.var/app/com.valvesoftware.Steam/.local/share/Steam"),
             ]
-        elif system == "Darwin":  # macOS
-            paths = [os.path.expanduser("~/Library/Application Support/Steam")]
         else:
             logger.warning(f"Unknown platform: {system}")
             return None

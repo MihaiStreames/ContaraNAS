@@ -26,7 +26,7 @@ class SteamParsingService:
                 return []
 
             try:
-                with open(libraryfolders_file, encoding="utf-8") as f:
+                with Path.open(libraryfolders_file, encoding="utf-8") as f:
                     data = vdf.load(f)
                     libraries_data = data.get("libraryfolders", {})
 
@@ -47,7 +47,7 @@ class SteamParsingService:
     def parse_app_manifest(manifest_path: Path) -> dict[str, Any] | None:
         """Parse an app manifest (ACF) file"""
         try:
-            with open(manifest_path, encoding="utf-8") as f:
+            with Path.open(manifest_path, encoding="utf-8") as f:
                 data = vdf.load(f)
                 app_state = data.get("AppState", {})
 

@@ -6,17 +6,18 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "pathlib>=1.0.1",
-    "pydantic>=2.12.3",
+    "pydantic>=2.12.4",
     "pywebview>=6.1",
     "pygobject>=3.54.5",
-    "nicegui>=3.2.0",
+    "nicegui>=3.3.0",
     "qtpy>=2.4.3",
     "watchdog>=6.0.0",
     "vdf>=3.4",
     "requests>=2.32.3",
     "psutil>=7.1.3",
     "pyside6>=6.9.2",
-    "types-psutil>=7.0.0.20251001",
+    "plotly>=6.4.0",
+    "types-psutil>=7.0.0.20251111",
     "types-requests>=2.32.4.20250913",
     "setuptools>=80.9.0",
     "wheel>=0.45.1",
@@ -29,9 +30,11 @@ Issues = "https://github.com/MihaiStreames/ContaraNAS/issues"
 
 [project.entry-points."contaranas.modules"]
 steam_module = "ContaraNAS.modules.steam:SteamModule"
+sys_monitor_module = "ContaraNAS.modules.sys_monitor:SysMonitorModule"
 
 [project.entry-points."contaranas.components"]
 steam_components = "ContaraNAS.gui.components.steam.steam_tile:SteamTile"
+sys_monitor_components = "ContaraNAS.gui.components.sys_monitor.sys_monitor_tile:SysMonitorTile"
 
 [build-system]
 requires = ["setuptools>=80.9.0", "wheel"]

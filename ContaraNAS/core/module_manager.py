@@ -93,6 +93,7 @@ class ModuleManager:
         module = self.modules[module_name]
         return {
             "name": module_name,
+            "display_name": module.display_name,
             "enabled": module.enable_flag,
             "initialized": module.init_flag,
             "state": module.state.copy(),

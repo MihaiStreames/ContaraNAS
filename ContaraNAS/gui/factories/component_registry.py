@@ -1,3 +1,5 @@
+from importlib.metadata import entry_points
+
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.components.base.base_tile import BaseTile
 from ContaraNAS.gui.factories import ComponentFactory
@@ -21,7 +23,6 @@ def register_all_components() -> None:
 
 def _register_components_from_entry_points() -> None:
     """Register components from entry points defined in pyproject.toml"""
-    from importlib.metadata import entry_points
 
     try:
         discovered = entry_points(group="contaranas.components")

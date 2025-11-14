@@ -11,8 +11,9 @@ logger = get_logger(__name__)
 class Module(ABC):
     """Base class for all modules in the system"""
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, display_name: str | None = None):
         self.name = name
+        self.display_name = display_name or name.replace("_", " ").title()
         self.enable_flag = False
         self.init_flag = False
         self.state = {}
@@ -96,6 +97,7 @@ class Module(ABC):
         """Emit a state change event for GUI components to listen to"""
         event_data = {
             "name": self.name,
+            "display_name": self.display_name,
             "enabled": self.enable_flag,
             "initialized": self.init_flag,
             "state": self.state.copy(),

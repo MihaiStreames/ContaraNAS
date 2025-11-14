@@ -38,4 +38,5 @@ class DashboardView:
             for name, state in module_states.items():
                 view_model = BaseTileViewModel.from_module_state(name, state)
                 tile = ComponentFactory.create_tile(view_model, self.controller)
-                self.tiles[name] = tile
+                if tile is not None:
+                    self.tiles[name] = tile
