@@ -48,7 +48,7 @@ class BaseTile(ABC):
         with ui.card().classes("w-72 min-h-[180px] p-4"):
             # Header
             with ui.row().classes("w-full items-center justify-between mb-4"):
-                ui.label(self.view_model.name.title()).classes("text-lg font-bold")
+                ui.label(self.view_model.display_name).classes("text-lg font-bold")
 
                 self.status_badge = ui.badge(
                     self.view_model.status_text, color=self.view_model.status_color

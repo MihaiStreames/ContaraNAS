@@ -15,7 +15,7 @@ class SysMonitorModule(Module):
 
     def __init__(self) -> None:
         self.controller: SysMonitorController | None = None
-        super().__init__("sys_monitor")
+        super().__init__("sys_monitor", display_name="System Monitor")
 
     async def initialize(self) -> None:
         """Initialize the SysMonitor module"""

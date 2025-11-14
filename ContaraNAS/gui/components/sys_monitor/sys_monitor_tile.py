@@ -39,13 +39,8 @@ class SysMonitorTile(BaseTile):
         with ui.column().classes("w-full mb-2"):
             ui.label("CPU").classes("text-xs font-semibold text-gray-400 mb-1")
 
-            with ui.row().classes("w-full items-center gap-2"):
-                # CPU usage bar
-                with ui.column().classes("flex-1"):
-                    ui.linear_progress(cpu.total_usage / 100, color="blue").classes("h-2")
-
-                # CPU usage percentage
-                ui.label(f"{cpu.total_usage:.1f}%").classes("text-sm font-mono")
+            # CPU usage bar
+            ui.linear_progress(cpu.total_usage / 100, color="blue").classes("h-2")
 
             # CPU details
             ui.label(f"{cpu.physical_cores}C/{cpu.logical_cores}T @ {cpu.current_speed_ghz:.2f}GHz").classes(
@@ -58,13 +53,8 @@ class SysMonitorTile(BaseTile):
         with ui.column().classes("w-full mb-2"):
             ui.label("Memory").classes("text-xs font-semibold text-gray-400 mb-1")
 
-            with ui.row().classes("w-full items-center gap-2"):
-                # Memory usage bar
-                with ui.column().classes("flex-1"):
-                    ui.linear_progress(memory.usage / 100, color="green").classes("h-2")
-
-                # Memory usage percentage
-                ui.label(f"{memory.usage:.1f}%").classes("text-sm font-mono")
+            # Memory usage bar
+            ui.linear_progress(memory.usage / 100, color="green").classes("h-2")
 
             # Memory details
             ui.label(f"{memory.used_gb:.1f}GB / {memory.total_gb:.1f}GB").classes(
@@ -79,18 +69,12 @@ class SysMonitorTile(BaseTile):
 
             # Show only the first 3 disks in the tile
             for disk in disks[:3]:
-                with ui.row().classes("w-full items-center gap-2 mb-1"):
+                with ui.column().classes("w-full mb-1"):
                     # Mount point label
-                    ui.label(disk.mountpoint).classes("text-xs w-16 truncate")
+                    ui.label(disk.mountpoint).classes("text-xs text-gray-500")
 
                     # Disk usage bar
-                    with ui.column().classes("flex-1"):
-                        ui.linear_progress(disk.usage_percent / 100, color="orange").classes(
-                            "h-2"
-                        )
-
-                    # Usage percentage
-                    ui.label(f"{disk.usage_percent:.0f}%").classes("text-xs font-mono")
+                    ui.linear_progress(disk.usage_percent / 100, color="orange").classes("h-2")
 
             # Show count if more disks exist
             if len(disks) > 3:
