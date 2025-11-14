@@ -58,18 +58,19 @@ def create_plotly_graph(
     return fig
 
 
-def render_cpu_header(cpu_usage: float) -> None:
-    """Render CPU section header with usage percentage"""
+def render_cpu_header(cpu) -> None:
+    """Render CPU section header with CPU name and usage percentage"""
     with ui.row().classes("w-full items-center justify-between mb-2"):
-        ui.label("CPU").classes("text-xs font-semibold text-black")
-        ui.label(f"{cpu_usage:.0f}%").classes("text-xs font-bold min-w-fit text-blue-500")
+        ui.label(f"CPU - {cpu.name}").classes("text-xs font-semibold text-black")
+        ui.label(f"{cpu.total_usage:.0f}%").classes("text-xs font-bold min-w-fit text-blue-500")
 
 
-def render_cpu_details(physical_cores: int, logical_cores: int, speed_ghz: float) -> None:
-    """Render CPU details line"""
-    ui.label(f"{physical_cores}C/{logical_cores}T @ {speed_ghz:.2f}GHz").classes(
-        "text-xs text-gray-500 mt-1"
-    )
+def render_cpu_details(cpu) -> None:
+    """Render CPU details line with extended information"""
+    ui.label(
+        f"{cpu.physical_cores}C/{cpu.logical_cores}T @ {cpu.current_speed_ghz:.2f}GHz "
+        f"(Max: {cpu.max_speed_ghz:.2f}GHz)"
+    ).classes("text-xs text-gray-500 mt-1")
 
 
 def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int) -> dict:
@@ -105,10 +106,10 @@ def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int)
     return cpu_core_history
 
 
-def render_general_cpu_graph(cpu_usage: float, cpu_general_history: list, max_history_points: int) -> list:
+def render_general_cpu_graph(cpu, cpu_general_history: list, max_history_points: int) -> list:
     """Render single general CPU usage graph"""
     # Track general CPU history
-    cpu_general_history.append(cpu_usage)
+    cpu_general_history.append(cpu.total_usage)
     if len(cpu_general_history) > max_history_points:
         cpu_general_history.pop(0)
 
@@ -159,22 +160,32 @@ def render_memory_section(memory, mem_history: list, max_history_points: int) ->
 
 
 def render_disk_summary(disks: list) -> None:
-    """Render disk summary with progress bars"""
+    """Render disk summary with detailed information"""
     with ui.column().classes("w-full"):
         ui.label("Disks").classes("text-xs font-semibold text-black mb-1")
 
         # Show only the first few disks in the tile
         for disk in disks[:MAX_DISPLAYED_DISKS]:
-            with ui.row().classes("w-full items-center gap-2 mb-1"):
-                # Mount point label
-                ui.label(disk.mountpoint).classes("text-xs w-20 truncate text-black")
+            with ui.column().classes("w-full mb-2"):
+                # First row: Mount point + Type + Model
+                with ui.row().classes("w-full items-center gap-2 mb-1"):
+                    ui.label(disk.mountpoint).classes("text-xs w-20 truncate font-semibold text-black")
+                    ui.label(f"[{disk.type}]").classes("text-xs text-gray-600")
+                    ui.label(disk.model).classes("text-xs text-gray-500 truncate flex-1")
 
-                # Disk usage bar
-                with ui.column().classes("flex-1"):
-                    ui.linear_progress(disk.usage_percent / 100, show_value=False).props("color=orange size=8px")
+                # Second row: Progress bar + usage + capacity
+                with ui.row().classes("w-full items-center gap-2"):
+                    with ui.column().classes("flex-1"):
+                        ui.linear_progress(disk.usage_percent / 100, show_value=False).props(
+                            "color=orange size=8px"
+                        )
 
-                # Usage percentage
-                ui.label(f"{disk.usage_percent:.0f}%").classes("text-xs font-mono w-10 text-right text-black")
+                    ui.label(f"{disk.usage_percent:.0f}%").classes(
+                        "text-xs font-mono w-10 text-right text-black"
+                    )
+                    ui.label(f"{disk.used_gb:.1f} / {disk.total_gb:.1f}GB").classes(
+                        "text-xs text-gray-500 w-32 text-right"
+                    )
 
         # Show count if more disks exist
         if len(disks) > MAX_DISPLAYED_DISKS:

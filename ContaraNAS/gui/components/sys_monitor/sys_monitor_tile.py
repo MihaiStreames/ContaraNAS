@@ -70,8 +70,8 @@ class SysMonitorTile(BaseTile):
                     on_click=self._toggle_cpu_view
                 )
 
-            # Header with overall usage percentage
-            helper.render_cpu_header(cpu.total_usage)
+            # Header with CPU name and usage percentage
+            helper.render_cpu_header(cpu)
 
             if self.show_per_core:
                 # Per-core graphs in a grid
@@ -81,8 +81,8 @@ class SysMonitorTile(BaseTile):
             else:
                 # General CPU graph
                 self.cpu_general_history = helper.render_general_cpu_graph(
-                    cpu.total_usage, self.cpu_general_history, self.max_history_points
+                    cpu, self.cpu_general_history, self.max_history_points
                 )
 
             # CPU details
-            helper.render_cpu_details(cpu.physical_cores, cpu.logical_cores, cpu.current_speed_ghz)
+            helper.render_cpu_details(cpu)
