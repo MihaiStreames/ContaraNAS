@@ -41,17 +41,6 @@ def get_drive_info(path: Path) -> dict[str, int]:
     return {"total": stat.total, "free": stat.free, "used": stat.total - stat.free}
 
 
-def get_dir_size(directory: str | Path) -> int | None:
-    """Calculate the total size of files in a directory"""
-    system = platform.system()
-
-    if system in ["Linux", "Darwin"]:
-        return _get_dir_size_unix(directory)
-    if system == "Windows":
-        return _get_dir_size_win(directory)
-    return None
-
-
 def _get_dir_size_unix(directory: str | Path) -> int:
     """Calculate directory size for Unix-like systems"""
     result = subprocess.run(["du", "-sb", directory], capture_output=True, text=True, check=True)
@@ -78,9 +67,18 @@ def _get_dir_size_win(directory: str | Path) -> int | None:
     return None
 
 
-async def get_dir_size_async(directory: str | Path) -> int | None:
-    """Calculate the total size of files in a directory (async version)
+async def get_dir_size(directory: str | Path) -> int | None:
+    """Calculate the total size of files in a directory (async)
 
-    Runs the blocking get_dir_size operation in a thread pool to avoid blocking the event loop.
+    Runs the blocking subprocess operation in a thread pool to avoid blocking the event loop.
     """
-    return await asyncio.to_thread(get_dir_size, directory)
+
+    def _sync_get_dir_size() -> int | None:
+        system = platform.system()
+        if system in ["Linux", "Darwin"]:
+            return _get_dir_size_unix(directory)
+        if system == "Windows":
+            return _get_dir_size_win(directory)
+        return None
+
+    return await asyncio.to_thread(_sync_get_dir_size)

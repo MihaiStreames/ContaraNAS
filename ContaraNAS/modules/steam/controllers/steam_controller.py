@@ -11,7 +11,7 @@ from ContaraNAS.modules.steam.services import (
     SteamMonitoringService,
     SteamParsingService,
 )
-from ContaraNAS.modules.steam.utils import extract_app_id, get_dir_size_async, get_drive_info
+from ContaraNAS.modules.steam.utils import extract_app_id, get_dir_size, get_drive_info
 
 
 logger = get_logger(__name__)
@@ -111,10 +111,10 @@ class SteamController:
 
                 # Create async tasks for size calculations
                 shader_task = (
-                    get_dir_size_async(shader_path) if shader_path.exists() else asyncio.sleep(0, result=0)
+                    get_dir_size(shader_path) if shader_path.exists() else asyncio.sleep(0, result=0)
                 )
                 workshop_task = (
-                    get_dir_size_async(workshop_path)
+                    get_dir_size(workshop_path)
                     if workshop_path.exists()
                     else asyncio.sleep(0, result=0)
                 )

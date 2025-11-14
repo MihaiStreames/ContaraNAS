@@ -20,22 +20,16 @@ def load_json(file_path: Path) -> dict | None:
     """
     try:
         if not Path(file_path).exists():
-            logger.debug(f"JSON file not found: {file_path}")
             return None
 
         with Path.open(file_path, encoding="utf-8") as f:
-            data = json.load(f)
-            logger.debug(f"Loaded JSON from {file_path}")
-            return data
+            return json.load(f)
 
     except json.JSONDecodeError as e:
         logger.error(f"Failed to parse JSON from {file_path}: {e}")
         return None
     except (OSError, PermissionError) as e:
         logger.error(f"Failed to read file {file_path}: {e}")
-        return None
-    except Exception as e:
-        logger.error(f"Unexpected error loading JSON from {file_path}: {e}")
         return None
 
 
@@ -51,24 +45,15 @@ def save_json(file_path: Path, data: Any) -> None:
         TypeError: If data is not JSON serializable
     """
     try:
-        # Ensure parent directory exists
-        parent_dir = Path(file_path).parent
-        parent_dir.mkdir(parents=True, exist_ok=True)
-        logger.debug(f"Ensured directory exists: {parent_dir}")
-
-        # Write JSON data
+        Path(file_path).parent.mkdir(parents=True, exist_ok=True)
         with Path.open(file_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
-        logger.debug(f"Saved JSON to {file_path}")
 
     except (OSError, PermissionError) as e:
         logger.error(f"Failed to write file {file_path}: {e}")
         raise
     except TypeError as e:
         logger.error(f"Data not JSON serializable for {file_path}: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"Unexpected error saving JSON to {file_path}: {e}")
         raise
 
 

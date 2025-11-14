@@ -24,7 +24,7 @@ class DiskService:
         self.previous_stats = {}
 
     @staticmethod
-    def _extract_base_device_name(device: str) -> str:
+    def __extract_base_device_name(device: str) -> str:
         """Extract base device name from full device path
 
         Examples:
@@ -70,13 +70,13 @@ class DiskService:
         if self.os_name != "Linux":
             return "Unknown"
 
-        base_device = self._extract_base_device_name(device)
+        base_device = self.__extract_base_device_name(device)
         model_path = Path(f"/sys/block/{base_device}/device/model")
         if model_path.exists():
             try:
                 return model_path.read_text().strip()
-            except Exception as e:
-                logger.debug(f"Failed to read device model for {device}: {e}")
+            except Exception:
+                pass
         return "Unknown"
 
     def __get_device_type(self, device: str) -> str:
@@ -84,7 +84,7 @@ class DiskService:
         if self.os_name != "Linux":
             return "Unknown"
 
-        base_device = self._extract_base_device_name(device)
+        base_device = self.__extract_base_device_name(device)
         # NVMe devices are always SSDs
         if base_device.startswith("nvme"):
             return "SSD"
@@ -94,8 +94,8 @@ class DiskService:
             try:
                 is_rotational = rotational_path.read_text().strip()
                 return "HDD" if is_rotational == "1" else "SSD"
-            except Exception as e:
-                logger.debug(f"Failed to read device type for {device}: {e}")
+            except Exception:
+                pass
         return "Unknown"
 
     def __get_disk_io_stats(self, device: str) -> dict:
@@ -109,7 +109,7 @@ class DiskService:
                 "io_time": 0,
             }
 
-        base_device = self._extract_base_device_name(device)
+        base_device = self.__extract_base_device_name(device)
         diskstats_path = Path("/proc/diskstats")
         stats = self.__parse_diskstats(diskstats_path, base_device)
 
