@@ -60,9 +60,12 @@ def create_plotly_graph(
 
 def render_cpu_header(cpu) -> None:
     """Render CPU section header with CPU name and usage percentage"""
-    with ui.row().classes("w-full items-center justify-between mb-2"):
-        ui.label(f"CPU - {cpu.name}").classes("text-xs font-semibold text-black")
+    with ui.row().classes("w-full items-center justify-between mb-1"):
+        ui.label("CPU").classes("text-xs font-semibold text-black")
         ui.label(f"{cpu.total_usage:.0f}%").classes("text-xs font-bold min-w-fit text-blue-500")
+
+    # CPU name below header
+    ui.label(cpu.name).classes("text-xs text-gray-500 mb-1")
 
 
 def render_cpu_details(cpu) -> None:

@@ -71,24 +71,47 @@ class DiskService:
             return "Unknown"
 
         base_device = self.__extract_base_device_name(device)
-        model_path = Path(f"/sys/block/{base_device}/device/model")
-        if model_path.exists():
-            try:
-                return model_path.read_text().strip()
-            except Exception:
-                pass
+
+        # Try different paths for different device types
+        model_paths = [
+            Path(f"/sys/block/{base_device}/device/model"),  # SATA/SCSI devices
+            Path(f"/sys/block/{base_device}/device/device/model"),  # Some devices
+        ]
+
+        for model_path in model_paths:
+            if model_path.exists():
+                try:
+                    model = model_path.read_text().strip()
+                    if model:
+                        return model
+                except Exception:
+                    pass
+
+        # For NVMe, try getting model from nvme/model
+        if base_device.startswith("nvme"):
+            nvme_model_path = Path(f"/sys/block/{base_device}/device/model")
+            if nvme_model_path.exists():
+                try:
+                    model = nvme_model_path.read_text().strip()
+                    if model:
+                        return model
+                except Exception:
+                    pass
+
         return "Unknown"
 
     def __get_device_type(self, device: str) -> str:
-        """Determine if device is HDD or SSD"""
+        """Determine if device is HDD, SSD, or NVMe"""
         if self.os_name != "Linux":
             return "Unknown"
 
         base_device = self.__extract_base_device_name(device)
-        # NVMe devices are always SSDs
-        if base_device.startswith("nvme"):
-            return "SSD"
 
+        # NVMe devices are a specific type
+        if base_device.startswith("nvme"):
+            return "NVMe"
+
+        # Check if rotational (HDD vs SSD)
         rotational_path = Path(f"/sys/block/{base_device}/queue/rotational")
         if rotational_path.exists():
             try:
@@ -96,6 +119,7 @@ class DiskService:
                 return "HDD" if is_rotational == "1" else "SSD"
             except Exception:
                 pass
+
         return "Unknown"
 
     def __get_disk_io_stats(self, device: str) -> dict:
