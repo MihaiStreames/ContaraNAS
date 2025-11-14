@@ -1,15 +1,12 @@
 from nicegui import ui
 
 from ContaraNAS.core.utils import get_logger
-from ContaraNAS.core.utils.cache_utils import get_cache_dir, load_json, save_json
 from ContaraNAS.gui.components.base import BaseTile
 from ContaraNAS.gui.components.sys_monitor import sys_monitor_tile_helper as helper
+from ContaraNAS.modules.sys_monitor.services import SysMonitorPreferenceService
 
 
 logger = get_logger(__name__)
-
-# Cache file for user preferences
-PREFERENCES_CACHE_FILE = get_cache_dir() / "sys_monitor_preferences.json"
 
 
 class SysMonitorTile(BaseTile):
@@ -24,34 +21,14 @@ class SysMonitorTile(BaseTile):
         self.mem_history = []
         self.max_history_points = 30
 
-        # Load user preference for CPU view (default to per-core)
-        self.show_per_core = self._load_cpu_view_preference()
-
-    def _load_cpu_view_preference(self) -> bool:
-        """Load the user's CPU view preference from cache"""
-        try:
-            prefs = load_json(PREFERENCES_CACHE_FILE)
-            if prefs and "show_per_core" in prefs:
-                return prefs["show_per_core"]
-        except Exception as e:
-            logger.debug(f"Could not load CPU view preference: {e}")
-
-        # Default to per-core view
-        return True
-
-    def _save_cpu_view_preference(self) -> None:
-        """Save the user's CPU view preference to cache"""
-        try:
-            prefs = load_json(PREFERENCES_CACHE_FILE) or {}
-            prefs["show_per_core"] = self.show_per_core
-            save_json(PREFERENCES_CACHE_FILE, prefs)
-        except Exception as e:
-            logger.error(f"Could not save CPU view preference: {e}")
+        # Initialize preference service and load user preference for CPU view
+        self.preference_service = SysMonitorPreferenceService()
+        self.show_per_core = self.preference_service.get_cpu_view_preference()
 
     def _toggle_cpu_view(self):
         """Toggle between per-core and general CPU view"""
         self.show_per_core = not self.show_per_core
-        self._save_cpu_view_preference()
+        self.preference_service.set_cpu_view_preference(self.show_per_core)
 
         # Force a refresh by updating the info container
         self.info_container.clear()

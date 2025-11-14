@@ -4,10 +4,10 @@ A modular desktop application for monitoring and managing NAS systems at home.
 
 ## Features
 
-- 🎮 Steam library monitoring and analysis
-- 📊 Real-time drive usage visualization
-- 🔄 Automatic game installation tracking
-- 🖥️ Native desktop GUI with NiceGUI
+- 🎮 **Steam Library Monitoring**: Track game installations, library sizes, and drive usage across multiple Steam libraries
+- 💻 **System Monitor**: Real-time CPU, memory, and disk monitoring with interactive graphs and per-core CPU visualization
+- 🔄 **Automatic Tracking**: Detect changes in Steam installations and system resources automatically
+- 🖥️ **Native Desktop GUI**: Clean, responsive interface built with NiceGUI
 
 ## Quick Start
 
@@ -32,8 +32,4 @@ uv run -m ContaraNAS.main
 
 ## Architecture
 
-ContaraNAS uses a modular architecture with the following components:
-
-- **Core**: Module management, event bus, utilities
-- **Modules**: Steam, System, etc. (pluggable)
-- **GUI**: NiceGUI-based dashboard with reactive components
+ContaraNAS uses a modular plugin-based architecture where new monitoring modules can be easily added through Python entry points.
