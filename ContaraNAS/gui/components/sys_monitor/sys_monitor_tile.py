@@ -1,4 +1,3 @@
-from pathlib import Path
 from nicegui import ui
 
 from ContaraNAS.core.utils import get_logger
@@ -29,11 +28,7 @@ class SysMonitorTile(BaseTile):
         self.show_per_core = self._load_cpu_view_preference()
 
     def _load_cpu_view_preference(self) -> bool:
-        """Load the user's CPU view preference from cache
-
-        Returns:
-            True for per-core view, False for general view
-        """
+        """Load the user's CPU view preference from cache"""
         try:
             prefs = load_json(PREFERENCES_CACHE_FILE)
             if prefs and "show_per_core" in prefs:

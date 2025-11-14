@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -72,7 +73,7 @@ class SteamImageService:
                 return
 
             # Save the image
-            with open(image_path, "wb") as f:
+            with Path.open(image_path, "wb") as f:
                 f.write(response.content)
 
             logger.debug(f"Successfully cached image for app {app_id}")

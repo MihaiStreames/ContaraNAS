@@ -1,5 +1,4 @@
 import json
-import os
 from pathlib import Path
 import platform
 from typing import Any
@@ -7,16 +6,16 @@ from typing import Any
 
 def load_json(file_path: Path) -> dict | None:
     """Load JSON data from a file"""
-    if os.path.exists(file_path):
-        with open(file_path, encoding="utf-8") as f:
+    if Path(file_path).exists:
+        with Path.open(file_path, encoding="utf-8") as f:
             return json.load(f)
     return None
 
 
 def save_json(file_path: Path, data: Any) -> None:
     """Save data to a JSON file"""
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    with open(file_path, "w", encoding="utf-8") as f:
+    Path(Path(file_path).parent).mkdir(parents=True, exist_ok=True)
+    with Path.open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
 

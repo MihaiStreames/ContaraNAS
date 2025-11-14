@@ -1,5 +1,5 @@
-import platform
 from pathlib import Path
+import platform
 from typing import Any
 
 import psutil
@@ -23,7 +23,7 @@ class DiskService:
         """Parse diskstats file for specific device"""
         diskstats = {}
         try:
-            with open(path, encoding="utf-8") as file:
+            with Path.open(path, encoding="utf-8") as file:
                 content = file.read()
 
             for line in content.splitlines():

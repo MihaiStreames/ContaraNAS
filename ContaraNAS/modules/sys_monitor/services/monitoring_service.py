@@ -1,5 +1,6 @@
 import asyncio
 from collections.abc import Callable
+import contextlib
 
 from ContaraNAS.core.utils import get_logger
 
@@ -40,10 +41,8 @@ class SysMonitorMonitoringService:
         self.monitor_flag = False
         if self._task:
             self._task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._task
-            except asyncio.CancelledError:
-                pass
             self._task = None
 
         logger.info("System monitoring stopped")

@@ -1,3 +1,4 @@
+from pathlib import Path
 import platform
 import time
 
@@ -17,7 +18,7 @@ class CPUService:
             return platform.processor()
         if self.os_name == "Linux":
             try:
-                with open("/proc/cpuinfo") as f:
+                with Path.open("/proc/cpuinfo") as f:
                     for line in f:
                         if "model name" in line:
                             return line.split(":", 1)[1].strip()

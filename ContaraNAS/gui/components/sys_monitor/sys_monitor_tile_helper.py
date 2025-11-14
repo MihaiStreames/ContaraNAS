@@ -8,17 +8,7 @@ def create_plotly_graph(
     height: int = 80,
     max_range: int = 100
 ) -> go.Figure:
-    """Create a Plotly graph with consistent styling
-
-    Args:
-        history: List of data points
-        color: Line color (hex format)
-        height: Graph height in pixels
-        max_range: Maximum Y-axis value
-
-    Returns:
-        Configured Plotly Figure object
-    """
+    """Create a Plotly graph with consistent styling"""
     # Convert hex color to rgba for fill
     rgb = tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
     fillcolor = f'rgba({rgb[0]}, {rgb[1]}, {rgb[2]}, 0.3)'
@@ -28,7 +18,7 @@ def create_plotly_graph(
         y=history,
         mode='lines',
         fill='tozeroy',
-        line=dict(color=color, width=1),
+        line={'color': color, 'width': 1},
         fillcolor=fillcolor,
         hovertemplate='%{y:.1f}%<extra></extra>',
         name=''  # Empty name to remove legend
@@ -36,25 +26,25 @@ def create_plotly_graph(
 
     fig.update_layout(
         height=height,
-        margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(
-            showgrid=False,
-            showticklabels=False,
-            zeroline=False,
-            visible=False
-        ),
-        yaxis=dict(
-            showgrid=False,
-            showticklabels=False,
-            zeroline=False,
-            range=[0, max_range],
-            visible=False
-        ),
+        margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
+        xaxis={
+            'showgrid': False,
+            'showticklabels': False,
+            'zeroline': False,
+            'visible': False
+        },
+        yaxis={
+            'showgrid': False,
+            'showticklabels': False,
+            'zeroline': False,
+            'range': [0, max_range],
+            'visible': False
+        },
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         showlegend=False,
         hovermode='closest',
-        modebar=dict(remove=['zoom', 'pan', 'select', 'lasso', 'zoomIn', 'zoomOut', 'autoScale', 'resetScale'])
+        modebar={'remove': ['zoom', 'pan', 'select', 'lasso', 'zoomIn', 'zoomOut', 'autoScale', 'resetScale']}
     )
 
     return fig
@@ -75,16 +65,7 @@ def render_cpu_details(physical_cores: int, logical_cores: int, speed_ghz: float
 
 
 def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int) -> dict:
-    """Render individual graphs for each CPU core
-
-    Args:
-        cpu: CPU info DTO
-        cpu_core_history: Dictionary mapping core index to history list
-        max_history_points: Maximum number of history points to keep
-
-    Returns:
-        Updated cpu_core_history dictionary
-    """
+    """Render individual graphs for each CPU core"""
     num_cores = len(cpu.usage_per_core)
     cols = min(4, num_cores)  # Max 4 columns
 
@@ -117,16 +98,7 @@ def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int)
 
 
 def render_general_cpu_graph(cpu_usage: float, cpu_general_history: list, max_history_points: int) -> list:
-    """Render single general CPU usage graph
-
-    Args:
-        cpu_usage: Current CPU usage percentage
-        cpu_general_history: List of historical CPU usage values
-        max_history_points: Maximum number of history points to keep
-
-    Returns:
-        Updated cpu_general_history list
-    """
+    """Render single general CPU usage graph"""
     # Track general CPU history
     cpu_general_history.append(cpu_usage)
     if len(cpu_general_history) > max_history_points:
@@ -146,16 +118,7 @@ def render_general_cpu_graph(cpu_usage: float, cpu_general_history: list, max_hi
 
 
 def render_memory_section(memory, mem_history: list, max_history_points: int) -> list:
-    """Render memory information with Task Manager style graph
-
-    Args:
-        memory: Memory info DTO
-        mem_history: List of historical memory usage values
-        max_history_points: Maximum number of history points to keep
-
-    Returns:
-        Updated mem_history list
-    """
+    """Render memory information with Task Manager style graph"""
     with ui.column().classes("w-full mb-3"):
         # Header with usage percentage
         with ui.row().classes("w-full items-center justify-between"):
@@ -188,11 +151,7 @@ def render_memory_section(memory, mem_history: list, max_history_points: int) ->
 
 
 def render_disk_summary(disks: list) -> None:
-    """Render disk summary with progress bars
-
-    Args:
-        disks: List of disk info DTOs
-    """
+    """Render disk summary with progress bars"""
     with ui.column().classes("w-full"):
         ui.label("Disks").classes("text-xs font-semibold text-black mb-1")
 
