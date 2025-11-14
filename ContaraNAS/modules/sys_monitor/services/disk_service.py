@@ -1,10 +1,10 @@
 import platform
 from pathlib import Path
+from typing import Any
 
 import psutil
 
 from ContaraNAS.modules.sys_monitor.dtos import DiskInfo
-from ContaraNAS.modules.sys_monitor.linux.parse_diskstats import parse_diskstats
 
 
 class DiskService:
@@ -13,6 +13,28 @@ class DiskService:
     def __init__(self, os_name=None):
         self.os_name = os_name or platform.system()
         self.previous_stats = {}
+
+    @staticmethod
+    def __parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:
+        """Parse diskstats file for specific device"""
+        diskstats = {}
+        try:
+            with open(path, encoding="utf-8") as file:
+                content = file.read()
+
+            for line in content.splitlines():
+                fields = line.split()
+                if len(fields) >= 14 and fields[2] == device_name:
+                    diskstats["reads"] = int(fields[5])
+                    diskstats["writes"] = int(fields[9])
+                    diskstats["read_time"] = int(fields[6])
+                    diskstats["write_time"] = int(fields[10])
+                    diskstats["io_time"] = int(fields[12])
+                    break
+        except (FileNotFoundError, PermissionError, OSError):
+            pass
+
+        return diskstats
 
     def __get_device_model(self, device: str) -> str:
         """Get the model name of the disk device"""
@@ -77,7 +99,7 @@ class DiskService:
             base_device = base_device.rstrip("0123456789")
 
         diskstats_path = Path("/proc/diskstats")
-        stats = parse_diskstats(diskstats_path, base_device)
+        stats = self.__parse_diskstats(diskstats_path, base_device)
 
         # Sector size is typically 512 bytes
         sector_size = 512
