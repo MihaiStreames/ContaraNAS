@@ -55,11 +55,11 @@ class SysMonitorTile(BaseTile):
 
     def _render_cpu_section(self, cpu):
         """Render CPU information with switchable graphs"""
-        with ui.column().classes("w-full mb-3") as cpu_container:
+        with ui.column().classes("w-full mb-3"):
             # Add context menu for switching views
-            with ui.context_menu(cpu_container):
+            with ui.context_menu():
                 ui.menu_item(
-                    "Per-Core View" if not self.show_per_core else "General View",
+                    "Switch to General View" if self.show_per_core else "Switch to Per-Core View",
                     on_click=self._toggle_cpu_view
                 )
 
