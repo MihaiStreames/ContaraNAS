@@ -18,9 +18,12 @@ class ComponentFactory:
         logger.debug(f"Registered components for module: {module_name}")
 
     @classmethod
-    def create_tile(cls, view_model: BaseTileViewModel, controller) -> BaseTile:
+    def create_tile(cls, view_model: BaseTileViewModel, controller) -> BaseTile | None:
         """Create tile from ViewModel"""
-        tile_class = cls._tile_classes.get(view_model.name, BaseTile)
+        tile_class = cls._tile_classes.get(view_model.name)
+        if tile_class is None:
+            logger.warning(f"No tile registered for module: {view_model.name}")
+            return None
         return tile_class(view_model, controller)
 
     @classmethod
