@@ -20,7 +20,7 @@ class SysMonitorModule(Module):
     async def initialize(self) -> None:
         """Initialize the SysMonitor module"""
         self.controller = SysMonitorController(self.update_state, update_interval=2.0)
-        self.controller.initialize()
+        await self.controller.initialize()
 
     async def start_monitoring(self) -> None:
         """Start System monitoring"""
@@ -32,9 +32,9 @@ class SysMonitorModule(Module):
         await self.controller.stop_monitoring()
         logger.info("System monitoring stopped")
 
-    def get_tile_data(self) -> dict[str, Any]:
+    async def get_tile_data(self) -> dict[str, Any]:
         """Get data for dashboard tile"""
         if not self.controller:
             return {"error": "Module not initialized"}
 
-        return self.controller.get_tile_data()
+        return await self.controller.get_tile_data()

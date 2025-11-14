@@ -30,7 +30,7 @@ class SteamController:
         self.image_service = SteamImageService()
         self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
 
-    def initialize(self) -> None:
+    async def initialize(self) -> None:
         """Initialize the controller and its services"""
         logger.info("Initializing Steam controller...")
 
@@ -46,7 +46,7 @@ class SteamController:
         installed_app_ids = self.cache_service.get_installed_app_ids()
         self.image_service.sync_with_manifest_cache(installed_app_ids)
 
-        self.state_update_callback(
+        await self.state_update_callback(
             initialized_at=datetime.now(),
             steam_path=str(self.library_service.get_steam_path()),
             last_scan_completed=datetime.now(),
@@ -73,13 +73,12 @@ class SteamController:
         self.monitoring_service.stop_monitoring()
         self.monitor_flag = False
 
-    def get_tile_data(self) -> dict[str, Any]:
+    async def get_tile_data(self) -> dict[str, Any]:
         """Build tile data for display"""
         libraries_data = []
 
         for library_path in self.library_service.get_library_paths():
-            # Run async analysis in sync context
-            library_info = asyncio.run(self._analyze_library_async(library_path))
+            library_info = await self._analyze_library(library_path)
             libraries_data.append(library_info)
 
         return {
@@ -88,7 +87,7 @@ class SteamController:
             "total_libraries": len(libraries_data),
         }
 
-    async def _analyze_library_async(self, library_path: Path) -> dict[str, Any]:
+    async def _analyze_library(self, library_path: Path) -> dict[str, Any]:
         """Analyze a single library with async directory size calculations"""
         steamapps_path = library_path / "steamapps"
         games = []
@@ -174,8 +173,10 @@ class SteamController:
 
         # Update state if there was a change
         if cache_action:
-            self.state_update_callback(
-                last_change_at=datetime.now(),
-                last_change_type=event_type,
-                last_change_app_id=app_id,
+            asyncio.create_task(
+                self.state_update_callback(
+                    last_change_at=datetime.now(),
+                    last_change_type=event_type,
+                    last_change_app_id=app_id,
+                )
             )

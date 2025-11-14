@@ -74,10 +74,10 @@ class DiskService:
 
         base_device = self.__extract_base_device_name(device)
 
-        # Use lsblk to get model name (works for all device types including NVMe)
+        # Use lsblk with JSON output to get model name (works for all device types including NVMe)
         try:
             result = subprocess.run(
-                ["lsblk", "-d", "-n", "-o", "MODEL", f"/dev/{base_device}"],
+                ["lsblk", "-d", "-J", "-o", "NAME,MODEL"],
                 capture_output=True,
                 text=True,
                 timeout=2,
@@ -85,10 +85,13 @@ class DiskService:
             )
 
             if result.returncode == 0:
-                model = result.stdout.strip()
-                if model:
-                    return model
-        except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+                data = json.loads(result.stdout)
+                for block_device in data.get("blockdevices", []):
+                    if block_device.get("name") == base_device:
+                        model = block_device.get("model", "").strip()
+                        if model:
+                            return model
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError, OSError):
             pass
 
         return "Unknown"
