@@ -6,12 +6,13 @@ from typing import Any
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.steam.services import (
     SteamCacheService,
+    SteamGameLoaderService,
     SteamImageService,
     SteamLibraryService,
     SteamMonitoringService,
     SteamParsingService,
 )
-from ContaraNAS.modules.steam.utils import extract_app_id, get_dir_size, get_drive_info
+from ContaraNAS.modules.steam.utils import extract_app_id, get_drive_info
 
 
 logger = get_logger(__name__)
@@ -26,6 +27,7 @@ class SteamController:
 
         self.library_service = SteamLibraryService()
         self.parsing_service = SteamParsingService(self.library_service.get_steam_path())
+        self.game_loader_service = SteamGameLoaderService(self.parsing_service)
         self.cache_service = SteamCacheService()
         self.image_service = SteamImageService()
         self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
@@ -87,45 +89,16 @@ class SteamController:
             "total_libraries": len(libraries_data),
         }
 
+    async def get_library_games(self, library_path: str) -> list[dict[str, Any]]:
+        """Get all games for a specific library with full details"""
+        library_path_obj = Path(library_path)
+        games = await self.game_loader_service.load_games_from_library(library_path_obj)
+        return [game.to_dict() for game in games]
+
     async def _analyze_library(self, library_path: Path) -> dict[str, Any]:
         """Analyze a single library with async directory size calculations"""
-        steamapps_path = library_path / "steamapps"
-        games = []
-
-        # Parse all games in this library (sync operation)
-        if steamapps_path.exists():
-            for manifest_path in steamapps_path.glob("appmanifest_*.acf"):
-                game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
-                if game:
-                    games.append(game)
-
-        # Calculate shader and workshop sizes asynchronously for all games in parallel
-        if games:
-            size_tasks = []
-            for game in games:
-                shader_path = library_path / "steamapps" / "shadercache" / str(game.app_id)
-                workshop_path = (
-                    library_path / "steamapps" / "workshop" / "content" / str(game.app_id)
-                )
-
-                # Create async tasks for size calculations
-                if shader_path.exists():
-                    shader_task = asyncio.create_task(get_dir_size(shader_path))
-                else:
-                    shader_task = asyncio.create_task(asyncio.sleep(0, 0))
-
-                if workshop_path.exists():
-                    workshop_task = asyncio.create_task(get_dir_size(workshop_path))
-                else:
-                    workshop_task = asyncio.create_task(asyncio.sleep(0, 0))
-
-                size_tasks.append((game, shader_task, workshop_task))
-
-            # Execute all size calculations in parallel
-            for game, shader_task, workshop_task in size_tasks:
-                shader_size, workshop_size = await asyncio.gather(shader_task, workshop_task)
-                game.shader_cache_size = shader_size or 0
-                game.workshop_content_size = workshop_size or 0
+        # Load all games with complete size information
+        games = await self.game_loader_service.load_games_from_library(library_path)
 
         # Calculate totals
         total_games_size = sum(game.size_on_disk for game in games)
