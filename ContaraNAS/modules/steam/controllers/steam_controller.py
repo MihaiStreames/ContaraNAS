@@ -87,6 +87,50 @@ class SteamController:
             "total_libraries": len(libraries_data),
         }
 
+    async def get_library_games(self, library_path: str) -> list[dict[str, Any]]:
+        """Get all games for a specific library with full details"""
+        library_path_obj = Path(library_path)
+        steamapps_path = library_path_obj / "steamapps"
+        games = []
+
+        # Parse all games in this library
+        if steamapps_path.exists():
+            for manifest_path in steamapps_path.glob("appmanifest_*.acf"):
+                game = self.parsing_service.create_game_from_manifest(manifest_path, library_path_obj)
+                if game:
+                    games.append(game)
+
+        # Calculate shader and workshop sizes asynchronously for all games in parallel
+        if games:
+            size_tasks = []
+            for game in games:
+                shader_path = library_path_obj / "steamapps" / "shadercache" / str(game.app_id)
+                workshop_path = (
+                    library_path_obj / "steamapps" / "workshop" / "content" / str(game.app_id)
+                )
+
+                # Create async tasks for size calculations
+                if shader_path.exists():
+                    shader_task = asyncio.create_task(get_dir_size(shader_path))
+                else:
+                    shader_task = asyncio.create_task(asyncio.sleep(0, 0))
+
+                if workshop_path.exists():
+                    workshop_task = asyncio.create_task(get_dir_size(workshop_path))
+                else:
+                    workshop_task = asyncio.create_task(asyncio.sleep(0, 0))
+
+                size_tasks.append((game, shader_task, workshop_task))
+
+            # Execute all size calculations in parallel
+            for game, shader_task, workshop_task in size_tasks:
+                shader_size, workshop_size = await asyncio.gather(shader_task, workshop_task)
+                game.shader_cache_size = shader_size or 0
+                game.workshop_content_size = workshop_size or 0
+
+        # Convert games to dictionaries
+        return [game.to_dict() for game in games]
+
     async def _analyze_library(self, library_path: Path) -> dict[str, Any]:
         """Analyze a single library with async directory size calculations"""
         steamapps_path = library_path / "steamapps"
