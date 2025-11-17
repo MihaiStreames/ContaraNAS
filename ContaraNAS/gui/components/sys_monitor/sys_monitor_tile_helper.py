@@ -1,6 +1,14 @@
 from nicegui import ui
 import plotly.graph_objects as go
 
+from ContaraNAS.modules.sys_monitor.constants import (
+    CPU_GRAPH_HEIGHT,
+    MAX_DISPLAYED_DISKS,
+    MAX_GRID_COLUMNS,
+    MEMORY_GRAPH_HEIGHT,
+    PER_CORE_GRAPH_HEIGHT,
+)
+
 
 def create_plotly_graph(
     history: list[float],
@@ -50,24 +58,28 @@ def create_plotly_graph(
     return fig
 
 
-def render_cpu_header(cpu_usage: float) -> None:
-    """Render CPU section header with usage percentage"""
-    with ui.row().classes("w-full items-center justify-between mb-2"):
+def render_cpu_header(cpu) -> None:
+    """Render CPU section header with CPU name and usage percentage"""
+    with ui.row().classes("w-full items-center justify-between mb-1"):
         ui.label("CPU").classes("text-xs font-semibold text-black")
-        ui.label(f"{cpu_usage:.0f}%").classes("text-xs font-bold min-w-fit text-blue-500")
+        ui.label(f"{cpu.total_usage:.0f}%").classes("text-xs font-bold min-w-fit text-blue-500")
+
+    # CPU name below header
+    ui.label(cpu.name).classes("text-xs text-gray-500 mb-1")
 
 
-def render_cpu_details(physical_cores: int, logical_cores: int, speed_ghz: float) -> None:
-    """Render CPU details line"""
-    ui.label(f"{physical_cores}C/{logical_cores}T @ {speed_ghz:.2f}GHz").classes(
-        "text-xs text-gray-500 mt-1"
-    )
+def render_cpu_details(cpu) -> None:
+    """Render CPU details line with extended information"""
+    ui.label(
+        f"{cpu.physical_cores}C/{cpu.logical_cores}T @ {cpu.current_speed_ghz:.2f}GHz "
+        f"(Max: {cpu.max_speed_ghz:.2f}GHz)"
+    ).classes("text-xs text-gray-500 mt-1")
 
 
 def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int) -> dict:
     """Render individual graphs for each CPU core"""
     num_cores = len(cpu.usage_per_core)
-    cols = min(4, num_cores)  # Max 4 columns
+    cols = min(MAX_GRID_COLUMNS, num_cores)
 
     with ui.grid(columns=cols).classes("w-full gap-1"):
         for i, core_usage in enumerate(cpu.usage_per_core):
@@ -87,7 +99,7 @@ def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int)
                 fig = create_plotly_graph(
                     history=cpu_core_history[i],
                     color='#1976d2',
-                    height=50,
+                    height=PER_CORE_GRAPH_HEIGHT,
                     max_range=100
                 )
 
@@ -97,17 +109,17 @@ def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int)
     return cpu_core_history
 
 
-def render_general_cpu_graph(cpu_usage: float, cpu_general_history: list, max_history_points: int) -> list:
+def render_general_cpu_graph(cpu, cpu_general_history: list, max_history_points: int) -> list:
     """Render single general CPU usage graph"""
     # Track general CPU history
-    cpu_general_history.append(cpu_usage)
+    cpu_general_history.append(cpu.total_usage)
     if len(cpu_general_history) > max_history_points:
         cpu_general_history.pop(0)
 
     fig = create_plotly_graph(
         history=cpu_general_history,
         color='#1976d2',
-        height=100,
+        height=CPU_GRAPH_HEIGHT,
         max_range=100
     )
 
@@ -133,7 +145,7 @@ def render_memory_section(memory, mem_history: list, max_history_points: int) ->
         fig = create_plotly_graph(
             history=mem_history,
             color='#388e3c',
-            height=80,
+            height=MEMORY_GRAPH_HEIGHT,
             max_range=100
         )
 
@@ -151,25 +163,35 @@ def render_memory_section(memory, mem_history: list, max_history_points: int) ->
 
 
 def render_disk_summary(disks: list) -> None:
-    """Render disk summary with progress bars"""
+    """Render disk summary with detailed information"""
     with ui.column().classes("w-full"):
         ui.label("Disks").classes("text-xs font-semibold text-black mb-1")
 
-        # Show only the first 3 disks in the tile
-        for disk in disks[:3]:
-            with ui.row().classes("w-full items-center gap-2 mb-1"):
-                # Mount point label
-                ui.label(disk.mountpoint).classes("text-xs w-20 truncate text-black")
+        # Show only the first few disks in the tile
+        for disk in disks[:MAX_DISPLAYED_DISKS]:
+            with ui.column().classes("w-full mb-2"):
+                # First row: Mount point + Type + Model
+                with ui.row().classes("w-full items-center gap-2 mb-1"):
+                    ui.label(disk.mountpoint).classes("text-xs w-20 truncate font-semibold text-black")
+                    ui.label(f"[{disk.type}]").classes("text-xs text-gray-600")
+                    ui.label(disk.model).classes("text-xs text-gray-500 truncate flex-1")
 
-                # Disk usage bar
-                with ui.column().classes("flex-1"):
-                    ui.linear_progress(disk.usage_percent / 100, show_value=False).props("color=orange size=8px")
+                # Second row: Progress bar + usage + capacity
+                with ui.row().classes("w-full items-center gap-2"):
+                    with ui.column().classes("flex-1"):
+                        ui.linear_progress(disk.usage_percent / 100, show_value=False).props(
+                            "color=orange size=8px"
+                        )
 
-                # Usage percentage
-                ui.label(f"{disk.usage_percent:.0f}%").classes("text-xs font-mono w-10 text-right text-black")
+                    ui.label(f"{disk.usage_percent:.0f}%").classes(
+                        "text-xs font-mono w-10 text-right text-black"
+                    )
+                    ui.label(f"{disk.used_gb:.1f} / {disk.total_gb:.1f}GB").classes(
+                        "text-xs text-gray-500 w-32 text-right"
+                    )
 
         # Show count if more disks exist
-        if len(disks) > 3:
-            ui.label(f"+ {len(disks) - 3} more disk(s)").classes(
+        if len(disks) > MAX_DISPLAYED_DISKS:
+            ui.label(f"+ {len(disks) - MAX_DISPLAYED_DISKS} more disk(s)").classes(
                 "text-xs text-gray-500 mt-1"
             )

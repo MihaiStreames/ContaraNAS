@@ -32,7 +32,7 @@ class Module(ABC):
         """Stop all event handlers/watchers"""
 
     @abstractmethod
-    def get_tile_data(self):
+    async def get_tile_data(self):
         """Get data for dashboard tile display"""
 
     async def enable(self):
@@ -59,7 +59,7 @@ class Module(ABC):
         except Exception as e:
             raise ModuleInitializationError(self.name, str(e)) from e
 
-        self._emit_event("enabled")
+        await self._emit_event("enabled")
 
     async def disable(self):
         """Disable the module and stop monitoring"""
@@ -72,18 +72,18 @@ class Module(ABC):
             self.enable_flag = False
             logger.info(f"Module {self.name} disabled successfully")
 
-            self._emit_event("disabled")
+            await self._emit_event("disabled")
         except Exception as e:
             logger.error(f"Failed to disable module {self.name}: {e!s}")
             raise ModuleError(self.name, str(e)) from e
 
-    def update_state(self, **kwargs):
+    async def update_state(self, **kwargs):
         """Helper method for modules to update their state"""
         old_state = self.state.copy()
         self.state.update(kwargs)
         logger.debug(f"Module {self.name} state updated: {kwargs}")
 
-        self._emit_event(
+        await self._emit_event(
             "state_updated",
             {
                 "module_name": self.name,
@@ -93,7 +93,7 @@ class Module(ABC):
             },
         )
 
-    def _emit_event(self, change_type: str, data: dict | None = None):
+    async def _emit_event(self, change_type: str, data: dict | None = None):
         """Emit a state change event for GUI components to listen to"""
         event_data = {
             "name": self.name,
@@ -101,7 +101,7 @@ class Module(ABC):
             "enabled": self.enable_flag,
             "initialized": self.init_flag,
             "state": self.state.copy(),
-            "tile_data": self.get_tile_data(),
+            "tile_data": await self.get_tile_data(),
             "change_type": change_type,
         }
 

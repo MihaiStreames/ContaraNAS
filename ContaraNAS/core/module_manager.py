@@ -85,7 +85,7 @@ class ModuleManager:
                 except Exception as e:
                     logger.error(f"Error shutting down module {name}: {e}")
 
-    def get_module_state(self, module_name: str) -> dict[str, Any] | None:
+    async def get_module_state(self, module_name: str) -> dict[str, Any] | None:
         """Get current state of a specific module"""
         if module_name not in self.modules:
             return None
@@ -97,9 +97,12 @@ class ModuleManager:
             "enabled": module.enable_flag,
             "initialized": module.init_flag,
             "state": module.state.copy(),
-            "tile_data": module.get_tile_data(),
+            "tile_data": await module.get_tile_data(),
         }
 
-    def get_all_states(self) -> dict[str, dict[str, Any] | None]:
+    async def get_all_states(self) -> dict[str, dict[str, Any] | None]:
         """Get states of all modules"""
-        return {name: self.get_module_state(name) for name in self.modules}
+        states = {}
+        for name in self.modules:
+            states[name] = await self.get_module_state(name)
+        return states

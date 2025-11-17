@@ -29,12 +29,12 @@ class SysMonitorController:
             self._collect_and_update_stats, interval=update_interval
         )
 
-    def initialize(self) -> None:
+    async def initialize(self) -> None:
         """Initialize the controller and its services"""
         logger.info("Initializing System Monitor controller...")
 
         # Perform initial data collection
-        self.state_update_callback(
+        await self.state_update_callback(
             initialized_at=datetime.now(),
         )
 
@@ -67,7 +67,7 @@ class SysMonitorController:
             disk_info = self.disk_service.get_disk_info()
 
             # Update module state (this triggers event emission to GUI)
-            self.state_update_callback(
+            await self.state_update_callback(
                 last_update=datetime.now(),
                 cpu=cpu_info,
                 memory=mem_info,
@@ -77,7 +77,7 @@ class SysMonitorController:
         except Exception as e:
             logger.error(f"Error collecting system stats: {e}")
 
-    def get_tile_data(self) -> dict[str, Any]:
+    async def get_tile_data(self) -> dict[str, Any]:
         """Build tile data for display"""
         # Get fresh data for tile display
         try:

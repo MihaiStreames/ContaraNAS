@@ -4,6 +4,7 @@ from pathlib import Path
 from watchdog.observers import Observer
 
 from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.steam.constants import OBSERVER_JOIN_TIMEOUT
 
 from .manifest_handler import SteamManifestHandler
 
@@ -52,7 +53,7 @@ class SteamMonitoringService:
 
         if self.observer:
             self.observer.stop()
-            self.observer.join(timeout=5.0)
+            self.observer.join(timeout=OBSERVER_JOIN_TIMEOUT)
             self.observer = None
 
         self.manifest_handler = None

@@ -4,8 +4,6 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, computed_field
 
-from ContaraNAS.modules.steam.utils import get_dir_size
-
 
 class SteamGame(BaseModel):
     """Steam Game Data Transfer Object (DTO)"""
@@ -20,6 +18,8 @@ class SteamGame(BaseModel):
 
     # Size information
     size_on_disk: int = Field(default=0, description="Size on disk in bytes")
+    shader_cache_size: int = Field(default=0, description="Shader cache size in bytes")
+    workshop_content_size: int = Field(default=0, description="Workshop content size in bytes")
 
     # Timestamps
     last_updated: int = Field(default=0, description="Last update timestamp")
@@ -72,20 +72,6 @@ class SteamGame(BaseModel):
     def install_path(self) -> Path:
         """Full installation path"""
         return self.library_path / "steamapps" / "common" / self.install_dir
-
-    @computed_field
-    @property
-    def shader_cache_size(self) -> int:
-        """Calculate shader cache size for this game"""
-        shader_path = self.library_path / "steamapps" / "shadercache" / str(self.app_id)
-        return get_dir_size(shader_path) if shader_path.exists() else 0
-
-    @computed_field
-    @property
-    def workshop_content_size(self) -> int:
-        """Calculate workshop content size for this game"""
-        workshop_path = self.library_path / "steamapps" / "workshop" / "content" / str(self.app_id)
-        return get_dir_size(workshop_path) if workshop_path.exists() else 0
 
     @computed_field
     @property

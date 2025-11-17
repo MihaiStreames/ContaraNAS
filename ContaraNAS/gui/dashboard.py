@@ -1,3 +1,5 @@
+import asyncio
+
 from nicegui import ui
 
 from ContaraNAS.core.module_manager import ModuleManager
@@ -28,11 +30,12 @@ class DashboardView:
             ui.label("Modules").classes("text-h5 mb-4")
 
             self.tiles_container = ui.row().classes("gap-4 w-full")
-            self._create_tiles()
+            # Defer tile creation to allow async initialization
+            ui.timer(0.01, lambda: asyncio.create_task(self._create_tiles()), once=True)
 
-    def _create_tiles(self):
+    async def _create_tiles(self):
         """Create tiles from current module states"""
-        module_states = self.module_manager.get_all_states()
+        module_states = await self.module_manager.get_all_states()
 
         with self.tiles_container:
             for name, state in module_states.items():
