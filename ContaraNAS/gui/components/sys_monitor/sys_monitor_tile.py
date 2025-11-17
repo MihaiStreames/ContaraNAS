@@ -17,8 +17,8 @@ class SysMonitorTile(BaseTile):
 
     def __init__(self, view_model, controller):
         super().__init__(view_model, controller)
-        self.cpu_core_history = {}  # Track history per core
-        self.cpu_general_history = []  # Track general CPU history
+        self.cpu_core_history = {}
+        self.cpu_general_history = []
         self.mem_history = []
         self.max_history_points = MAX_HISTORY_POINTS
 

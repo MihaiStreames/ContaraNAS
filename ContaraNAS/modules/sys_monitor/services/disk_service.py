@@ -1,6 +1,6 @@
+import json
 from pathlib import Path
 import platform
-import json
 import re
 import subprocess
 from typing import Any
