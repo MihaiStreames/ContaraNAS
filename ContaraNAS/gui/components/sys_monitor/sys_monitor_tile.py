@@ -33,6 +33,12 @@ class SysMonitorTile(BaseTile):
         self.disks_tab_ref = None
         self.tabs_ref = None
 
+        # UI element references for updating without re-rendering
+        self.tabs_initialized = False
+        self.cpu_tab_panel = None
+        self.ram_tab_panel = None
+        self.disks_tab_panel = None
+
         super().__init__(view_model, controller)
 
     def _create_tile(self):
@@ -78,31 +84,27 @@ class SysMonitorTile(BaseTile):
 
     def _update_info(self):
         """Update the info container with current data while preserving tab selection"""
-        # Store current tab selection before clearing
-        current_tab_value = None
-        if self.tabs_ref is not None:
-            try:
-                current_tab_value = self.tabs_ref.value
-            except:
-                pass
-
-        self.info_container.clear()
-
-        with self.info_container:
-            self.render(self.view_model.tile_data, current_tab_value)
+        if not self.tabs_initialized:
+            # First time: create the tabs structure
+            self.info_container.clear()
+            with self.info_container:
+                self._initialize_tabs(self.view_model.tile_data)
+            self.tabs_initialized = True
+        else:
+            # Subsequent updates: just update the values without clearing
+            self._update_tab_contents(self.view_model.tile_data)
 
     def _toggle_cpu_view(self):
         """Toggle between per-core and general CPU view"""
         self.show_per_core = not self.show_per_core
         self.preference_service.set_cpu_view_preference(self.show_per_core)
 
-        # Force a refresh by updating the info container
-        self.info_container.clear()
-        with self.info_container:
-            self.render(self.view_model.tile_data)
+        # Force a refresh by re-initializing tabs
+        self.tabs_initialized = False
+        self._update_info()
 
-    def render(self, tile_data: dict, previous_tab=None):
-        """Render System Monitor-specific stats in the tile with tabs"""
+    def _initialize_tabs(self, tile_data: dict):
+        """Initialize the tab structure (called only once)"""
         if not tile_data:
             ui.label("No system data available").classes("text-sm text-gray-500")
             return
@@ -111,7 +113,7 @@ class SysMonitorTile(BaseTile):
         memory = tile_data.get("memory")
         disks = tile_data.get("disks", [])
 
-        logger.debug(f"Rendering tile - CPU: {cpu is not None}, Memory: {memory is not None}, Disks: {len(disks) if disks else 0}")
+        logger.debug(f"Initializing tabs - CPU: {cpu is not None}, Memory: {memory is not None}, Disks: {len(disks) if disks else 0}")
 
         # Create tabs for CPU, RAM, and Disks
         with ui.tabs().classes('w-full') as tabs:
@@ -122,35 +124,61 @@ class SysMonitorTile(BaseTile):
         # Store tabs reference
         self.tabs_ref = tabs
 
-        # Restore previous tab selection
-        initial_tab = self.cpu_tab_ref
-        if previous_tab is not None:
-            if previous_tab == self.ram_tab_ref or (hasattr(previous_tab, 'name') and previous_tab.name == 'RAM'):
-                initial_tab = self.ram_tab_ref
-            elif previous_tab == self.disks_tab_ref or (hasattr(previous_tab, 'name') and previous_tab.name == 'Disks'):
-                initial_tab = self.disks_tab_ref
-
-        with ui.tab_panels(tabs, value=initial_tab).classes('w-full'):
+        with ui.tab_panels(tabs, value=self.cpu_tab_ref).classes('w-full'):
             # CPU Tab
-            with ui.tab_panel(self.cpu_tab_ref):
+            with ui.tab_panel(self.cpu_tab_ref) as cpu_panel:
+                self.cpu_tab_panel = cpu_panel
                 if cpu:
                     self._render_cpu_tab(cpu)
                 else:
                     ui.label("No CPU data available").classes("text-sm text-gray-500")
 
             # RAM Tab
-            with ui.tab_panel(self.ram_tab_ref):
+            with ui.tab_panel(self.ram_tab_ref) as ram_panel:
+                self.ram_tab_panel = ram_panel
                 if memory:
                     self._render_ram_tab(memory)
                 else:
                     ui.label("No memory data available").classes("text-sm text-gray-500")
 
             # Disks Tab
-            with ui.tab_panel(self.disks_tab_ref):
+            with ui.tab_panel(self.disks_tab_ref) as disks_panel:
+                self.disks_tab_panel = disks_panel
                 if disks:
                     self._render_disks_tab(disks)
                 else:
                     ui.label("No disk data available").classes("text-sm text-gray-500")
+
+    def _update_tab_contents(self, tile_data: dict):
+        """Update only the values in existing tabs without recreating them"""
+        if not tile_data:
+            return
+
+        cpu = tile_data.get("cpu")
+        memory = tile_data.get("memory")
+        disks = tile_data.get("disks", [])
+
+        # Update CPU tab
+        if cpu and self.cpu_tab_panel:
+            self.cpu_tab_panel.clear()
+            with self.cpu_tab_panel:
+                self._render_cpu_tab(cpu)
+
+        # Update RAM tab
+        if memory and self.ram_tab_panel:
+            self.ram_tab_panel.clear()
+            with self.ram_tab_panel:
+                self._render_ram_tab(memory)
+
+        # Update Disks tab
+        if disks and self.disks_tab_panel:
+            self.disks_tab_panel.clear()
+            with self.disks_tab_panel:
+                self._render_disks_tab(disks)
+
+    def render(self, tile_data: dict):
+        """Render System Monitor-specific stats in the tile with tabs (for base class compatibility)"""
+        self._initialize_tabs(tile_data)
 
     def _render_cpu_tab(self, cpu):
         """Render CPU information with graph-first layout"""
