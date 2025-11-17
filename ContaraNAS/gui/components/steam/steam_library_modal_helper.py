@@ -11,9 +11,9 @@ def sort_games(games: list[dict], sort_by: str) -> list[dict]:
     """Sort games based on the specified criteria"""
     if sort_by == SORT_BY_SIZE:
         return sorted(games, key=lambda g: g["total_size"], reverse=True)
-    elif sort_by == SORT_BY_NAME:
+    if sort_by == SORT_BY_NAME:
         return sorted(games, key=lambda g: g["name"].lower())
-    elif sort_by == SORT_BY_LAST_PLAYED:
+    if sort_by == SORT_BY_LAST_PLAYED:
         return sorted(
             games,
             key=lambda g: g["last_played"] if g["last_played"] > 0 else 0,
@@ -45,19 +45,18 @@ def format_last_played(timestamp: int) -> str:
 
     if diff.days == 0:
         return "Today"
-    elif diff.days == 1:
+    if diff.days == 1:
         return "Yesterday"
-    elif diff.days < 7:
+    if diff.days < 7:
         return f"{diff.days} days ago"
-    elif diff.days < 30:
+    if diff.days < 30:
         weeks = diff.days // 7
         return f"{weeks} week{'s' if weeks > 1 else ''} ago"
-    elif diff.days < 365:
+    if diff.days < 365:
         months = diff.days // 30
         return f"{months} month{'s' if months > 1 else ''} ago"
-    else:
-        years = diff.days // 365
-        return f"{years} year{'s' if years > 1 else ''} ago"
+    years = diff.days // 365
+    return f"{years} year{'s' if years > 1 else ''} ago"
 
 
 def render_game_row(game: dict) -> None:
@@ -106,10 +105,9 @@ def render_modal_content(games: list[dict], library_path: str, sort_by: str, on_
         # Games list
         sorted_games = sort_games(games, sort_by)
 
-        with ui.scroll_area().classes("w-full h-96"):
-            with ui.column().classes("w-full gap-1"):
-                for game in sorted_games:
-                    render_game_row(game)
+        with ui.scroll_area().classes("w-full h-96"), ui.column().classes("w-full gap-1"):
+            for game in sorted_games:
+                render_game_row(game)
 
         # Footer with game count
         ui.separator()
