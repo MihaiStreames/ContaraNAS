@@ -1,9 +1,10 @@
 # Claude Development Guidelines for ContaraNAS
 
 ## Project Overview
+
 - **Language**: Python (100% Python codebase)
 - **Architecture**: MVVM (Model-View-ViewModel) pattern
-- **UI Framework**: NiceGUI for web interface
+- **UI Framework**: NiceGUI for native interface
 
 ## MVVM Architecture
 
@@ -12,35 +13,35 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      Module Layer                       │
-│  - SteamModule, etc.                                   │
-│  - Manages lifecycle (enable/disable/initialize)       │
-│  - Contains reference to Controller                    │
+│  - SteamModule, etc.                                    │
+│  - Manages lifecycle (enable/disable/initialize)        │
+│  - Contains reference to Controller                     │
 └─────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
 │                    Controller Layer                     │
-│  - SteamController, etc.                               │
-│  - Business logic and data operations                  │
-│  - Interacts with Services                            │
-│  - Provides methods for Tiles to call                  │
+│  - SteamController, etc.                                │
+│  - Business logic and data operations                   │
+│  - Interacts with Services                              │
+│  - Provides methods for Tiles to call                   │
 └─────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
 │                   ViewModel Layer                       │
-│  - BaseTileViewModel (dataclass)                       │
-│  - Pure data objects for UI display                    │
-│  - No business logic                                   │
+│  - BaseTileViewModel (dataclass)                        │
+│  - Pure data objects for UI display                     │
+│  - No business logic                                    │
 └─────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
 │                      View Layer                         │
-│  - SteamTile, SystemMonitorTile, etc.                  │
-│  - Renders UI using NiceGUI                            │
-│  - Delegates to helper functions for rendering         │
-│  - Calls Controller methods for data/actions           │
+│  - SteamTile, SystemMonitorTile, etc.                   │
+│  - Renders UI using NiceGUI                             │
+│  - Delegates to helper functions for rendering          │
+│  - Calls Controller methods for data/actions            │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -57,6 +58,7 @@ games = await steam_controller.get_library_games(library_path)
 ## Code Organization Principles
 
 ### 1. Code Splitting
+
 - **Always split code into smaller, manageable modules**
 - Break down large components into smaller, focused sub-components
 - Extract reusable logic into utility/helper functions
@@ -64,6 +66,7 @@ games = await steam_controller.get_library_games(library_path)
 - Keep files under 300 lines when possible
 
 ### 2. Constants Management
+
 - **Use constants across the app for each module**
 - Define module-specific constants in dedicated constant files (e.g., `steam/constants.py`)
 - Group related constants together with clear comments
@@ -71,6 +74,7 @@ games = await steam_controller.get_library_games(library_path)
 - Avoid magic numbers and strings - always use named constants
 
 ### 3. Codebase Cleanliness
+
 - Maintain consistent code structure across modules
 - Remove unused imports, variables, and code
 - Follow established patterns in the codebase
@@ -86,8 +90,8 @@ modules/
     ├── constants.py         # Module constants
     ├── controllers/         # Business logic
     ├── services/            # External operations (API, file I/O)
-    ├── dtos/               # Data transfer objects
-    └── utils/              # Helper functions
+    ├── dtos/                # Data transfer objects
+    └── utils/               # Helper functions
 
 gui/
 ├── components/
@@ -121,6 +125,7 @@ SORT_OPTIONS = {
 ```
 
 ## General Guidelines
+
 - Follow MVVM pattern strictly - no business logic in Views/Tiles
 - Use Python type hints consistently
 - Write self-documenting code with clear naming

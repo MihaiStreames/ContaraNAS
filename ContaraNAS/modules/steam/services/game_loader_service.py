@@ -23,20 +23,7 @@ class SteamGameLoaderService:
         self.parsing_service = parsing_service
 
     async def load_games_from_library(self, library_path: Path) -> list[SteamGame]:
-        """
-        Load all games from a library with complete size information.
-
-        This method:
-        1. Parses all game manifests in the library
-        2. Calculates shader and workshop sizes asynchronously
-        3. Returns complete SteamGame objects
-
-        Args:
-            library_path: Path to the Steam library
-
-        Returns:
-            List of SteamGame objects with complete size information
-        """
+        """Load all games from a library with complete size information"""
         steamapps_path = library_path / STEAMAPPS_DIR
         games = []
 
@@ -56,14 +43,9 @@ class SteamGameLoaderService:
 
         return games
 
-    async def _calculate_additional_sizes(self, library_path: Path, games: list[SteamGame]) -> None:
-        """
-        Calculate shader and workshop sizes for all games in parallel.
-
-        Args:
-            library_path: Path to the Steam library
-            games: List of SteamGame objects to update with size information
-        """
+    @staticmethod
+    async def _calculate_additional_sizes(library_path: Path, games: list[SteamGame]) -> None:
+        """Calculate shader and workshop sizes for all games in parallel"""
         size_tasks = []
 
         for game in games:
