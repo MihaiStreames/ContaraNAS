@@ -1,6 +1,7 @@
 from pathlib import Path
 import platform
 import json
+import re
 import subprocess
 from typing import Any
 
@@ -37,9 +38,11 @@ class DiskService:
         base_device = device.split("/")[-1]
         if base_device.startswith("nvme"):
             # Handle NVMe devices: nvme0n1p1 -> nvme0n1
-            base_device = base_device.rstrip("0123456789p")
-            if base_device.endswith("p"):
-                base_device = base_device[:-1]
+            # NVMe format: nvme<controller>n<namespace>p<partition>
+            # Remove partition suffix (p<number>) if present
+            match = re.match(r"(nvme\d+n\d+)", base_device)
+            if match:
+                base_device = match.group(1)
         else:
             # Handle regular devices: sda1 -> sda
             base_device = base_device.rstrip("0123456789")
