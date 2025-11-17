@@ -198,11 +198,11 @@ class SysMonitorTile(BaseTile):
             ui.label(f"Cores: {cpu.physical_cores}P / {cpu.logical_cores}L")
             ui.label(f"Threads: {cpu.threads}")
             # Row 2
-            ui.label(f"Processes: {cpu.processes}")
-            ui.label(f"Min: {cpu.min_speed_ghz:.2f} GHz")
-            # Row 3
             ui.label(f"Max: {cpu.max_speed_ghz:.2f} GHz")
-            ui.label(f"FDs: {cpu.file_descriptors}")
+            ui.label(f"Processes: {cpu.processes}")
+            # Row 3
+            ui.label(f"Min: {cpu.min_speed_ghz:.2f} GHz")
+            ui.label(f"File Descriptors: {cpu.file_descriptors}")
 
     def _render_ram_tab(self, memory):
         """Render RAM information with graph-first layout"""
@@ -275,7 +275,7 @@ class SysMonitorTile(BaseTile):
                 # Disk header
                 with ui.row().classes("w-full items-center gap-2 mb-2"):
                     ui.label(disk.mountpoint or disk.device).classes("text-sm font-bold")
-                    ui.label(f"[{disk.type}]").classes("text-xs text-white bg-blue-500 px-1 py-0.5 rounded")
+                    ui.label(f"{disk.type}").classes("text-xs text-white bg-blue-500 px-1 py-0.5 rounded")
                     ui.label(disk.model).classes("flex-1 text-xs text-gray-600 truncate text-right")
 
                 # Large usage bar
