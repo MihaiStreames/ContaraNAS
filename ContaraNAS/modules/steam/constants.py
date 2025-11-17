@@ -1,5 +1,21 @@
 """Steam module constants"""
 
+# Steam directory paths
+STEAMAPPS_DIR = "steamapps"
+SHADERCACHE_DIR = "shadercache"
+WORKSHOP_DIR = "workshop"
+WORKSHOP_CONTENT_DIR = "content"
+COMMON_DIR = "common"
+
+# Steam files
+LIBRARY_FOLDERS_FILE = "libraryfolders.vdf"
+APP_MANIFEST_PATTERN = "appmanifest_*.acf"
+APP_MANIFEST_PREFIX = "appmanifest_"
+APP_MANIFEST_SUFFIX = ".acf"
+
+# Cache paths
+IMAGE_CACHE_DIR = "images"
+
 # Image service constants
 MIN_VALID_IMAGE_SIZE = 1000  # Minimum bytes for a valid image file
 IMAGE_DOWNLOAD_DELAY = 0.1   # Seconds to wait between image downloads

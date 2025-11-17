@@ -26,13 +26,13 @@ class MemService:
         blocks = data.split("Memory Device")
         ram_info = []
 
+        def get_field(block_data: str, label: str) -> str:
+            """Extract a field value from a dmidecode block"""
+            m = re.search(rf"{label}:\s*(.*)", block_data)
+            return m.group(1).strip() if m else ""
+
         for block in blocks[1:]:
-
-            def get_field(label: str) -> str:
-                m = re.search(rf"{label}:\s*(.*)", block)
-                return m.group(1).strip() if m else ""
-
-            size_str = get_field("Size")
+            size_str = get_field(block, "Size")
             if size_str in {"No Module Installed", ""}:
                 continue
 
@@ -42,18 +42,18 @@ class MemService:
                 else float(size_str.replace("MB", "").strip()) / 1024 if "MB" in size_str else 0.0
             )
 
-            speed_str = get_field("Speed")
+            speed_str = get_field(block, "Speed")
             speed = int(speed_str.replace("MT/s", "").strip()) if "MT/s" in speed_str else 0
 
             ram_info.append(
                 RAMInfo(
-                    locator=get_field("Locator"),
-                    bank_locator=get_field("Bank Locator"),
+                    locator=get_field(block, "Locator"),
+                    bank_locator=get_field(block, "Bank Locator"),
                     size=size,
-                    type=get_field("Type"),
+                    type=get_field(block, "Type"),
                     speed=speed,
-                    manufacturer=get_field("Manufacturer"),
-                    part_number=get_field("Part Number"),
+                    manufacturer=get_field(block, "Manufacturer"),
+                    part_number=get_field(block, "Part Number"),
                 )
             )
 

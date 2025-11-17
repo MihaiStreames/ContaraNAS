@@ -9,6 +9,7 @@ from ContaraNAS.core.utils import get_cache_dir, get_logger
 from ContaraNAS.modules.steam.constants import (
     HTTP_RETRY_COUNT,
     HTTP_TIMEOUT_SECONDS,
+    IMAGE_CACHE_DIR,
     IMAGE_DOWNLOAD_DELAY,
     MIN_VALID_IMAGE_SIZE,
 )
@@ -21,7 +22,7 @@ class SteamImageService:
     """Service for caching Steam game images"""
 
     def __init__(self):
-        self.image_cache_dir = get_cache_dir() / "steam" / "images"
+        self.image_cache_dir = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
         self.image_cache_dir.mkdir(parents=True, exist_ok=True)
 
         # Setup requests session with retries

@@ -4,7 +4,12 @@ from nicegui import ui
 
 from ContaraNAS.core.utils import get_cache_dir
 from ContaraNAS.gui.utils import format_bytes
-from ContaraNAS.modules.steam.constants import SORT_BY_LAST_PLAYED, SORT_BY_NAME, SORT_BY_SIZE
+from ContaraNAS.modules.steam.constants import (
+    IMAGE_CACHE_DIR,
+    SORT_BY_LAST_PLAYED,
+    SORT_BY_NAME,
+    SORT_BY_SIZE,
+)
 
 
 def sort_games(games: list[dict], sort_by: str) -> list[dict]:
@@ -24,7 +29,7 @@ def sort_games(games: list[dict], sort_by: str) -> list[dict]:
 
 def get_game_image_path(app_id: int) -> str:
     """Get the path to a cached game image"""
-    image_cache_dir = get_cache_dir() / "steam" / "images"
+    image_cache_dir = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
     image_path = image_cache_dir / f"{app_id}.jpg"
 
     if image_path.exists():
@@ -39,24 +44,27 @@ def format_last_played(timestamp: int) -> str:
 
     last_played_date = datetime.fromtimestamp(timestamp)
     now = datetime.now()
-
-    # Calculate time difference
     diff = now - last_played_date
+    days = diff.days
 
-    if diff.days == 0:
-        return "Today"
-    if diff.days == 1:
-        return "Yesterday"
-    if diff.days < 7:
-        return f"{diff.days} days ago"
-    if diff.days < 30:
-        weeks = diff.days // 7
-        return f"{weeks} week{'s' if weeks > 1 else ''} ago"
-    if diff.days < 365:
-        months = diff.days // 30
-        return f"{months} month{'s' if months > 1 else ''} ago"
-    years = diff.days // 365
-    return f"{years} year{'s' if years > 1 else ''} ago"
+    # Map days to appropriate format
+    if days == 0:
+        result = "Today"
+    elif days == 1:
+        result = "Yesterday"
+    elif days < 7:
+        result = f"{days} days ago"
+    elif days < 30:
+        weeks = days // 7
+        result = f"{weeks} week{'s' if weeks > 1 else ''} ago"
+    elif days < 365:
+        months = days // 30
+        result = f"{months} month{'s' if months > 1 else ''} ago"
+    else:
+        years = days // 365
+        result = f"{years} year{'s' if years > 1 else ''} ago"
+
+    return result
 
 
 def render_game_row(game: dict) -> None:

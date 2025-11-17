@@ -4,6 +4,7 @@ from typing import Any
 import vdf
 
 from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.steam.constants import LIBRARY_FOLDERS_FILE, STEAMAPPS_DIR
 from ContaraNAS.modules.steam.dtos import SteamGame
 
 
@@ -20,9 +21,9 @@ class SteamParsingService:
     def get_library_paths(self) -> list[Path]:
         """Get all Steam library paths from libraryfolders.vdf"""
         if not self.libraries:
-            libraryfolders_file = self.steam_path / "steamapps" / "libraryfolders.vdf"
+            libraryfolders_file = self.steam_path / STEAMAPPS_DIR / LIBRARY_FOLDERS_FILE
             if not libraryfolders_file.exists():
-                logger.error(f"libraryfolders.vdf not found at {libraryfolders_file}")
+                logger.error(f"{LIBRARY_FOLDERS_FILE} not found at {libraryfolders_file}")
                 return []
 
             try:

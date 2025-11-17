@@ -1,4 +1,5 @@
 from .cache_service import SteamCacheService
+from .game_loader_service import SteamGameLoaderService
 from .image_service import SteamImageService
 from .library_service import SteamLibraryService
 from .manifest_handler import SteamManifestHandler
@@ -9,6 +10,7 @@ from .path_service import SteamPathService
 
 __all__ = [
     "SteamCacheService",
+    "SteamGameLoaderService",
     "SteamImageService",
     "SteamLibraryService",
     "SteamManifestHandler",
