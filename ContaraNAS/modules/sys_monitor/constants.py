@@ -7,10 +7,9 @@ IO_TIME_MS_DIVISOR = 10.0         # Divisor for converting I/O time to seconds
 
 # GUI display constants
 MAX_HISTORY_POINTS = 30  # Maximum number of data points to keep in history graphs
-MAX_DISPLAYED_DISKS = 3  # Maximum number of disks to show before "show more"
 
 # Graph dimensions (pixels)
-CPU_GRAPH_HEIGHT = 100
-MEMORY_GRAPH_HEIGHT = 80
-PER_CORE_GRAPH_HEIGHT = 50
+CPU_GRAPH_HEIGHT = 150
+MEMORY_GRAPH_HEIGHT = 150
+PER_CORE_GRAPH_HEIGHT = 150
 MAX_GRID_COLUMNS = 4  # Maximum columns in per-core CPU grid

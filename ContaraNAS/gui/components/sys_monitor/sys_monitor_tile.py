@@ -27,13 +27,13 @@ class SysMonitorTile(BaseTile):
         self.preference_service = SysMonitorPreferenceService()
         self.show_per_core = self.preference_service.get_cpu_view_preference()
 
-        # Tab references - will be set during render
+        # Tab references
         self.cpu_tab_ref = None
         self.ram_tab_ref = None
         self.disks_tab_ref = None
         self.tabs_ref = None
 
-        # UI element references for updating without re-rendering
+        # UI element references
         self.tabs_initialized = False
         self.cpu_tab_panel = None
         self.ram_tab_panel = None
@@ -104,7 +104,7 @@ class SysMonitorTile(BaseTile):
         self._update_info()
 
     def _initialize_tabs(self, tile_data: dict):
-        """Initialize the tab structure (called only once)"""
+        """Initialize the tab structure"""
         if not tile_data:
             ui.label("No system data available").classes("text-sm text-gray-500")
             return
@@ -181,7 +181,7 @@ class SysMonitorTile(BaseTile):
         self._initialize_tabs(tile_data)
 
     def _render_cpu_tab(self, cpu):
-        """Render CPU information - delegates to helper"""
+        """Render CPU information"""
         self.cpu_core_history, self.cpu_general_history = helper.render_cpu_tab(
             cpu,
             self.show_per_core,
@@ -192,7 +192,7 @@ class SysMonitorTile(BaseTile):
         )
 
     def _render_ram_tab(self, memory):
-        """Render RAM information - delegates to helper"""
+        """Render RAM information"""
         self.mem_history = helper.render_ram_tab(
             memory,
             self.mem_history,
@@ -200,5 +200,5 @@ class SysMonitorTile(BaseTile):
         )
 
     def _render_disks_tab(self, disks):
-        """Render disk information - delegates to helper"""
+        """Render disk information"""
         helper.render_disks_tab(disks)
