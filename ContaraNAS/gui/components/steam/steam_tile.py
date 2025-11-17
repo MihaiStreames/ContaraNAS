@@ -43,8 +43,14 @@ class SteamTile(BaseTile):
 
     async def _open_library_modal(self, library_path: str):
         """Open modal showing all games in the library"""
-        # Fetch games from controller
-        games = await self.controller.get_library_games(library_path)
+        # Get the Steam controller from the dashboard controller
+        steam_controller = self.controller.get_module_controller("steam")
+        if not steam_controller:
+            ui.notify("Steam module not available", type="negative")
+            return
+
+        # Fetch games from Steam controller
+        games = await steam_controller.get_library_games(library_path)
 
         if not games:
             ui.notify("No games found in this library", type="warning")

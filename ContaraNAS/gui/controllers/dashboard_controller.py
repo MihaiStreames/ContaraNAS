@@ -1,3 +1,5 @@
+from typing import Any
+
 from nicegui import ui
 
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
@@ -25,3 +27,10 @@ class DashboardController:
             ui.notify(f"Module '{module_name}' disabled successfully", type="warning")
         except ModuleError as e:
             ui.notify(f"Failed to stop {module_name}: {e.reason}", type="negative")
+
+    def get_module_controller(self, module_name: str) -> Any:
+        """Get the controller for a specific module"""
+        if module_name in self.module_manager.modules:
+            module = self.module_manager.modules[module_name]
+            return module.controller
+        return None
