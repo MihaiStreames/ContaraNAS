@@ -1,5 +1,5 @@
 import asyncio
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 import contextlib
 
 from ContaraNAS.core.utils import get_logger
@@ -11,11 +11,11 @@ logger = get_logger(__name__)
 class SysMonitorMonitoringService:
     """Service for periodic system monitoring updates"""
 
-    def __init__(self, update_callback: Callable[[], None], interval: float = 2.0):
-        self._update_callback: Callable[[], None] = update_callback
+    def __init__(self, update_callback: Callable[[], Awaitable[None]], interval: float = 2.0):
+        self._update_callback: Callable[[], Awaitable[None]] = update_callback
         self._interval: float = interval
         self._monitor_flag: bool = False
-        self._task: asyncio.Task | None = None
+        self._task: asyncio.Task[None] | None = None
 
     async def start_monitoring(self) -> None:
         """Start periodic system monitoring"""
