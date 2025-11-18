@@ -13,11 +13,11 @@ class MemService:
     """Service to monitor Memory information and usage"""
 
     def __init__(self, os_name=None, ram_sticks=None):
-        self.os_name = os_name or platform.system()
+        self._os_name = os_name or platform.system()
         self.ram_sticks = ram_sticks or []
 
     def __get_dmidecode_output(self) -> str:
-        if self.os_name != "Linux":
+        if self._os_name != "Linux":
             raise NotImplementedError("DMIDECODE is only supported on Linux systems.")
         return subprocess.check_output(["pkexec", "dmidecode", "--type", "17"], text=True)
 
@@ -60,7 +60,7 @@ class MemService:
         return ram_info
 
     def __get_ram_sticks(self) -> list[RAMInfo]:
-        if self.os_name == "Linux":
+        if self._os_name == "Linux":
             dmidecode_out = self.__get_dmidecode_output()
             return self.__parse_dmidecode(dmidecode_out)
         return []

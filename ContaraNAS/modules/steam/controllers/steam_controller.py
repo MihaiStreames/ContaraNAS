@@ -22,8 +22,9 @@ class SteamController:
     """Controller that orchestrates Steam module operations"""
 
     def __init__(self, state_update_callback):
-        self.state_update_callback = state_update_callback
-        self.monitor_flag = False
+        self._state_update_callback = state_update_callback
+        self._monitor_flag = False
+        self._event_loop = None
 
         self.library_service = SteamLibraryService()
         self.parsing_service = SteamParsingService(self.library_service.get_steam_path())
@@ -35,6 +36,9 @@ class SteamController:
     async def initialize(self) -> None:
         """Initialize the controller and its services"""
         logger.info("Initializing Steam controller...")
+
+        # Capture the event loop for thread callbacks
+        self._event_loop = asyncio.get_running_loop()
 
         # Initialize library service
         if not self.library_service.initialize():
@@ -48,7 +52,7 @@ class SteamController:
         installed_app_ids = self.cache_service.get_installed_app_ids()
         self.image_service.sync_with_manifest_cache(installed_app_ids)
 
-        await self.state_update_callback(
+        await self._state_update_callback(
             initialized_at=datetime.now(),
             steam_path=str(self.library_service.get_steam_path()),
             last_scan_completed=datetime.now(),
@@ -58,22 +62,22 @@ class SteamController:
 
     def start_monitoring(self) -> None:
         """Start monitoring Steam libraries"""
-        if self.monitor_flag:
+        if self._monitor_flag:
             logger.debug("Monitoring already started")
             return
 
         self.cache_service.update_cache(self.library_service.get_library_paths())
         self.monitoring_service.start_monitoring(self.library_service.get_library_paths())
-        self.monitor_flag = True
+        self._monitor_flag = True
 
     def stop_monitoring(self) -> None:
         """Stop monitoring Steam libraries"""
-        if not self.monitor_flag:
+        if not self._monitor_flag:
             logger.debug("Monitoring already stopped")
             return
 
         self.monitoring_service.stop_monitoring()
-        self.monitor_flag = False
+        self._monitor_flag = False
 
     async def get_tile_data(self) -> dict[str, Any]:
         """Build tile data for display"""
@@ -145,11 +149,12 @@ class SteamController:
                     self.image_service.download_image(app_id)
 
         # Update state if there was a change
-        if cache_action:
-            asyncio.create_task(
-                self.state_update_callback(
+        if cache_action and self._event_loop:
+            asyncio.run_coroutine_threadsafe(
+                self._state_update_callback(
                     last_change_at=datetime.now(),
                     last_change_type=event_type,
                     last_change_app_id=app_id,
-                )
+                ),
+                self._event_loop
             )

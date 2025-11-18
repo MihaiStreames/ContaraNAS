@@ -22,26 +22,26 @@ class SteamImageService:
     """Service for caching Steam game images"""
 
     def __init__(self):
-        self.image_cache_dir = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
-        self.image_cache_dir.mkdir(parents=True, exist_ok=True)
+        self._image_cache_dir = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
+        self._image_cache_dir.mkdir(parents=True, exist_ok=True)
 
         # Setup requests session with retries
-        self.session = requests.Session()
+        self._session = requests.Session()
         retry_strategy = Retry(
             total=HTTP_RETRY_COUNT,
             backoff_factor=1,
             status_forcelist=[429, 500, 502, 503, 504],
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
-        self.session.mount("http://", adapter)
-        self.session.mount("https://", adapter)
+        self._session.mount("http://", adapter)
+        self._session.mount("https://", adapter)
 
     def sync_with_manifest_cache(self, installed_app_ids: list[int]) -> None:
         """Sync images with current manifest cache state"""
         installed_set = set(installed_app_ids)
 
         # Remove images for games no longer in manifest cache
-        for image_file in self.image_cache_dir.glob("*.jpg"):
+        for image_file in self._image_cache_dir.glob("*.jpg"):
             try:
                 app_id = int(image_file.stem)
                 if app_id not in installed_set:
@@ -53,7 +53,7 @@ class SteamImageService:
         # Download missing images in background
         missing_app_ids = []
         for app_id in installed_app_ids:
-            image_path = self.image_cache_dir / f"{app_id}.jpg"
+            image_path = self._image_cache_dir / f"{app_id}.jpg"
             if not image_path.exists():
                 missing_app_ids.append(app_id)
 
@@ -63,7 +63,7 @@ class SteamImageService:
 
     def download_image(self, app_id: int) -> None:
         """Download image for a single app ID"""
-        image_path = self.image_cache_dir / f"{app_id}.jpg"
+        image_path = self._image_cache_dir / f"{app_id}.jpg"
 
         # Skip if already cached
         if image_path.exists():
@@ -73,7 +73,7 @@ class SteamImageService:
 
         try:
             logger.debug(f"Downloading image for app {app_id}")
-            response = self.session.get(cover_url, timeout=HTTP_TIMEOUT_SECONDS)
+            response = self._session.get(cover_url, timeout=HTTP_TIMEOUT_SECONDS)
             response.raise_for_status()
 
             # Check if we got a valid image
@@ -92,7 +92,7 @@ class SteamImageService:
 
     def remove_image(self, app_id: int) -> None:
         """Remove cached image for app ID"""
-        image_path = self.image_cache_dir / f"{app_id}.jpg"
+        image_path = self._image_cache_dir / f"{app_id}.jpg"
 
         if image_path.exists():
             image_path.unlink()

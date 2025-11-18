@@ -23,8 +23,8 @@ class DiskService:
     """Service to monitor disk information and usage"""
 
     def __init__(self, os_name=None):
-        self.os_name = os_name or platform.system()
-        self.previous_stats = {}
+        self._os_name = os_name or platform.system()
+        self._previous_stats = {}
 
     @staticmethod
     def __extract_base_device_name(device: str) -> str:
@@ -72,7 +72,7 @@ class DiskService:
 
     def __get_device_model(self, device: str) -> str:
         """Get the model name of the disk device using lsblk"""
-        if self.os_name != "Linux":
+        if self._os_name != "Linux":
             return "Unknown"
 
         base_device = self.__extract_base_device_name(device)
@@ -101,7 +101,7 @@ class DiskService:
 
     def __get_device_type(self, device: str) -> str:
         """Determine if device is HDD, SSD, or NVMe"""
-        if self.os_name != "Linux":
+        if self._os_name != "Linux":
             return "Unknown"
 
         base_device = self.__extract_base_device_name(device)
@@ -123,7 +123,7 @@ class DiskService:
 
     def __get_disk_io_stats(self, device: str) -> dict:
         """Get disk I/O statistics"""
-        if self.os_name != "Linux":
+        if self._os_name != "Linux":
             return {
                 "read_bytes": 0,
                 "write_bytes": 0,
@@ -165,8 +165,8 @@ class DiskService:
                 busy_time = 0.0
 
                 device_key = partition.device
-                if device_key in self.previous_stats:
-                    prev = self.previous_stats[device_key]
+                if device_key in self._previous_stats:
+                    prev = self._previous_stats[device_key]
                     read_diff = io_stats["read_bytes"] - prev["read_bytes"]
                     write_diff = io_stats["write_bytes"] - prev["write_bytes"]
                     io_time_diff = io_stats["io_time"] - prev["io_time"]
@@ -185,7 +185,7 @@ class DiskService:
                     )
 
                 # Store current stats for next calculation
-                self.previous_stats[device_key] = io_stats.copy()
+                self._previous_stats[device_key] = io_stats.copy()
 
                 disk_info = DiskInfo(
                     device=partition.device,

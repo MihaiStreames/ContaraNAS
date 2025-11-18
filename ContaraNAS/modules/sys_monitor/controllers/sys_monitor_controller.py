@@ -17,11 +17,10 @@ class SysMonitorController:
     """Controller that orchestrates System Monitor module operations"""
 
     def __init__(self, state_update_callback, update_interval: float = 2.0):
-        self.state_update_callback = state_update_callback
-        self.monitor_flag = False
-        self.update_interval = update_interval
+        self._state_update_callback = state_update_callback
+        self._monitor_flag = False
+        self._update_interval = update_interval
 
-        # Initialize services
         self.cpu_service = CPUService()
         self.mem_service = MemService()
         self.disk_service = DiskService()
@@ -34,7 +33,7 @@ class SysMonitorController:
         logger.info("Initializing System Monitor controller...")
 
         # Perform initial data collection
-        await self.state_update_callback(
+        await self._state_update_callback(
             initialized_at=datetime.now(),
         )
 
@@ -42,21 +41,21 @@ class SysMonitorController:
 
     async def start_monitoring(self) -> None:
         """Start monitoring system stats"""
-        if self.monitor_flag:
+        if self._monitor_flag:
             logger.debug("Monitoring already started")
             return
 
         await self.monitoring_service.start_monitoring()
-        self.monitor_flag = True
+        self._monitor_flag = True
 
     async def stop_monitoring(self) -> None:
         """Stop monitoring system stats"""
-        if not self.monitor_flag:
+        if not self._monitor_flag:
             logger.debug("Monitoring already stopped")
             return
 
         await self.monitoring_service.stop_monitoring()
-        self.monitor_flag = False
+        self._monitor_flag = False
 
     async def _collect_and_update_stats(self) -> None:
         """Collect all system stats and update module state"""
@@ -67,7 +66,7 @@ class SysMonitorController:
             disk_info = self.disk_service.get_disk_info()
 
             # Update module state (this triggers event emission to GUI)
-            await self.state_update_callback(
+            await self._state_update_callback(
                 last_update=datetime.now(),
                 cpu=cpu_info,
                 memory=mem_info,

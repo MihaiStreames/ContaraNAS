@@ -15,7 +15,7 @@ class SteamManifestHandler(FileSystemEventHandler):
 
     def __init__(self, callback):
         super().__init__()
-        self.callback = callback
+        self._callback = callback
 
     def on_created(self, event: FileSystemEvent):
         if not event.is_directory:
@@ -56,7 +56,7 @@ class SteamManifestHandler(FileSystemEventHandler):
         logger.info(f"Processing manifest {event_type}: {path.name}")
 
         try:
-            self.callback(event_type, path)
+            self._callback(event_type, path)
         except Exception as e:
             logger.error(f"Error in callback for {event_type} {path.name}: {e}")
             logger.error(traceback.format_exc())

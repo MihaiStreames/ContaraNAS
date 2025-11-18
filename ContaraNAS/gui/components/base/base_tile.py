@@ -21,10 +21,10 @@ class BaseTile(ABC):
         self.controller = controller
 
         # UI elements
-        self.status_badge = None
-        self.enable_button = None
-        self.disable_button = None
-        self.info_container = None
+        self._status_badge = None
+        self._enable_button = None
+        self._disable_button = None
+        self._info_container = None
         self._create_tile()
         self._setup_event_listeners()
 
@@ -50,22 +50,22 @@ class BaseTile(ABC):
             with ui.row().classes("w-full items-center justify-between mb-4"):
                 ui.label(self.view_model.display_name).classes("text-lg font-bold")
 
-                self.status_badge = ui.badge(
+                self._status_badge = ui.badge(
                     self.view_model.status_text, color=self.view_model.status_color
                 )
 
             # Info container
-            self.info_container = ui.column().classes("w-full mb-4 flex-1")
+            self._info_container = ui.column().classes("w-full mb-4 flex-1")
 
             # Buttons
             with ui.row().classes("w-full justify-end gap-2"):
-                self.enable_button = ui.button(
+                self._enable_button = ui.button(
                     "Enable",
                     icon="play_arrow",
                     on_click=lambda: self.controller.enable_module(self.view_model.name),
                 ).props("size=sm color=positive")
 
-                self.disable_button = ui.button(
+                self._disable_button = ui.button(
                     "Disable",
                     icon="stop",
                     on_click=lambda: self.controller.disable_module(self.view_model.name),
@@ -76,23 +76,23 @@ class BaseTile(ABC):
     def _refresh_ui(self):
         """Update UI to match current view model"""
         # Update status badge
-        self.status_badge.set_text(self.view_model.status_text)
-        self.status_badge.props(f"color={self.view_model.status_color}")
+        self._status_badge.set_text(self.view_model.status_text)
+        self._status_badge.props(f"color={self.view_model.status_color}")
 
         # Update buttons
         if self.view_model.enabled:
-            self.enable_button.set_visibility(False)
-            self.disable_button.set_visibility(True)
+            self._enable_button.set_visibility(False)
+            self._disable_button.set_visibility(True)
         else:
-            self.enable_button.set_visibility(True)
-            self.disable_button.set_visibility(False)
+            self._enable_button.set_visibility(True)
+            self._disable_button.set_visibility(False)
 
         # Update info display
         self._update_info()
 
     def _update_info(self):
         """Update the info container with current data"""
-        self.info_container.clear()
+        self._info_container.clear()
 
-        with self.info_container:
+        with self._info_container:
             self.render(self.view_model.tile_data)

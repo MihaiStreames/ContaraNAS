@@ -16,9 +16,9 @@ class DashboardView:
     """Main dashboard view for managing modules"""
 
     def __init__(self, module_manager: ModuleManager):
-        self.module_manager = module_manager
+        self._module_manager = module_manager
         self.controller = DashboardController(module_manager)
-        self.tiles: dict[str, BaseTile] = {}
+        self._tiles: dict[str, BaseTile] = {}
         self._setup_ui()
 
     def _setup_ui(self):
@@ -35,11 +35,11 @@ class DashboardView:
 
     async def _create_tiles(self):
         """Create tiles from current module states"""
-        module_states = await self.module_manager.get_all_states()
+        module_states = await self._module_manager.get_all_states()
 
         with self.tiles_container:
             for name, state in module_states.items():
                 view_model = BaseTileViewModel.from_module_state(name, state)
                 tile = ComponentFactory.create_tile(view_model, self.controller)
                 if tile is not None:
-                    self.tiles[name] = tile
+                    self._tiles[name] = tile

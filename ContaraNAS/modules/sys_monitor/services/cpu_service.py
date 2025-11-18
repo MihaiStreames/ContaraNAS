@@ -11,12 +11,12 @@ class CPUService:
     """Service to monitor CPU information and usage"""
 
     def __init__(self, os_name=None):
-        self.os_name = os_name or platform.system()
+        self._os_name = os_name or platform.system()
 
     def __get_cpu_name(self) -> str:
-        if self.os_name == "Windows":
+        if self._os_name == "Windows":
             return platform.processor()
-        if self.os_name == "Linux":
+        if self._os_name == "Linux":
             try:
                 with Path.open("/proc/cpuinfo") as f:
                     for line in f:

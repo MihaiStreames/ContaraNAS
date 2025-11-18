@@ -15,13 +15,13 @@ class SteamParsingService:
     """Service for parsing Steam VDF and ACF files"""
 
     def __init__(self, steam_path: Path):
-        self.libraries: list[Path] = []
-        self.steam_path = steam_path
+        self._libraries: list[Path] = []
+        self._steam_path = steam_path
 
     def get_library_paths(self) -> list[Path]:
         """Get all Steam library paths from libraryfolders.vdf"""
-        if not self.libraries:
-            libraryfolders_file = self.steam_path / STEAMAPPS_DIR / LIBRARY_FOLDERS_FILE
+        if not self._libraries:
+            libraryfolders_file = self._steam_path / STEAMAPPS_DIR / LIBRARY_FOLDERS_FILE
             if not libraryfolders_file.exists():
                 logger.error(f"{LIBRARY_FOLDERS_FILE} not found at {libraryfolders_file}")
                 return []
@@ -34,15 +34,15 @@ class SteamParsingService:
                     for lib_data in libraries_data.values():
                         if isinstance(lib_data, dict) and "path" in lib_data:
                             path = lib_data["path"]
-                            self.libraries.append(Path(path))
+                            self._libraries.append(Path(path))
 
-                    if not self.libraries:
+                    if not self._libraries:
                         logger.warning("No library folders found in libraryfolders.vdf")
             except Exception as e:
                 logger.error(f"Error reading libraryfolders.vdf: {e}")
                 return []
 
-        return self.libraries
+        return self._libraries
 
     @staticmethod
     def parse_app_manifest(manifest_path: Path) -> dict[str, Any] | None:

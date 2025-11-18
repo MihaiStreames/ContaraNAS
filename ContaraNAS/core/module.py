@@ -17,7 +17,6 @@ class Module(ABC):
         self.enable_flag = False
         self.init_flag = False
         self.state = {}
-        self.event_handlers = []
 
     @abstractmethod
     async def initialize(self):

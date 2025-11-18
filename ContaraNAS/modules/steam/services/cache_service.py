@@ -11,22 +11,22 @@ class SteamCacheService:
     """Service for caching Steam manifest file states"""
 
     def __init__(self):
-        self.manifest_cache: dict[str, float] = {}  # manifest_path -> mtime
-        self.cache_file = get_cache_dir() / "steam" / "steam_cache.json"
+        self._manifest_cache: dict[str, float] = {}  # manifest_path -> mtime
+        self._cache_file = get_cache_dir() / "steam" / "steam_cache.json"
 
     def initialize_cache(self, library_paths: list[Path]) -> None:
         """Initialize cache with current manifest states"""
         logger.debug("Initializing manifest cache...")
 
         if self._load_cache():
-            logger.info(f"Loaded manifest cache from disk: {len(self.manifest_cache)} games")
+            logger.info(f"Loaded manifest cache from disk: {len(self._manifest_cache)} games")
             self.update_cache(library_paths)
         else:
             logger.info("No cache found, performing fresh initialization...")
             self._scan(library_paths)
             self._save_cache()
 
-        logger.info(f"Cache initialized: {len(self.manifest_cache)} manifest files")
+        logger.info(f"Cache initialized: {len(self._manifest_cache)} manifest files")
 
     def update_manifest(self, manifest_path: Path) -> str:
         """Update manifest in cache. Returns action taken: 'added', 'updated', or 'no_change'"""
@@ -34,10 +34,10 @@ class SteamCacheService:
             return "no_change"
 
         mtime = manifest_path.stat().st_mtime
-        old_mtime = self.manifest_cache.get(str(manifest_path))
+        old_mtime = self._manifest_cache.get(str(manifest_path))
 
         if old_mtime != mtime:
-            self.manifest_cache[str(manifest_path)] = mtime
+            self._manifest_cache[str(manifest_path)] = mtime
             self._save_cache()
             return "updated" if old_mtime else "added"
 
@@ -45,7 +45,7 @@ class SteamCacheService:
 
     def remove_manifest(self, manifest_path: Path) -> bool:
         """Remove manifest from cache. Returns True if it was cached."""
-        was_cached = self.manifest_cache.pop(str(manifest_path), None) is not None
+        was_cached = self._manifest_cache.pop(str(manifest_path), None) is not None
 
         if was_cached:
             self._save_cache()
@@ -62,7 +62,7 @@ class SteamCacheService:
         self._save_cache()
 
         logger.info(
-            f"Cache updated: {len(self.manifest_cache)} manifest files "
+            f"Cache updated: {len(self._manifest_cache)} manifest files "
             f"(+{len(added)} added, -{len(removed)} removed, "
             f"{len(changed)} changed)"
         )
@@ -70,7 +70,7 @@ class SteamCacheService:
     def get_installed_app_ids(self) -> list[int]:
         """Get list of currently installed app IDs from manifest cache"""
         app_ids = []
-        for manifest_path_str in self.manifest_cache:
+        for manifest_path_str in self._manifest_cache:
             app_id_str = extract_app_id(Path(manifest_path_str))
             if app_id_str:
                 app_ids.append(int(app_id_str))
@@ -78,28 +78,28 @@ class SteamCacheService:
 
     def _save_cache(self) -> None:
         """Save manifest cache to JSON file"""
-        cache_data = {"manifests": self.manifest_cache}
-        save_json(self.cache_file, cache_data)
-        logger.debug(f"Saved cache to {self.cache_file}")
+        cache_data = {"manifests": self._manifest_cache}
+        save_json(self._cache_file, cache_data)
+        logger.debug(f"Saved cache to {self._cache_file}")
 
     def _load_cache(self) -> bool:
         """Load manifest cache from JSON file"""
-        if not self.cache_file.exists():
+        if not self._cache_file.exists():
             return False
 
-        cache_data = load_json(self.cache_file)
+        cache_data = load_json(self._cache_file)
         if not cache_data or "manifests" not in cache_data:
             return False
 
-        self.manifest_cache = cache_data["manifests"]
-        logger.debug(f"Loaded cache from {self.cache_file}")
+        self._manifest_cache = cache_data["manifests"]
+        logger.debug(f"Loaded cache from {self._cache_file}")
         return True
 
     def _scan(self, library_paths: list[Path]) -> None:
         """Scan library paths and update cache"""
-        self.manifest_cache.clear()
-        self.manifest_cache.update(self._get_manifests(library_paths))
-        logger.debug(f"Cached {len(self.manifest_cache)} manifest files")
+        self._manifest_cache.clear()
+        self._manifest_cache.update(self._get_manifests(library_paths))
+        logger.debug(f"Cached {len(self._manifest_cache)} manifest files")
 
     @staticmethod
     def _get_manifests(library_paths: list[Path]) -> dict[str, float]:
@@ -120,7 +120,7 @@ class SteamCacheService:
 
     def _find_diff(self, current_manifests: dict[str, float]) -> tuple:
         """Find manifests that were added, removed, or changed"""
-        cached_paths = set(self.manifest_cache.keys())
+        cached_paths = set(self._manifest_cache.keys())
         current_paths = set(current_manifests.keys())
 
         removed = cached_paths - current_paths
@@ -128,7 +128,7 @@ class SteamCacheService:
         existing = cached_paths & current_paths
 
         changed = {
-            path for path in existing if self.manifest_cache[path] != current_manifests[path]
+            path for path in existing if self._manifest_cache[path] != current_manifests[path]
         }
 
         return added, removed, changed
@@ -143,15 +143,15 @@ class SteamCacheService:
         """Apply the detected changes to the manifest cache"""
         # Remove missing manifests
         for manifest_path in removed:
-            del self.manifest_cache[manifest_path]
+            del self._manifest_cache[manifest_path]
             logger.debug(f"Removed missing manifest: {manifest_path}")
 
         # Add new manifests
         for manifest_path in added:
-            self.manifest_cache[manifest_path] = current_manifests[manifest_path]
+            self._manifest_cache[manifest_path] = current_manifests[manifest_path]
             logger.debug(f"Added new manifest: {manifest_path}")
 
         # Update changed manifests
         for manifest_path in changed:
-            self.manifest_cache[manifest_path] = current_manifests[manifest_path]
+            self._manifest_cache[manifest_path] = current_manifests[manifest_path]
             logger.debug(f"Updated manifest mtime: {manifest_path}")
