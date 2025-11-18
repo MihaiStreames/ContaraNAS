@@ -22,12 +22,12 @@ logger = get_logger(__name__)
 class DiskService:
     """Service to monitor disk information and usage"""
 
-    def __init__(self, os_name=None):
-        self._os_name = os_name or platform.system()
-        self._previous_stats = {}
+    def __init__(self, os_name: str | None = None):
+        self._os_name: str = os_name or platform.system()
+        self._previous_stats: dict[str, dict[str, Any]] = {}
 
     @staticmethod
-    def __extract_base_device_name(device: str) -> str:
+    def _extract_base_device_name(device: str) -> str:
         """Extract base device name from full device path
 
         Examples:
@@ -49,7 +49,7 @@ class DiskService:
         return base_device
 
     @staticmethod
-    def __parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:
+    def _parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:
         """Parse diskstats file for specific device"""
         diskstats = {}
         try:
@@ -70,12 +70,12 @@ class DiskService:
 
         return diskstats
 
-    def __get_device_model(self, device: str) -> str:
+    def _get_device_model(self, device: str) -> str:
         """Get the model name of the disk device using lsblk"""
         if self._os_name != "Linux":
             return "Unknown"
 
-        base_device = self.__extract_base_device_name(device)
+        base_device = self._extract_base_device_name(device)
 
         # Use lsblk with JSON output to get model name (works for all device types including NVMe)
         try:
@@ -91,7 +91,7 @@ class DiskService:
                 data = json.loads(result.stdout)
                 for block_device in data.get("blockdevices", []):
                     if block_device.get("name") == base_device:
-                        model = block_device.get("model", "").strip()
+                        model = str(block_device.get("model", "")).strip()
                         if model:
                             return model
         except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError, OSError):
@@ -99,12 +99,12 @@ class DiskService:
 
         return "Unknown"
 
-    def __get_device_type(self, device: str) -> str:
+    def _get_device_type(self, device: str) -> str:
         """Determine if device is HDD, SSD, or NVMe"""
         if self._os_name != "Linux":
             return "Unknown"
 
-        base_device = self.__extract_base_device_name(device)
+        base_device = self._extract_base_device_name(device)
 
         # NVMe devices are a specific type
         if base_device.startswith("nvme"):
@@ -121,7 +121,7 @@ class DiskService:
 
         return "Unknown"
 
-    def __get_disk_io_stats(self, device: str) -> dict:
+    def _get_disk_io_stats(self, device: str) -> dict[str, int]:
         """Get disk I/O statistics"""
         if self._os_name != "Linux":
             return {
@@ -132,9 +132,9 @@ class DiskService:
                 "io_time": 0,
             }
 
-        base_device = self.__extract_base_device_name(device)
+        base_device = self._extract_base_device_name(device)
         diskstats_path = Path("/proc/diskstats")
-        stats = self.__parse_diskstats(diskstats_path, base_device)
+        stats = self._parse_diskstats(diskstats_path, base_device)
 
         read_bytes = stats.get("reads", 0) * DISK_SECTOR_SIZE
         write_bytes = stats.get("writes", 0) * DISK_SECTOR_SIZE
@@ -157,7 +157,7 @@ class DiskService:
         for partition in partitions:
             try:
                 usage = psutil.disk_usage(partition.mountpoint)
-                io_stats = self.__get_disk_io_stats(partition.device)
+                io_stats = self._get_disk_io_stats(partition.device)
 
                 # Calculate speeds based on previous stats
                 read_speed = 0.0
@@ -203,8 +203,8 @@ class DiskService:
                     write_time=io_stats["write_time"],
                     io_time=io_stats["io_time"],
                     busy_time=busy_time,
-                    model=self.__get_device_model(partition.device),
-                    type=self.__get_device_type(partition.device),
+                    model=self._get_device_model(partition.device),
+                    type=self._get_device_type(partition.device),
                 )
                 disks.append(disk_info)
                 logger.debug(f"Added disk: {partition.mountpoint} ({partition.device})")

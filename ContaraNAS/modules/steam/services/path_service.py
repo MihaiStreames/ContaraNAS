@@ -25,8 +25,8 @@ class SteamPathService:
             ]
         elif system == "Linux":
             paths = [
-                Path.expanduser(Path("~/.steam/steam")),
-                Path.expanduser(Path("~/.local/share/Steam")),
+                str(Path("~/.steam/steam").expanduser()),
+                str(Path("~/.local/share/Steam").expanduser()),
                 "/usr/share/steam",
             ]
         else:

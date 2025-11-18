@@ -32,5 +32,5 @@ class DashboardController:
         """Get the controller for a specific module"""
         if module_name in self._module_manager.modules:
             module = self._module_manager.modules[module_name]
-            return module.controller
+            return getattr(module, "controller", None)
         return None

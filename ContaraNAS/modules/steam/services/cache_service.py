@@ -12,7 +12,7 @@ class SteamCacheService:
 
     def __init__(self):
         self._manifest_cache: dict[str, float] = {}  # manifest_path -> mtime
-        self._cache_file = get_cache_dir() / "steam" / "steam_cache.json"
+        self._cache_file: Path = get_cache_dir() / "steam" / "steam_cache.json"
 
     def initialize_cache(self, library_paths: list[Path]) -> None:
         """Initialize cache with current manifest states"""

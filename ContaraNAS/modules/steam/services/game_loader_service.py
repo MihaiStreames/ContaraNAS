@@ -10,6 +10,7 @@ from ContaraNAS.modules.steam.constants import (
     WORKSHOP_DIR,
 )
 from ContaraNAS.modules.steam.dtos import SteamGame
+from ContaraNAS.modules.steam.services.parsing_service import SteamParsingService
 from ContaraNAS.modules.steam.utils import get_dir_size
 
 
@@ -19,13 +20,13 @@ logger = get_logger(__name__)
 class SteamGameLoaderService:
     """Service for loading Steam games with complete size information"""
 
-    def __init__(self, parsing_service):
-        self.parsing_service = parsing_service
+    def __init__(self, parsing_service: SteamParsingService):
+        self.parsing_service: SteamParsingService = parsing_service
 
     async def load_games_from_library(self, library_path: Path) -> list[SteamGame]:
         """Load all games from a library with complete size information"""
         steamapps_path = library_path / STEAMAPPS_DIR
-        games = []
+        games: list[SteamGame] = []
 
         # Parse all games in this library
         if not steamapps_path.exists():

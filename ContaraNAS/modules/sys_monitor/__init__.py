@@ -24,13 +24,15 @@ class SysMonitorModule(Module):
 
     async def start_monitoring(self) -> None:
         """Start System monitoring"""
-        await self.controller.start_monitoring()
-        logger.info("System monitoring started")
+        if self.controller:
+            await self.controller.start_monitoring()
+            logger.info("System monitoring started")
 
     async def stop_monitoring(self) -> None:
         """Stop System monitoring"""
-        await self.controller.stop_monitoring()
-        logger.info("System monitoring stopped")
+        if self.controller:
+            await self.controller.stop_monitoring()
+            logger.info("System monitoring stopped")
 
     async def get_tile_data(self) -> dict[str, Any]:
         """Get data for dashboard tile"""

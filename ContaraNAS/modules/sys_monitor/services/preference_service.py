@@ -1,3 +1,6 @@
+from pathlib import Path
+from typing import Any
+
 from ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
 
 
@@ -8,12 +11,12 @@ class SysMonitorPreferenceService:
     """Service for managing system monitor user preferences"""
 
     def __init__(self):
-        self._cache_file = get_cache_dir() / "sys_monitor_preferences.json"
-        self._preferences = self._load_preferences()
+        self._cache_file: Path = get_cache_dir() / "sys_monitor_preferences.json"
+        self._preferences: dict[str, Any] = self._load_preferences()
 
     def get_cpu_view_preference(self) -> bool:
         """Get the user's CPU view preference. Returns True for per-core view, False for general view"""
-        return self._preferences.get("show_per_core", True)
+        return bool(self._preferences.get("show_per_core", True))
 
     def set_cpu_view_preference(self, show_per_core: bool) -> None:
         """Set the user's CPU view preference"""
@@ -21,7 +24,7 @@ class SysMonitorPreferenceService:
         self._save_preferences()
         logger.debug(f"CPU view preference updated: show_per_core={show_per_core}")
 
-    def _load_preferences(self) -> dict:
+    def _load_preferences(self) -> dict[str, Any]:
         """Load preferences from cache file"""
         if not self._cache_file.exists():
             logger.debug("No preference cache found, using defaults")

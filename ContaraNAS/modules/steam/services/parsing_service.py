@@ -16,7 +16,7 @@ class SteamParsingService:
 
     def __init__(self, steam_path: Path):
         self._libraries: list[Path] = []
-        self._steam_path = steam_path
+        self._steam_path: Path = steam_path
 
     def get_library_paths(self) -> list[Path]:
         """Get all Steam library paths from libraryfolders.vdf"""

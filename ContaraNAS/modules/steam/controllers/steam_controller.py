@@ -1,4 +1,5 @@
 import asyncio
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -21,17 +22,24 @@ logger = get_logger(__name__)
 class SteamController:
     """Controller that orchestrates Steam module operations"""
 
-    def __init__(self, state_update_callback):
-        self._state_update_callback = state_update_callback
-        self._monitor_flag = False
-        self._event_loop = None
+    def __init__(self, state_update_callback: Callable[..., Awaitable[None]]):
+        self._state_update_callback: Callable[..., Awaitable[None]] = state_update_callback
+        self._monitor_flag: bool = False
+        self._event_loop: asyncio.AbstractEventLoop | None = None
 
-        self.library_service = SteamLibraryService()
-        self.parsing_service = SteamParsingService(self.library_service.get_steam_path())
-        self.game_loader_service = SteamGameLoaderService(self.parsing_service)
-        self.cache_service = SteamCacheService()
-        self.image_service = SteamImageService()
-        self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
+        self.library_service: SteamLibraryService = SteamLibraryService()
+
+        # Get steam path, will be validated during initialize()
+        steam_path = self.library_service.get_steam_path()
+        if steam_path is None:
+            # Create with placeholder, will fail during initialize() if Steam not found
+            steam_path = Path("/")
+
+        self.parsing_service: SteamParsingService = SteamParsingService(steam_path)
+        self.game_loader_service: SteamGameLoaderService = SteamGameLoaderService(self.parsing_service)
+        self.cache_service: SteamCacheService = SteamCacheService()
+        self.image_service: SteamImageService = SteamImageService()
+        self.monitoring_service: SteamMonitoringService = SteamMonitoringService(self._handle_manifest_change)
 
     async def initialize(self) -> None:
         """Initialize the controller and its services"""
