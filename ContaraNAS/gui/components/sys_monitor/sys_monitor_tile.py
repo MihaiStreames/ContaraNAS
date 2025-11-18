@@ -89,8 +89,8 @@ class SysMonitorTile(BaseTile):
         """Update the info container with current data while preserving tab selection"""
         if not self._tabs_init_flag:
             # First time: create the tabs structure
-            self.info_container.clear()
-            with self.info_container:
+            self._info_container.clear()
+            with self._info_container:
                 self._initialize_tabs(self.view_model.tile_data)
             self._tabs_init_flag = True
         else:
