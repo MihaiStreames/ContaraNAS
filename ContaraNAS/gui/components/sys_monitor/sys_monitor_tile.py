@@ -51,22 +51,22 @@ class SysMonitorTile(BaseTile):
             with ui.row().classes("w-full items-center justify-between mb-4"):
                 ui.label(self.view_model.display_name).classes("text-lg font-bold")
 
-                self.status_badge = ui.badge(
+                self._status_badge = ui.badge(
                     self.view_model.status_text, color=self.view_model.status_color
                 )
 
             # Info container
-            self.info_container = ui.column().classes("w-full mb-4 flex-1")
+            self._info_container = ui.column().classes("w-full mb-4 flex-1")
 
             # Buttons
             with ui.row().classes("w-full justify-end gap-2"):
-                self.enable_button = ui.button(
+                self._enable_button = ui.button(
                     "Enable",
                     icon="play_arrow",
                     on_click=lambda: self.controller.enable_module(self.view_model.name),
                 ).props("size=sm color=positive")
 
-                self.disable_button = ui.button(
+                self._disable_button = ui.button(
                     "Disable",
                     icon="stop",
                     on_click=lambda: self.controller.disable_module(self.view_model.name),
