@@ -18,21 +18,20 @@ class CPUService:
             return platform.processor()
         if self._os_name == "Linux":
             try:
-                with Path.open("/proc/cpuinfo") as f:
+                with Path("/proc/cpuinfo").open() as f:
                     for line in f:
                         if "model name" in line:
-                            return line.split(":", 1)[1].strip()
+                            return str(line.split(":", 1)[1].strip())
                 return "Unknown"
             except FileNotFoundError:
                 return "Unknown"
-        else:
-            return "Unknown"
+        return "Unknown"
 
     def get_cpu_info(self) -> CPUInfo:
         name = self._get_cpu_name()
 
-        physical_cores = psutil.cpu_count(logical=False)
-        logical_cores = psutil.cpu_count(logical=True)
+        physical_cores = psutil.cpu_count(logical=False) or 0
+        logical_cores = psutil.cpu_count(logical=True) or 0
         usage_per_core = psutil.cpu_percent(interval=None, percpu=True)
 
         total_usage = psutil.cpu_percent(interval=None)

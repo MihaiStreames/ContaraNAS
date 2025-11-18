@@ -91,7 +91,7 @@ class DiskService:
                 data = json.loads(result.stdout)
                 for block_device in data.get("blockdevices", []):
                     if block_device.get("name") == base_device:
-                        model = block_device.get("model", "").strip()
+                        model = str(block_device.get("model", "")).strip()
                         if model:
                             return model
         except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError, OSError):

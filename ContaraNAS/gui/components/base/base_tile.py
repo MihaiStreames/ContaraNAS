@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from nicegui import ui
 
@@ -14,17 +15,17 @@ logger = get_logger(__name__)
 class BaseTile(ABC):
     """Abstract base class for module tiles"""
 
-    module_type = "base"
+    module_type: str = "base"
 
-    def __init__(self, view_model: BaseTileViewModel, controller):
-        self.view_model = view_model
-        self.controller = controller
+    def __init__(self, view_model: BaseTileViewModel, controller: Any):
+        self.view_model: BaseTileViewModel = view_model
+        self.controller: Any = controller
 
-        # UI elements
-        self._status_badge = None
-        self._enable_button = None
-        self._disable_button = None
-        self._info_container = None
+        # UI elements (initialized in _create_tile)
+        self._status_badge: Any = None
+        self._enable_button: Any = None
+        self._disable_button: Any = None
+        self._info_container: Any = None
         self._create_tile()
         self._setup_event_listeners()
 

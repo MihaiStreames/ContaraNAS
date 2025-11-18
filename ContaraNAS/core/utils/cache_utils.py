@@ -9,7 +9,7 @@ from ContaraNAS.core.utils.logger import get_logger
 logger = get_logger(__name__)
 
 
-def load_json(file_path: Path) -> dict | None:
+def load_json(file_path: Path) -> dict[str, Any] | None:
     """Load JSON data from a file
 
     Args:
@@ -22,8 +22,9 @@ def load_json(file_path: Path) -> dict | None:
         if not Path(file_path).exists():
             return None
 
-        with Path.open(file_path, encoding="utf-8") as f:
-            return json.load(f)
+        with Path(file_path).open(encoding="utf-8") as f:
+            data: dict[str, Any] = json.load(f)
+            return data
 
     except json.JSONDecodeError as e:
         logger.error(f"Failed to parse JSON from {file_path}: {e}")
@@ -46,7 +47,7 @@ def save_json(file_path: Path, data: Any) -> None:
     """
     try:
         Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-        with Path.open(file_path, "w", encoding="utf-8") as f:
+        with Path(file_path).open("w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
     except (OSError, PermissionError) as e:

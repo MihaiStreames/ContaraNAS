@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
@@ -12,11 +13,11 @@ class Module(ABC):
     """Base class for all modules in the system"""
 
     def __init__(self, name: str, display_name: str | None = None):
-        self.name = name
-        self.display_name = display_name or name.replace("_", " ").title()
-        self.enable_flag = False
-        self.init_flag = False
-        self.state = {}
+        self.name: str = name
+        self.display_name: str = display_name or name.replace("_", " ").title()
+        self.enable_flag: bool = False
+        self.init_flag: bool = False
+        self.state: dict[str, Any] = {}
 
     @abstractmethod
     async def initialize(self):

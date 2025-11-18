@@ -28,7 +28,14 @@ class SteamController:
         self._event_loop: asyncio.AbstractEventLoop | None = None
 
         self.library_service: SteamLibraryService = SteamLibraryService()
-        self.parsing_service: SteamParsingService = SteamParsingService(self.library_service.get_steam_path())
+
+        # Get steam path, will be validated during initialize()
+        steam_path = self.library_service.get_steam_path()
+        if steam_path is None:
+            # Create with placeholder, will fail during initialize() if Steam not found
+            steam_path = Path("/")
+
+        self.parsing_service: SteamParsingService = SteamParsingService(steam_path)
         self.game_loader_service: SteamGameLoaderService = SteamGameLoaderService(self.parsing_service)
         self.cache_service: SteamCacheService = SteamCacheService()
         self.image_service: SteamImageService = SteamImageService()
