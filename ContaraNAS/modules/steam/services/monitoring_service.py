@@ -15,9 +15,9 @@ logger = get_logger(__name__)
 class SteamMonitoringService:
     """Service for monitoring Steam library file changes"""
 
-    def __init__(self, change_callback: Callable):
-        self._change_callback = change_callback
-        self._monitor_flag = False
+    def __init__(self, change_callback: Callable[[str, Path], None]):
+        self._change_callback: Callable[[str, Path], None] = change_callback
+        self._monitor_flag: bool = False
         self._observer: Observer | None = None
 
         self.manifest_handler: SteamManifestHandler | None = None

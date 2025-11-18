@@ -12,17 +12,17 @@ from ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
 class MemService:
     """Service to monitor Memory information and usage"""
 
-    def __init__(self, os_name=None, ram_sticks=None):
-        self._os_name = os_name or platform.system()
-        self.ram_sticks = ram_sticks or []
+    def __init__(self, os_name: str | None = None, ram_sticks: list[RAMInfo] | None = None):
+        self._os_name: str = os_name or platform.system()
+        self.ram_sticks: list[RAMInfo] = ram_sticks or []
 
-    def __get_dmidecode_output(self) -> str:
+    def _get_dmidecode_output(self) -> str:
         if self._os_name != "Linux":
             raise NotImplementedError("DMIDECODE is only supported on Linux systems.")
         return subprocess.check_output(["pkexec", "dmidecode", "--type", "17"], text=True)
 
     @staticmethod
-    def __parse_dmidecode(data: str) -> list[RAMInfo]:
+    def _parse_dmidecode(data: str) -> list[RAMInfo]:
         blocks = data.split("Memory Device")
         ram_info = []
 
@@ -59,10 +59,10 @@ class MemService:
 
         return ram_info
 
-    def __get_ram_sticks(self) -> list[RAMInfo]:
+    def _get_ram_sticks(self) -> list[RAMInfo]:
         if self._os_name == "Linux":
-            dmidecode_out = self.__get_dmidecode_output()
-            return self.__parse_dmidecode(dmidecode_out)
+            dmidecode_out = self._get_dmidecode_output()
+            return self._parse_dmidecode(dmidecode_out)
         return []
 
     def get_memory_info(self) -> MemoryInfo:
@@ -70,7 +70,7 @@ class MemService:
         swap_mem = psutil.swap_memory()
 
         if not self.ram_sticks:
-            self.ram_sticks = self.__get_ram_sticks()
+            self.ram_sticks = self._get_ram_sticks()
             cache_dir = Path(get_cache_dir() / "ram_info_cache.json")
             save_json(cache_dir, [ram.__dict__ for ram in self.ram_sticks])
 

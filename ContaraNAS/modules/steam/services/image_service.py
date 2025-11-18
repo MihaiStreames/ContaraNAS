@@ -22,11 +22,11 @@ class SteamImageService:
     """Service for caching Steam game images"""
 
     def __init__(self):
-        self._image_cache_dir = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
+        self._image_cache_dir: Path = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
         self._image_cache_dir.mkdir(parents=True, exist_ok=True)
 
         # Setup requests session with retries
-        self._session = requests.Session()
+        self._session: requests.Session = requests.Session()
         retry_strategy = Retry(
             total=HTTP_RETRY_COUNT,
             backoff_factor=1,

@@ -10,10 +10,10 @@ from ContaraNAS.modules.sys_monitor.dtos import CPUInfo
 class CPUService:
     """Service to monitor CPU information and usage"""
 
-    def __init__(self, os_name=None):
-        self._os_name = os_name or platform.system()
+    def __init__(self, os_name: str | None = None):
+        self._os_name: str = os_name or platform.system()
 
-    def __get_cpu_name(self) -> str:
+    def _get_cpu_name(self) -> str:
         if self._os_name == "Windows":
             return platform.processor()
         if self._os_name == "Linux":
@@ -29,7 +29,7 @@ class CPUService:
             return "Unknown"
 
     def get_cpu_info(self) -> CPUInfo:
-        name = self.__get_cpu_name()
+        name = self._get_cpu_name()
 
         physical_cores = psutil.cpu_count(logical=False)
         logical_cores = psutil.cpu_count(logical=True)

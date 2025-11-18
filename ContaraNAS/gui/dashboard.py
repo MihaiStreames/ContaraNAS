@@ -16,8 +16,8 @@ class DashboardView:
     """Main dashboard view for managing modules"""
 
     def __init__(self, module_manager: ModuleManager):
-        self._module_manager = module_manager
-        self.controller = DashboardController(module_manager)
+        self._module_manager: ModuleManager = module_manager
+        self.controller: DashboardController = DashboardController(module_manager)
         self._tiles: dict[str, BaseTile] = {}
         self._setup_ui()
 

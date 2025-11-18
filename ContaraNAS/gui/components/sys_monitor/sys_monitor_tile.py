@@ -1,3 +1,5 @@
+from typing import Any
+
 from nicegui import ui
 
 from ContaraNAS.core.event_bus import event_bus
@@ -6,6 +8,7 @@ from ContaraNAS.gui.components.base import BaseTile
 from ContaraNAS.gui.components.base.base_view_model import BaseTileViewModel
 from ContaraNAS.gui.components.sys_monitor import sys_monitor_tile_helper as helper
 from ContaraNAS.modules.sys_monitor.constants import MAX_HISTORY_POINTS
+from ContaraNAS.modules.sys_monitor.controllers import SysMonitorController
 from ContaraNAS.modules.sys_monitor.services import SysMonitorPreferenceService
 
 
@@ -17,27 +20,27 @@ class SysMonitorTile(BaseTile):
 
     module_type = "sys_monitor"
 
-    def __init__(self, view_model, controller):
-        self._cpu_core_history = {}
-        self._cpu_general_history = []
-        self._mem_history = []
-        self._max_history_points = MAX_HISTORY_POINTS
+    def __init__(self, view_model: BaseTileViewModel, controller: SysMonitorController):
+        self._cpu_core_history: dict[int, list[float]] = {}
+        self._cpu_general_history: list[float] = []
+        self._mem_history: list[float] = []
+        self._max_history_points: int = MAX_HISTORY_POINTS
 
         # Initialize preference service and load user preference for CPU view
-        self.preference_service = SysMonitorPreferenceService()
-        self._show_per_core = self.preference_service.get_cpu_view_preference()
+        self.preference_service: SysMonitorPreferenceService = SysMonitorPreferenceService()
+        self._show_per_core: bool = self.preference_service.get_cpu_view_preference()
 
         # Tab references
-        self._cpu_tab_ref = None
-        self._ram_tab_ref = None
-        self._disks_tab_ref = None
-        self._tabs_ref = None
+        self._cpu_tab_ref: Any = None
+        self._ram_tab_ref: Any = None
+        self._disks_tab_ref: Any = None
+        self._tabs_ref: Any = None
 
         # UI element references
-        self._tabs_init_flag = False
-        self._cpu_tab_panel = None
-        self._ram_tab_panel = None
-        self._disks_tab_panel = None
+        self._tabs_init_flag: bool = False
+        self._cpu_tab_panel: Any = None
+        self._ram_tab_panel: Any = None
+        self._disks_tab_panel: Any = None
 
         super().__init__(view_model, controller)
 
