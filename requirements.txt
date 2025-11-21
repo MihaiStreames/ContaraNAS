@@ -430,9 +430,9 @@ narwhals==2.11.0 \
     --hash=sha256:a9795e1e44aa94e5ba6406ef1c5ee4c172414ced4f1aea4a79e5894f0c7378d4 \
     --hash=sha256:d23f3ea7efc6b4d0355444a72de6b8fa3011175585246c3400c894a7583964af
     # via plotly
-nicegui==3.3.0 \
-    --hash=sha256:2267bdcb7596d877c8b1b360cfd9bd4f0a0e884687f21154e671eb87489d4584 \
-    --hash=sha256:e0ea59de946b232fcd6aacc4a0ee4d6ef58a6ed42aee656a37c8b604c24f49fc
+nicegui==3.3.1 \
+    --hash=sha256:0de625b836acf1c36875dc290ae769ef114aba9535e33d302566b19381b206fa \
+    --hash=sha256:7eb4e35936958c1df4b0fa6f5f4ed51d6e060c2938aca09b229abfec6b25e35e
     # via contaranas
 orjson==3.11.3 ; platform_machine != 'i386' and platform_machine != 'i686' \
     --hash=sha256:0c6d7328c200c349e3a4c6d8c83e0a5ad029bdc2d417f234152bf34842d0fc8d \
@@ -473,9 +473,9 @@ pathlib==1.0.1 \
     --hash=sha256:6940718dfc3eff4258203ad5021090933e5c04707d5ca8cc9e73c94a7894ea9f \
     --hash=sha256:f35f95ab8b0f59e6d354090350b44a80a80635d22efdedfa84c7ad1cf0a74147
     # via contaranas
-plotly==6.4.0 \
-    --hash=sha256:68c6db2ed2180289ef978f087841148b7efda687552276da15a6e9b92107052a \
-    --hash=sha256:a1062eafbdc657976c2eedd276c90e184ccd6c21282a5e9ee8f20efca9c9a4c5
+plotly==6.5.0 \
+    --hash=sha256:5ac851e100367735250206788a2b1325412aa4a4917a4fe3e6f0bc5aa6f3d90a \
+    --hash=sha256:d5d38224883fd38c1409bef7d6a8dc32b74348d39313f3c52ca998b8e447f5c8
     # via contaranas
 propcache==0.4.1 \
     --hash=sha256:005f08e6a0529984491e37d8dbc3dd86f84bd78a8ceb5fa9a021f4c48d4984be \
@@ -687,26 +687,26 @@ pyobjc-framework-webkit==11.1 ; sys_platform == 'darwin' \
     --hash=sha256:864f9867a2caaeaeb83e5c0fa3dcf78169622233cf93a9a5eeb7012ced3b8076 \
     --hash=sha256:c1c00d549ab1d50e3d7e8f5f71352b999d2c32dc2365c299f317525eb9bff916
     # via pywebview
-pyside6==6.10.0 \
-    --hash=sha256:4b709bdeeb89d386059343a5a706fc185cee37b517bda44c7d6b64d5fdaf3339 \
-    --hash=sha256:70a8bcc73ea8d6baab70bba311eac77b9a1d31f658d0b418e15eb6ea36c97e6f \
-    --hash=sha256:9f402f883e640048fab246d36e298a5e16df9b18ba2e8c519877e472d3602820 \
-    --hash=sha256:ae8c3c8339cd7c3c9faa7cc5c52670dcc8662ccf4b63a6fed61c6345b90c4c01 \
-    --hash=sha256:c2cbc5dc2a164e3c7c51b3435e24203e90e5edd518c865466afccbd2e5872bb0
+pyside6==6.10.1 \
+    --hash=sha256:4053bf51ba2c2cb20e1005edd469997976a02cec009f7c46356a0b65c137f1fa \
+    --hash=sha256:7d3ca20a40139ca5324a7864f1d91cdf2ff237e11bd16354a42670f2a4eeb13c \
+    --hash=sha256:9c5c1d94387d1a32a6fae25348097918ef413b87dfa3767c46f737c6d48ae437 \
+    --hash=sha256:9f89ff994f774420eaa38cec6422fddd5356611d8481774820befd6f3bb84c9e \
+    --hash=sha256:d0e70dd0e126d01986f357c2a555722f9462cf8a942bf2ce180baf69f468e516
     # via contaranas
-pyside6-addons==6.10.0 \
-    --hash=sha256:08d4ed46c4c9a353a9eb84134678f8fdd4ce17fb8cce2b3686172a7575025464 \
-    --hash=sha256:15d32229d681be0bba1b936c4a300da43d01e1917ada5b57f9e03a387c245ab0 \
-    --hash=sha256:88e61e21ee4643cdd9efb39ec52f4dc1ac74c0b45c5b7fa453d03c094f0a8a5c \
-    --hash=sha256:92536427413f3b6557cf53f1a515cd766725ee46a170aff57ad2ff1dfce0ffb1 \
-    --hash=sha256:99d93a32c17c5f6d797c3b90dd58f2a8bae13abde81e85802c34ceafaee11859
+pyside6-addons==6.10.1 \
+    --hash=sha256:0de303c0447326cdc6c8be5ab066ef581e2d0baf22560c9362d41b8304fdf2db \
+    --hash=sha256:330c229b58d30083a7b99ed22e118eb4f4126408429816a4044ccd0438ae81b4 \
+    --hash=sha256:4d2b82bbf9b861134845803837011e5f9ac7d33661b216805273cf0c6d0f8e82 \
+    --hash=sha256:56864b5fecd6924187a2d0f7e98d968ed72b6cc267caa5b294cd7e88fff4e54c \
+    --hash=sha256:b6e249d15407dd33d6a2ffabd9dc6d7a8ab8c95d05f16a71dad4d07781c76341
     # via pyside6
-pyside6-essentials==6.10.0 \
-    --hash=sha256:003e871effe1f3e5b876bde715c15a780d876682005a6e989d89f48b8b93e93a \
-    --hash=sha256:1d5e013a8698e37ab8ef360e6960794eb5ef20832a8d562e649b8c5a0574b2d8 \
-    --hash=sha256:6dd0936394cb14da2fd8e869899f5e0925a738b1c8d74c2f22503720ea363fb1 \
-    --hash=sha256:b1dd0864f0577a448fb44426b91cafff7ee7cccd1782ba66491e1c668033f998 \
-    --hash=sha256:fc167eb211dd1580e20ba90d299e74898e7a5a1306d832421e879641fc03b6fe
+pyside6-essentials==6.10.1 \
+    --hash=sha256:4d1d248644f1778f8ddae5da714ca0f5a150a5e6f602af2765a7d21b876da05c \
+    --hash=sha256:9555a48e8f0acf63fc6a23c250808db841b28a66ed6ad89ee0e4df7628752674 \
+    --hash=sha256:cd224aff3bb26ff1fca32c050e1c4d0bd9f951a96219d40d5f3d0128485b0bbe \
+    --hash=sha256:e9ccbfb58c03911a0bce1f2198605b02d4b5ca6276bfc0cbcf7c6f6393ffb856 \
+    --hash=sha256:ec8617c9b143b0c19ba1cc5a7e98c538e4143795480cb152aee47802c18dc5d2
     # via
     #   pyside6
     #   pyside6-addons
@@ -781,12 +781,12 @@ setuptools==80.9.0 \
     --hash=sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922 \
     --hash=sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c
     # via contaranas
-shiboken6==6.10.0 \
-    --hash=sha256:0bc5631c1bf150cbef768a17f5f289aae1cb4db6c6b0c19b2421394e27783717 \
-    --hash=sha256:7a5f5f400ebfb3a13616030815708289c2154e701a60b9db7833b843e0bee543 \
-    --hash=sha256:b01377e68d14132360efb0f4b7233006d26aa8ae9bb50edf00960c2a5f52d148 \
-    --hash=sha256:dfc4beab5fec7dbbebbb418f3bf99af865d6953aa0795435563d4cbb82093b61 \
-    --hash=sha256:e612734da515d683696980107cdc0396a3ae0f07b059f0f422ec8a2333810234
+shiboken6==6.10.1 \
+    --hash=sha256:5cf800917008587b551005a45add2d485cca66f5f7ecd5b320e9954e40448cc9 \
+    --hash=sha256:9f2990f5b61b0b68ecadcd896ab4441f2cb097eef7797ecc40584107d9850d71 \
+    --hash=sha256:c095b00f4d6bf578c0b2464bb4e264b351a99345374478570f69e2e679a2a1d0 \
+    --hash=sha256:c1601d3cda1fa32779b141663873741b54e797cb0328458d7466281f117b0a4e \
+    --hash=sha256:f4221a52dfb81f24a0d20cc4f8981cb6edd810d5a9fb28287ce10d342573a0e4
     # via
     #   pyside6
     #   pyside6-addons
@@ -805,9 +805,9 @@ starlette==0.49.3 \
     # via
     #   fastapi
     #   nicegui
-types-psutil==7.0.0.20251111 \
-    --hash=sha256:85ba00205dcfa3c73685122e5a360205d2fbc9b56f942b591027bf401ce0cc47 \
-    --hash=sha256:d109ee2da4c0a9b69b8cefc46e195db8cf0fc0200b6641480df71e7f3f51a239
+types-psutil==7.0.0.20251116 \
+    --hash=sha256:74c052de077c2024b85cd435e2cba971165fe92a5eace79cbeb821e776dbc047 \
+    --hash=sha256:92b5c78962e55ce1ed7b0189901a4409ece36ab9fd50c3029cca7e681c606c8a
     # via contaranas
 types-requests==2.32.4.20250913 \
     --hash=sha256:78c9c1fffebbe0fa487a418e0fa5252017e9c60d1a2da394077f1780f655d7e1 \
