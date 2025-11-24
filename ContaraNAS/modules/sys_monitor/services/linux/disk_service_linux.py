@@ -127,7 +127,7 @@ class DiskServiceLinux(DiskService):
             "io_time": stats.get("io_time", 0),
         }
 
-    def _get_disk_hardware_info(self, device: str) -> tuple[str, str]:
+    def _collect_disk_hardware_info(self, device: str) -> tuple[str, str]:
         """Get model and type for a disk, using cache or collecting fresh data"""
         base_device = self._extract_base_device_name(device)
 
@@ -203,7 +203,7 @@ class DiskServiceLinux(DiskService):
                 self._previous_stats[device_key] = io_stats.copy()
 
                 # Get hardware info (uses cache for known disks, discovers new ones)
-                model, disk_type = self._get_disk_hardware_info(partition.device)
+                model, disk_type = self._collect_disk_hardware_info(partition.device)
 
                 disk_info = DiskInfo(
                     device=partition.device,

@@ -26,7 +26,7 @@ class MemService(ABC):
 
             return MemServiceLinux()
         if system == "Windows":
-            # from .windows.mem_service_windows import MemServiceWindows # noqa: PLC0415
-            # return MemServiceWindows()
-            raise NotImplementedError("Windows not supported for Memory monitoring yet")
+            from .windows.mem_service_windows import MemServiceWindows  # noqa: PLC0415
+
+            return MemServiceWindows()
         raise NotImplementedError(f"OS '{system}' not supported for Memory monitoring")

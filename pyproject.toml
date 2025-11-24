@@ -8,7 +8,6 @@ dependencies = [
     "pathlib>=1.0.1",
     "pydantic>=2.12.4",
     "pywebview>=6.1",
-    "pygobject>=3.54.5",
     "nicegui>=3.3.1",
     "qtpy>=2.4.3",
     "watchdog>=6.0.0",
@@ -21,6 +20,16 @@ dependencies = [
     "types-requests>=2.32.4.20250913",
     "setuptools>=80.9.0",
     "wheel>=0.45.1",
+]
+
+[project.optional-dependencies]
+linux = [
+    "pygobject>=3.54.5",
+    "pycairo>=1.28.0",
+]
+windows = [
+    "wmi>=1.5.1",
+    "pywin32>=311",
 ]
 
 [project.urls]

@@ -26,7 +26,7 @@ class CPUService(ABC):
 
             return CPUServiceLinux()
         if system == "Windows":
-            # from .windows.cpu_service_windows import CPUServiceWindows # noqa: PLC0415
-            # return CPUServiceWindows()
-            raise NotImplementedError("Windows not supported for CPU monitoring yet")
+            from .windows.cpu_service_windows import CPUServiceWindows  # noqa: PLC0415
+
+            return CPUServiceWindows()
         raise NotImplementedError(f"OS '{system}' not supported for CPU monitoring")

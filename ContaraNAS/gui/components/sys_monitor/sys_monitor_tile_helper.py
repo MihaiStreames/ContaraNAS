@@ -1,5 +1,6 @@
 from nicegui import ui
 import plotly.graph_objects as go
+import platform
 
 from ContaraNAS.modules.sys_monitor.constants import (
     CPU_GRAPH_HEIGHT,
@@ -168,7 +169,11 @@ def render_cpu_tab(
         ui.label(f"Processes: {cpu.processes}")
         # Row 3
         ui.label(f"Min: {cpu.min_speed_ghz:.2f} GHz")
-        ui.label(f"File Descriptors: {cpu.file_descriptors}")
+
+        # Windows support
+        system = platform.system()
+        fd_label = "Handles" if system == "Windows" else "File Descriptors"
+        ui.label(f"{fd_label}: {cpu.file_descriptors}")
 
     return cpu_core_history, cpu_general_history
 

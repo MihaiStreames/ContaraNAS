@@ -18,8 +18,11 @@ A modular desktop application for monitoring and managing NAS systems at home.
 git clone https://github.com/MihaiStreames/ContaraNAS
 cd ContaraNAS
 
-# Install dependencies
-uv sync
+# Install dependencies (Linux)
+uv sync --extra linux
+
+# Install dependencies (Windows)
+uv sync --extra windows
 
 # Run the application
 uv run -m ContaraNAS.main
@@ -27,9 +30,10 @@ uv run -m ContaraNAS.main
 
 ### Requirements
 
-- Python 3.9+
+- Python 3.13+
 - Steam installed (for Steam module)
-- `dmidecode` installed (for hardware monitoring)
+- **Linux**: `dmidecode` installed (for hardware monitoring)
+- **Windows**: Administrative privileges may be required for hardware monitoring
 
 ## Architecture
 

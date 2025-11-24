@@ -26,7 +26,7 @@ class DiskService(ABC):
 
             return DiskServiceLinux()
         if system == "Windows":
-            # from .windows.disk_service_windows import DiskServiceWindows # noqa: PLC0415
-            # return DiskServiceWindows()
-            raise NotImplementedError("Windows not supported for Disk monitoring yet")
+            from .windows.disk_service_windows import DiskServiceWindows  # noqa: PLC0415
+
+            return DiskServiceWindows()
         raise NotImplementedError(f"OS '{system}' not supported for Disk monitoring")
