@@ -805,9 +805,9 @@ starlette==0.49.3 \
     # via
     #   fastapi
     #   nicegui
-types-psutil==7.0.0.20251116 \
-    --hash=sha256:74c052de077c2024b85cd435e2cba971165fe92a5eace79cbeb821e776dbc047 \
-    --hash=sha256:92b5c78962e55ce1ed7b0189901a4409ece36ab9fd50c3029cca7e681c606c8a
+types-psutil==7.1.1.20251122 \
+    --hash=sha256:9a5d074b472dee08c97891c986549f6ef4f0896fbdd6cdc0686c6663721995fe \
+    --hash=sha256:cdb39c30a81ce6e433aa672922d59b78c4c6a9c64cd9936f1f6894d26c82ae0f
     # via contaranas
 types-requests==2.32.4.20250913 \
     --hash=sha256:78c9c1fffebbe0fa487a418e0fa5252017e9c60d1a2da394077f1780f655d7e1 \

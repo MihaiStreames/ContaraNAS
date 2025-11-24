@@ -29,6 +29,7 @@ uv run -m ContaraNAS.main
 
 - Python 3.9+
 - Steam installed (for Steam module)
+- `dmidecode` installed (for hardware monitoring)
 
 ## Architecture
 
