@@ -4,7 +4,7 @@ A modular desktop application for monitoring and managing NAS systems at home.
 
 ## Features
 
-- 🎮 **Steam Library Monitoring**: Track game installations, library sizes, and drive usage across multiple Steam libraries
+- 🎮 **Steam Library Monitor**: Track game installations, library sizes, and drive usage across multiple Steam libraries
 - 💻 **System Monitor**: Real-time CPU, memory, and disk monitoring with interactive graphs and per-core CPU visualization
 - 🔄 **Automatic Tracking**: Detect changes in Steam installations and system resources automatically
 - 🖥️ **Native Desktop GUI**: Clean, responsive interface built with NiceGUI
