@@ -52,7 +52,11 @@ class SteamGameLoaderService:
         for game in games:
             shader_path = library_path / STEAMAPPS_DIR / SHADERCACHE_DIR / str(game.app_id)
             workshop_path = (
-                library_path / STEAMAPPS_DIR / WORKSHOP_DIR / WORKSHOP_CONTENT_DIR / str(game.app_id)
+                library_path
+                / STEAMAPPS_DIR
+                / WORKSHOP_DIR
+                / WORKSHOP_CONTENT_DIR
+                / str(game.app_id)
             )
 
             # Create async tasks for size calculations

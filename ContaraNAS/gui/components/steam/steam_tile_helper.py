@@ -45,24 +45,24 @@ def generate_progress_bar_html(percentages: dict[str, float]) -> str:
     ">
         <div style="
             background-color: #1976d2;
-            width: {percentages['games']}%;
+            width: {percentages["games"]}%;
             height: 100%;
-        " title="Games: {format_bytes(int(percentages['games_size']))}"></div>
+        " title="Games: {format_bytes(int(percentages["games_size"]))}"></div>
         <div style="
             background-color: #388e3c;
-            width: {percentages['shaders']}%;
+            width: {percentages["shaders"]}%;
             height: 100%;
-        " title="Shaders: {format_bytes(int(percentages['shader_size']))}"></div>
+        " title="Shaders: {format_bytes(int(percentages["shader_size"]))}"></div>
         <div style="
             background-color: #f57c00;
-            width: {percentages['workshop']}%;
+            width: {percentages["workshop"]}%;
             height: 100%;
-        " title="Workshop: {format_bytes(int(percentages['workshop_size']))}"></div>
+        " title="Workshop: {format_bytes(int(percentages["workshop_size"]))}"></div>
         <div style="
             background-color: #fdd835;
-            width: {percentages['non_steam']}%;
+            width: {percentages["non_steam"]}%;
             height: 100%;
-        " title="Non-Steam files: {format_bytes(int(percentages['non_steam_size']))}"></div>
+        " title="Non-Steam files: {format_bytes(int(percentages["non_steam_size"]))}"></div>
     </div>
     """
 
@@ -103,11 +103,23 @@ def render_color_legend(library: dict) -> None:
     non_steam_size = max(0, drive_used - total_steam_size)
 
     with ui.row().classes("w-full gap-4 mt-1 text-xs"):
-        ui.html(f'<span style="color: #1976d2;">■</span> Games: {format_bytes(games_size)}', sanitize=False)
-        ui.html(f'<span style="color: #388e3c;">■</span> Shaders: {format_bytes(shader_size)}', sanitize=False)
-        ui.html(f'<span style="color: #f57c00;">■</span> Workshop: {format_bytes(workshop_size)}', sanitize=False)
+        ui.html(
+            f'<span style="color: #1976d2;">■</span> Games: {format_bytes(games_size)}',
+            sanitize=False,
+        )
+        ui.html(
+            f'<span style="color: #388e3c;">■</span> Shaders: {format_bytes(shader_size)}',
+            sanitize=False,
+        )
+        ui.html(
+            f'<span style="color: #f57c00;">■</span> Workshop: {format_bytes(workshop_size)}',
+            sanitize=False,
+        )
         if non_steam_size > 0:
-            ui.html(f'<span style="color: #fdd835;">■</span> Other: {format_bytes(non_steam_size)}', sanitize=False)
+            ui.html(
+                f'<span style="color: #fdd835;">■</span> Other: {format_bytes(non_steam_size)}',
+                sanitize=False,
+            )
 
 
 def render_drive_info(library: dict) -> None:

@@ -1,28 +1,32 @@
-from pathlib import Path
 import platform
 import re
 import subprocess
+from typing import Any
 
 import psutil
 
-from ContaraNAS.core.utils import get_cache_dir, save_json
 from ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
+
+from .hardware_cache_service import HardwareCacheService
 
 
 class MemService:
     """Service to monitor Memory information and usage"""
 
-    def __init__(self, os_name: str | None = None, ram_sticks: list[RAMInfo] | None = None):
+    def __init__(self, os_name: str | None = None):
         self._os_name: str = os_name or platform.system()
-        self.ram_sticks: list[RAMInfo] = ram_sticks or []
+        self._hardware_cache = HardwareCacheService()
+        self.ram_sticks: list[RAMInfo] = []
 
     def _get_dmidecode_output(self) -> str:
+        """Run dmidecode command to get RAM information (requires sudo)"""
         if self._os_name != "Linux":
             raise NotImplementedError("DMIDECODE is only supported on Linux systems.")
         return subprocess.check_output(["pkexec", "dmidecode", "--type", "17"], text=True)
 
     @staticmethod
     def _parse_dmidecode(data: str) -> list[RAMInfo]:
+        """Parse dmidecode output to extract RAM information"""
         blocks = data.split("Memory Device")
         ram_info = []
 
@@ -39,7 +43,9 @@ class MemService:
             size = (
                 float(size_str.replace("GB", "").strip())
                 if "GB" in size_str
-                else float(size_str.replace("MB", "").strip()) / 1024 if "MB" in size_str else 0.0
+                else float(size_str.replace("MB", "").strip()) / 1024
+                if "MB" in size_str
+                else 0.0
             )
 
             speed_str = get_field(block, "Speed")
@@ -59,20 +65,30 @@ class MemService:
 
         return ram_info
 
-    def _get_ram_sticks(self) -> list[RAMInfo]:
-        if self._os_name == "Linux":
-            dmidecode_out = self._get_dmidecode_output()
-            return self._parse_dmidecode(dmidecode_out)
-        return []
+    def _collect_ram_hardware_info(self) -> dict[str, Any]:
+        """Collect RAM hardware info (requires sudo)"""
+        dmidecode_out = self._get_dmidecode_output()
+        ram_sticks = self._parse_dmidecode(dmidecode_out)
+        ram_sticks_data = [ram.__dict__ for ram in ram_sticks]
+        return {"ram_sticks": ram_sticks_data}
+
+    def _load_ram_sticks_from_cache(self) -> list[RAMInfo]:
+        """Load RAM sticks from cache"""
+        hardware_info = self._hardware_cache.get_or_collect_hardware_info(
+            self._collect_ram_hardware_info
+        )
+
+        ram_sticks_data = hardware_info.get("ram_sticks", [])
+        return [RAMInfo(**ram_data) for ram_data in ram_sticks_data]
 
     def get_memory_info(self) -> MemoryInfo:
+        """Get comprehensive Memory information and usage stats"""
         virtual_mem = psutil.virtual_memory()
         swap_mem = psutil.swap_memory()
 
+        # Load RAM sticks from cache if not already loaded
         if not self.ram_sticks:
-            self.ram_sticks = self._get_ram_sticks()
-            cache_dir = Path(get_cache_dir() / "ram_info_cache.json")
-            save_json(cache_dir, [ram.__dict__ for ram in self.ram_sticks])
+            self.ram_sticks = self._load_ram_sticks_from_cache()
 
         return MemoryInfo(
             total=virtual_mem.total,

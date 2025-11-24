@@ -15,6 +15,8 @@ from ContaraNAS.modules.sys_monitor.constants import (
 )
 from ContaraNAS.modules.sys_monitor.dtos import DiskInfo
 
+from .hardware_cache_service import HardwareCacheService
+
 
 logger = get_logger(__name__)
 
@@ -24,7 +26,39 @@ class DiskService:
 
     def __init__(self, os_name: str | None = None):
         self._os_name: str = os_name or platform.system()
+        self._hardware_cache = HardwareCacheService()
         self._previous_stats: dict[str, dict[str, Any]] = {}
+
+        self._disk_types: dict[str, str] = {}
+        self._disk_models: dict[str, str] = {}
+
+        self._ensure_disk_cache_loaded()
+
+    def _collect_disk_hardware_info(self) -> dict[str, Any]:
+        """Collect disk hardware info"""
+        partitions = psutil.disk_partitions()
+        disk_models = {}
+        disk_types = {}
+
+        for partition in partitions:
+            base_device = self._extract_base_device_name(partition.device)
+            if base_device not in disk_models:
+                disk_models[base_device] = self._get_device_model(partition.device)
+                disk_types[base_device] = self._get_device_type(partition.device)
+
+        return {
+            "disk_models": disk_models,
+            "disk_types": disk_types,
+        }
+
+    def _ensure_disk_cache_loaded(self):
+        """Load disk hardware info from cache"""
+        if not self._disk_models:
+            hardware_info = self._hardware_cache.get_or_collect_hardware_info(
+                self._collect_disk_hardware_info
+            )
+            self._disk_models = hardware_info.get("disk_models", {})
+            self._disk_types = hardware_info.get("disk_types", {})
 
     @staticmethod
     def _extract_base_device_name(device: str) -> str:
@@ -116,8 +150,8 @@ class DiskService:
             try:
                 is_rotational = rotational_path.read_text().strip()
                 return "HDD" if is_rotational == "1" else "SSD"
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Error reading rotational info for {base_device}: {e}")
 
         return "Unknown"
 
@@ -172,12 +206,8 @@ class DiskService:
                     io_time_diff = io_stats["io_time"] - prev["io_time"]
 
                     # Calculate speeds based on default update interval
-                    read_speed = (
-                        read_diff / DEFAULT_IO_UPDATE_INTERVAL if read_diff > 0 else 0.0
-                    )
-                    write_speed = (
-                        write_diff / DEFAULT_IO_UPDATE_INTERVAL if write_diff > 0 else 0.0
-                    )
+                    read_speed = read_diff / DEFAULT_IO_UPDATE_INTERVAL if read_diff > 0 else 0.0
+                    write_speed = write_diff / DEFAULT_IO_UPDATE_INTERVAL if write_diff > 0 else 0.0
                     busy_time = (
                         (io_time_diff / IO_TIME_MS_DIVISOR) / DEFAULT_IO_UPDATE_INTERVAL
                         if io_time_diff > 0

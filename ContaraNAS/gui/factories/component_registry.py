@@ -28,9 +28,9 @@ def _register_components_from_entry_points() -> None:
         discovered = entry_points(group="contaranas.components")
         for entry_point in discovered:
             component_class = entry_point.load()
-            assert issubclass(
-                component_class, BaseTile
-            ), "Component class must have a module_type attribute"
+            assert issubclass(component_class, BaseTile), (
+                "Component class must have a module_type attribute"
+            )
             module_name = entry_point.name
             ComponentFactory.register_components(component_class.module_type, component_class)
             logger.info(f"Registered component for module: {module_name}")

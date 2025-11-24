@@ -36,10 +36,14 @@ class SteamController:
             steam_path = Path("/")
 
         self.parsing_service: SteamParsingService = SteamParsingService(steam_path)
-        self.game_loader_service: SteamGameLoaderService = SteamGameLoaderService(self.parsing_service)
+        self.game_loader_service: SteamGameLoaderService = SteamGameLoaderService(
+            self.parsing_service
+        )
         self.cache_service: SteamCacheService = SteamCacheService()
         self.image_service: SteamImageService = SteamImageService()
-        self.monitoring_service: SteamMonitoringService = SteamMonitoringService(self._handle_manifest_change)
+        self.monitoring_service: SteamMonitoringService = SteamMonitoringService(
+            self._handle_manifest_change
+        )
 
     async def initialize(self) -> None:
         """Initialize the controller and its services"""
@@ -164,5 +168,5 @@ class SteamController:
                     last_change_type=event_type,
                     last_change_app_id=app_id,
                 ),
-                self._event_loop
+                self._event_loop,
             )

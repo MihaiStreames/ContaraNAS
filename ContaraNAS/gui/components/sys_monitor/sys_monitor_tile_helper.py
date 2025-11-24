@@ -10,48 +10,53 @@ from ContaraNAS.modules.sys_monitor.constants import (
 
 
 def create_plotly_graph(
-    history: list[float],
-    color: str,
-    height: int = 80,
-    max_range: int = 100
+    history: list[float], color: str, height: int = 80, max_range: int = 100
 ) -> go.Figure:
     """Create a Plotly graph with consistent styling"""
     # Convert hex color to rgba for fill
-    rgb = tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
-    fillcolor = f'rgba({rgb[0]}, {rgb[1]}, {rgb[2]}, 0.3)'
+    rgb = tuple(int(color.lstrip("#")[i : i + 2], 16) for i in (0, 2, 4))
+    fillcolor = f"rgba({rgb[0]}, {rgb[1]}, {rgb[2]}, 0.3)"
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        y=history,
-        mode='lines',
-        fill='tozeroy',
-        line={'color': color, 'width': 1},
-        fillcolor=fillcolor,
-        hovertemplate='%{y:.1f}%<extra></extra>',
-        name=''
-    ))
+    fig.add_trace(
+        go.Scatter(
+            y=history,
+            mode="lines",
+            fill="tozeroy",
+            line={"color": color, "width": 1},
+            fillcolor=fillcolor,
+            hovertemplate="%{y:.1f}%<extra></extra>",
+            name="",
+        )
+    )
 
     fig.update_layout(
         height=height,
-        margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
-        xaxis={
-            'showgrid': False,
-            'showticklabels': False,
-            'zeroline': False,
-            'visible': False
-        },
+        margin={"l": 0, "r": 0, "t": 0, "b": 0},
+        xaxis={"showgrid": False, "showticklabels": False, "zeroline": False, "visible": False},
         yaxis={
-            'showgrid': False,
-            'showticklabels': False,
-            'zeroline': False,
-            'range': [0, max_range],
-            'visible': False
+            "showgrid": False,
+            "showticklabels": False,
+            "zeroline": False,
+            "range": [0, max_range],
+            "visible": False,
         },
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         showlegend=False,
-        hovermode='closest',
-        modebar={'remove': ['zoom', 'pan', 'select', 'lasso', 'zoomIn', 'zoomOut', 'autoScale', 'resetScale']}
+        hovermode="closest",
+        modebar={
+            "remove": [
+                "zoom",
+                "pan",
+                "select",
+                "lasso",
+                "zoomIn",
+                "zoomOut",
+                "autoScale",
+                "resetScale",
+            ]
+        },
     )
 
     return fig
@@ -79,9 +84,9 @@ def render_per_core_graphs(cpu, cpu_core_history: dict, max_history_points: int)
 
                 fig = create_plotly_graph(
                     history=cpu_core_history[i],
-                    color='#1976d2',
+                    color="#1976d2",
                     height=PER_CORE_GRAPH_HEIGHT,
-                    max_range=100
+                    max_range=100,
                 )
 
                 # Use config parameter directly instead of props
@@ -98,10 +103,7 @@ def render_general_cpu_graph(cpu, cpu_general_history: list, max_history_points:
         cpu_general_history.pop(0)
 
     fig = create_plotly_graph(
-        history=cpu_general_history,
-        color='#1976d2',
-        height=CPU_GRAPH_HEIGHT,
-        max_range=100
+        history=cpu_general_history, color="#1976d2", height=CPU_GRAPH_HEIGHT, max_range=100
     )
 
     # Use config parameter directly instead of props
@@ -110,14 +112,20 @@ def render_general_cpu_graph(cpu, cpu_general_history: list, max_history_points:
     return cpu_general_history
 
 
-def render_cpu_tab(cpu, show_per_core: bool, cpu_core_history: dict, cpu_general_history: list,
-                   max_history_points: int, toggle_view_callback) -> tuple[dict, list]:
+def render_cpu_tab(
+    cpu,
+    show_per_core: bool,
+    cpu_core_history: dict,
+    cpu_general_history: list,
+    max_history_points: int,
+    toggle_view_callback,
+) -> tuple[dict, list]:
     """Render CPU tab content with graphs and information"""
     # Add context menu for switching views
     with ui.context_menu():
         ui.menu_item(
             "Switch to General View" if show_per_core else "Switch to Per-Core View",
-            on_click=toggle_view_callback
+            on_click=toggle_view_callback,
         )
 
     # CPU name above graph
@@ -126,19 +134,17 @@ def render_cpu_tab(cpu, show_per_core: bool, cpu_core_history: dict, cpu_general
     # Main graph section
     if show_per_core:
         # Per-core graphs in a grid
-        cpu_core_history = render_per_core_graphs(
-            cpu, cpu_core_history, max_history_points
-        )
+        cpu_core_history = render_per_core_graphs(cpu, cpu_core_history, max_history_points)
     else:
         # General CPU graph
-        cpu_general_history = render_general_cpu_graph(
-            cpu, cpu_general_history, max_history_points
-        )
+        cpu_general_history = render_general_cpu_graph(cpu, cpu_general_history, max_history_points)
 
     # Main information below graph
     with ui.row().classes("w-full items-center gap-6 mb-2 mt-3"):
         # Primary metrics
-        ui.label(f"Speed: {cpu.current_speed_ghz:.2f} GHz").classes("text-sm font-semibold text-gray-800")
+        ui.label(f"Speed: {cpu.current_speed_ghz:.2f} GHz").classes(
+            "text-sm font-semibold text-gray-800"
+        )
         with ui.row().classes("items-center gap-1"):
             ui.label("Usage:").classes("text-sm font-semibold text-gray-800")
             ui.label(f"{cpu.total_usage:.1f}%").classes("text-sm font-semibold text-blue-600")
@@ -148,7 +154,9 @@ def render_cpu_tab(cpu, show_per_core: bool, cpu_core_history: dict, cpu_general
         hours = int((cpu.uptime % 86400) // 3600)
         minutes = int((cpu.uptime % 3600) // 60)
         seconds = int(cpu.uptime % 60)
-        ui.label(f"Uptime: {days:02d}:{hours:02d}:{minutes:02d}:{seconds:02d}").classes("text-sm font-semibold text-gray-800")
+        ui.label(f"Uptime: {days:02d}:{hours:02d}:{minutes:02d}:{seconds:02d}").classes(
+            "text-sm font-semibold text-gray-800"
+        )
 
     # Secondary information (regrouped in 2 columns, 3 rows)
     with ui.grid(columns=2).classes("w-full gap-x-8 gap-y-1 text-xs text-gray-600"):
@@ -183,10 +191,7 @@ def render_ram_tab(memory, mem_history: list, max_history_points: int) -> list:
         mem_history.pop(0)
 
     fig = create_plotly_graph(
-        history=mem_history,
-        color='#388e3c',
-        height=MEMORY_GRAPH_HEIGHT,
-        max_range=100
+        history=mem_history, color="#388e3c", height=MEMORY_GRAPH_HEIGHT, max_range=100
     )
     ui.plotly(fig).classes("w-full")
 
@@ -212,7 +217,9 @@ def render_ram_tab(memory, mem_history: list, max_history_points: int) -> list:
         ui.label("Physical RAM Modules").classes("text-sm font-semibold mb-2")
 
         for i, ram in enumerate(memory.ram_sticks):
-            with ui.row().classes("w-full items-center gap-2 mb-1 text-xs border border-black rounded p-2"):
+            with ui.row().classes(
+                "w-full items-center gap-2 mb-1 text-xs border border-black rounded p-2"
+            ):
                 ui.label(f"{i + 1}.").classes("w-4 text-gray-500")
                 ui.label(f"{ram.size:.0f}GB").classes("font-semibold w-12")
                 ui.label(ram.type).classes("w-16")
@@ -237,7 +244,9 @@ def render_disks_tab(disks: list) -> None:
             # Disk header
             with ui.row().classes("w-full items-center gap-2 mb-2"):
                 ui.label(disk.mountpoint or disk.device).classes("text-base font-bold")
-                ui.label(f"{disk.type}").classes("text-xs text-white bg-blue-500 px-1 py-0.5 rounded")
+                ui.label(f"{disk.type}").classes(
+                    "text-xs text-white bg-blue-500 px-1 py-0.5 rounded"
+                )
                 ui.label(disk.model).classes("flex-1 text-xs text-gray-600 truncate text-right")
 
             # Large usage bar
@@ -246,17 +255,27 @@ def render_disks_tab(disks: list) -> None:
                     ui.linear_progress(disk.usage_percent / 100, show_value=False).props(
                         "color=orange size=20px"
                     )
-                ui.label(f"{disk.usage_percent:.1f}%").classes("text-base font-bold w-16 text-right")
+                ui.label(f"{disk.usage_percent:.1f}%").classes(
+                    "text-base font-bold w-16 text-right"
+                )
 
             # Capacity info
-            ui.label(f"{disk.used_gb:.1f} / {disk.total_gb:.1f} GB (Free: {disk.free_gb:.1f} GB)").classes("text-xs text-gray-600 mb-2")
+            ui.label(
+                f"{disk.used_gb:.1f} / {disk.total_gb:.1f} GB (Free: {disk.free_gb:.1f} GB)"
+            ).classes("text-xs text-gray-600 mb-2")
 
             # Main information
             with ui.row().classes("w-full items-center gap-6 mb-1"):
                 # Primary metrics
-                ui.label(f"Read: {read_speed_mb:.1f} MB/s").classes("text-sm font-semibold text-gray-800")
-                ui.label(f"Write: {write_speed_mb:.1f} MB/s").classes("text-sm font-semibold text-gray-800")
-                ui.label(f"Busy: {disk.busy_time:.1f}%").classes("text-sm font-semibold text-orange-600")
+                ui.label(f"Read: {read_speed_mb:.1f} MB/s").classes(
+                    "text-sm font-semibold text-gray-800"
+                )
+                ui.label(f"Write: {write_speed_mb:.1f} MB/s").classes(
+                    "text-sm font-semibold text-gray-800"
+                )
+                ui.label(f"Busy: {disk.busy_time:.1f}%").classes(
+                    "text-sm font-semibold text-orange-600"
+                )
 
             # Secondary information
             with ui.grid(columns=3).classes("w-full gap-x-4 gap-y-1 text-xs text-gray-600"):

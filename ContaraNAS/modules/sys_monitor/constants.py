@@ -11,5 +11,5 @@ MAX_HISTORY_POINTS = 30  # Maximum number of data points to keep in history grap
 # Graph dimensions (pixels)
 CPU_GRAPH_HEIGHT = 150
 MEMORY_GRAPH_HEIGHT = 150
-PER_CORE_GRAPH_HEIGHT = 150
+PER_CORE_GRAPH_HEIGHT = 50
 MAX_GRID_COLUMNS = 4  # Maximum columns in per-core CPU grid

@@ -33,8 +33,10 @@ class SteamTile(BaseTile):
 
     def _render_library_bar(self, library: dict):
         """Render a segmented progress bar for a single library"""
-        with ui.column().classes("w-full mb-3 p-2 border rounded cursor-pointer hover:bg-gray-50").on(
-            "click", lambda: self._open_library_modal(library["path"])
+        with (
+            ui.column()
+            .classes("w-full mb-3 p-2 border rounded cursor-pointer hover:bg-gray-50")
+            .on("click", lambda: self._open_library_modal(library["path"]))
         ):
             render_library_header(library["path"], library["game_count"])
             render_progress_section(library)
@@ -65,12 +67,7 @@ class SteamTile(BaseTile):
                 """Re-render modal content with new sort"""
                 content_container.clear()
                 with content_container:
-                    render_modal_content(
-                        games,
-                        library_path,
-                        current_sort["value"],
-                        on_sort_change
-                    )
+                    render_modal_content(games, library_path, current_sort["value"], on_sort_change)
 
             def on_sort_change(new_sort: str):
                 """Handle sort change"""

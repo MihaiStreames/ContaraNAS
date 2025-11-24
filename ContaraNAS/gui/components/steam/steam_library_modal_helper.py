@@ -20,9 +20,7 @@ def sort_games(games: list[dict], sort_by: str) -> list[dict]:
         return sorted(games, key=lambda g: g["name"].lower())
     if sort_by == SORT_BY_LAST_PLAYED:
         return sorted(
-            games,
-            key=lambda g: g["last_played"] if g["last_played"] > 0 else 0,
-            reverse=True
+            games, key=lambda g: g["last_played"] if g["last_played"] > 0 else 0, reverse=True
         )
     return games
 
@@ -76,7 +74,9 @@ def render_game_row(game: dict) -> None:
             ui.image(image_path).classes("w-24 h-auto rounded")
         else:
             # Placeholder if no image
-            with ui.element("div").classes("w-24 h-12 bg-gray-300 rounded flex items-center justify-center"):
+            with ui.element("div").classes(
+                "w-24 h-12 bg-gray-300 rounded flex items-center justify-center"
+            ):
                 ui.label("No Image").classes("text-xs text-gray-500")
 
         # Game info in the middle (flex-grow)
@@ -88,7 +88,9 @@ def render_game_row(game: dict) -> None:
         ui.label(format_bytes(game["total_size"])).classes("text-sm font-bold min-w-fit")
 
 
-def render_modal_content(games: list[dict], library_path: str, sort_by: str, on_sort_change) -> None:
+def render_modal_content(
+    games: list[dict], library_path: str, sort_by: str, on_sort_change
+) -> None:
     """Render the modal content with game list and sorting options"""
     with ui.column().classes("w-full gap-4"):
         # Header with library path and sort options
@@ -102,10 +104,10 @@ def render_modal_content(games: list[dict], library_path: str, sort_by: str, on_
                     options={
                         SORT_BY_SIZE: "Size",
                         SORT_BY_NAME: "Name",
-                        SORT_BY_LAST_PLAYED: "Last Played"
+                        SORT_BY_LAST_PLAYED: "Last Played",
                     },
                     value=sort_by,
-                    on_change=lambda e: on_sort_change(e.value)
+                    on_change=lambda e: on_sort_change(e.value),
                 ).classes("w-32")
 
         ui.separator()
@@ -119,4 +121,6 @@ def render_modal_content(games: list[dict], library_path: str, sort_by: str, on_
 
         # Footer with game count
         ui.separator()
-        ui.label(f"Total: {len(games)} game{'s' if len(games) != 1 else ''}").classes("text-sm text-gray-500")
+        ui.label(f"Total: {len(games)} game{'s' if len(games) != 1 else ''}").classes(
+            "text-sm text-gray-500"
+        )
