@@ -1,6 +1,7 @@
+import platform
+
 from nicegui import ui
 import plotly.graph_objects as go
-import platform
 
 from ContaraNAS.modules.sys_monitor.constants import (
     CPU_GRAPH_HEIGHT,

@@ -1,12 +1,22 @@
+import contextlib
 import time
 from typing import Any
 
 import psutil
+from win32pdh import (
+    PDH_FMT_DOUBLE,
+    AddCounter,
+    CloseQuery,
+    CollectQueryData,
+    GetFormattedCounterValue,
+    OpenQuery,
+)
 import wmi
 
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.sys_monitor.dtos import CPUInfo
 from ContaraNAS.modules.sys_monitor.services import CPUService, HardwareCacheService
+
 
 logger = get_logger(__name__)
 
@@ -23,7 +33,8 @@ class CPUServiceWindows(CPUService):
         self._counter_handle = None
         self._pdh_initialized = False
 
-    def _collect_cpu_hardware_info(self) -> dict[str, Any]:
+    @staticmethod
+    def _collect_cpu_hardware_info() -> dict[str, Any]:
         """Collect static CPU hardware info using WMI"""
         c = wmi.WMI()
         cpu = c.Win32_Processor()[0]
@@ -54,8 +65,6 @@ class CPUServiceWindows(CPUService):
             return True
 
         try:
-            from win32pdh import AddCounter, CollectQueryData, OpenQuery
-
             self._query_handle = OpenQuery()
             counter_path = r"\Processor Information(_Total)\% Processor Performance"
             self._counter_handle = AddCounter(self._query_handle, counter_path)
@@ -80,8 +89,6 @@ class CPUServiceWindows(CPUService):
             if not self._pdh_initialized and not self._initialize_pdh():
                 raise RuntimeError("PDH not initialized")
 
-            from win32pdh import CollectQueryData, GetFormattedCounterValue, PDH_FMT_DOUBLE
-
             CollectQueryData(self._query_handle)
             _, percentage = GetFormattedCounterValue(self._counter_handle, PDH_FMT_DOUBLE)
 
@@ -98,13 +105,14 @@ class CPUServiceWindows(CPUService):
         current_freq = psutil.cpu_freq()
         return current_freq.current / 1000 if current_freq else 0
 
-    def _get_total_handles(self) -> int:
+    @staticmethod
+    def _get_total_handles() -> int:
         """Get total system handles (Windows equivalent of file descriptors)"""
         try:
             total_handles = 0
-            for proc in psutil.process_iter(['num_handles']):
+            for proc in psutil.process_iter(["num_handles"]):
                 try:
-                    handles = proc.info.get('num_handles', 0)
+                    handles = proc.info.get("num_handles", 0)
                     if handles:
                         total_handles += handles
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -117,11 +125,9 @@ class CPUServiceWindows(CPUService):
     def _cleanup_pdh(self):
         """Clean up PDH resources"""
         if self._query_handle:
-            try:
-                from win32pdh import CloseQuery
+            with contextlib.suppress(Exception):
                 CloseQuery(self._query_handle)
-            except Exception:
-                pass
+
             self._query_handle = None
             self._counter_handle = None
             self._pdh_initialized = False

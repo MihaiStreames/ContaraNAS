@@ -1,6 +1,15 @@
+import contextlib
 from typing import Any
 
 import psutil
+from win32pdh import (
+    PDH_FMT_DOUBLE,
+    AddCounter,
+    CloseQuery,
+    CollectQueryData,
+    GetFormattedCounterValue,
+    OpenQuery,
+)
 import wmi
 
 from ContaraNAS.core.utils import get_logger
@@ -59,7 +68,8 @@ class MemServiceWindows(MemService):
         self._cache_counters = {}
         self._pdh_initialized = False
 
-    def _collect_ram_hardware_info(self) -> dict[str, Any]:
+    @staticmethod
+    def _collect_ram_hardware_info() -> dict[str, Any]:
         """Collect RAM hardware info using WMI"""
         c = wmi.WMI()
         ram_modules = c.Win32_PhysicalMemory()
@@ -69,17 +79,19 @@ class MemServiceWindows(MemService):
             smbios_type = ram.SMBIOSMemoryType
             memory_type = SMBIOS_MEMORY_TYPES.get(smbios_type, f"Unknown ({smbios_type})")
 
-            size_gb = int(ram.Capacity) / (1024 ** 3) if ram.Capacity else 0
+            size_gb = int(ram.Capacity) / (1024**3) if ram.Capacity else 0
 
-            ram_sticks.append({
-                "locator": ram.DeviceLocator or "Unknown",
-                "bank_locator": ram.BankLabel or "Unknown",
-                "size": size_gb,
-                "type": memory_type,
-                "speed": int(ram.Speed) if ram.Speed else 0,
-                "manufacturer": (ram.Manufacturer or "Unknown").strip(),
-                "part_number": (ram.PartNumber or "Unknown").strip(),
-            })
+            ram_sticks.append(
+                {
+                    "locator": ram.DeviceLocator or "Unknown",
+                    "bank_locator": ram.BankLabel or "Unknown",
+                    "size": size_gb,
+                    "type": memory_type,
+                    "speed": int(ram.Speed) if ram.Speed else 0,
+                    "manufacturer": (ram.Manufacturer or "Unknown").strip(),
+                    "part_number": (ram.PartNumber or "Unknown").strip(),
+                }
+            )
 
         return {"ram_sticks": ram_sticks}
 
@@ -89,8 +101,6 @@ class MemServiceWindows(MemService):
             return True
 
         try:
-            from win32pdh import AddCounter, CollectQueryData, OpenQuery
-
             self._query_handle = OpenQuery()
 
             # Add counters for all cached memory components (matches Task Manager)
@@ -122,8 +132,6 @@ class MemServiceWindows(MemService):
             if not self._pdh_initialized and not self._initialize_pdh():
                 raise RuntimeError("PDH not initialized")
 
-            from win32pdh import CollectQueryData, GetFormattedCounterValue, PDH_FMT_DOUBLE
-
             CollectQueryData(self._query_handle)
 
             total_cached = 0.0
@@ -141,11 +149,8 @@ class MemServiceWindows(MemService):
     def _cleanup_pdh(self):
         """Clean up PDH resources"""
         if self._query_handle:
-            try:
-                from win32pdh import CloseQuery
+            with contextlib.suppress(Exception):
                 CloseQuery(self._query_handle)
-            except Exception:
-                pass
             self._query_handle = None
             self._cache_counters = {}
             self._pdh_initialized = False

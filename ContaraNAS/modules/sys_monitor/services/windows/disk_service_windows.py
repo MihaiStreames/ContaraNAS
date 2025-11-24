@@ -1,9 +1,9 @@
+import json
+import subprocess
 from typing import Any
 
 import psutil
-import json
 import wmi
-import subprocess
 
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.sys_monitor.constants import DEFAULT_IO_UPDATE_INTERVAL
@@ -30,7 +30,6 @@ class DiskServiceWindows(DiskService):
     @staticmethod
     def _get_disk_hardware_info_wmi() -> dict[str, dict[str, str]]:
         """Get disk hardware info using WMI and PowerShell"""
-        import wmi
 
         c = wmi.WMI()
         disk_info = {}
@@ -49,12 +48,13 @@ class DiskServiceWindows(DiskService):
                 disk_num = device_id.split("PHYSICALDRIVE")[-1]
 
                 # Use PowerShell to get BusType and MediaType
-                ps_command = f'Get-PhysicalDisk -DeviceNumber {disk_num} | Select-Object BusType, MediaType | ConvertTo-Json'
+                ps_command = f"Get-PhysicalDisk -DeviceNumber {disk_num} | Select-Object BusType, MediaType | ConvertTo-Json"
                 result = subprocess.run(
                     ["powershell", "-Command", ps_command],
+                    check=False,
                     capture_output=True,
                     text=True,
-                    timeout=5
+                    timeout=5,
                 )
 
                 if result.returncode == 0:
@@ -75,10 +75,7 @@ class DiskServiceWindows(DiskService):
             except Exception as e:
                 logger.debug(f"Error getting disk type via PowerShell: {e}")
 
-            disk_info[device_id] = {
-                "model": model,
-                "type": disk_type
-            }
+            disk_info[device_id] = {"model": model, "type": disk_type}
 
         return disk_info
 
@@ -105,8 +102,9 @@ class DiskServiceWindows(DiskService):
         # Simplified: use first disk info as fallback
         if self._disk_models:
             first_key = list(self._disk_models.keys())[0]
-            return self._disk_models.get(device, self._disk_models[first_key]), \
-                self._disk_types.get(device, self._disk_types[first_key])
+            return self._disk_models.get(
+                device, self._disk_models[first_key]
+            ), self._disk_types.get(device, self._disk_types[first_key])
 
         return "Unknown", "Unknown"
 
@@ -173,9 +171,9 @@ class DiskServiceWindows(DiskService):
                     device=partition.device,
                     mountpoint=partition.mountpoint,
                     filesystem=partition.fstype,
-                    total_gb=usage.total / (1024 ** 3),
-                    used_gb=usage.used / (1024 ** 3),
-                    free_gb=usage.free / (1024 ** 3),
+                    total_gb=usage.total / (1024**3),
+                    used_gb=usage.used / (1024**3),
+                    free_gb=usage.free / (1024**3),
                     usage_percent=usage.percent,
                     read_bytes=read_bytes,
                     write_bytes=write_bytes,
