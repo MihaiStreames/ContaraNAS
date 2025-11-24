@@ -2,9 +2,11 @@ from datetime import datetime
 from typing import Any
 
 from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.sys_monitor.services.cpu_service import CPUService
-from ContaraNAS.modules.sys_monitor.services.disk_service import DiskService
-from ContaraNAS.modules.sys_monitor.services.mem_service import MemService
+from ContaraNAS.modules.sys_monitor.services import (
+    CPUService,
+    DiskService,
+    MemService,
+)
 from ContaraNAS.modules.sys_monitor.services.monitoring_service import (
     SysMonitorMonitoringService,
 )
@@ -21,9 +23,11 @@ class SysMonitorController:
         self._monitor_flag = False
         self._update_interval = update_interval
 
-        self.cpu_service = CPUService()
-        self.mem_service = MemService()
-        self.disk_service = DiskService()
+        # Use factory methods to create OS-specific services
+        self.cpu_service = CPUService.create()
+        self.mem_service = MemService.create()
+        self.disk_service = DiskService.create()
+
         self.monitoring_service = SysMonitorMonitoringService(
             self._collect_and_update_stats, interval=update_interval
         )
