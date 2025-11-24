@@ -12,7 +12,7 @@ logger = get_logger(__name__)
 class HardwareCacheService:
     """Service for caching hardware information that requires elevated privileges"""
 
-    def __inif__(self):
+    def __init__(self):
         self._cache_dir = get_cache_dir() / "hardware"
         self._cache_dir.mkdir(parents=True, exist_ok=True)
 
