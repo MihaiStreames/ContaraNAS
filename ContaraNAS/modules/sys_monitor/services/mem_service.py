@@ -5,9 +5,13 @@ from typing import Any
 
 import psutil
 
+from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
 
 from .hardware_cache_service import HardwareCacheService
+
+
+logger = get_logger(__name__)
 
 
 class MemService:
@@ -15,8 +19,8 @@ class MemService:
 
     def __init__(self, os_name: str | None = None):
         self._os_name: str = os_name or platform.system()
-        self._hardware_cache = HardwareCacheService()
-        self.ram_sticks: list[RAMInfo] = []
+        self._hardware_cache = HardwareCacheService(cache_name="memory")
+        self.ram_sticks: list[RAMInfo] | None = None
 
     def _get_dmidecode_output(self) -> str:
         """Run dmidecode command to get RAM information (requires sudo)"""
@@ -72,23 +76,23 @@ class MemService:
         ram_sticks_data = [ram.__dict__ for ram in ram_sticks]
         return {"ram_sticks": ram_sticks_data}
 
-    def _load_ram_sticks_from_cache(self) -> list[RAMInfo]:
-        """Load RAM sticks from cache"""
-        hardware_info = self._hardware_cache.get_or_collect_hardware_info(
-            self._collect_ram_hardware_info
-        )
-
-        ram_sticks_data = hardware_info.get("ram_sticks", [])
-        return [RAMInfo(**ram_data) for ram_data in ram_sticks_data]
+    def _load_ram_sticks(self) -> None:
+        """Load RAM sticks from cache or collect it"""
+        if self.ram_sticks is None:
+            hardware_info = self._hardware_cache.get_or_collect_hardware_info(
+                self._collect_ram_hardware_info
+            )
+            ram_sticks_data = hardware_info.get("ram_sticks", [])
+            self.ram_sticks = [RAMInfo(**ram_data) for ram_data in ram_sticks_data]
+            logger.debug("RAM sticks info loaded and cached in memory")
 
     def get_memory_info(self) -> MemoryInfo:
         """Get comprehensive Memory information and usage stats"""
         virtual_mem = psutil.virtual_memory()
         swap_mem = psutil.swap_memory()
 
-        # Load RAM sticks from cache if not already loaded
-        if not self.ram_sticks:
-            self.ram_sticks = self._load_ram_sticks_from_cache()
+        # Load RAM sticks from cache into memory
+        self._load_ram_sticks()
 
         return MemoryInfo(
             total=virtual_mem.total,

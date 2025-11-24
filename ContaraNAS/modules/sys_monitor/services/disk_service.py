@@ -26,39 +26,14 @@ class DiskService:
 
     def __init__(self, os_name: str | None = None):
         self._os_name: str = os_name or platform.system()
-        self._hardware_cache = HardwareCacheService()
+        self._hardware_cache = HardwareCacheService(cache_name="disk")
         self._previous_stats: dict[str, dict[str, Any]] = {}
 
+        # In-memory cache of disk hardware attributes (grows as we discover new disks)
         self._disk_types: dict[str, str] = {}
         self._disk_models: dict[str, str] = {}
 
-        self._ensure_disk_cache_loaded()
-
-    def _collect_disk_hardware_info(self) -> dict[str, Any]:
-        """Collect disk hardware info"""
-        partitions = psutil.disk_partitions()
-        disk_models = {}
-        disk_types = {}
-
-        for partition in partitions:
-            base_device = self._extract_base_device_name(partition.device)
-            if base_device not in disk_models:
-                disk_models[base_device] = self._get_device_model(partition.device)
-                disk_types[base_device] = self._get_device_type(partition.device)
-
-        return {
-            "disk_models": disk_models,
-            "disk_types": disk_types,
-        }
-
-    def _ensure_disk_cache_loaded(self):
-        """Load disk hardware info from cache"""
-        if not self._disk_models:
-            hardware_info = self._hardware_cache.get_or_collect_hardware_info(
-                self._collect_disk_hardware_info
-            )
-            self._disk_models = hardware_info.get("disk_models", {})
-            self._disk_types = hardware_info.get("disk_types", {})
+        self._load_existing_disk_cache()
 
     @staticmethod
     def _extract_base_device_name(device: str) -> str:
@@ -181,6 +156,45 @@ class DiskService:
             "io_time": stats.get("io_time", 0),
         }
 
+    def _get_disk_hardware_info(self, device: str) -> tuple[str, str]:
+        """Get model and type for a disk, using cache or collecting fresh data"""
+        base_device = self._extract_base_device_name(device)
+
+        # Check if we already have this disk's info in memory
+        if base_device in self._disk_models and base_device in self._disk_types:
+            return self._disk_models[base_device], self._disk_types[base_device]
+
+        # New disk discovered - collect its hardware info
+        logger.debug(f"Discovering hardware info for new disk: {base_device}")
+        model = self._get_device_model(device)
+        disk_type = self._get_device_type(device)
+
+        # Cache in memory
+        self._disk_models[base_device] = model
+        self._disk_types[base_device] = disk_type
+
+        # Persist to disk cache
+        self._save_disk_cache()
+
+        return model, disk_type
+
+    def _save_disk_cache(self):
+        """Save current disk hardware info to cache"""
+        hardware_data = {
+            "disk_models": self._disk_models,
+            "disk_types": self._disk_types,
+        }
+        self._hardware_cache.save_cache(hardware_data)
+        logger.debug(f"Saved disk cache with {len(self._disk_models)} disks")
+
+    def _load_existing_disk_cache(self):
+        """Load previously cached disk hardware info"""
+        cached_data = self._hardware_cache.load_cache()
+        if cached_data:
+            self._disk_models = cached_data.get("disk_models", {})
+            self._disk_types = cached_data.get("disk_types", {})
+            logger.debug(f"Loaded cached info for {len(self._disk_models)} disks")
+
     def get_disk_info(self) -> list[DiskInfo]:
         """Get information for all disk partitions"""
         disks = []
@@ -217,6 +231,9 @@ class DiskService:
                 # Store current stats for next calculation
                 self._previous_stats[device_key] = io_stats.copy()
 
+                # Get hardware info (uses cache for known disks, discovers new ones)
+                model, disk_type = self._get_disk_hardware_info(partition.device)
+
                 disk_info = DiskInfo(
                     device=partition.device,
                     mountpoint=partition.mountpoint,
@@ -233,8 +250,8 @@ class DiskService:
                     write_time=io_stats["write_time"],
                     io_time=io_stats["io_time"],
                     busy_time=busy_time,
-                    model=self._get_device_model(partition.device),
-                    type=self._get_device_type(partition.device),
+                    model=model,
+                    type=disk_type,
                 )
                 disks.append(disk_info)
                 logger.debug(f"Added disk: {partition.mountpoint} ({partition.device})")

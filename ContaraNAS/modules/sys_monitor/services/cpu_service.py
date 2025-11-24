@@ -5,9 +5,13 @@ from typing import Any
 
 import psutil
 
+from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.sys_monitor.dtos import CPUInfo
 
 from .hardware_cache_service import HardwareCacheService
+
+
+logger = get_logger(__name__)
 
 
 class CPUService:
@@ -15,8 +19,7 @@ class CPUService:
 
     def __init__(self, os_name: str | None = None):
         self._os_name: str = os_name or platform.system()
-        self._hardware_cache = HardwareCacheService()
-
+        self._hardware_cache = HardwareCacheService(cache_name="cpu")
         self._cpu_static_info: dict | None = None
 
     def _collect_cpu_hardware_info(self) -> dict[str, Any]:
@@ -53,20 +56,18 @@ class CPUService:
                 return "Unknown"
         return "Unknown"
 
-    def _load_cpu_static_info(self) -> dict[str, Any]:
+    def _load_static_cpu_info(self) -> None:
         """Load CPU static info from cache or collect it"""
         if self._cpu_static_info is None:
-            # CPU info never changes, so we can cache it indefinitely
-            # Use boot_time-based cache but it's effectively permanent
             self._cpu_static_info = self._hardware_cache.get_or_collect_hardware_info(
                 self._collect_cpu_hardware_info
             )
-        return self._cpu_static_info
+            logger.debug("CPU static info loaded and cached in memory")
 
     def get_cpu_info(self) -> CPUInfo:
         """Get comprehensive CPU information and usage stats"""
-        # Load static info from cache
-        static_info = self._load_cpu_static_info()
+        # Load static info into memory
+        self._load_static_cpu_info()
 
         # Collect dynamic info
         usage_per_core = psutil.cpu_percent(interval=None, percpu=True)
@@ -80,14 +81,14 @@ class CPUService:
         uptime = time.time() - psutil.boot_time()
 
         return CPUInfo(
-            name=static_info["name"],
-            physical_cores=static_info["physical_cores"],
-            logical_cores=static_info["logical_cores"],
+            name=self._cpu_static_info["name"],
+            physical_cores=self._cpu_static_info["physical_cores"],
+            logical_cores=self._cpu_static_info["logical_cores"],
             usage_per_core=usage_per_core,
             total_usage=total_usage,
             current_speed_ghz=current_speed_ghz,
-            max_speed_ghz=static_info["max_speed_ghz"],
-            min_speed_ghz=static_info["min_speed_ghz"],
+            max_speed_ghz=self._cpu_static_info["max_speed_ghz"],
+            min_speed_ghz=self._cpu_static_info["min_speed_ghz"],
             processes=processes,
             threads=threads,
             file_descriptors=file_descriptors,
