@@ -23,6 +23,7 @@
 	// Local state
 	let isInitializing = $state(true);
 	let showUnpairConfirm = $state(false);
+	let hasConnectedOnce = $state(false);
 
 	onMount(async () => {
 		// Initialize auth state from storage
@@ -45,24 +46,42 @@
 		isInitializing = false;
 	});
 
-	// React to auth changes
+	// React to successful connection
 	$effect(() => {
-		if (auth.isPaired && connection.backendOnline && !connection.isConnected) {
+		if (connection.isConnected && !hasConnectedOnce) {
+			hasConnectedOnce = true;
+			// Fetch modules when we first connect
+			fetchModules();
+		}
+	});
+
+	// Only reconnect if we're paired, backend is online, and we haven't connected yet
+	// This prevents the reconnection loop
+	$effect(() => {
+		if (
+			auth.isPaired &&
+			connection.backendOnline &&
+			!connection.isConnected &&
+			!connection.isConnecting &&
+			!hasConnectedOnce
+		) {
 			setupWebSocketHandlers();
 			connectWebSocket();
-			fetchModules();
 		}
 	});
 
 	async function handleUnpair() {
 		disconnectWebSocket();
+		hasConnectedOnce = false;
 		await unpair();
 		showUnpairConfirm = false;
 	}
 
 	async function handleRefresh() {
 		await checkBackendHealth();
-		if (auth.isPaired && connection.backendOnline) {
+		if (auth.isPaired && connection.backendOnline && !connection.isConnected) {
+			hasConnectedOnce = false;
+			connectWebSocket();
 			await fetchModules();
 		}
 	}

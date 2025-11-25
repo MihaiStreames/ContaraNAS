@@ -3,8 +3,7 @@
  * Manages WebSocket connection with auto-reconnect
  */
 
-import {API_CONFIG} from '../api/config';
-import {getStoredToken} from '../api/client';
+import {API_CONFIG, getStoredToken} from '$lib/api';
 import type {
 	ConnectionState,
 	IncomingMessage,
@@ -175,14 +174,21 @@ export class WebSocketClient {
 			if (this.intentionallyClosed) {
 				this.setConnectionState('disconnected');
 			} else {
-				this._lastError = `Connection closed: ${event.code}`;
-				this.setConnectionState('error');
-				this.scheduleReconnect();
+				// Only reconnect on abnormal closures
+				if (event.code !== 1000 && event.code !== 1001) {
+					this._lastError = `Connection closed: ${event.code}`;
+					this.setConnectionState('error');
+					this.scheduleReconnect();
+				} else {
+					// Normal closure
+					this._lastError = 'Connection closed normally';
+					this.setConnectionState('disconnected');
+				}
 			}
 		};
 
-		this.ws.onerror = () => {
-			// onerror is usually followed by onclose, so we just log here
+		this.ws.onerror = (error) => {
+			console.error('WebSocket error:', error);
 			this._lastError = 'WebSocket error occurred';
 		};
 

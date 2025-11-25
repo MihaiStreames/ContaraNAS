@@ -3,7 +3,7 @@
  * Manages authentication state using Svelte 5 runes
  */
 
-import {clearStoredToken, hasStoredToken} from '../api/client';
+import {clearStoredToken, hasStoredToken} from '$lib/api';
 import {auth} from '../api';
 import {resetWebSocketClient} from '../websocket';
 

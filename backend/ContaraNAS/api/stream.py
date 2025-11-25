@@ -27,7 +27,7 @@ class StreamManager:
         self._handlers: dict[str, Any] = {}  # event_type -> handler function
 
     async def handle_connection(
-        self, websocket: WebSocket, auth_service: AuthService, token: str | None
+            self, websocket: WebSocket, auth_service: AuthService, token: str | None
     ) -> None:
         """Handle a new WebSocket connection"""
         # Authenticate before accepting
@@ -38,8 +38,14 @@ class StreamManager:
 
         # Replace existing client if any
         if self._client:
-            await self._client.close()
-            logger.info("Replaced previous client")
+            try:
+                await self._client.close()
+                logger.info("Replaced previous client")
+            except RuntimeError:
+                # Already closed, ignore
+                logger.debug("Previous client already closed")
+            except Exception as e:
+                logger.warning(f"Error closing previous client: {e}")
 
         await websocket.accept()
         self._client = websocket
