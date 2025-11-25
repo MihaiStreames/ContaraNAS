@@ -53,8 +53,8 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main():
-    """Main entry point"""
+def main() -> None:
+    """Main entry point for the ContaraNAS API server"""
     args = parse_args()
 
     logger.info("Starting ContaraNAS API Server...")
@@ -65,7 +65,7 @@ def main():
     logger.info(f"Log Level: {args.log_level}")
 
     uvicorn_config = {
-        "app": "ContaraNAS.api.main:app",
+        "app": "ContaraNAS.api:app",
         "host": args.host,
         "port": args.port,
         "log_level": args.log_level,

@@ -27,6 +27,7 @@ class SteamController:
         self._monitor_flag: bool = False
         self._event_loop: asyncio.AbstractEventLoop | None = None
 
+        # Initialize services
         self.library_service: SteamLibraryService = SteamLibraryService()
 
         # Get steam path, will be validated during initialize()
@@ -46,7 +47,7 @@ class SteamController:
         )
 
     async def initialize(self) -> None:
-        """Initialize the controller and its services"""
+        """Initialize the controller and all dependent services"""
         logger.info("Initializing Steam controller...")
 
         # Capture the event loop for thread callbacks
@@ -73,7 +74,7 @@ class SteamController:
         logger.info("Steam controller initialized successfully")
 
     def start_monitoring(self) -> None:
-        """Start monitoring Steam libraries"""
+        """Start monitoring Steam libraries for file changes"""
         if self._monitor_flag:
             logger.debug("Monitoring already started")
             return
@@ -92,27 +93,24 @@ class SteamController:
         self._monitor_flag = False
 
     async def get_tile_data(self) -> dict[str, Any]:
-        """Build tile data for display"""
+        """Build complete tile data including summary and all games"""
         libraries_data = []
+        all_games = []
 
         for library_path in self.library_service.get_library_paths():
-            library_info = await self._analyze_library(library_path)
+            library_info, games = await self._analyze_library(library_path)
             libraries_data.append(library_info)
+            all_games.extend(games)
 
         return {
             "libraries": libraries_data,
-            "total_games": sum(lib["game_count"] for lib in libraries_data),
+            "games": all_games,
+            "total_games": len(all_games),
             "total_libraries": len(libraries_data),
         }
 
-    async def get_library_games(self, library_path: str) -> list[dict[str, Any]]:
-        """Get all games for a specific library with full details"""
-        library_path_obj = Path(library_path)
-        games = await self.game_loader_service.load_games_from_library(library_path_obj)
-        return [game.to_dict() for game in games]
-
-    async def _analyze_library(self, library_path: Path) -> dict[str, Any]:
-        """Analyze a single library with async directory size calculations"""
+    async def _analyze_library(self, library_path: Path) -> tuple[dict[str, Any], list[dict]]:
+        """Analyze a single library and return summary info with games list"""
         # Load all games with complete size information
         games = await self.game_loader_service.load_games_from_library(library_path)
 
@@ -125,7 +123,7 @@ class SteamController:
         # Get drive info
         drive_info = get_drive_info(library_path)
 
-        return {
+        library_summary = {
             "path": str(library_path),
             "game_count": len(games),
             "total_games_size": total_games_size,
@@ -136,6 +134,11 @@ class SteamController:
             "drive_free": drive_info["free"],
             "drive_used": drive_info["used"],
         }
+
+        # Convert games to dicts for serialization
+        games_data = [game.to_dict() for game in games]
+
+        return library_summary, games_data
 
     def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:
         """Handle manifest file changes from the monitoring service"""

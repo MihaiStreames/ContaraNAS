@@ -7,13 +7,16 @@ logger = get_logger(__name__)
 
 
 def create_command_routes() -> APIRouter:
+    """Create API router with module control endpoints"""
     router = APIRouter(prefix="/api", tags=["commands"])
 
     def get_manager(request: Request):
+        """Extract module manager from app state"""
         return request.app.state.module_manager
 
     @router.post("/modules/{name}/enable")
     async def enable_module(name: str, request: Request) -> dict:
+        """Enable a registered module"""
         manager = get_manager(request)
 
         if name not in manager.modules:
@@ -28,6 +31,7 @@ def create_command_routes() -> APIRouter:
 
     @router.post("/modules/{name}/disable")
     async def disable_module(name: str, request: Request) -> dict:
+        """Disable an enabled module"""
         manager = get_manager(request)
 
         if name not in manager.modules:
