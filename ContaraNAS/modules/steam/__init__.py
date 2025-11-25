@@ -23,13 +23,13 @@ class SteamModule(Module):
     async def start_monitoring(self) -> None:
         """Start Steam library monitoring"""
         if self.controller:
-            self.controller.start_monitoring()
+            await self.controller.start_monitoring()
             logger.info("Steam monitoring started")
 
     async def stop_monitoring(self) -> None:
         """Stop Steam library monitoring"""
         if self.controller:
-            self.controller.stop_monitoring()
+            await self.controller.cleanup()
             logger.info("Steam monitoring stopped")
 
     async def get_tile_data(self) -> dict[str, Any]:

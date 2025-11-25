@@ -5,18 +5,6 @@ import re
 import shutil
 import subprocess
 
-import requests
-
-
-def check_url(url: str) -> bool:
-    """Check if the given URL is valid and doesn't redirect to the default Steam store page"""
-    try:
-        response = requests.head(url, allow_redirects=True)
-        final_url = response.url
-        return final_url != "https://store.steampowered.com/"
-    except requests.RequestException:
-        return False
-
 
 def is_manifest_file(path: str) -> bool:
     """Check if the path is a Steam manifest file"""

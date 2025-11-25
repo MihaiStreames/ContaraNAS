@@ -14,6 +14,10 @@ class MemService(ABC):
     @abstractmethod
     def get_memory_info(self) -> MemoryInfo:
         """Get comprehensive Memory information and usage stats"""
+        ...
+
+    def cleanup(self) -> None:
+        """Clean up any resources - override if needed"""
         pass
 
     @staticmethod

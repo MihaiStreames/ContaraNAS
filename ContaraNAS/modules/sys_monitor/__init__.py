@@ -31,7 +31,7 @@ class SysMonitorModule(Module):
     async def stop_monitoring(self) -> None:
         """Stop System monitoring"""
         if self.controller:
-            await self.controller.stop_monitoring()
+            await self.controller.cleanup()
             logger.info("System monitoring stopped")
 
     async def get_tile_data(self) -> dict[str, Any]:

@@ -14,6 +14,10 @@ class DiskService(ABC):
     @abstractmethod
     def get_disk_info(self) -> list[DiskInfo]:
         """Get information for all disk partitions"""
+        ...
+
+    def cleanup(self) -> None:
+        """Clean up any resources - override if needed"""
         pass
 
     @staticmethod

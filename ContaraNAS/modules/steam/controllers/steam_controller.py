@@ -63,7 +63,7 @@ class SteamController:
 
         # Sync image cache with manifest cache
         installed_app_ids = self.cache_service.get_installed_app_ids()
-        self.image_service.sync_with_manifest_cache(installed_app_ids)
+        await self.image_service.sync_with_manifest_cache(installed_app_ids)
 
         await self._state_update_callback(
             initialized_at=datetime.now(),
@@ -73,7 +73,7 @@ class SteamController:
 
         logger.info("Steam controller initialized successfully")
 
-    def start_monitoring(self) -> None:
+    async def start_monitoring(self) -> None:
         """Start monitoring Steam libraries for file changes"""
         if self._monitor_flag:
             logger.debug("Monitoring already started")
@@ -83,7 +83,7 @@ class SteamController:
         self.monitoring_service.start_monitoring(self.library_service.get_library_paths())
         self._monitor_flag = True
 
-    def stop_monitoring(self) -> None:
+    async def stop_monitoring(self) -> None:
         """Stop monitoring Steam libraries"""
         if not self._monitor_flag:
             logger.debug("Monitoring already stopped")
@@ -91,6 +91,12 @@ class SteamController:
 
         self.monitoring_service.stop_monitoring()
         self._monitor_flag = False
+
+    async def cleanup(self) -> None:
+        """Clean up all resources"""
+        await self.stop_monitoring()
+        await self.image_service.cleanup()
+        logger.info("Steam controller cleaned up")
 
     async def get_tile_data(self) -> dict[str, Any]:
         """Build complete tile data including summary and all games"""
@@ -160,8 +166,12 @@ class SteamController:
             action = self.cache_service.update_manifest(manifest_path)
             if action != "no_change":
                 cache_action = action
-                if action == "added":
-                    self.image_service.download_image(app_id)
+                if action == "added" and self._event_loop:
+                    # Schedule async image download on the event loop
+                    asyncio.run_coroutine_threadsafe(
+                        self.image_service.download_image(app_id),
+                        self._event_loop,
+                    )
 
         # Update state if there was a change
         if cache_action and self._event_loop:

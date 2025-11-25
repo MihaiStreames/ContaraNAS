@@ -1,9 +1,8 @@
 import asyncio
+import contextlib
 from pathlib import Path
 
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+import aiohttp
 
 from ContaraNAS.core.utils import get_cache_dir, get_logger
 from ContaraNAS.modules.steam.constants import (
@@ -25,18 +24,29 @@ class SteamImageService:
         self._image_cache_dir: Path = get_cache_dir() / "steam" / IMAGE_CACHE_DIR
         self._image_cache_dir.mkdir(parents=True, exist_ok=True)
 
-        # Setup requests session with retries
-        self._session: requests.Session = requests.Session()
-        retry_strategy = Retry(
-            total=HTTP_RETRY_COUNT,
-            backoff_factor=1,
-            status_forcelist=[429, 500, 502, 503, 504],
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        self._session.mount("http://", adapter)
-        self._session.mount("https://", adapter)
+        self._session: aiohttp.ClientSession | None = None
+        self._download_task: asyncio.Task | None = None
 
-    def sync_with_manifest_cache(self, installed_app_ids: list[int]) -> None:
+    async def _get_session(self) -> aiohttp.ClientSession:
+        """Get or create the aiohttp session"""
+        if self._session is None or self._session.closed:
+            timeout = aiohttp.ClientTimeout(total=HTTP_TIMEOUT_SECONDS)
+            self._session = aiohttp.ClientSession(timeout=timeout)
+        return self._session
+
+    async def cleanup(self) -> None:
+        """Clean up resources"""
+        if self._download_task and not self._download_task.done():
+            self._download_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await self._download_task
+            self._download_task = None
+
+        if self._session and not self._session.closed:
+            await self._session.close()
+            self._session = None
+
+    async def sync_with_manifest_cache(self, installed_app_ids: list[int]) -> None:
         """Sync images with current manifest cache state"""
         installed_set = set(installed_app_ids)
 
@@ -50,18 +60,25 @@ class SteamImageService:
             except ValueError:
                 continue
 
-        # Download missing images in background
+        # Find missing images
         missing_app_ids = []
         for app_id in installed_app_ids:
             image_path = self._image_cache_dir / f"{app_id}.jpg"
             if not image_path.exists():
                 missing_app_ids.append(app_id)
 
+        # Download missing images in background
         if missing_app_ids:
-            asyncio.create_task(self._download_images(missing_app_ids))
+            # Cancel any existing download task
+            if self._download_task and not self._download_task.done():
+                self._download_task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await self._download_task
+
+            self._download_task = asyncio.create_task(self._download_images(missing_app_ids))
             logger.info(f"Queued {len(missing_app_ids)} images for background download")
 
-    def download_image(self, app_id: int) -> None:
+    async def download_image(self, app_id: int) -> None:
         """Download image for a single app ID"""
         image_path = self._image_cache_dir / f"{app_id}.jpg"
 
@@ -71,24 +88,34 @@ class SteamImageService:
 
         cover_url = f"https://steamcdn-a.akamaihd.net/steam/apps/{app_id}/header.jpg"
 
-        try:
-            logger.debug(f"Downloading image for app {app_id}")
-            response = self._session.get(cover_url, timeout=HTTP_TIMEOUT_SECONDS)
-            response.raise_for_status()
+        session = await self._get_session()
 
-            # Check if we got a valid image
-            if len(response.content) < MIN_VALID_IMAGE_SIZE:
-                logger.warning(f"Received small image for app {app_id}, skipping")
+        for attempt in range(HTTP_RETRY_COUNT):
+            try:
+                logger.debug(f"Downloading image for app {app_id} (attempt {attempt + 1})")
+                async with session.get(cover_url) as response:
+                    response.raise_for_status()
+                    content = await response.read()
+
+                    # Check if we got a valid image
+                    if len(content) < MIN_VALID_IMAGE_SIZE:
+                        logger.warning(f"Received small image for app {app_id}, skipping")
+                        return
+
+                    # Save the image
+                    image_path.write_bytes(content)
+                    logger.debug(f"Successfully cached image for app {app_id}")
+                    return
+
+            except aiohttp.ClientResponseError as e:
+                if e.status in {429, 500, 502, 503, 504} and attempt < HTTP_RETRY_COUNT - 1:
+                    await asyncio.sleep(2**attempt)  # Exponential backoff
+                    continue
+                logger.error(f"Failed to download image for app {app_id}: HTTP {e.status}")
                 return
-
-            # Save the image
-            with Path.open(image_path, "wb") as f:
-                f.write(response.content)
-
-            logger.debug(f"Successfully cached image for app {app_id}")
-
-        except Exception as e:
-            logger.error(f"Failed to download image for app {app_id}: {e}")
+            except Exception as e:
+                logger.error(f"Failed to download image for app {app_id}: {e}")
+                return
 
     def remove_image(self, app_id: int) -> None:
         """Remove cached image for app ID"""
@@ -102,8 +129,11 @@ class SteamImageService:
         """Download images in background"""
         for app_id in app_ids:
             try:
-                await asyncio.get_event_loop().run_in_executor(None, self.download_image, app_id)
+                await self.download_image(app_id)
                 # Rate limit to be nice to Steam's servers
                 await asyncio.sleep(IMAGE_DOWNLOAD_DELAY)
+            except asyncio.CancelledError:
+                logger.debug("Image download task cancelled")
+                raise
             except Exception as e:
                 logger.error(f"Error in background download for app {app_id}: {e}")

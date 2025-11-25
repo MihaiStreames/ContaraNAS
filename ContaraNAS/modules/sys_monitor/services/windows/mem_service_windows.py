@@ -143,10 +143,10 @@ class MemServiceWindows(MemService):
 
         except Exception as e:
             logger.debug(f"Error getting cached memory from PDH: {e}")
-            self._cleanup_pdh()
+            self.cleanup()
             return 0.0
 
-    def _cleanup_pdh(self):
+    def cleanup(self) -> None:
         """Clean up PDH resources"""
         if self._query_handle:
             with contextlib.suppress(Exception):
@@ -154,6 +154,7 @@ class MemServiceWindows(MemService):
             self._query_handle = None
             self._cache_counters = {}
             self._pdh_initialized = False
+            logger.debug("Memory PDH resources cleaned up")
 
     def _load_ram_sticks(self) -> None:
         """Load RAM sticks from cache or collect it"""
@@ -191,7 +192,3 @@ class MemServiceWindows(MemService):
             swap_usage=swap_mem.percent,
             ram_sticks=self.ram_sticks,
         )
-
-    def __del__(self):
-        """Cleanup when service is destroyed"""
-        self._cleanup_pdh()

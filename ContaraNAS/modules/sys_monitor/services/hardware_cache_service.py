@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import time
 from typing import Any
 
@@ -66,7 +67,7 @@ class HardwareCacheService:
 
         return cache_data.get("hardware")
 
-    def get_or_collect_hardware_info(self, collect_fn: callable) -> dict[str, Any]:
+    def get_or_collect_hardware_info(self, collect_fn: Callable) -> dict[str, Any]:
         """Get hardware info from cache or collect it (requiring sudo)"""
         if not self.needs_refresh():
             cached_data = self.load_cache()

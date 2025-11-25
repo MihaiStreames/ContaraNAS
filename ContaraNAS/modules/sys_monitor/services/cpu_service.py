@@ -14,6 +14,10 @@ class CPUService(ABC):
     @abstractmethod
     def get_cpu_info(self) -> CPUInfo:
         """Get comprehensive CPU information and usage stats"""
+        ...
+
+    def cleanup(self) -> None:
+        """Clean up any resources - override if needed"""
         pass
 
     @staticmethod

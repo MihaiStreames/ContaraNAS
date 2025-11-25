@@ -6,8 +6,6 @@ from ContaraNAS.modules.sys_monitor.services import (
     CPUService,
     DiskService,
     MemService,
-)
-from ContaraNAS.modules.sys_monitor.services.monitoring_service import (
     SysMonitorMonitoringService,
 )
 
@@ -60,6 +58,17 @@ class SysMonitorController:
 
         await self.monitoring_service.stop_monitoring()
         self._monitor_flag = False
+
+    async def cleanup(self) -> None:
+        """Clean up all resources"""
+        await self.stop_monitoring()
+
+        # Clean up OS-specific resources (e.g., PDH handles on Windows)
+        self.cpu_service.cleanup()
+        self.mem_service.cleanup()
+        self.disk_service.cleanup()
+
+        logger.info("System Monitor controller cleaned up")
 
     async def _collect_and_update_stats(self) -> None:
         """Collect all system stats and update module state"""

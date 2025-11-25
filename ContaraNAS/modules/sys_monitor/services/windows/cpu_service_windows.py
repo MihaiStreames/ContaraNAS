@@ -99,7 +99,7 @@ class CPUServiceWindows(CPUService):
 
         except Exception as e:
             logger.debug(f"Error getting CPU frequency from PDH: {e}")
-            self._cleanup_pdh()
+            self.cleanup()
 
         # Fallback to psutil
         current_freq = psutil.cpu_freq()
@@ -122,7 +122,7 @@ class CPUServiceWindows(CPUService):
             logger.debug(f"Error getting total handles: {e}")
             return 0
 
-    def _cleanup_pdh(self):
+    def cleanup(self) -> None:
         """Clean up PDH resources"""
         if self._query_handle:
             with contextlib.suppress(Exception):
@@ -131,6 +131,7 @@ class CPUServiceWindows(CPUService):
             self._query_handle = None
             self._counter_handle = None
             self._pdh_initialized = False
+            logger.debug("PDH resources cleaned up")
 
     def _load_static_cpu_info(self) -> None:
         """Load CPU static info from cache or collect it"""
@@ -168,7 +169,3 @@ class CPUServiceWindows(CPUService):
             file_descriptors=handles,
             uptime=uptime,
         )
-
-    def __del__(self):
-        """Cleanup when service is destroyed"""
-        self._cleanup_pdh()
