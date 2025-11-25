@@ -5,7 +5,6 @@ from nicegui import app, ui
 
 from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
-from ContaraNAS.gui.dashboard import DashboardView
 from ContaraNAS.gui.factories import register_all_components
 
 
@@ -26,7 +25,6 @@ def setup_gui(manager: ModuleManager):
     logger.info("Setting up GUI...")
 
     ui.colors(primary="#1976d2")
-    DashboardView(manager)
 
     # Restore module states after UI is ready (using timer for native mode)
     ui.timer(0.1, lambda: asyncio.create_task(restore_module_states(manager)), once=True)

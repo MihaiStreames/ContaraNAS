@@ -41,10 +41,6 @@ Issues = "https://github.com/MihaiStreames/ContaraNAS/issues"
 steam_module = "ContaraNAS.modules.steam:SteamModule"
 sys_monitor_module = "ContaraNAS.modules.sys_monitor:SysMonitorModule"
 
-[project.entry-points."contaranas.components"]
-steam_components = "ContaraNAS.gui.components.steam.steam_tile:SteamTile"
-sys_monitor_components = "ContaraNAS.gui.components.sys_monitor.sys_monitor_tile:SysMonitorTile"
-
 [build-system]
 requires = ["setuptools>=80.9.0", "wheel"]
 build-backend = "setuptools.build_meta"
