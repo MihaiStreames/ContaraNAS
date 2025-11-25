@@ -7,7 +7,7 @@ from .exceptions import (
     SteamError,
     SteamNotFoundError,
 )
-from .module import Module, ModuleCategory, ModuleMetadata, ModuleSource
+from .module import Module, ModuleMetadata
 from .module_manager import ModuleManager
 from .state_manager import StateManager, state_manager
 
@@ -25,9 +25,7 @@ __all__ = [
     "SteamNotFoundError",
     # Module System
     "Module",
-    "ModuleCategory",
     "ModuleMetadata",
-    "ModuleSource",
     "ModuleManager",
     # State Management
     "StateManager",

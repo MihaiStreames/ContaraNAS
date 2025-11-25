@@ -1,0 +1,51 @@
+{
+	"name": "sys_monitor",
+	"displayName": "System Monitor",
+	"version": "1.0.0",
+	"author": "MihaiStreames",
+	"description": "Real-time CPU, memory, and disk monitoring",
+	"icon": "💻",
+	"engine": {
+		"contaranas": "^0.1.0"
+	},
+	"platforms": [
+		"linux",
+		"windows"
+	],
+	"backend": {
+		"dependencies": {
+			"psutil": ">=7.1.3"
+		},
+		"platform_dependencies": {
+			"windows": [
+				"wmi>=1.5.1",
+				"pywin32>=311"
+			],
+			"linux": []
+		}
+	},
+	"system_deps": [
+		"dmidecode"
+	],
+	"capabilities": {
+		"websocket": true,
+		"dashboard": true,
+		"detailPage": false,
+		"settings": false
+	},
+	"category": "monitoring",
+	"tags": [
+		"cpu",
+		"memory",
+		"disk",
+		"monitoring",
+		"hardware",
+		"system"
+	],
+	"homepage": "https://github.com/MihaiStreames/ContaraNAS",
+	"repository": "https://github.com/MihaiStreames/ContaraNAS",
+	"documentation": "https://github.com/MihaiStreames/ContaraNAS/wiki/System-Monitor",
+	"source": "builtin",
+	"requires_network": false,
+	"requires_root": true
+}

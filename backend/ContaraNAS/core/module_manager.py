@@ -4,7 +4,7 @@ from typing import Any
 from backend.ContaraNAS.core.module import Module
 from backend.ContaraNAS.core.state_manager import state_manager
 from backend.ContaraNAS.core.utils import get_logger
-
+from backend.ContaraNAS.modules import module_loader
 
 logger = get_logger(__name__)
 
@@ -17,19 +17,28 @@ class ModuleManager:
         self.discover_modules()
 
     def discover_modules(self):
-        """Discover and load modules via entry points"""
+        """Discover and load modules via filesystem scanning"""
         try:
-            discovered = entry_points(group="contaranas.modules")
-            for entry_point in discovered:
+            # Discover all modules
+            discovered = module_loader.discover()
+
+            for module_id, (metadata, _) in discovered.items():
                 try:
-                    module_class = entry_point.load()
+                    # Load module class
+                    module_class = module_loader.load_module(module_id)
+
+                    # Instantiate module
                     instance = module_class()
+
+                    # Register
                     self.register(instance)
-                    logger.info(f"Loaded module: {entry_point.name}")
+                    logger.info(f"Loaded module: {module_id} v{metadata.version}")
+
                 except Exception as e:
-                    logger.error(f"Failed to load {entry_point.name}: {e}")
+                    logger.error(f"Failed to load {module_id}: {e}")
+
         except Exception as e:
-            logger.warning(f"No modules found: {e}")
+            logger.error(f"Module discovery failed: {e}")
 
     def register(self, module: Module):
         """Register a module"""

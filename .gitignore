@@ -11,3 +11,7 @@ __pycache__
 .idea
 .cache
 resources
+
+# Community modules (user-installed)
+backend/ContaraNAS/modules/community/*
+!backend/ContaraNAS/modules/community/.gitkeep

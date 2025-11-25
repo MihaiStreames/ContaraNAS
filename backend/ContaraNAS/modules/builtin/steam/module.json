@@ -1,0 +1,44 @@
+{
+	"name": "steam",
+	"displayName": "Steam",
+	"version": "1.0.0",
+	"author": "MihaiStreames",
+	"description": "Monitor your Steam game libraries",
+	"icon": "🎮",
+	"engine": {
+		"contaranas": "^0.1.0"
+	},
+	"platforms": [
+		"linux",
+		"windows"
+	],
+	"backend": {
+		"dependencies": {
+			"vdf": "^3.4",
+			"watchdog": ">=6.0.0",
+			"aiohttp": ">=3.13.2"
+		},
+		"platform_dependencies": {}
+	},
+	"system_deps": [],
+	"capabilities": {
+		"websocket": true,
+		"dashboard": true,
+		"detailPage": false,
+		"settings": false
+	},
+	"category": "gaming",
+	"tags": [
+		"steam",
+		"games",
+		"gaming",
+		"library",
+		"storage"
+	],
+	"homepage": "https://github.com/MihaiStreames/ContaraNAS",
+	"repository": "https://github.com/MihaiStreames/ContaraNAS",
+	"documentation": "https://github.com/MihaiStreames/ContaraNAS/wiki/Steam-Module",
+	"source": "builtin",
+	"requires_network": true,
+	"requires_root": false
+}
