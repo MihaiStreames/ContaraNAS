@@ -38,15 +38,6 @@ def require_auth(
         )
 
 
-def extract_token(
-    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
-) -> str | None:
-    """Extract bearer token from request"""
-    if credentials is None:
-        return None
-    return credentials.credentials
-
-
 def create_auth_routes() -> APIRouter:
     """Create API router for authentication endpoints"""
     router = APIRouter(prefix="/api/auth", tags=["authentication"])

@@ -84,22 +84,6 @@ class AuthService:
         self._display_pairing_code(display_token)
         return display_token
 
-    def get_active_pairing_info(self) -> dict | None:
-        """Get info about active pairing (for admin UI)"""
-        if self._state.active_pairing is None:
-            return None
-
-        active = self._state.active_pairing
-        now = time.time()
-
-        if now > active.expires_at or active.used:
-            return None
-
-        return {
-            "display_token": active.display_token,
-            "expires_in_seconds": int(active.expires_at - now),
-        }
-
     def pair(self, pairing_code: str) -> str:
         """Exchange a pairing code for an API token"""
         if not self.config.enabled:
