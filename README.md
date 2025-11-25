@@ -18,7 +18,10 @@ A modular desktop application for monitoring and managing NAS systems at home.
 git clone https://github.com/MihaiStreames/ContaraNAS
 cd ContaraNAS
 
-# Install dependencies (Windows)
+# Install dependencies
+uv sync 
+
+# If NAS is running on Windows
 uv sync --extra windows
 
 # Run the API server
@@ -45,19 +48,3 @@ pnpm tauri dev
 - Steam installed (for Steam module)
 - **Linux**: `dmidecode` installed (for hardware monitoring)
 - **Windows**: Administrative privileges may be required for hardware monitoring
-
-## Architecture
-
-```
-ContaraNAS/
-├── api/              # FastAPI backend (REST + WebSocket)
-├── core/             # Module system, event bus, state management
-└── modules/
-    ├── steam/        # Steam library monitoring
-    └── sys_monitor/  # System resource monitoring
-
-frontend/             # Tauri + SvelteKit desktop app
-```
-
-- **Backend**: Python modules discovered via entry points, FastAPI serves REST commands and WebSocket streams
-- **Frontend**: Tauri wraps a SvelteKit SPA, connects to backend via WebSocket for real-time updates
