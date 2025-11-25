@@ -41,7 +41,7 @@ class DiskStatsComponent:
             with ui.row().classes("w-full items-center gap-6 mb-1"):
                 stat_label("Read", f"{read_speed_mb:.1f}", unit=" MB/s", size="text-sm")
                 stat_label("Write", f"{write_speed_mb:.1f}", unit=" MB/s", size="text-sm")
-                stat_label("Busy", f"{disk.busy_time:.1f}%", highlight=True, size="text-sm")
+                stat_label("Busy", f"{disk.busy_time:.1f}%", "text-orange-600", size="text-sm")
 
             # Secondary info
             secondary_stats_grid(

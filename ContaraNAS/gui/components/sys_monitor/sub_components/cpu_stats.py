@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import platform
 
 from nicegui import ui
@@ -51,7 +52,7 @@ class CPUStatsComponent:
         self,
         cpu: CPUInfo,
         show_per_core: bool,
-        on_toggle_view: callable,
+        on_toggle_view: Callable,
     ) -> None:
         """Render CPU stats with graphs and info"""
         self._current_cpu = cpu
@@ -78,9 +79,9 @@ class CPUStatsComponent:
         # Primary stats row
         primary_stats_row(
             [
-                ("Speed", format_frequency(cpu.current_speed_ghz), False),
-                ("Usage", f"{cpu.total_usage:.1f}%", True),
-                ("Uptime", format_duration(cpu.uptime), False),
+                ("Speed", format_frequency(cpu.current_speed_ghz)),
+                ("Usage", f"{cpu.total_usage:.1f}%", "text-blue-600"),
+                ("Uptime", format_duration(cpu.uptime)),
             ]
         )
 

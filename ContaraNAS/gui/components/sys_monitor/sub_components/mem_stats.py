@@ -41,9 +41,9 @@ class MemoryStatsComponent:
         # Primary stats
         primary_stats_row(
             [
-                ("Usage", f"{memory.usage:.1f}%", True),
-                ("Used", f"{used_gb:.1f} GB", False),
-                ("Free", f"{free_gb:.1f} GB", False),
+                ("Usage", f"{memory.usage:.1f}%", "text-green-600"),
+                ("Used", f"{used_gb:.1f} GB"),
+                ("Free", f"{free_gb:.1f} GB"),
             ]
         )
 

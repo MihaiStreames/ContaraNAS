@@ -14,9 +14,9 @@ from ContaraNAS.gui.components.shared import (
 
 # Color constants for consistent styling
 COLORS = {
-    "games": "#1976d2",      # Blue
-    "shaders": "#388e3c",    # Green
-    "workshop": "#f57c00",   # Orange
+    "games": "#1976d2",  # Blue
+    "shaders": "#388e3c",  # Green
+    "workshop": "#f57c00",  # Orange
     "non_steam": "#fdd835",  # Yellow
 }
 
