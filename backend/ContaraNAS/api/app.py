@@ -10,9 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from guard.middleware import SecurityMiddleware
 from guard.models import SecurityConfig
 
-from .auth import create_auth_routes
-from .commands import create_command_routes
 from .responses import HealthResponse, InfoResponse
+from .routes import create_auth_routes, create_command_routes
 from .stream import StreamManager
 
 
@@ -109,9 +108,9 @@ def create_app() -> FastAPI:
         )
 
     @app.websocket("/ws")
-    async def websocket_endpoint(websocket: WebSocket):
-        """WebSocket for real-time data streaming"""
-        await app.state.stream_manager.handle_connection(websocket)
+    async def websocket_endpoint(websocket: WebSocket, token: str | None = None):
+        """WebSocket for real-time data streaming. Requires token query param."""
+        await app.state.stream_manager.handle_connection(websocket, app.state.auth_service, token)
 
     return app
 

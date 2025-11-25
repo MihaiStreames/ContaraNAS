@@ -1,9 +1,8 @@
+from backend.ContaraNAS.api.requests import PairRequest
+from backend.ContaraNAS.api.responses import PairResponse, SuccessResponse
 from backend.ContaraNAS.core.utils import get_logger
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-
-from .requests import PairRequest
-from .responses import PairingStatusResponse, PairResponse, VerifyResponse
 
 
 logger = get_logger(__name__)
@@ -39,6 +38,15 @@ def require_auth(
         )
 
 
+def extract_token(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+) -> str | None:
+    """Extract bearer token from request"""
+    if credentials is None:
+        return None
+    return credentials.credentials
+
+
 def create_auth_routes() -> APIRouter:
     """Create API router for authentication endpoints"""
     router = APIRouter(prefix="/api/auth", tags=["authentication"])
@@ -61,33 +69,21 @@ def create_auth_routes() -> APIRouter:
             message="Paired successfully. Store this token securely.",
         )
 
-    @router.get("/status", response_model=PairingStatusResponse)
-    async def get_pairing_status(request: Request) -> PairingStatusResponse:
-        """Get current pairing status"""
-        auth_service = get_auth_service(request)
-        active_pairing = auth_service.get_active_pairing_info()
-
-        return PairingStatusResponse(
-            is_paired=auth_service.is_paired(),
-            locked_out=auth_service.is_locked_out(),
-            lockout_remaining_seconds=auth_service.get_lockout_remaining(),
-            active_pairing_expires_in=active_pairing["expires_in_seconds"]
-            if active_pairing
-            else None,
-        )
-
-    @router.get("/verify", response_model=VerifyResponse)
-    async def verify_token(
+    @router.post("/unpair", response_model=SuccessResponse)
+    async def unpair(
         request: Request,
-        credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
-    ) -> VerifyResponse:
-        """Verify if a token is valid"""
-        if credentials is None:
-            return VerifyResponse(valid=False)
-
+        _: None = Depends(require_auth),
+    ) -> SuccessResponse:
+        """Unpair the app from this NAS. Requires authentication"""
         auth_service = get_auth_service(request)
-        valid = auth_service.verify_token(credentials.credentials)
+        auth_service.unpair()
 
-        return VerifyResponse(valid=valid)
+        # Generate a new pairing code for next pairing
+        try:
+            auth_service.generate_pairing_code()
+        except RuntimeError:
+            pass  # Code generation failed, but unpair succeeded
+
+        return SuccessResponse(success=True, message="Unpaired successfully")
 
     return router

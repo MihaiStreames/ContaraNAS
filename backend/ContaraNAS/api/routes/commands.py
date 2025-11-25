@@ -1,8 +1,8 @@
+from backend.ContaraNAS.api.responses import ModuleActionResponse, ModuleInfo, ModuleListResponse
 from backend.ContaraNAS.core.utils import get_logger
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from .auth import require_auth
-from .responses import ModuleActionResponse, ModuleInfo, ModuleListResponse
 
 
 logger = get_logger(__name__)

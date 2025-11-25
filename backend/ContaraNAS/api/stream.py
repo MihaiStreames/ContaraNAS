@@ -3,9 +3,10 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
+from backend.ContaraNAS.core.auth import AuthService
 from backend.ContaraNAS.core.event_bus import event_bus
 from backend.ContaraNAS.core.utils import get_logger
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect, status
 
 
 if TYPE_CHECKING:
@@ -25,8 +26,16 @@ class StreamManager:
         self._loop: asyncio.AbstractEventLoop | None = None
         self._handlers: dict[str, Any] = {}  # event_type -> handler function
 
-    async def handle_connection(self, websocket: WebSocket) -> None:
+    async def handle_connection(
+        self, websocket: WebSocket, auth_service: AuthService, token: str | None
+    ) -> None:
         """Handle a new WebSocket connection"""
+        # Authenticate before accepting
+        if not token or not auth_service.verify_token(token):
+            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            logger.warning("WebSocket connection rejected: invalid or missing token")
+            return
+
         # Replace existing client if any
         if self._client:
             await self._client.close()
