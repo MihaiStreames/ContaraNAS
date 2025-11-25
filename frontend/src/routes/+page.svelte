@@ -1,156 +1,297 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
+	import {onMount} from 'svelte';
+	import {checkHealth, disableModule, enableModule, fetchModules, type Module} from '$lib/api';
 
-  let name = $state("");
-  let greetMsg = $state("");
+	// State using Svelte 5 runes
+	let modules = $state<Module[]>([]);
+	let loading = $state(true);
+	let error = $state<string | null>(null);
+	let backendOnline = $state(false);
+	let actionLoading = $state<string | null>(null);
 
-  async function greet(event: Event) {
-    event.preventDefault();
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsg = await invoke("greet", { name });
-  }
+	onMount(async () => {
+		await loadData();
+	});
+
+	async function loadData() {
+		loading = true;
+		error = null;
+
+		// Check if backend is online
+		backendOnline = await checkHealth();
+
+		if (!backendOnline) {
+			error = 'Backend is offline. Make sure the API server is running on port 8000.';
+			loading = false;
+			return;
+		}
+
+		try {
+			modules = await fetchModules();
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to load modules';
+		} finally {
+			loading = false;
+		}
+	}
+
+	async function toggleModule(module: Module) {
+		actionLoading = module.name;
+		error = null;
+
+		try {
+			if (module.enabled) {
+				await disableModule(module.name);
+			} else {
+				await enableModule(module.name);
+			}
+			// Refresh the module list
+			modules = await fetchModules();
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to toggle module';
+		} finally {
+			actionLoading = null;
+		}
+	}
 </script>
 
 <main class="container">
-  <h1>Welcome to Tauri + Svelte</h1>
+    <h1>🖥️ ContaraNAS</h1>
+    <p class="subtitle">System Monitoring Dashboard</p>
 
-  <div class="row">
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
-    </a>
-    <a href="https://tauri.app" target="_blank">
-      <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank">
-      <img src="/svelte.svg" class="logo svelte-kit" alt="SvelteKit Logo" />
-    </a>
-  </div>
-  <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
+    <!-- Connection Status -->
+    <div class="status-bar">
+        <span class="status-indicator" class:online={backendOnline} class:offline={!backendOnline}></span>
+        <span>{backendOnline ? 'Backend Connected' : 'Backend Offline'}</span>
+        <button class="refresh-btn" onclick={loadData} disabled={loading}>
+            {loading ? '⏳' : '🔄'} Refresh
+        </button>
+    </div>
 
-  <form class="row" onsubmit={greet}>
-    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit">Greet</button>
-  </form>
-  <p>{greetMsg}</p>
+    <!-- Error Display -->
+    {#if error}
+        <div class="error-box">
+            ⚠️ {error}
+        </div>
+    {/if}
+
+    <!-- Loading State -->
+    {#if loading}
+        <div class="loading">
+            <p>Loading modules...</p>
+        </div>
+    {:else if modules.length === 0}
+        <div class="empty">
+            <p>No modules found. Make sure your backend is configured correctly.</p>
+        </div>
+    {:else}
+        <!-- Module Cards -->
+        <div class="modules-grid">
+            {#each modules as module (module.name)}
+                <div class="module-card" class:enabled={module.enabled}>
+                    <div class="module-header">
+                        <h2>{module.display_name}</h2>
+                        <span class="module-status" class:active={module.enabled}>
+                            {module.enabled ? '● Active' : '○ Inactive'}
+                        </span>
+                    </div>
+
+                    <div class="module-info">
+                        <p><strong>ID:</strong> {module.name}</p>
+                        <p><strong>Initialized:</strong> {module.initialized ? 'Yes' : 'No'}</p>
+                    </div>
+
+                    <button
+                            class="toggle-btn"
+                            class:disable={module.enabled}
+                            onclick={() => toggleModule(module)}
+                            disabled={actionLoading === module.name}
+                    >
+                        {#if actionLoading === module.name}
+                            ⏳ Processing...
+                        {:else if module.enabled}
+                            ⏹️ Disable
+                        {:else}
+                            ▶️ Enable
+                        {/if}
+                    </button>
+                </div>
+            {/each}
+        </div>
+    {/if}
 </main>
 
 <style>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
+    :global(body) {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        min-height: 100vh;
+        color: #e4e4e4;
+    }
 
-.logo.svelte-kit:hover {
-  filter: drop-shadow(0 0 2em #ff3e00);
-}
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
 
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #fff;
+    }
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
+    .subtitle {
+        text-align: center;
+        color: #888;
+        margin-bottom: 2rem;
+    }
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
+    .status-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
 
-.container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
+    .status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
-}
+    .status-indicator.online {
+        background: #4ade80;
+        box-shadow: 0 0 8px #4ade80;
+    }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
-}
+    .status-indicator.offline {
+        background: #ef4444;
+        box-shadow: 0 0 8px #ef4444;
+    }
 
-.row {
-  display: flex;
-  justify-content: center;
-}
+    .refresh-btn {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
+    .refresh-btn:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.2);
+    }
 
-a:hover {
-  color: #535bf2;
-}
+    .refresh-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 
-h1 {
-  text-align: center;
-}
+    .error-box {
+        padding: 1rem;
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.5);
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        color: #fca5a5;
+    }
 
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
+    .loading, .empty {
+        text-align: center;
+        padding: 3rem;
+        color: #888;
+    }
 
-button {
-  cursor: pointer;
-}
+    .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
 
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
+    .module-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s;
+    }
 
-input,
-button {
-  outline: none;
-}
+    .module-card:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
 
-#greet-input {
-  margin-right: 5px;
-}
+    .module-card.enabled {
+        border-color: rgba(74, 222, 128, 0.3);
+        background: rgba(74, 222, 128, 0.05);
+    }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
+    .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-  a:hover {
-    color: #24c8db;
-  }
+    .module-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: #fff;
+    }
 
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
-  }
-}
+    .module-status {
+        font-size: 0.85rem;
+        color: #888;
+    }
 
+    .module-status.active {
+        color: #4ade80;
+    }
+
+    .module-info {
+        margin-bottom: 1.5rem;
+    }
+
+    .module-info p {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        color: #aaa;
+    }
+
+    .toggle-btn {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        color: #000;
+    }
+
+    .toggle-btn.disable {
+        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+        color: #fff;
+    }
+
+    .toggle-btn:hover:not(:disabled) {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .toggle-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
 </style>
