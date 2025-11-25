@@ -211,26 +211,26 @@ class ModuleInstaller:
         # Install common dependencies
         for package, version_spec in dependencies.items():
             spec = f"{package}{version_spec}" if version_spec else package
-            if not self._pip_install(spec):
+            if not self._install_package(spec):
                 success = False
 
         # Install platform-specific dependencies
         current_platform = platform.system().lower()
         if current_platform in platform_deps:
             for package in platform_deps[current_platform]:
-                if not self._pip_install(package):
+                if not self._install_package(package):
                     success = False
 
         return success
 
     @staticmethod
-    def _pip_install(package: str) -> bool:
-        """Install a Python package with pip"""
+    def _install_package(package: str) -> bool:
+        """Install a Python package with uv"""
         print(f"   Installing {package}...", end=" ")
 
         try:
             result = subprocess.run(
-                [sys.executable, "-m", "pip", "install", package, "--break-system-packages"],
+                ["uv", "pip", "install", package],
                 capture_output=True,
                 text=True,
                 check=True
