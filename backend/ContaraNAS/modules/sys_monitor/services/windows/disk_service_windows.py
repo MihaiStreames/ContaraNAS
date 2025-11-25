@@ -2,13 +2,12 @@ import json
 import subprocess
 from typing import Any
 
-import psutil
-import wmi
-
 from backend.ContaraNAS.core.utils import get_logger
 from backend.ContaraNAS.modules.sys_monitor.constants import DEFAULT_IO_UPDATE_INTERVAL
 from backend.ContaraNAS.modules.sys_monitor.dtos import DiskInfo
 from backend.ContaraNAS.modules.sys_monitor.services import DiskService, HardwareCacheService
+import psutil
+import wmi
 
 
 logger = get_logger(__name__)

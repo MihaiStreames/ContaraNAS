@@ -1,11 +1,23 @@
 import argparse
-
-import uvicorn
+import socket
 
 from backend.ContaraNAS.core.utils import get_logger
+import uvicorn
 
 
 logger = get_logger(__name__)
+
+
+def get_local_ip() -> str:
+    """Get the local IP address of this machine"""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
 
 
 def parse_args() -> argparse.Namespace:
@@ -53,16 +65,38 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def print_startup_banner(host: str, port: int) -> None:
+    """Print startup banner with connection info"""
+    local_ip = get_local_ip()
+
+    print()
+    print("╔════════════════════════════════════════════════════════════════╗")
+    print("║                                                                ║")
+    print("║   ██████╗ ██████╗ ███╗   ██╗████████╗ █████╗ ██████╗  █████╗   ║")
+    print("║  ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗  ║")
+    print("║  ██║     ██║   ██║██╔██╗ ██║   ██║   ███████║██████╔╝███████║  ║")
+    print("║  ██║     ██║   ██║██║╚██╗██║   ██║   ██╔══██║██╔══██╗██╔══██║  ║")
+    print("║  ╚██████╗╚██████╔╝██║ ╚████║   ██║   ██║  ██║██║  ██║██║  ██║  ║")
+    print("║   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝  ║")
+    print("║                                                                ║")
+    print("╠════════════════════════════════════════════════════════════════╣")
+    print("║  NAS System Monitor & Management                               ║")
+    print("╠════════════════════════════════════════════════════════════════╣")
+    print(f"║  Local:    http://localhost:{port:<5}                            ║")
+    print(f"║  Network:  http://{local_ip}:{port:<5}                          ║")
+    print("╠════════════════════════════════════════════════════════════════╣")
+    print("║  API Docs: /docs                                               ║")
+    print("║  Health:   /health                                             ║")
+    print("╚════════════════════════════════════════════════════════════════╝")
+    print()
+
+
 def main() -> None:
-    """Main entry point for the ContaraNAS API server"""
+    """Main entry point"""
     args = parse_args()
 
     logger.info("Starting ContaraNAS API Server...")
-    logger.info(f"Host: {args.host}")
-    logger.info(f"Port: {args.port}")
-    logger.info(f"Reload: {args.reload}")
-    logger.info(f"Workers: {args.workers}")
-    logger.info(f"Log Level: {args.log_level}")
+    logger.info(f"Host: {args.host}, Port: {args.port}")
 
     uvicorn_config = {
         "app": "ContaraNAS.api:app",
@@ -77,6 +111,8 @@ def main() -> None:
         uvicorn_config["reload_dirs"] = ["ContaraNAS"]
     else:
         uvicorn_config["workers"] = args.workers
+
+    print_startup_banner(args.host, args.port)
 
     try:
         uvicorn.run(**uvicorn_config)

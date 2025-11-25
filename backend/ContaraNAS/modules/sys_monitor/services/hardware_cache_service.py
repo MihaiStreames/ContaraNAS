@@ -2,9 +2,8 @@ from collections.abc import Callable
 import time
 from typing import Any
 
-import psutil
-
 from backend.ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
+import psutil
 
 
 logger = get_logger(__name__)

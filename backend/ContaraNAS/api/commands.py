@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException, Request, status
-
 from backend.ContaraNAS.core.utils import get_logger
+from fastapi import APIRouter, HTTPException, Request, status
 
 
 logger = get_logger(__name__)
@@ -21,12 +20,14 @@ def create_command_routes() -> APIRouter:
 
         modules = []
         for name, module in manager.modules.items():
-            modules.append({
-                "name": name,
-                "display_name": module.display_name,
-                "enabled": module.enable_flag,
-                "initialized": module.init_flag,
-            })
+            modules.append(
+                {
+                    "name": name,
+                    "display_name": module.display_name,
+                    "enabled": module.enable_flag,
+                    "initialized": module.init_flag,
+                }
+            )
 
         return {"modules": modules}
 
