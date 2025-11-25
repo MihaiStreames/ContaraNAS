@@ -8,7 +8,7 @@ logger = get_logger(__name__)
 
 
 class EventBus:
-    """Simple event bus for Module -> GUI communication"""
+    """Simple event bus for publishing and subscribing to events"""
 
     def __init__(self):
         self._listeners: dict[str, list[Callable]] = {}

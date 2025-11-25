@@ -2,8 +2,8 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime
 
+from backend.ContaraNAS.core.auth import AuthService, PairingConfig
 from backend.ContaraNAS.core.module_manager import ModuleManager
-from backend.ContaraNAS.core.security import AuthService, PairingConfig
 from backend.ContaraNAS.core.utils import get_logger
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +12,7 @@ from guard.models import SecurityConfig
 
 from .auth import create_auth_routes
 from .commands import create_command_routes
+from .responses import HealthResponse, InfoResponse
 from .stream import StreamManager
 
 
@@ -46,12 +47,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
     logger.info(f"API started with {len(app.state.module_manager.modules)} modules")
 
-    if not app.state.auth_service.has_devices():
-        logger.info("No paired devices - generating initial pairing code...")
+    # Generate pairing code on launch if not already paired
+    if not app.state.auth_service.is_paired():
+        logger.info("No app paired - generating pairing code...")
         try:
             app.state.auth_service.generate_pairing_code()
         except RuntimeError as e:
             logger.error(f"Failed to generate pairing code: {e}")
+
     yield
 
     logger.info("Shutting down ContaraNAS API...")
@@ -91,19 +94,19 @@ def create_app() -> FastAPI:
     app.include_router(create_command_routes())
     app.include_router(create_auth_routes())
 
-    @app.get("/health")
-    async def health() -> dict:
+    @app.get("/health", response_model=HealthResponse)
+    async def health() -> HealthResponse:
         """Health check endpoint"""
-        return {"status": "ok", "timestamp": datetime.now().isoformat()}
+        return HealthResponse(status="ok", timestamp=datetime.now().isoformat())
 
-    @app.get("/info")
-    async def info() -> dict:
+    @app.get("/info", response_model=InfoResponse)
+    async def info() -> InfoResponse:
         """Server information"""
-        return {
-            "name": "ContaraNAS",
-            "version": "0.1.0",
-            "timestamp": datetime.now().isoformat(),
-        }
+        return InfoResponse(
+            name="ContaraNAS",
+            version="0.1.0",
+            timestamp=datetime.now().isoformat(),
+        )
 
     @app.websocket("/ws")
     async def websocket_endpoint(websocket: WebSocket):

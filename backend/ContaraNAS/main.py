@@ -82,7 +82,7 @@ def print_startup_banner(host: str, port: int) -> None:
     print("╠════════════════════════════════════════════════════════════════╣")
     print("║  NAS System Monitor & Management                               ║")
     print("╠════════════════════════════════════════════════════════════════╣")
-    print(f"║  Local:    http://localhost:{port:<5}                            ║")
+    print(f"║  Local:    http://localhost:{port:<5}                              ║")
     print(f"║  Network:  http://{local_ip}:{port:<5}                          ║")
     print("╠════════════════════════════════════════════════════════════════╣")
     print("║  API Docs: /docs                                               ║")

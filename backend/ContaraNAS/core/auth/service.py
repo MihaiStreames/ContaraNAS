@@ -1,9 +1,11 @@
-from dataclasses import dataclass
 import hashlib
 import secrets
 import time
 
 from backend.ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
+
+from .config import PairingConfig
+from .models import AuthState, PairedApp, PairingToken
 
 
 logger = get_logger(__name__)
@@ -17,59 +19,23 @@ PAIRING_CODE_LENGTH = PAIRING_CODE_SEGMENT_LENGTH * PAIRING_CODE_SEGMENTS
 API_TOKEN_LENGTH = 64  # 256-bit tokens
 
 
-@dataclass
-class PairingConfig:
-    """Configuration for pairing service"""
-
-    token_validity_seconds: int = 300
-    max_failed_attempts: int = 5
-    lockout_duration_seconds: int = 300
-    enabled: bool = True
-
-
-@dataclass
-class PairingToken:
-    """Active pairing token"""
-
-    raw_token: str
-    display_token: str
-    created_at: float
-    expires_at: float
-    used: bool = False
-
-
-@dataclass
-class RegisteredDevice:
-    """A paired device"""
-
-    name: str
-    token_hash: str
-    created_at: float
-    last_seen: float | None = None
-
-
-@dataclass
-class AuthState:
-    """Authentication state"""
-
-    failed_attempts: int = 0
-    lockout_until: float = 0
-    active_pairing: PairingToken | None = None
-
-
 class AuthService:
-    """Manages device pairing and API token authentication"""
+    """Manages app pairing and API token authentication - One NAS can only be paired with one app"""
 
     def __init__(self, config: PairingConfig | None = None):
         self.config = config or PairingConfig()
         self._state = AuthState()
-        self._devices_file = get_cache_dir() / "security" / "devices.json"
-        self._devices: dict[str, RegisteredDevice] = {}
-        self._load_devices()
+        self._paired_app_file = get_cache_dir() / "security" / "paired_app.json"
+        self._paired_app: PairedApp | None = None
+        self._load_paired_app()
 
     def is_enabled(self) -> bool:
         """Check if pairing is enabled"""
         return self.config.enabled
+
+    def is_paired(self) -> bool:
+        """Check if an app is already paired"""
+        return self._paired_app is not None
 
     def is_locked_out(self) -> bool:
         """Check if pairing is locked out due to failed attempts"""
@@ -90,6 +56,9 @@ class AuthService:
         """Generate a new pairing code and display it on stdout"""
         if not self.config.enabled:
             raise RuntimeError("Pairing is disabled")
+
+        if self.is_paired():
+            raise RuntimeError("Already paired with an app. Unpair first to generate new code.")
 
         if self.is_locked_out():
             remaining = self.get_lockout_remaining()
@@ -131,18 +100,13 @@ class AuthService:
             "expires_in_seconds": int(active.expires_at - now),
         }
 
-    def cancel_pairing(self) -> bool:
-        """Cancel any active pairing"""
-        if self._state.active_pairing is not None:
-            self._state.active_pairing = None
-            logger.info("Active pairing cancelled")
-            return True
-        return False
-
-    def pair_device(self, pairing_code: str, device_name: str) -> str:
+    def pair(self, pairing_code: str) -> str:
         """Exchange a pairing code for an API token"""
         if not self.config.enabled:
             raise RuntimeError("Pairing is disabled")
+
+        if self.is_paired():
+            raise RuntimeError("Already paired with an app")
 
         if self.is_locked_out():
             remaining = self.get_lockout_remaining()
@@ -156,29 +120,34 @@ class AuthService:
             self._record_failed_attempt()
             raise ValueError("Invalid or expired pairing code")
 
-        # Check device name
-        if device_name in self._devices:
-            raise ValueError(f"Device '{device_name}' already exists. Delete it first.")
-
         # Generate API token
         api_token = secrets.token_urlsafe(API_TOKEN_LENGTH)
         token_hash = self._hash_token(api_token)
 
-        # Register device
-        self._devices[device_name] = RegisteredDevice(
-            name=device_name,
+        # Store paired app
+        self._paired_app = PairedApp(
             token_hash=token_hash,
-            created_at=time.time(),
+            paired_at=time.time(),
         )
-        self._save_devices()
+        self._save_paired_app()
 
         # Consume pairing code
         self._state.active_pairing.used = True
         self._state.active_pairing = None
         self._state.failed_attempts = 0
 
-        logger.info(f"Device paired successfully: {device_name}")
+        logger.info("App paired successfully")
         return api_token
+
+    def unpair(self) -> bool:
+        """Unpair the current app. Returns True if was paired"""
+        if self._paired_app is None:
+            return False
+
+        self._paired_app = None
+        self._save_paired_app()
+        logger.info("App unpaired")
+        return True
 
     def _verify_pairing_code(self, normalized_code: str) -> bool:
         """Verify a pairing code"""
@@ -199,59 +168,26 @@ class AuthService:
         # Constant-time comparison
         return secrets.compare_digest(normalized_code, active.raw_token)
 
-    def verify_token(self, token: str) -> str | None:
+    def verify_token(self, token: str) -> bool:
         """Verify an API token"""
+        if self._paired_app is None:
+            return False
+
         token_hash = self._hash_token(token)
 
-        for device_name, device in self._devices.items():
-            if secrets.compare_digest(device.token_hash, token_hash):
-                # Update last seen
-                device.last_seen = time.time()
-                self._save_devices()
-                return device_name
+        if secrets.compare_digest(self._paired_app.token_hash, token_hash):
+            # Update last seen
+            self._paired_app.last_seen = time.time()
+            self._save_paired_app()
+            return True
 
-        return None
+        return False
 
     def is_authenticated(self, token: str | None) -> bool:
         """Check if a token is valid"""
         if not token:
             return False
-        return self.verify_token(token) is not None
-
-    def list_devices(self) -> list[dict]:
-        """List all paired devices"""
-        return [
-            {
-                "name": d.name,
-                "created_at": d.created_at,
-                "last_seen": d.last_seen,
-            }
-            for d in self._devices.values()
-        ]
-
-    def get_device(self, name: str) -> dict | None:
-        """Get info about a specific device"""
-        device = self._devices.get(name)
-        if not device:
-            return None
-        return {
-            "name": device.name,
-            "created_at": device.created_at,
-            "last_seen": device.last_seen,
-        }
-
-    def delete_device(self, name: str) -> bool:
-        """Delete a paired device (revokes its token)"""
-        if name in self._devices:
-            del self._devices[name]
-            self._save_devices()
-            logger.info(f"Device deleted: {name}")
-            return True
-        return False
-
-    def has_devices(self) -> bool:
-        """Check if any devices are paired"""
-        return len(self._devices) > 0
+        return self.verify_token(token)
 
     @staticmethod
     def _hash_token(token: str) -> str:
@@ -273,26 +209,33 @@ class AuthService:
                 f"after {self._state.failed_attempts} failed attempts"
             )
 
-    def _save_devices(self) -> None:
-        """Save devices to disk"""
-        self._devices_file.parent.mkdir(parents=True, exist_ok=True)
-        data = {
-            name: {
-                "name": d.name,
-                "token_hash": d.token_hash,
-                "created_at": d.created_at,
-                "last_seen": d.last_seen,
-            }
-            for name, d in self._devices.items()
-        }
-        save_json(self._devices_file, data)
+    def _save_paired_app(self) -> None:
+        """Save paired app to disk"""
+        self._paired_app_file.parent.mkdir(parents=True, exist_ok=True)
 
-    def _load_devices(self) -> None:
-        """Load devices from disk"""
-        data = load_json(self._devices_file)
+        if self._paired_app is None:
+            # Delete the file if unpaired
+            if self._paired_app_file.exists():
+                self._paired_app_file.unlink()
+            return
+
+        data = {
+            "token_hash": self._paired_app.token_hash,
+            "paired_at": self._paired_app.paired_at,
+            "last_seen": self._paired_app.last_seen,
+        }
+        save_json(self._paired_app_file, data)
+
+    def _load_paired_app(self) -> None:
+        """Load paired app from disk"""
+        data = load_json(self._paired_app_file)
         if data:
-            self._devices = {name: RegisteredDevice(**info) for name, info in data.items()}
-            logger.info(f"Loaded {len(self._devices)} paired devices")
+            self._paired_app = PairedApp(
+                token_hash=data["token_hash"],
+                paired_at=data["paired_at"],
+                last_seen=data.get("last_seen"),
+            )
+            logger.info("Loaded paired app configuration")
 
     @staticmethod
     def _display_pairing_code(code: str) -> None:

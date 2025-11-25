@@ -62,10 +62,6 @@ class StreamManager:
             self._client = None
             self._loop = None
 
-    # -------------------------------------------------------------------------
-    # EventBus Integration
-    # -------------------------------------------------------------------------
-
     def _subscribe_to_modules(self) -> None:
         """Subscribe to state change events for all registered modules"""
         for name in self._manager.modules:
@@ -112,10 +108,6 @@ class StreamManager:
             steam = await self._collect_steam_state()
             if steam:
                 await self._send({"type": "steam_library", **steam})
-
-    # -------------------------------------------------------------------------
-    # Data Collection
-    # -------------------------------------------------------------------------
 
     async def _send_initial_state(self) -> None:
         """Send complete initial state dump to newly connected client"""
@@ -169,10 +161,6 @@ class StreamManager:
             logger.error(f"Steam state collection failed: {e}")
             return None
 
-    # -------------------------------------------------------------------------
-    # WebSocket Communication
-    # -------------------------------------------------------------------------
-
     async def _send(self, data: dict) -> None:
         """Send JSON message to connected client"""
         if not self._client:
@@ -187,10 +175,6 @@ class StreamManager:
         """Handle incoming message from client"""
         if msg.get("type") == "ping":
             await self._send({"type": "pong"})
-
-    # -------------------------------------------------------------------------
-    # Periodic Streaming
-    # -------------------------------------------------------------------------
 
     def _start_streaming(self) -> None:
         """Start the periodic system stats streaming task"""
@@ -223,11 +207,6 @@ class StreamManager:
         if self._client:
             await self._client.close()
             self._client = None
-
-
-# -----------------------------------------------------------------------------
-# Utility Functions
-# -----------------------------------------------------------------------------
 
 
 def _to_dict(obj) -> dict | None:
