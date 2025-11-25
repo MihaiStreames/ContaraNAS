@@ -7,7 +7,7 @@ from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.gui.dashboard import DashboardView
 from ContaraNAS.gui.factories import register_all_components
-from ContaraNAS.gui.theme import theme
+
 
 # Some fixes
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
@@ -25,7 +25,7 @@ def setup_gui(manager: ModuleManager):
     """Setup the main GUI application"""
     logger.info("Setting up GUI...")
 
-    theme.initialize()
+    ui.colors(primary="#1976d2")
     DashboardView(manager)
 
     # Restore module states after UI is ready (using timer for native mode)
