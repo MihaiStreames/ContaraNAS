@@ -3,10 +3,9 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from fastapi import WebSocket, WebSocketDisconnect
-
 from backend.ContaraNAS.core.event_bus import event_bus
 from backend.ContaraNAS.core.utils import get_logger
+from fastapi import WebSocket, WebSocketDisconnect
 
 
 if TYPE_CHECKING:

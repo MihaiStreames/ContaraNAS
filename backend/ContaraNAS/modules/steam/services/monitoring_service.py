@@ -1,10 +1,9 @@
 from collections.abc import Callable
 from pathlib import Path
 
-from watchdog.observers import Observer
-
 from backend.ContaraNAS.core.utils import get_logger
 from backend.ContaraNAS.modules.steam.constants import OBSERVER_JOIN_TIMEOUT
+from watchdog.observers import Observer
 
 from .manifest_handler import SteamManifestHandler
 

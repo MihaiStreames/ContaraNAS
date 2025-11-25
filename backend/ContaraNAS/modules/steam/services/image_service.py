@@ -3,7 +3,6 @@ import contextlib
 from pathlib import Path
 
 import aiohttp
-
 from backend.ContaraNAS.core.utils import get_cache_dir, get_logger
 from backend.ContaraNAS.modules.steam.constants import (
     HTTP_RETRY_COUNT,

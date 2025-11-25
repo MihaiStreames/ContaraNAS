@@ -2,11 +2,10 @@ import re
 import subprocess
 from typing import Any
 
-import psutil
-
 from backend.ContaraNAS.core.utils import get_logger
 from backend.ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
 from backend.ContaraNAS.modules.sys_monitor.services import HardwareCacheService, MemService
+import psutil
 
 
 logger = get_logger(__name__)

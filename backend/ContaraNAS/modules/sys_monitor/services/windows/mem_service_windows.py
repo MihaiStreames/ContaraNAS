@@ -1,6 +1,9 @@
 import contextlib
 from typing import Any
 
+from backend.ContaraNAS.core.utils import get_logger
+from backend.ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
+from backend.ContaraNAS.modules.sys_monitor.services import HardwareCacheService, MemService
 import psutil
 from win32pdh import (
     PDH_FMT_DOUBLE,
@@ -11,10 +14,6 @@ from win32pdh import (
     OpenQuery,
 )
 import wmi
-
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.sys_monitor.dtos import MemoryInfo, RAMInfo
-from backend.ContaraNAS.modules.sys_monitor.services import HardwareCacheService, MemService
 
 
 logger = get_logger(__name__)
