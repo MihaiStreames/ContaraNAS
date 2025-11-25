@@ -1,122 +1,168 @@
 <script lang="ts">
 	import {onMount} from 'svelte';
-	import {checkHealth, disableModule, enableModule, fetchModules, type Module} from '$lib/api';
+	import {ConnectionStatus, ErrorAlert, ModuleCard, PairingForm} from '$lib/components';
+	import {
+		checkBackendHealth,
+		clearModulesError,
+		connectWebSocket,
+		disconnectWebSocket,
+		fetchModules,
+		getAuthState,
+		getConnectionState,
+		getModulesState,
+		initAuth,
+		setupWebSocketHandlers,
+		unpair
+	} from '$lib/stores';
 
-	// State using Svelte 5 runes
-	let modules = $state<Module[]>([]);
-	let loading = $state(true);
-	let error = $state<string | null>(null);
-	let backendOnline = $state(false);
-	let actionLoading = $state<string | null>(null);
+	// Get reactive state
+	const auth = getAuthState();
+	const connection = getConnectionState();
+	const modules = getModulesState();
+
+	// Local state
+	let isInitializing = $state(true);
+	let showUnpairConfirm = $state(false);
 
 	onMount(async () => {
-		await loadData();
+		// Initialize auth state from storage
+		initAuth();
+
+		// Check backend health
+		await checkBackendHealth();
+
+		if (auth.isPaired && connection.backendOnline) {
+			// Set up WebSocket handlers before connecting
+			setupWebSocketHandlers();
+
+			// Connect WebSocket
+			connectWebSocket();
+
+			// Fetch modules as backup (WebSocket will also provide them)
+			await fetchModules();
+		}
+
+		isInitializing = false;
 	});
 
-	async function loadData() {
-		loading = true;
-		error = null;
-
-		// Check if backend is online
-		backendOnline = await checkHealth();
-
-		if (!backendOnline) {
-			error = 'Backend is offline. Make sure the API server is running on port 8000.';
-			loading = false;
-			return;
+	// React to auth changes
+	$effect(() => {
+		if (auth.isPaired && connection.backendOnline && !connection.isConnected) {
+			setupWebSocketHandlers();
+			connectWebSocket();
+			fetchModules();
 		}
+	});
 
-		try {
-			modules = await fetchModules();
-		} catch (e) {
-			error = e instanceof Error ? e.message : 'Failed to load modules';
-		} finally {
-			loading = false;
-		}
+	async function handleUnpair() {
+		disconnectWebSocket();
+		await unpair();
+		showUnpairConfirm = false;
 	}
 
-	async function toggleModule(module: Module) {
-		actionLoading = module.name;
-		error = null;
-
-		try {
-			if (module.enabled) {
-				await disableModule(module.name);
-			} else {
-				await enableModule(module.name);
-			}
-			// Refresh the module list
-			modules = await fetchModules();
-		} catch (e) {
-			error = e instanceof Error ? e.message : 'Failed to toggle module';
-		} finally {
-			actionLoading = null;
+	async function handleRefresh() {
+		await checkBackendHealth();
+		if (auth.isPaired && connection.backendOnline) {
+			await fetchModules();
 		}
 	}
 </script>
 
-<main class="container">
-    <h1>🖥️ ContaraNAS</h1>
-    <p class="subtitle">System Monitoring Dashboard</p>
+<svelte:head>
+    <title>ContaraNAS</title>
+</svelte:head>
 
-    <!-- Connection Status -->
+<main class="app">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">🖥️ ContaraNAS</h1>
+            <p class="tagline">System Monitoring Dashboard</p>
+        </div>
+    </header>
+
+    <!-- Connection Status Bar -->
     <div class="status-bar">
-        <span class="status-indicator" class:online={backendOnline} class:offline={!backendOnline}></span>
-        <span>{backendOnline ? 'Backend Connected' : 'Backend Offline'}</span>
-        <button class="refresh-btn" onclick={loadData} disabled={loading}>
-            {loading ? '⏳' : '🔄'} Refresh
-        </button>
+        <ConnectionStatus/>
+
+        {#if auth.isPaired}
+            <button class="btn-text" onclick={() => (showUnpairConfirm = true)}> Unpair</button>
+        {/if}
     </div>
 
-    <!-- Error Display -->
-    {#if error}
-        <div class="error-box">
-            ⚠️ {error}
-        </div>
-    {/if}
+    <!-- Main Content -->
+    <div class="content">
+        {#if isInitializing}
+            <!-- Loading State -->
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Initializing...</p>
+            </div>
+        {:else if !connection.backendOnline}
+            <!-- Backend Offline -->
+            <div class="offline-state">
+                <div class="icon">📡</div>
+                <h2>Backend Offline</h2>
+                <p>Cannot connect to the ContaraNAS server.</p>
+                <p class="hint">Make sure the API server is running on port 8000.</p>
+                <button class="btn-primary" onclick={handleRefresh}> 🔄 Retry Connection</button>
+            </div>
+        {:else if !auth.isPaired}
+            <!-- Pairing Required -->
+            <PairingForm/>
+        {:else}
+            <!-- Dashboard -->
+            <div class="dashboard">
+                <!-- Error Display -->
+                {#if modules.error}
+                    <ErrorAlert message={modules.error} onDismiss={clearModulesError}/>
+                {/if}
 
-    <!-- Loading State -->
-    {#if loading}
-        <div class="loading">
-            <p>Loading modules...</p>
-        </div>
-    {:else if modules.length === 0}
-        <div class="empty">
-            <p>No modules found. Make sure your backend is configured correctly.</p>
-        </div>
-    {:else}
-        <!-- Module Cards -->
-        <div class="modules-grid">
-            {#each modules as module (module.name)}
-                <div class="module-card" class:enabled={module.enabled}>
-                    <div class="module-header">
-                        <h2>{module.display_name}</h2>
-                        <span class="module-status" class:active={module.enabled}>
-                            {module.enabled ? '● Active' : '○ Inactive'}
-                        </span>
+                <!-- Module Grid -->
+                {#if modules.isLoading && modules.modules.length === 0}
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading modules...</p>
                     </div>
-
-                    <div class="module-info">
-                        <p><strong>ID:</strong> {module.name}</p>
-                        <p><strong>Initialized:</strong> {module.initialized ? 'Yes' : 'No'}</p>
+                {:else if modules.modules.length === 0}
+                    <div class="empty-state">
+                        <div class="icon">📦</div>
+                        <h2>No Modules Found</h2>
+                        <p>No modules are registered with the backend.</p>
                     </div>
+                {:else}
+                    <section class="modules-section">
+                        <div class="section-header">
+                            <h2>Modules</h2>
+                            <span class="module-count">
+								{modules.enabledModules.length} / {modules.modules.length} active
+							</span>
+                        </div>
 
-                    <button
-                            class="toggle-btn"
-                            class:disable={module.enabled}
-                            onclick={() => toggleModule(module)}
-                            disabled={actionLoading === module.name}
-                    >
-                        {#if actionLoading === module.name}
-                            ⏳ Processing...
-                        {:else if module.enabled}
-                            ⏹️ Disable
-                        {:else}
-                            ▶️ Enable
-                        {/if}
+                        <div class="modules-grid">
+                            {#each modules.modules as module (module.name)}
+                                <ModuleCard {module}/>
+                            {/each}
+                        </div>
+                    </section>
+                {/if}
+            </div>
+        {/if}
+    </div>
+
+    <!-- Unpair Confirmation Modal -->
+    {#if showUnpairConfirm}
+        <div class="modal-overlay" onclick={() => (showUnpairConfirm = false)} role="presentation">
+            <div class="modal" onclick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+                <h3>Unpair from NAS?</h3>
+                <p>You'll need to enter a new pairing code to reconnect.</p>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick={() => (showUnpairConfirm = false)}>
+                        Cancel
                     </button>
+                    <button class="btn-danger" onclick={handleUnpair}> Unpair</button>
                 </div>
-            {/each}
+            </div>
         </div>
     {/if}
 </main>
@@ -125,173 +171,272 @@
     :global(body) {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
         min-height: 100vh;
         color: #e4e4e4;
     }
 
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 2rem;
+    .app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
-    h1 {
-        text-align: center;
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
+    /* Header */
+    .header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .logo {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 700;
         color: #fff;
     }
 
-    .subtitle {
-        text-align: center;
-        color: #888;
-        margin-bottom: 2rem;
+    .tagline {
+        margin: 0.25rem 0 0 0;
+        color: #666;
+        font-size: 0.9rem;
     }
 
+    /* Status Bar */
     .status-bar {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
-    .status-indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-    }
-
-    .status-indicator.online {
-        background: #4ade80;
-        box-shadow: 0 0 8px #4ade80;
-    }
-
-    .status-indicator.offline {
-        background: #ef4444;
-        box-shadow: 0 0 8px #ef4444;
-    }
-
-    .refresh-btn {
-        margin-left: auto;
+    .btn-text {
         padding: 0.5rem 1rem;
-        background: rgba(255, 255, 255, 0.1);
+        background: transparent;
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 6px;
-        color: #fff;
+        color: #888;
+        font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.2s;
     }
 
-    .refresh-btn:hover:not(:disabled) {
-        background: rgba(255, 255, 255, 0.2);
+    .btn-text:hover {
+        color: #e4e4e4;
+        border-color: rgba(255, 255, 255, 0.4);
     }
 
-    .refresh-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+    /* Content */
+    .content {
+        flex: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem 2rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
-    .error-box {
-        padding: 1rem;
-        background: rgba(239, 68, 68, 0.2);
-        border: 1px solid rgba(239, 68, 68, 0.5);
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        color: #fca5a5;
-    }
-
-    .loading, .empty {
-        text-align: center;
-        padding: 3rem;
+    /* Loading State */
+    .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem;
         color: #888;
     }
 
-    .modules-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .module-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 1.5rem;
-        transition: all 0.3s;
-    }
-
-    .module-card:hover {
-        border-color: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-    }
-
-    .module-card.enabled {
-        border-color: rgba(74, 222, 128, 0.3);
-        background: rgba(74, 222, 128, 0.05);
-    }
-
-    .module-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #4ade80;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
         margin-bottom: 1rem;
     }
 
-    .module-header h2 {
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Offline State */
+    .offline-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .offline-state .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .offline-state h2 {
+        margin: 0 0 0.5rem 0;
+        color: #fff;
+    }
+
+    .offline-state p {
+        margin: 0.25rem 0;
+        color: #888;
+    }
+
+    .offline-state .hint {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        border: none;
+        border-radius: 8px;
+        color: #000;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-state .icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h2 {
+        margin: 0 0 0.5rem 0;
+        color: #fff;
+    }
+
+    .empty-state p {
+        color: #888;
+    }
+
+    /* Dashboard */
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Modules Section */
+    .modules-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .section-header h2 {
         margin: 0;
         font-size: 1.25rem;
         color: #fff;
     }
 
-    .module-status {
+    .module-count {
         font-size: 0.85rem;
-        color: #888;
+        color: #666;
     }
 
-    .module-status.active {
-        color: #4ade80;
+    .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
     }
 
-    .module-info {
-        margin-bottom: 1.5rem;
+    /* Modal */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
     }
 
-    .module-info p {
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-        color: #aaa;
+    .modal {
+        background: #1a1a2e;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        max-width: 360px;
+        width: 90%;
     }
 
-    .toggle-btn {
-        width: 100%;
-        padding: 0.75rem;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s;
-        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-        color: #000;
-    }
-
-    .toggle-btn.disable {
-        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+    .modal h3 {
+        margin: 0 0 0.5rem 0;
         color: #fff;
     }
 
-    .toggle-btn:hover:not(:disabled) {
-        transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    .modal p {
+        margin: 0 0 1.5rem 0;
+        color: #888;
+        font-size: 0.9rem;
     }
 
-    .toggle-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
+    .modal-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-secondary {
+        flex: 1;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #e4e4e4;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-danger {
+        flex: 1;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 </style>
