@@ -1,6 +1,6 @@
 [project]
-name = "contaranas"
-version = "0.0.2"
+name = "ContaraNAS"
+version = "0.1.0"
 description = "A modular desktop application for monitoring gaming services"
 readme = "README.md"
 requires-python = ">=3.13"

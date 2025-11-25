@@ -1,47 +1,90 @@
-import asyncio
-import os
+import argparse
 
-from ContaraNAS.core.module_manager import ModuleManager
+import uvicorn
+
 from ContaraNAS.core.utils import get_logger
 
-# Some fixes
-os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
 
 logger = get_logger(__name__)
 
 
-async def restore_module_states(manager: ModuleManager):
-    """Restore modules to their previous states"""
-    logger.info("Restoring module states...")
-    await manager.restore_module_states()
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(
+        description="ContaraNAS API Server",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
 
+    parser.add_argument(
+        "--host",
+        type=str,
+        default="0.0.0.0",
+        help="Host to bind the server to",
+    )
 
-def setup_gui(manager: ModuleManager):
-    """Setup the main GUI application"""
-    logger.info("Setting up GUI...")
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to bind the server to",
+    )
 
-    # Restore module states after UI is ready (using timer for native mode)
-    # ui.timer(0.1, lambda: asyncio.create_task(restore_module_states(manager)), once=True)
+    parser.add_argument(
+        "--reload",
+        action="store_true",
+        help="Enable auto-reload for development",
+    )
 
-    logger.info("GUI setup complete")
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Number of worker processes (only without --reload)",
+    )
 
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        default="info",
+        choices=["debug", "info", "warning", "error", "critical"],
+        help="Logging level",
+    )
 
-async def cleanup_on_shutdown(manager: ModuleManager):
-    """Clean up all modules on app shutdown"""
-    logger.info("ContaraNAS shutting down...")
-    await manager.shutdown_all_modules()
-    logger.info("Module cleanup complete")
+    return parser.parse_args()
 
 
 def main():
-    logger.info("Starting ContaraNAS...")
+    """Main entry point"""
+    args = parse_args()
 
-    # Setup components
-    manager = ModuleManager()
-    setup_gui(manager=manager)
+    logger.info("Starting ContaraNAS API Server...")
+    logger.info(f"Host: {args.host}")
+    logger.info(f"Port: {args.port}")
+    logger.info(f"Reload: {args.reload}")
+    logger.info(f"Workers: {args.workers}")
+    logger.info(f"Log Level: {args.log_level}")
 
-    # Configure app shutdown handler
-    # app.on_shutdown(lambda: asyncio.create_task(cleanup_on_shutdown(manager)))
+    uvicorn_config = {
+        "app": "ContaraNAS.api.main:app",
+        "host": args.host,
+        "port": args.port,
+        "log_level": args.log_level,
+        "access_log": True,
+    }
+
+    if args.reload:
+        uvicorn_config["reload"] = True
+        uvicorn_config["reload_dirs"] = ["ContaraNAS"]
+    else:
+        uvicorn_config["workers"] = args.workers
+
+    try:
+        uvicorn.run(**uvicorn_config)
+    except KeyboardInterrupt:
+        logger.info("Server interrupted by user")
+    except Exception as e:
+        logger.error(f"Server error: {e}")
+        raise
 
 
 if __name__ == "__main__":
