@@ -1,4 +1,5 @@
 import re
+import shutil
 import subprocess
 from typing import Any
 
@@ -16,12 +17,39 @@ class MemServiceLinux(MemService):
 
     def __init__(self):
         self._hardware_cache = HardwareCacheService(cache_name="memory")
+        self._dmidecode_flag: bool | None = None
         self.ram_sticks: list[RAMInfo] | None = None
 
-    @staticmethod
-    def _get_dmidecode_output() -> str:
+    def _check_dmidecode_available(self) -> bool:
+        """Check if dmidecode is available on the system"""
+        if self._dmidecode_flag is None:
+            self._dmidecode_flag = shutil.which("dmidecode") is not None
+            if not self._dmidecode_flag:
+                logger.warning(
+                    "dmidecode not found - RAM stick details will be unavailable"
+                )
+        return self._dmidecode_flag
+
+    def _get_dmidecode_output(self) -> str | None:
         """Run dmidecode command to get RAM information (requires sudo)"""
-        return subprocess.check_output(["pkexec", "dmidecode", "--type", "17"], text=True)
+        if not self._check_dmidecode_available():
+            return None
+
+        try:
+            return subprocess.check_output(
+                ["pkexec", "dmidecode", "--type", "17"],
+                text=True,
+                timeout=30,
+            )
+        except subprocess.TimeoutExpired:
+            logger.error("dmidecode timed out")
+            return None
+        except subprocess.CalledProcessError as e:
+            logger.error(f"dmidecode failed: {e}")
+            return None
+        except FileNotFoundError:
+            logger.error("pkexec not found")
+            return None
 
     @staticmethod
     def _parse_dmidecode(data: str) -> list[RAMInfo]:
@@ -67,9 +95,14 @@ class MemServiceLinux(MemService):
     def _collect_ram_hardware_info(self) -> dict[str, Any]:
         """Collect RAM hardware info (requires sudo)"""
         dmidecode_out = self._get_dmidecode_output()
+
+        if dmidecode_out is None:
+            logger.info("Skipping RAM hardware info collection, dmidecode unavailable")
+            return {"ram_sticks": [], "dmidecode_available": False}
+
         ram_sticks = self._parse_dmidecode(dmidecode_out)
         ram_sticks_data = [ram.__dict__ for ram in ram_sticks]
-        return {"ram_sticks": ram_sticks_data}
+        return {"ram_sticks": ram_sticks_data, "dmidecode_available": True}
 
     def _load_ram_sticks(self) -> None:
         """Load RAM sticks from cache or collect it"""
@@ -79,7 +112,7 @@ class MemServiceLinux(MemService):
             )
             ram_sticks_data = hardware_info.get("ram_sticks", [])
             self.ram_sticks = [RAMInfo(**ram_data) for ram_data in ram_sticks_data]
-            logger.debug("RAM sticks info loaded and cached in memory")
+            logger.debug(f"RAM sticks info loaded: {len(self.ram_sticks)} sticks")
 
     def get_memory_info(self) -> MemoryInfo:
         """Get comprehensive Memory information and usage stats"""
