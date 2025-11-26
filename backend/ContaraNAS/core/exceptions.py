@@ -30,3 +30,15 @@ class SteamError(ServiceError):
 
 class SteamNotFoundError(SteamError):
     """Raised when Steam installation is not found"""
+
+
+class MarketplaceError(Exception):
+    """Marketplace-related errors"""
+
+    pass
+
+
+class ChecksumMismatchError(MarketplaceError):
+    """Checksum verification failed"""
+
+    pass

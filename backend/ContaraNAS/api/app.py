@@ -2,8 +2,8 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime
 
+from backend.ContaraNAS.core import MarketplaceClient, ModuleManager
 from backend.ContaraNAS.core.auth import AuthService, PairingConfig
-from backend.ContaraNAS.core.module_manager import ModuleManager
 from backend.ContaraNAS.core.utils import get_logger
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,18 +11,24 @@ from guard.middleware import SecurityMiddleware
 from guard.models import SecurityConfig
 
 from .responses import HealthResponse, InfoResponse
-from .routes import create_auth_routes, create_command_routes
+from .routes import create_auth_routes, create_command_routes, create_marketplace_routes
 from .stream import StreamManager
 
 
 logger = get_logger(__name__)
 
+# Backend version
+BACKEND_VERSION = "0.1.0"
+
+# Marketplace configuration
+MARKETPLACE_URL = "http://localhost:8001"
+
 # Allowed origins for CORS
 ALLOWED_ORIGINS = [
-    "http://localhost:1420",    # Vite dev server
-    "http://127.0.0.1:1420",    # Vite dev server (alt)
-    "tauri://localhost",        # Tauri production (macOS/Linux)
-    "https://tauri.localhost",  # Tauri production (Windows)
+    "http://localhost:1420",
+    "http://127.0.0.1:1420",
+    "tauri://localhost",
+    "https://tauri.localhost",
 ]
 
 
@@ -31,6 +37,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Application lifespan manager"""
     logger.info("Starting ContaraNAS API...")
 
+    # Auth service
     auth_config = PairingConfig(
         token_validity_seconds=300,
         max_failed_attempts=5,
@@ -38,8 +45,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     )
     app.state.auth_service = AuthService(auth_config)
 
+    # Module manager
     app.state.module_manager = ModuleManager()
     app.state.stream_manager = StreamManager(app.state.module_manager)
+
+    # Marketplace client
+    app.state.marketplace_client = MarketplaceClient(
+        base_url=MARKETPLACE_URL,
+        backend_version=BACKEND_VERSION,
+    )
 
     # Restore previously enabled modules
     await app.state.module_manager.restore_module_states()
@@ -66,7 +80,7 @@ def create_app() -> FastAPI:
     """Create and configure the FastAPI application"""
     app = FastAPI(
         title="ContaraNAS API",
-        version="0.1.0",
+        version=BACKEND_VERSION,
         description="Backend API for ContaraNAS system monitoring and management",
         lifespan=lifespan,
     )
@@ -90,8 +104,10 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # Include routers
     app.include_router(create_command_routes())
     app.include_router(create_auth_routes())
+    app.include_router(create_marketplace_routes())
 
     @app.get("/health", response_model=HealthResponse)
     async def health() -> HealthResponse:
@@ -103,7 +119,7 @@ def create_app() -> FastAPI:
         """Server information"""
         return InfoResponse(
             name="ContaraNAS",
-            version="0.1.0",
+            version=BACKEND_VERSION,
             timestamp=datetime.now().isoformat(),
         )
 

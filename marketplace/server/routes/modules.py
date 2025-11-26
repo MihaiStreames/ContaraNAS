@@ -3,9 +3,9 @@ import json
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse, Response
-
 from marketplace.server.config import config
-from marketplace.server.models import ModuleDetail, ModuleVersion, ModuleResponse
+from marketplace.server.models import ModuleDetail, ModuleResponse, ModuleVersion
+
 
 router = APIRouter(prefix="/modules", tags=["modules"])
 
@@ -52,8 +52,8 @@ def filter_versions_by_backend(versions: dict, backend_version: str) -> list[Mod
 
 @router.get("/{module_id}", response_model=ModuleResponse)
 async def get_module(
-        module_id: str,
-        backend_version: str = Query(..., description="Backend version for compatibility filtering"),
+    module_id: str,
+    backend_version: str = Query(..., description="Backend version for compatibility filtering"),
 ):
     """Get detailed information about a specific module"""
     module_data = get_module_from_registry(module_id)

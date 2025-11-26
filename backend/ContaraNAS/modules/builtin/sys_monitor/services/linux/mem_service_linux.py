@@ -25,9 +25,7 @@ class MemServiceLinux(MemService):
         if self._dmidecode_flag is None:
             self._dmidecode_flag = shutil.which("dmidecode") is not None
             if not self._dmidecode_flag:
-                logger.warning(
-                    "dmidecode not found - RAM stick details will be unavailable"
-                )
+                logger.warning("dmidecode not found - RAM stick details will be unavailable")
         return self._dmidecode_flag
 
     def _get_dmidecode_output(self) -> str | None:

@@ -23,6 +23,10 @@ class ModuleInfo(BaseModel):
     display_name: str
     enabled: bool
     initialized: bool
+    source: str
+    removable: bool
+    version: str
+    system_deps: list[str]
 
 
 class ModuleListResponse(BaseModel):

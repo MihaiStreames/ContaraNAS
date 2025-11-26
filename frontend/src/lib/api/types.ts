@@ -27,6 +27,10 @@ export interface ModuleInfo {
 	display_name: string;
 	enabled: boolean;
 	initialized: boolean;
+	source: 'builtin' | 'community';
+	removable: boolean;
+	version: string;
+	system_deps: string[];
 }
 
 export interface ModuleListResponse {

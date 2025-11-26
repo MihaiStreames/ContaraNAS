@@ -5,9 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from guard.middleware import SecurityMiddleware
 from guard.models import SecurityConfig
-
 from marketplace.server.config import config
-from marketplace.server.routes import registry_router, modules_router
+from marketplace.server.routes import modules_router, registry_router
 
 
 @asynccontextmanager

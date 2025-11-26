@@ -26,12 +26,22 @@ def create_command_routes() -> APIRouter:
 
         modules = []
         for name, module in manager.modules.items():
+            # Get metadata info
+            metadata = module.metadata
+            source = metadata.source if metadata else "builtin"
+            version = metadata.version if metadata else "0.0.0"
+            system_deps = metadata.dependencies.system if metadata else []
+
             modules.append(
                 ModuleInfo(
                     name=name,
                     display_name=module.display_name,
                     enabled=module.enable_flag,
                     initialized=module.init_flag,
+                    source=source,
+                    removable=source == "community",
+                    version=version,
+                    system_deps=system_deps,
                 )
             )
 

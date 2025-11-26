@@ -2,9 +2,9 @@ import hashlib
 import json
 
 from fastapi import APIRouter, Query
-
 from marketplace.server.config import config
-from marketplace.server.models import RegistryResponse, ModuleSummary
+from marketplace.server.models import ModuleSummary, RegistryResponse
+
 
 router = APIRouter(tags=["registry"])
 
@@ -62,13 +62,15 @@ def filter_by_backend_version(registry: dict, backend_version: str) -> dict[str,
 
 @router.get("/registry", response_model=RegistryResponse)
 async def get_registry(
-        backend_version: str = Query(..., description="Backend version for compatibility filtering"),
+    backend_version: str = Query(..., description="Backend version for compatibility filtering"),
 ):
     """Get the module registry filtered by backend version"""
     registry = load_registry()
     filtered_modules = filter_by_backend_version(registry, backend_version)
 
-    checksum = compute_checksum({"modules": {k: v.model_dump() for k, v in filtered_modules.items()}})
+    checksum = compute_checksum(
+        {"modules": {k: v.model_dump() for k, v in filtered_modules.items()}}
+    )
 
     return RegistryResponse(
         checksum=checksum,
