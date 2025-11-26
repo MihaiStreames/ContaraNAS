@@ -29,7 +29,10 @@ class SteamModule(Module):
         """Start Steam library monitoring"""
         if self.controller:
             await self.controller.start_monitoring()
-            logger.info("Steam monitoring started")
+            if self.controller.steam_available:
+                logger.info("Steam monitoring started")
+            else:
+                logger.info("Steam monitoring skipped - Steam not available")
 
     async def stop_monitoring(self) -> None:
         """Stop Steam library monitoring"""
@@ -40,6 +43,12 @@ class SteamModule(Module):
     async def get_tile_data(self) -> dict[str, Any]:
         """Get data for dashboard tile"""
         if not self.controller:
-            return {"libraries": [], "error": "Module not initialized"}
+            return {
+                "status": "not_initialized",
+                "libraries": [],
+                "games": [],
+                "total_games": 0,
+                "total_libraries": 0,
+            }
 
         return await self.controller.get_tile_data()

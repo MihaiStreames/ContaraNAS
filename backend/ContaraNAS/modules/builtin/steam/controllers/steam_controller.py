@@ -24,27 +24,25 @@ class SteamController:
 
     def __init__(self, state_update_callback: Callable[..., Awaitable[None]]):
         self._state_update_callback: Callable[..., Awaitable[None]] = state_update_callback
-        self._monitor_flag: bool = False
         self._event_loop: asyncio.AbstractEventLoop | None = None
 
-        # Initialize services
+        self._monitor_flag: bool = False
+        self._steam_flag: bool = False
+
+        # Initialize services that don't require Steam
         self.library_service: SteamLibraryService = SteamLibraryService()
-
-        # Get steam path, will be validated during initialize()
-        steam_path = self.library_service.get_steam_path()
-        if steam_path is None:
-            # Create with placeholder, will fail during initialize() if Steam not found
-            steam_path = Path("/")
-
-        self.parsing_service: SteamParsingService = SteamParsingService(steam_path)
-        self.game_loader_service: SteamGameLoaderService = SteamGameLoaderService(
-            self.parsing_service
-        )
         self.cache_service: SteamCacheService = SteamCacheService()
         self.image_service: SteamImageService = SteamImageService()
-        self.monitoring_service: SteamMonitoringService = SteamMonitoringService(
-            self._handle_manifest_change
-        )
+
+        # These will be initialized only if Steam is found
+        self.parsing_service: SteamParsingService | None = None
+        self.game_loader_service: SteamGameLoaderService | None = None
+        self.monitoring_service: SteamMonitoringService | None = None
+
+    @property
+    def steam_available(self) -> bool:
+        """Check if Steam is available on this system"""
+        return self._steam_flag
 
     async def initialize(self) -> None:
         """Initialize the controller and all dependent services"""
@@ -55,9 +53,24 @@ class SteamController:
 
         # Initialize library service
         if not self.library_service.initialize():
-            raise RuntimeError("Failed to initialize Steam library service")
+            logger.warning("Steam not found")
+            self._steam_flag = False
+            await self._state_update_callback(
+                initialized_at=datetime.now(),
+                steam_available=False,
+                status="steam_not_found",
+            )
+            return
 
-        # Initialize manifest cache
+        self._steam_flag = True
+        steam_path = self.library_service.get_steam_path()
+
+        # Initialize services that require Steam
+        self.parsing_service = SteamParsingService(steam_path)
+        self.game_loader_service = SteamGameLoaderService(self.parsing_service)
+        self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
+
+        # Initialize caches
         library_paths = self.library_service.get_library_paths()
         self.cache_service.initialize_cache(library_paths)
 
@@ -67,7 +80,9 @@ class SteamController:
 
         await self._state_update_callback(
             initialized_at=datetime.now(),
-            steam_path=str(self.library_service.get_steam_path()),
+            steam_available=True,
+            steam_path=str(steam_path),
+            status="ready",
             last_scan_completed=datetime.now(),
         )
 
@@ -75,6 +90,10 @@ class SteamController:
 
     async def start_monitoring(self) -> None:
         """Start monitoring Steam libraries for file changes"""
+        if not self._steam_flag:
+            logger.debug("Steam not available, skipping monitoring")
+            return
+
         if self._monitor_flag:
             logger.debug("Monitoring already started")
             return
@@ -89,7 +108,8 @@ class SteamController:
             logger.debug("Monitoring already stopped")
             return
 
-        self.monitoring_service.stop_monitoring()
+        if self.monitoring_service:
+            self.monitoring_service.stop_monitoring()
         self._monitor_flag = False
 
     async def cleanup(self) -> None:
@@ -100,6 +120,15 @@ class SteamController:
 
     async def get_tile_data(self) -> dict[str, Any]:
         """Build complete tile data including summary and all games"""
+        if not self._steam_flag:
+            return {
+                "status": "steam_not_found",
+                "libraries": [],
+                "games": [],
+                "total_games": 0,
+                "total_libraries": 0,
+            }
+
         libraries_data = []
         all_games = []
 
@@ -109,6 +138,7 @@ class SteamController:
             all_games.extend(games)
 
         return {
+            "status": "ready",
             "libraries": libraries_data,
             "games": all_games,
             "total_games": len(all_games),
@@ -148,6 +178,9 @@ class SteamController:
 
     def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:
         """Handle manifest file changes from the monitoring service"""
+        if not self._steam_flag:
+            return
+
         app_id_str = extract_app_id(manifest_path)
         if not app_id_str:
             return
