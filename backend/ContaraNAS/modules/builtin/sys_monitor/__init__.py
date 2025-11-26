@@ -2,6 +2,7 @@ from typing import Any
 
 from backend.ContaraNAS.core.module import Module
 from backend.ContaraNAS.core.utils import get_logger
+from backend.ContaraNAS.modules.builtin.sys_monitor.constants import DEFAULT_MONITOR_UPDATE_INTERVAL
 from backend.ContaraNAS.modules.builtin.sys_monitor.controllers.sys_monitor_controller import (
     SysMonitorController,
 )
@@ -24,7 +25,9 @@ class SysMonitorModule(Module):
 
     async def initialize(self) -> None:
         """Initialize the SysMonitor module"""
-        self.controller = SysMonitorController(self.update_state, update_interval=2.0)
+        self.controller = SysMonitorController(
+            self.update_state, update_interval=DEFAULT_MONITOR_UPDATE_INTERVAL
+        )
         await self.controller.initialize()
 
     async def start_monitoring(self) -> None:

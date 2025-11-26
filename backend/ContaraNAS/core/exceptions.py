@@ -35,10 +35,18 @@ class SteamNotFoundError(SteamError):
 class MarketplaceError(Exception):
     """Marketplace-related errors"""
 
-    pass
-
 
 class ChecksumMismatchError(MarketplaceError):
     """Checksum verification failed"""
 
-    pass
+
+class ConfigurationError(ContaraNASError):
+    """Configuration-related errors"""
+
+
+class AuthError(ContaraNASError):
+    """Authentication errors"""
+
+
+class PairingError(AuthError):
+    """Pairing-specific errors"""

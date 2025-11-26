@@ -65,8 +65,11 @@ class Module(ABC):
             logger.debug(f"Module {self.name} is already enabled")
             return
 
+        logger.info(f"Enabling module: {self.name}")
+
         try:
             if not self.init_flag:
+                logger.debug(f"Initializing module {self.name} for first time")
                 await self.initialize()
                 self.init_flag = True
 
@@ -77,6 +80,7 @@ class Module(ABC):
             self.enable_flag = True
             logger.info(f"Module {self.name} enabled successfully")
         except Exception as e:
+            logger.error(f"Failed to enable module {self.name}: {e!s}")
             raise ModuleInitializationError(self.name, str(e)) from e
 
         await self._emit_event("enabled")
@@ -86,6 +90,8 @@ class Module(ABC):
         if not self.enable_flag:
             logger.debug(f"Module {self.name} is already disabled")
             return
+
+        logger.info(f"Disabling module: {self.name}")
 
         try:
             await self.stop_monitoring()

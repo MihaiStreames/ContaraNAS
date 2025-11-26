@@ -46,12 +46,13 @@ class SteamController:
 
     async def initialize(self) -> None:
         """Initialize the controller and all dependent services"""
-        logger.info("Initializing Steam controller...")
+        logger.info("Initializing Steam controller")
 
         # Capture the event loop for thread callbacks
         self._event_loop = asyncio.get_running_loop()
 
         # Initialize library service
+        logger.debug("Initializing Steam library service")
         if not self.library_service.initialize():
             logger.warning("Steam not found")
             self._steam_flag = False
@@ -64,18 +65,24 @@ class SteamController:
 
         self._steam_flag = True
         steam_path = self.library_service.get_steam_path()
+        logger.debug(f"Steam found at: {steam_path}")
 
         # Initialize services that require Steam
+        logger.debug("Initializing Steam parsing, game loader, and monitoring services")
         self.parsing_service = SteamParsingService(steam_path)
         self.game_loader_service = SteamGameLoaderService(self.parsing_service)
         self.monitoring_service = SteamMonitoringService(self._handle_manifest_change)
 
         # Initialize caches
         library_paths = self.library_service.get_library_paths()
+        logger.trace(f"Steam library paths: {library_paths}")
+        logger.debug("Initializing Steam manifest cache")
         self.cache_service.initialize_cache(library_paths)
 
         # Sync image cache with manifest cache
         installed_app_ids = self.cache_service.get_installed_app_ids()
+        logger.trace(f"Installed Steam app IDs: {installed_app_ids}")
+        logger.debug("Syncing Steam image cache with manifest cache")
         await self.image_service.sync_with_manifest_cache(installed_app_ids)
 
         await self._state_update_callback(

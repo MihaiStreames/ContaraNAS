@@ -2,34 +2,27 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime
 
-from backend.ContaraNAS.core import MarketplaceClient, ModuleManager
+from backend.ContaraNAS.core import MarketplaceClient, ModuleManager, settings
 from backend.ContaraNAS.core.auth import AuthService, PairingConfig
-from backend.ContaraNAS.core.utils import get_logger
+from backend.ContaraNAS.core.exceptions import ContaraNASError
+from backend.ContaraNAS.core.utils import get_logger, setup_logging
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from guard.middleware import SecurityMiddleware
-from guard.models import SecurityConfig
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
 
 from .responses import HealthResponse, InfoResponse
 from .routes import create_auth_routes, create_command_routes, create_marketplace_routes
 from .stream import StreamManager
 
 
+setup_logging(
+    level=settings.log_level,
+    rotation=settings.log_rotation,
+    retention=settings.log_retention,
+)
+
 logger = get_logger(__name__)
-
-# Backend version
-BACKEND_VERSION = "0.1.0"
-
-# Marketplace configuration
-MARKETPLACE_URL = "http://localhost:8001"
-
-# Allowed origins for CORS
-ALLOWED_ORIGINS = [
-    "http://localhost:1420",
-    "http://127.0.0.1:1420",
-    "tauri://localhost",
-    "https://tauri.localhost",
-]
 
 
 @asynccontextmanager
@@ -39,9 +32,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
     # Auth service
     auth_config = PairingConfig(
-        token_validity_seconds=300,
-        max_failed_attempts=5,
-        lockout_duration_seconds=300,
+        token_validity_seconds=settings.pairing_code_validity_seconds,
+        max_failed_attempts=settings.pairing_max_failed_attempts,
+        lockout_duration_seconds=settings.pairing_lockout_duration_seconds,
     )
     app.state.auth_service = AuthService(auth_config)
 
@@ -51,8 +44,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
     # Marketplace client
     app.state.marketplace_client = MarketplaceClient(
-        base_url=MARKETPLACE_URL,
-        backend_version=BACKEND_VERSION,
+        base_url=settings.marketplace_url,
+        backend_version=settings.backend_version,
     )
 
     # Restore previously enabled modules
@@ -80,25 +73,14 @@ def create_app() -> FastAPI:
     """Create and configure the FastAPI application"""
     app = FastAPI(
         title="ContaraNAS API",
-        version=BACKEND_VERSION,
-        description="Backend API for ContaraNAS system monitoring and management",
+        version=settings.backend_version,
+        description="Backend API for ContaraNAS",
         lifespan=lifespan,
     )
 
-    security_config = SecurityConfig(
-        enable_redis=False,
-        rate_limit=100,
-        rate_limit_window=60,
-        auto_ban_threshold=5,
-        auto_ban_duration=3600,
-        whitelist=["192.168.0.0/16", "10.0.0.0/8", "127.0.0.1"],
-    )
-
-    app.add_middleware(SecurityMiddleware, config=security_config)
-
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=ALLOWED_ORIGINS,
+        allow_origins=settings.cors_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -109,17 +91,37 @@ def create_app() -> FastAPI:
     app.include_router(create_auth_routes())
     app.include_router(create_marketplace_routes())
 
+    @app.exception_handler(ContaraNASError)
+    async def contaranas_error_handler(request: Request, exc: ContaraNASError):
+        logger.error("Application error: {}", exc)
+        return JSONResponse(
+            status_code=500, content={"detail": str(exc), "error_type": exc.__class__.__name__}
+        )
+
+    @app.exception_handler(Exception)
+    async def generic_error_handler(request: Request, exc: Exception):
+        logger.exception("Unhandled exception")
+        return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+
     @app.get("/health", response_model=HealthResponse)
-    async def health() -> HealthResponse:
+    async def health(request: Request) -> HealthResponse:
         """Health check endpoint"""
-        return HealthResponse(status="ok", timestamp=datetime.now().isoformat())
+        checks = {
+            "api": "ok",
+            "modules": "ok" if request.app.state.module_manager else "degraded",
+            "websocket": "ok" if request.app.state.stream_manager else "degraded",
+        }
+
+        status = "ok" if all(v == "ok" for v in checks.values()) else "degraded"
+
+        return HealthResponse(status=status, timestamp=datetime.now().isoformat(), checks=checks)
 
     @app.get("/info", response_model=InfoResponse)
     async def info() -> InfoResponse:
         """Server information"""
         return InfoResponse(
             name="ContaraNAS",
-            version=BACKEND_VERSION,
+            version=settings.backend_version,
             timestamp=datetime.now().isoformat(),
         )
 

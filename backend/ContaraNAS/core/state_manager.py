@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
 
-from backend.ContaraNAS.core.utils import get_cache_dir, get_logger
+from backend.ContaraNAS.core import settings
+from backend.ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)
@@ -11,7 +12,7 @@ class StateManager:
     """Manages persistent state for modules across application restarts"""
 
     def __init__(self):
-        self.state_file = get_cache_dir() / "module_states.json"
+        self.state_file = settings.cache_dir / "module_states.json"
         self._enabled_modules: set[str] = set()
         self._load_state()
 

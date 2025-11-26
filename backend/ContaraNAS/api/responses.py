@@ -48,6 +48,7 @@ class HealthResponse(BaseModel):
 
     status: str
     timestamp: str
+    checks: dict[str, str]
 
 
 class InfoResponse(BaseModel):

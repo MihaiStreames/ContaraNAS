@@ -2,7 +2,8 @@ from collections.abc import Callable
 import time
 from typing import Any
 
-from backend.ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
+from backend.ContaraNAS.core import settings
+from backend.ContaraNAS.core.utils import get_logger, load_json, save_json
 import psutil
 
 
@@ -13,7 +14,7 @@ class HardwareCacheService:
     """Service for caching hardware information that requires elevated privileges"""
 
     def __init__(self, cache_name: str = "hardware"):
-        self._cache_dir = get_cache_dir() / "hardware"
+        self._cache_dir = settings.cache_dir / "hardware"
         self._cache_dir.mkdir(parents=True, exist_ok=True)
 
         self._cache_file = self._cache_dir / f"{cache_name}_cache.json"

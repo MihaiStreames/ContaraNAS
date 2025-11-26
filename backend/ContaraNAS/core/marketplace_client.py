@@ -4,8 +4,9 @@ from pathlib import Path
 import time
 
 import aiohttp
+from backend.ContaraNAS.core import settings
 from backend.ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
-from backend.ContaraNAS.core.utils import get_cache_dir, get_logger
+from backend.ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)
@@ -25,7 +26,7 @@ class MarketplaceClient:
         self.cache_ttl = cache_ttl
 
         # Cache
-        self._cache_dir = get_cache_dir() / "marketplace"
+        self._cache_dir = settings.cache_dir / "marketplace"
         self._cache_dir.mkdir(parents=True, exist_ok=True)
         self._registry_cache: dict | None = None
         self._registry_cache_time: float = 0

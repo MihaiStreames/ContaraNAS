@@ -2,7 +2,8 @@ import hashlib
 import secrets
 import time
 
-from backend.ContaraNAS.core.utils import get_cache_dir, get_logger, load_json, save_json
+from backend.ContaraNAS.core import settings
+from backend.ContaraNAS.core.utils import get_logger, load_json, save_json
 
 from .config import PairingConfig
 from .models import AuthState, PairedApp, PairingToken
@@ -25,7 +26,7 @@ class AuthService:
     def __init__(self, config: PairingConfig | None = None):
         self.config = config or PairingConfig()
         self._state = AuthState()
-        self._paired_app_file = get_cache_dir() / "security" / "paired_app.json"
+        self._paired_app_file = settings.cache_dir / "security" / "paired_app.json"
         self._paired_app: PairedApp | None = None
         self._load_paired_app()
 
