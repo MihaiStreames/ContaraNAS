@@ -38,4 +38,4 @@ def save_json(file_path: Path, data: Any) -> None:
         raise
     except TypeError as e:
         logger.error(f"Data not JSON serializable for {file_path}: {e}")
-        raiseF
+        raise

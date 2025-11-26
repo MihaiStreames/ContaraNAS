@@ -10,7 +10,7 @@ from marketplace.server.routes import modules_router, registry_router
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
+async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     """Application lifespan"""
     # Ensure data directories exist
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)

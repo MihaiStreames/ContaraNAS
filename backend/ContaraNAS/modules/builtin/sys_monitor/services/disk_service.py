@@ -16,9 +16,8 @@ class DiskService(ABC):
         """Get information for all disk partitions"""
         ...
 
-    def cleanup(self) -> None:
+    def cleanup(self) -> None:  # noqa: B027
         """Clean up any resources - override if needed"""
-        pass
 
     @staticmethod
     def create() -> "DiskService":

@@ -1,7 +1,9 @@
 import contextlib
+from typing import Annotated
 
 from backend.ContaraNAS.api.requests import PairRequest
 from backend.ContaraNAS.api.responses import PairResponse, SuccessResponse
+from backend.ContaraNAS.core.exceptions import PairingError
 from backend.ContaraNAS.core.utils import get_logger
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -12,6 +14,9 @@ logger = get_logger(__name__)
 # Bearer token security scheme
 bearer_scheme = HTTPBearer(auto_error=False)
 
+# Type alias for dependency injection (B008 compliant)
+BearerCredentials = Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)]
+
 
 def get_auth_service(request: Request):
     """Get auth service from app state"""
@@ -20,7 +25,7 @@ def get_auth_service(request: Request):
 
 def require_auth(
     request: Request,
-    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    credentials: BearerCredentials,
 ) -> None:
     """Dependency that validates the bearer token - Protects endpoints that require authentication"""
     if credentials is None:
@@ -51,7 +56,7 @@ def create_auth_routes() -> APIRouter:
 
         try:
             api_token = auth_service.pair(pair_request.pairing_code)
-        except RuntimeError as e:
+        except PairingError as e:
             raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, str(e)) from e
         except ValueError as e:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, str(e)) from e
@@ -73,7 +78,7 @@ def create_auth_routes() -> APIRouter:
 
         # Generate a new pairing code for next pairing
         # Code generation failed, but unpair succeeded
-        with contextlib.suppress(RuntimeError):
+        with contextlib.suppress(PairingError):
             auth_service.generate_pairing_code()
 
         return SuccessResponse(success=True, message="Unpaired successfully")

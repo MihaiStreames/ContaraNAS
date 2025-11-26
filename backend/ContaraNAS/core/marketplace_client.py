@@ -32,12 +32,7 @@ class MarketplaceClient:
         self._registry_cache_time: float = 0
 
     async def get_registry(self, force_refresh: bool = False) -> dict:
-        """
-        Fetch module registry from marketplace.
-
-        Returns cached version if still valid, unless force_refresh is True.
-        Verifies checksum to ensure data integrity.
-        """
+        """Fetch module registry from marketplace"""
         # Return cache if valid
         if not force_refresh and self._is_cache_valid():
             logger.debug("Using cached registry")
@@ -82,11 +77,7 @@ class MarketplaceClient:
         return data
 
     async def get_module(self, module_id: str) -> dict | None:
-        """
-        Fetch detailed information about a specific module.
-
-        Returns None if module not found or no compatible versions.
-        """
+        """Fetch detailed information about a specific module"""
         logger.debug(f"Fetching module details: {module_id}")
 
         try:
@@ -109,12 +100,7 @@ class MarketplaceClient:
             raise MarketplaceError(f"Cannot fetch module: {e}") from e
 
     async def download_module(self, module_id: str, version: str) -> Path:
-        """
-        Download a module zip file.
-
-        Verifies checksum from response header.
-        Returns path to downloaded zip file.
-        """
+        """Download a module zip file"""
         logger.info(f"Downloading module: {module_id} v{version}")
 
         download_dir = self._cache_dir / "downloads"
@@ -169,7 +155,8 @@ class MarketplaceClient:
         age = time.time() - self._registry_cache_time
         return age < self.cache_ttl
 
-    def _verify_checksum(self, modules_data: dict, expected: str) -> bool:
+    @staticmethod
+    def _verify_checksum(modules_data: dict, expected: str) -> bool:
         """Verify registry checksum"""
         if not expected:
             logger.warning("No checksum provided by marketplace")
@@ -194,7 +181,7 @@ class MarketplaceClient:
         }
 
         try:
-            with open(cache_file, "w", encoding="utf-8") as f:
+            with cache_file.open("w", encoding="utf-8") as f:
                 json.dump(cache_data, f)
             logger.debug(f"Registry cache saved to {cache_file}")
         except OSError as e:
@@ -208,7 +195,7 @@ class MarketplaceClient:
             return
 
         try:
-            with open(cache_file, encoding="utf-8") as f:
+            with cache_file.open(encoding="utf-8") as f:
                 cache_data = json.load(f)
 
             self._registry_cache = cache_data.get("data")
@@ -217,14 +204,3 @@ class MarketplaceClient:
 
         except (OSError, json.JSONDecodeError) as e:
             logger.warning(f"Failed to load cache: {e}")
-
-    def clear_cache(self) -> None:
-        """Clear all cached data"""
-        self._registry_cache = None
-        self._registry_cache_time = 0
-
-        cache_file = self._cache_dir / "registry_cache.json"
-        if cache_file.exists():
-            cache_file.unlink()
-
-        logger.info("Marketplace cache cleared")

@@ -16,9 +16,8 @@ class MemService(ABC):
         """Get comprehensive Memory information and usage stats"""
         ...
 
-    def cleanup(self) -> None:
+    def cleanup(self) -> None:  # noqa: B027
         """Clean up any resources - override if needed"""
-        pass
 
     @staticmethod
     def create() -> "MemService":

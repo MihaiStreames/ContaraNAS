@@ -2,10 +2,9 @@ from typing import Any
 
 from backend.ContaraNAS.core.module import Module
 from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.builtin.sys_monitor.constants import DEFAULT_MONITOR_UPDATE_INTERVAL
-from backend.ContaraNAS.modules.builtin.sys_monitor.controllers.sys_monitor_controller import (
-    SysMonitorController,
-)
+
+from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL
+from .controllers import SysMonitorController
 
 
 logger = get_logger(__name__)

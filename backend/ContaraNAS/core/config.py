@@ -1,4 +1,5 @@
 from pathlib import Path
+import platform as plat
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -44,8 +45,6 @@ class Settings(BaseSettings):
     @property
     def log_dir(self) -> Path:
         """Platform-specific log directory"""
-        import platform as plat
-
         system = plat.system()
         if system == "Linux":
             return Path.home() / ".local" / "share" / "contaranas" / "logs"
@@ -56,8 +55,6 @@ class Settings(BaseSettings):
     @property
     def cache_dir(self) -> Path:
         """Platform-specific cache directory"""
-        import platform as plat
-
         system = plat.system()
         if system == "Linux":
             return Path.home() / ".cache" / "contaranas"

@@ -3,6 +3,7 @@ import secrets
 import time
 
 from backend.ContaraNAS.core import settings
+from backend.ContaraNAS.core.exceptions import PairingError
 from backend.ContaraNAS.core.utils import get_logger, load_json, save_json
 
 from .config import PairingConfig
@@ -56,14 +57,14 @@ class AuthService:
     def generate_pairing_code(self) -> str:
         """Generate a new pairing code and display it on stdout"""
         if not self.config.enabled:
-            raise RuntimeError("Pairing is disabled")
+            raise PairingError("Pairing is disabled")
 
         if self.is_paired():
-            raise RuntimeError("Already paired with an app. Unpair first to generate new code.")
+            raise PairingError("Already paired with an app. Unpair first to generate new code.")
 
         if self.is_locked_out():
             remaining = self.get_lockout_remaining()
-            raise RuntimeError(f"Pairing locked out. Try again in {remaining} seconds.")
+            raise PairingError(f"Pairing locked out. Try again in {remaining} seconds.")
 
         # Generate cryptographically secure random token
         raw_token = secrets.token_hex(PAIRING_CODE_LENGTH // 2)[:PAIRING_CODE_LENGTH]
@@ -88,14 +89,14 @@ class AuthService:
     def pair(self, pairing_code: str) -> str:
         """Exchange a pairing code for an API token"""
         if not self.config.enabled:
-            raise RuntimeError("Pairing is disabled")
+            raise PairingError("Pairing is disabled")
 
         if self.is_paired():
-            raise RuntimeError("Already paired with an app")
+            raise PairingError("Already paired with an app")
 
         if self.is_locked_out():
             remaining = self.get_lockout_remaining()
-            raise RuntimeError(f"Pairing locked out. Try again in {remaining} seconds.")
+            raise PairingError(f"Pairing locked out. Try again in {remaining} seconds.")
 
         # Normalize code
         normalized = pairing_code.replace("-", "").replace(" ", "").lower()

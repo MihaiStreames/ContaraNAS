@@ -37,9 +37,9 @@ class Module(ABC):
     def metadata(self) -> ModuleMetadata:
         """Get module metadata"""
         if self._metadata is None:
-            raise RuntimeError(
-                f"Module '{self.name}' does not have metadata. "
-                "Metadata should be provided by ModuleLoader during instantiation."
+            raise ModuleError(
+                self.name,
+                "Metadata not available. Metadata should be provided by ModuleLoader during instantiation.",
             )
         return self._metadata
 
@@ -74,7 +74,7 @@ class Module(ABC):
                 self.init_flag = True
 
             if not self.init_flag:
-                raise RuntimeError(f"Cannot enable module {self.name}: not initialized")
+                raise ModuleError(self.name, "Module failed to initialize")
 
             await self.start_monitoring()
             self.enable_flag = True
@@ -106,7 +106,7 @@ class Module(ABC):
         """Update module state"""
         old_state = self.state.copy()
         self.state.update(kwargs)
-        logger.debug(f"Module {self.name} state updated: {kwargs}")
+        logger.trace(f"Module {self.name} state updated: {kwargs}")
 
         await self._emit_event(
             "state_updated",
@@ -128,7 +128,6 @@ class Module(ABC):
             "state": self.state.copy(),
             "tile_data": await self.get_tile_data(),
             "change_type": change_type,
-            "metadata": self.metadata.to_dict(),
         }
 
         # Include metadata if available

@@ -26,7 +26,7 @@ logger = get_logger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
+async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     """Application lifespan manager"""
     logger.info("Starting ContaraNAS API...")
 
@@ -92,14 +92,14 @@ def create_app() -> FastAPI:
     app.include_router(create_marketplace_routes())
 
     @app.exception_handler(ContaraNASError)
-    async def contaranas_error_handler(request: Request, exc: ContaraNASError):
-        logger.error("Application error: {}", exc)
+    async def contaranas_error_handler(_request: Request, exc: ContaraNASError):
+        logger.error(f"Application error: {exc}")
         return JSONResponse(
             status_code=500, content={"detail": str(exc), "error_type": exc.__class__.__name__}
         )
 
     @app.exception_handler(Exception)
-    async def generic_error_handler(request: Request, exc: Exception):
+    async def generic_error_handler(_request: Request, _exc: Exception):
         logger.exception("Unhandled exception")
         return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 

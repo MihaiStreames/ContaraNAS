@@ -14,7 +14,7 @@ def load_registry() -> dict:
     if not config.REGISTRY_FILE.exists():
         return {"schema_version": 1, "modules": {}}
 
-    with open(config.REGISTRY_FILE, encoding="utf-8") as f:
+    with config.REGISTRY_FILE.open("r", encoding="utf-8") as f:
         return json.load(f)
 
 
