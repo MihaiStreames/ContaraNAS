@@ -1,0 +1,18 @@
+[project]
+name = "contaranas-marketplace"
+version = "0.1.0"
+description = "Marketplace server for ContaraNAS community modules"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.122.0",
+    "uvicorn>=0.38.0",
+    "pydantic>=2.12.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/MihaiStreames/ContaraNAS"
+Repository = "https://github.com/MihaiStreames/ContaraNAS.git"
+
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"

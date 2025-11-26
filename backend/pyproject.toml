@@ -22,12 +22,6 @@ dependencies = [
     "click>=8.3.1",
 ]
 
-[project.optional-dependencies]
-windows = [
-    "wmi>=1.5.1",
-    "pywin32>=311",
-]
-
 [project.urls]
 Homepage = "https://github.com/MihaiStreames/ContaraNAS"
 Repository = "https://github.com/MihaiStreames/ContaraNAS.git"
