@@ -1,3 +1,5 @@
+import contextlib
+
 from backend.ContaraNAS.api.requests import PairRequest
 from backend.ContaraNAS.api.responses import PairResponse, SuccessResponse
 from backend.ContaraNAS.core.utils import get_logger
@@ -70,10 +72,9 @@ def create_auth_routes() -> APIRouter:
         auth_service.unpair()
 
         # Generate a new pairing code for next pairing
-        try:
+        # Code generation failed, but unpair succeeded
+        with contextlib.suppress(RuntimeError):
             auth_service.generate_pairing_code()
-        except RuntimeError:
-            pass  # Code generation failed, but unpair succeeded
 
         return SuccessResponse(success=True, message="Unpaired successfully")
 

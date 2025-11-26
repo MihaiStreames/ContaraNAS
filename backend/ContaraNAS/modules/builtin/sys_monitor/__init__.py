@@ -13,9 +13,14 @@ logger = get_logger(__name__)
 class SysMonitorModule(Module):
     """Module for monitoring your NAS system"""
 
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            name: str = "sys_monitor",
+            display_name: str | None = None,
+            metadata=None,
+    ) -> None:
         self.controller: SysMonitorController | None = None
-        super().__init__("sys_monitor", display_name="System Monitor")
+        super().__init__(name, display_name or "System Monitor", metadata)
 
     async def initialize(self) -> None:
         """Initialize the SysMonitor module"""

@@ -1,4 +1,3 @@
-from importlib.metadata import entry_points
 from typing import Any
 
 from backend.ContaraNAS.core.module import Module
@@ -27,8 +26,12 @@ class ModuleManager:
                     # Load module class
                     module_class = module_loader.load_module(module_id)
 
-                    # Instantiate module
-                    instance = module_class()
+                    # Instantiate module with metadata
+                    instance = module_class(
+                        name=metadata.id,
+                        display_name=metadata.name,
+                        metadata=metadata,
+                    )
 
                     # Register
                     self.register(instance)
@@ -109,7 +112,7 @@ class ModuleManager:
             "tile_data": await module.get_tile_data(),
         }
 
-    async def get_all_states(self) -> dict[str, dict[str, Any] | None]:
+    async def get_all_states(self) -> dict[str, dict | None]:
         """Get states of all modules"""
         states = {}
         for name in self.modules:

@@ -19,9 +19,9 @@ logger = get_logger(__name__)
 
 # Allowed origins for CORS
 ALLOWED_ORIGINS = [
-    "http://localhost:1420",    # Vite dev server
-    "http://127.0.0.1:1420",    # Vite dev server (alt)
-    "tauri://localhost",        # Tauri production (macOS/Linux)
+    "http://localhost:1420",  # Vite dev server
+    "http://127.0.0.1:1420",  # Vite dev server (alt)
+    "tauri://localhost",  # Tauri production (macOS/Linux)
     "https://tauri.localhost",  # Tauri production (Windows)
 ]
 

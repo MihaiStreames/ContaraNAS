@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Any
 
 
@@ -42,7 +42,7 @@ class ModuleMetadata:
         dependencies = ModuleDependencies(
             python_packages=backend_deps,
             platform_specific=platform_deps,
-            system_packages=system_deps
+            system_packages=system_deps,
         )
 
         return cls(
@@ -54,5 +54,9 @@ class ModuleMetadata:
             min_backend_version=data.get("engine", {}).get("contaranas", "0.0.0"),
             platforms=data.get("platforms", ["linux", "windows"]),
             dependencies=dependencies,
-            source=source
+            source=source,
         )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert metadata to dictionary"""
+        return asdict(self)

@@ -11,9 +11,14 @@ logger = get_logger(__name__)
 class SteamModule(Module):
     """Module for managing Steam library"""
 
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            name: str = "steam",
+            display_name: str | None = None,
+            metadata=None,
+    ) -> None:
         self.controller: SteamController | None = None
-        super().__init__("steam")
+        super().__init__(name, display_name, metadata)
 
     async def initialize(self) -> None:
         """Initialize the Steam module"""

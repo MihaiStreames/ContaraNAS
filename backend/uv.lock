@@ -217,6 +217,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
+    { name = "click" },
     { name = "fastapi" },
     { name = "fastapi-guard" },
     { name = "pathlib" },
@@ -241,6 +242,7 @@ windows = [
 [package.metadata]
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.13.2" },
+    { name = "click", specifier = ">=8.3.1" },
     { name = "fastapi", specifier = ">=0.122.0" },
     { name = "fastapi-guard", specifier = ">=4.2.1" },
     { name = "pathlib", specifier = ">=1.0.1" },

@@ -5,7 +5,10 @@ from typing import Any
 from backend.ContaraNAS.core.utils import get_logger
 from backend.ContaraNAS.modules.builtin.sys_monitor.constants import DEFAULT_IO_UPDATE_INTERVAL
 from backend.ContaraNAS.modules.builtin.sys_monitor.dtos import DiskInfo
-from backend.ContaraNAS.modules.builtin.sys_monitor.services import DiskService, HardwareCacheService
+from backend.ContaraNAS.modules.builtin.sys_monitor.services import (
+    DiskService,
+    HardwareCacheService,
+)
 import psutil
 import wmi
 

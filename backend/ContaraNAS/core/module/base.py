@@ -17,41 +17,34 @@ logger = get_logger(__name__)
 class Module(ABC):
     """Base class for all modules"""
 
-    def __init__(self, name: str, display_name: str | None = None):
+    def __init__(
+            self,
+            name: str,
+            display_name: str | None = None,
+            metadata: ModuleMetadata | None = None,
+    ):
         self.name: str = name
         self.display_name: str = display_name or name.replace("_", " ").title()
         self.enable_flag: bool = False
         self.init_flag: bool = False
         self.state: dict[str, Any] = {}
 
-        # Load metadata from module.json
-        self._metadata: ModuleMetadata | None = None
+        # Store metadata
+        self._metadata: ModuleMetadata | None = metadata
+
+        # If metadata was provided, use it to update display_name if not explicitly set
+        if metadata and not display_name:
+            self.display_name = metadata.name
 
     @property
     def metadata(self) -> ModuleMetadata:
-        """Get module metadata, loading from module.json if needed"""
+        """Get module metadata"""
         if self._metadata is None:
-            self._metadata = self._load_metadata()
+            raise RuntimeError(
+                f"Module '{self.name}' does not have metadata. "
+                "Metadata should be provided by ModuleLoader during instantiation."
+            )
         return self._metadata
-
-    def _load_metadata(self) -> ModuleMetadata:
-        """Load metadata from module.json alongside the module's __init__.py"""
-        # Get the directory containing the module's __init__.py
-        module_file = inspect.getfile(self.__class__)
-        module_dir = Path(module_file).parent
-        json_path = module_dir / "module.json"
-
-        if json_path.exists():
-            try:
-                with open(json_path, encoding="utf-8") as f:
-                    data = json.load(f)
-                logger.debug(f"Loaded metadata for {self.name} from {json_path}")
-                return ModuleMetadata.from_dict(data)
-            except (json.JSONDecodeError, OSError) as e:
-                logger.warning(f"Failed to load module.json for {self.name}: {e}")
-
-        logger.debug(f"No module.json found for {self.name}, using defaults")
-        return ModuleMetadata()
 
     @abstractmethod
     async def initialize(self):
@@ -134,6 +127,10 @@ class Module(ABC):
             "change_type": change_type,
             "metadata": self.metadata.to_dict(),
         }
+
+        # Include metadata if available
+        if self._metadata:
+            event_data["metadata"] = self.metadata.to_dict()
 
         if data:
             event_data.update(data)

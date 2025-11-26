@@ -1,7 +1,6 @@
 import importlib
 import json
 from pathlib import Path
-from typing import Type
 
 from backend.ContaraNAS.core.module import Module, ModuleMetadata
 from backend.ContaraNAS.core.utils import get_logger
@@ -53,7 +52,7 @@ class ModuleLoader:
 
             try:
                 # Load metadata
-                with open(metadata_file, encoding="utf-8") as f:
+                with metadata_file.open(encoding="utf-8") as f:
                     metadata_data = json.load(f)
 
                 metadata = ModuleMetadata.from_json(metadata_data, source=source)
@@ -65,7 +64,7 @@ class ModuleLoader:
             except Exception as e:
                 logger.error(f"Failed to load metadata for {module_dir.name}: {e}")
 
-    def load_module(self, module_id: str) -> Type[Module]:
+    def load_module(self, module_id: str) -> type[Module]:
         """Dynamically load a module class"""
         if module_id not in self._discovered_modules:
             raise ValueError(f"Module '{module_id}' not found")
@@ -73,7 +72,6 @@ class ModuleLoader:
         metadata, module_path = self._discovered_modules[module_id]
 
         # Construct module import path
-        # e.g., ContaraNAS.modules.builtin.steam
         relative_path = module_path.relative_to(self.modules_base)
         import_path = f"ContaraNAS.modules.{'.'.join(relative_path.parts)}"
 
@@ -93,11 +91,15 @@ class ModuleLoader:
             logger.error(f"Failed to load module {module_id}: {e}")
             raise ImportError(f"Failed to load module {module_id}") from e
 
-    @staticmethod
-    def _find_module_class(module) -> Type[Module] | None:
-        """Find the Module subclass in a loaded module"""
-        from backend.ContaraNAS.core.module import Module
+    def get_metadata(self, module_id: str) -> ModuleMetadata | None:
+        """Get metadata for a specific module"""
+        if module_id in self._discovered_modules:
+            return self._discovered_modules[module_id][0]
+        return None
 
+    @staticmethod
+    def _find_module_class(module) -> type[Module] | None:
+        """Find the Module subclass in a loaded module"""
         for attr_name in dir(module):
             attr = getattr(module, attr_name)
 
@@ -109,12 +111,6 @@ class ModuleLoader:
             ):
                 return attr
 
-        return None
-
-    def get_metadata(self, module_id: str) -> ModuleMetadata | None:
-        """Get metadata for a module"""
-        if module_id in self._discovered_modules:
-            return self._discovered_modules[module_id][0]
         return None
 
     def get_all_metadata(self) -> list[ModuleMetadata]:

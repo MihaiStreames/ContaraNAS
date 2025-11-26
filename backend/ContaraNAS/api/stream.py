@@ -27,7 +27,7 @@ class StreamManager:
         self._handlers: dict[str, Any] = {}  # event_type -> handler function
 
     async def handle_connection(
-            self, websocket: WebSocket, auth_service: AuthService, token: str | None
+        self, websocket: WebSocket, auth_service: AuthService, token: str | None
     ) -> None:
         """Handle a new WebSocket connection"""
         # Authenticate before accepting
