@@ -12,10 +12,10 @@ class SteamModule(Module):
     """Module for managing Steam library"""
 
     def __init__(
-            self,
-            name: str = "steam",
-            display_name: str | None = None,
-            metadata=None,
+        self,
+        name: str = "steam",
+        display_name: str | None = None,
+        metadata=None,
     ) -> None:
         self.controller: SteamController | None = None
         super().__init__(name, display_name, metadata)

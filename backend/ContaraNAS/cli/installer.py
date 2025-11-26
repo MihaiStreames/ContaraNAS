@@ -68,9 +68,7 @@ class ModuleInstaller:
         target_dir = self.community_dir / module_id
 
         if target_dir.exists():
-            click.secho(
-                f"⚠️  Module '{module_id}' already exists. Overwriting...", fg="yellow"
-            )
+            click.secho(f"⚠️  Module '{module_id}' already exists. Overwriting...", fg="yellow")
             shutil.rmtree(target_dir)
 
         # Copy backend directory as module root

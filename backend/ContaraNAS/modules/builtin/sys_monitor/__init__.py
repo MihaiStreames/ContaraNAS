@@ -14,10 +14,10 @@ class SysMonitorModule(Module):
     """Module for monitoring your NAS system"""
 
     def __init__(
-            self,
-            name: str = "sys_monitor",
-            display_name: str | None = None,
-            metadata=None,
+        self,
+        name: str = "sys_monitor",
+        display_name: str | None = None,
+        metadata=None,
     ) -> None:
         self.controller: SysMonitorController | None = None
         super().__init__(name, display_name or "System Monitor", metadata)

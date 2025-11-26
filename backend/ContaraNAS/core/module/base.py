@@ -1,7 +1,4 @@
 from abc import ABC, abstractmethod
-import inspect
-import json
-from pathlib import Path
 from typing import Any
 
 from backend.ContaraNAS.core.event_bus import event_bus
@@ -18,10 +15,10 @@ class Module(ABC):
     """Base class for all modules"""
 
     def __init__(
-            self,
-            name: str,
-            display_name: str | None = None,
-            metadata: ModuleMetadata | None = None,
+        self,
+        name: str,
+        display_name: str | None = None,
+        metadata: ModuleMetadata | None = None,
     ):
         self.name: str = name
         self.display_name: str = display_name or name.replace("_", " ").title()

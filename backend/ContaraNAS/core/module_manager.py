@@ -5,6 +5,7 @@ from backend.ContaraNAS.core.state_manager import state_manager
 from backend.ContaraNAS.core.utils import get_logger
 from backend.ContaraNAS.modules import module_loader
 
+
 logger = get_logger(__name__)
 
 
@@ -12,90 +13,77 @@ class ModuleManager:
     """Central manager for all system modules"""
 
     def __init__(self) -> None:
+        self._loader = module_loader
         self.modules: dict[str, Module] = {}
-        self.discover_modules()
+        self._discover_and_register()
 
-    def discover_modules(self):
-        """Discover and load modules via filesystem scanning"""
-        try:
-            # Discover all modules
-            discovered = module_loader.discover()
+    def _discover_and_register(self) -> None:
+        """Discover and register all available modules"""
+        discovered = self._loader.discover()
 
-            for module_id, (metadata, _) in discovered.items():
-                try:
-                    # Load module class
-                    module_class = module_loader.load_module(module_id)
-
-                    # Instantiate module with metadata
-                    instance = module_class(
-                        name=metadata.id,
-                        display_name=metadata.name,
-                        metadata=metadata,
-                    )
-
-                    # Register
-                    self.register(instance)
-                    logger.info(f"Loaded module: {module_id} v{metadata.version}")
-
-                except Exception as e:
-                    logger.error(f"Failed to load {module_id}: {e}")
-
-        except Exception as e:
-            logger.error(f"Module discovery failed: {e}")
-
-    def register(self, module: Module):
-        """Register a module"""
-        self.modules[module.name] = module
-        logger.info(f"Registered module: {module.name}")
+        for module_id, (metadata, _) in discovered.items():
+            try:
+                module_class = self._loader.load_module_class(module_id)
+                instance = module_class(
+                    name=metadata.id,
+                    display_name=metadata.name,
+                    metadata=metadata,
+                )
+                self.modules[module_id] = instance
+                logger.info(f"Registered module: {module_id} v{metadata.version}")
+            except Exception as e:
+                logger.error(f"Failed to register {module_id}: {e}")
 
     async def enable_module(self, name: str) -> None:
-        """Enable a registered module"""
-        if name in self.modules:
-            await self.modules[name].enable()
-            state_manager.mark_enabled(name)
+        """Enable a module and persist the state"""
+        if name not in self.modules:
+            raise KeyError(f"Module '{name}' is not registered")
+
+        await self.modules[name].enable()
+        state_manager.mark_enabled(name)
+        logger.info(f"Enabled module: {name}")
 
     async def disable_module(self, name: str) -> None:
-        """Disable a registered module"""
-        if name in self.modules:
-            await self.modules[name].disable()
-            state_manager.mark_disabled(name)
+        """Disable a module and persist the state"""
+        if name not in self.modules:
+            raise KeyError(f"Module '{name}' is not registered")
+
+        await self.modules[name].disable()
+        state_manager.mark_disabled(name)
+        logger.info(f"Disabled module: {name}")
 
     async def restore_module_states(self) -> None:
-        """Restore modules to their previous states on startup"""
+        """Restore modules to their previous enabled/disabled states"""
         enabled_modules = state_manager.get_enabled_modules()
 
         if not enabled_modules:
             logger.info("No modules to restore")
             return
 
-        logger.info(f"Restoring {len(enabled_modules)} modules: {list(enabled_modules)}")
+        logger.info(f"Restoring {len(enabled_modules)} modules")
 
-        # Enable modules that were previously enabled
         for module_name in enabled_modules:
-            if module_name in self.modules:
-                try:
-                    await self.enable_module(module_name)
-                    logger.info(f"Restored module: {module_name}")
-                except Exception as e:
-                    logger.error(f"Failed to restore module '{module_name}': {e}")
-                    # Remove from enabled list if it fails to start
-                    state_manager.mark_disabled(module_name)
-            else:
-                logger.warning(f"Module '{module_name}' was enabled but is no longer registered")
-                # Clean up state for non-existent modules
+            if module_name not in self.modules:
+                logger.warning(f"Module '{module_name}' no longer exists")
+                state_manager.mark_disabled(module_name)
+                continue
+
+            try:
+                await self.enable_module(module_name)
+            except Exception as e:
+                logger.error(f"Failed to restore '{module_name}': {e}")
                 state_manager.mark_disabled(module_name)
 
     async def shutdown_all_modules(self) -> None:
-        """Disable all currently enabled modules during shutdown"""
+        """Gracefully disable all currently enabled modules"""
         logger.info("Shutting down all modules...")
 
         for name, module in self.modules.items():
             if module.enable_flag:
                 try:
                     await module.disable()
-                    logger.info(f"Shutdown module: {name}")
                 except Exception as e:
-                    logger.error(f"Error shutting down module {name}: {e}")
+                    logger.error(f"Error shutting down {name}: {e}")
 
     async def get_module_state(self, module_name: str) -> dict[str, Any] | None:
         """Get current state of a specific module"""
@@ -114,7 +102,4 @@ class ModuleManager:
 
     async def get_all_states(self) -> dict[str, dict | None]:
         """Get states of all modules"""
-        states = {}
-        for name in self.modules:
-            states[name] = await self.get_module_state(name)
-        return states
+        return {name: await self.get_module_state(name) for name in self.modules}
