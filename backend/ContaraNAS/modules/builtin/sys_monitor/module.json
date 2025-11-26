@@ -12,21 +12,20 @@
 		"linux",
 		"windows"
 	],
-	"backend": {
-		"dependencies": {
+	"dependencies": {
+		"python": {
 			"psutil": ">=7.1.3"
 		},
-		"platform_dependencies": {
+		"python_platform": {
 			"windows": [
 				"wmi>=1.5.1",
 				"pywin32>=311"
-			],
-			"linux": []
-		}
+			]
+		},
+		"system": [
+			"dmidecode"
+		]
 	},
-	"system_deps": [
-		"dmidecode"
-	],
 	"capabilities": {
 		"websocket": true,
 		"dashboard": true,
@@ -44,8 +43,6 @@
 	],
 	"homepage": "https://github.com/MihaiStreames/ContaraNAS",
 	"repository": "https://github.com/MihaiStreames/ContaraNAS",
-	"documentation": "https://github.com/MihaiStreames/ContaraNAS/wiki/System-Monitor",
 	"source": "builtin",
-	"requires_network": false,
-	"requires_root": true
+	"requires_network": false
 }
