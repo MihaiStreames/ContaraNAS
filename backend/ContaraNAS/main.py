@@ -1,6 +1,6 @@
 import socket
 
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.utils import get_logger
 import click
 import uvicorn
 
@@ -64,7 +64,7 @@ def main(host: str, port: int, reload: bool, workers: int, log_level: str):
     logger.info(f"Starting ContaraNAS on {host}:{port}")
 
     config = {
-        "app": "backend.ContaraNAS.api:app",
+        "app": "ContaraNAS.api:app",
         "host": host,
         "port": port,
         "log_level": log_level.lower(),

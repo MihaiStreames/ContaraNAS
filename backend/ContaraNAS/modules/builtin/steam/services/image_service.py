@@ -3,9 +3,9 @@ import contextlib
 from pathlib import Path
 
 import aiohttp
-from backend.ContaraNAS.core import settings
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.builtin.steam.constants import (
+from ContaraNAS.core import settings
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.builtin.steam.constants import (
     HTTP_RETRY_COUNT,
     HTTP_TIMEOUT_SECONDS,
     IMAGE_CACHE_DIR,
@@ -23,7 +23,6 @@ class SteamImageService:
     def __init__(self):
         self._image_cache_dir: Path = settings.cache_dir / "steam" / IMAGE_CACHE_DIR
         self._image_cache_dir.mkdir(parents=True, exist_ok=True)
-
         self._session: aiohttp.ClientSession | None = None
         self._download_task: asyncio.Task | None = None
 

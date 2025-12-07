@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from backend.ContaraNAS.core import settings
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import settings
+from ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)
@@ -12,15 +12,15 @@ class StateManager:
     """Manages persistent state for modules across application restarts"""
 
     def __init__(self):
-        self.state_file = settings.cache_dir / "module_states.json"
+        self._state_file = settings.cache_dir / "module_states.json"
         self._enabled_modules: set[str] = set()
         self._load_state()
 
     def _load_state(self) -> None:
         """Load module states from disk"""
         try:
-            if self.state_file.exists():
-                with Path.open(self.state_file, encoding="utf-8") as f:
+            if self._state_file.exists():
+                with Path.open(self._state_file, encoding="utf-8") as f:
                     data = json.load(f)
                     self._enabled_modules = set(data.get("enabled_modules", []))
                     logger.info(
@@ -37,7 +37,7 @@ class StateManager:
         try:
             data = {"enabled_modules": list(self._enabled_modules)}
 
-            with Path.open(self.state_file, "w", encoding="utf-8") as f:
+            with Path.open(self._state_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
 
             logger.debug(f"Saved module states: {len(self._enabled_modules)} enabled modules")

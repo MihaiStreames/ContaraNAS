@@ -1,7 +1,7 @@
 from typing import Any
 
-from backend.ContaraNAS.core.module import Module
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.utils import get_logger
 
 from .controllers import SteamController
 

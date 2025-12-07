@@ -2,7 +2,7 @@ import asyncio
 from collections.abc import Awaitable, Callable
 import contextlib
 
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)

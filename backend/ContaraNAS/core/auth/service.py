@@ -2,9 +2,9 @@ import hashlib
 import secrets
 import time
 
-from backend.ContaraNAS.core import settings
-from backend.ContaraNAS.core.exceptions import PairingError
-from backend.ContaraNAS.core.utils import get_logger, load_json, save_json
+from ContaraNAS.core import settings
+from ContaraNAS.core.exceptions import PairingError
+from ContaraNAS.core.utils import get_logger, load_json, save_json
 
 from .config import PairingConfig
 from .models import AuthState, PairedApp, PairingToken

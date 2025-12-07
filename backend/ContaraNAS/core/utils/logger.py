@@ -1,6 +1,6 @@
 import sys
 
-from backend.ContaraNAS.core import settings
+from ContaraNAS.core import settings
 import loguru
 from loguru import logger
 

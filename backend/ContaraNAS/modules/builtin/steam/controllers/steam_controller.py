@@ -4,8 +4,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.builtin.steam.services import (
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.builtin.steam.services import (
     SteamCacheService,
     SteamGameLoaderService,
     SteamImageService,
@@ -13,7 +13,7 @@ from backend.ContaraNAS.modules.builtin.steam.services import (
     SteamMonitoringService,
     SteamParsingService,
 )
-from backend.ContaraNAS.modules.builtin.steam.utils import extract_app_id, get_drive_info
+from ContaraNAS.modules.builtin.steam.utils import extract_app_id, get_drive_info
 
 
 logger = get_logger(__name__)
@@ -25,7 +25,6 @@ class SteamController:
     def __init__(self, state_update_callback: Callable[..., Awaitable[None]]):
         self._state_update_callback: Callable[..., Awaitable[None]] = state_update_callback
         self._event_loop: asyncio.AbstractEventLoop | None = None
-
         self._monitor_flag: bool = False
         self._steam_flag: bool = False
 

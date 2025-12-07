@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from backend.ContaraNAS.core import settings
-from backend.ContaraNAS.core.utils import get_logger, load_json, save_json
-from backend.ContaraNAS.modules.builtin.steam.utils import extract_app_id
+from ContaraNAS.core import settings
+from ContaraNAS.core.utils import get_logger, load_json, save_json
+from ContaraNAS.modules.builtin.steam.utils import extract_app_id
 
 
 logger = get_logger(__name__)

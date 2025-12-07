@@ -4,9 +4,9 @@ from pathlib import Path
 import time
 
 import aiohttp
-from backend.ContaraNAS.core import settings
-from backend.ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import settings
+from ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
+from ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)
@@ -21,9 +21,9 @@ class MarketplaceClient:
         backend_version: str,
         cache_ttl: int = 3600,
     ):
-        self.base_url = base_url.rstrip("/")
-        self.backend_version = backend_version
-        self.cache_ttl = cache_ttl
+        self._base_url = base_url.rstrip("/")
+        self._backend_version = backend_version
+        self._cache_ttl = cache_ttl
 
         # Cache
         self._cache_dir = settings.cache_dir / "marketplace"
@@ -38,12 +38,12 @@ class MarketplaceClient:
             logger.debug("Using cached registry")
             return self._registry_cache
 
-        logger.info(f"Fetching registry from {self.base_url}")
+        logger.info(f"Fetching registry from {self._base_url}")
 
         try:
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/registry"
-                params = {"backend_version": self.backend_version}
+                url = f"{self._base_url}/registry"
+                params = {"backend_version": self._backend_version}
 
                 async with session.get(url, params=params, timeout=30) as resp:
                     if resp.status != 200:
@@ -82,8 +82,8 @@ class MarketplaceClient:
 
         try:
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/modules/{module_id}"
-                params = {"backend_version": self.backend_version}
+                url = f"{self._base_url}/modules/{module_id}"
+                params = {"backend_version": self._backend_version}
 
                 async with session.get(url, params=params, timeout=30) as resp:
                     if resp.status == 404:
@@ -110,7 +110,7 @@ class MarketplaceClient:
 
         try:
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/modules/{module_id}/versions/{version}/download"
+                url = f"{self._base_url}/modules/{module_id}/versions/{version}/download"
 
                 async with session.get(url, timeout=300) as resp:
                     if resp.status == 404:
@@ -153,7 +153,7 @@ class MarketplaceClient:
             return False
 
         age = time.time() - self._registry_cache_time
-        return age < self.cache_ttl
+        return age < self._cache_ttl
 
     @staticmethod
     def _verify_checksum(modules_data: dict, expected: str) -> bool:

@@ -6,9 +6,9 @@ class ModuleError(ContaraNASError):
     """Base exception for module-related errors"""
 
     def __init__(self, module_name: str, reason: str):
-        self.module_name = module_name
-        self.reason = reason
-        super().__init__(f"Module '{module_name}' error: {reason}")
+        self._module_name = module_name
+        self._reason = reason
+        super().__init__(f"Module '{self._module_name}' error: {self._reason}")
 
 
 class ModuleInitializationError(ModuleError):

@@ -1,9 +1,9 @@
 import contextlib
 from typing import Any
 
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo, RAMInfo
-from backend.ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService, MemService
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo, RAMInfo
+from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService, MemService
 import psutil
 from win32pdh import (
     PDH_FMT_DOUBLE,

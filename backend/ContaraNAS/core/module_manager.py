@@ -1,9 +1,9 @@
 from typing import Any
 
-from backend.ContaraNAS.core.module import Module
-from backend.ContaraNAS.core.state_manager import state_manager
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules import module_loader
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.state_manager import state_manager
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules import module_loader
 
 
 logger = get_logger(__name__)

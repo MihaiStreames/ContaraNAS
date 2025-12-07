@@ -1,8 +1,8 @@
 from collections.abc import Callable
 from pathlib import Path
 
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.builtin.steam.constants import OBSERVER_JOIN_TIMEOUT
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.builtin.steam.constants import OBSERVER_JOIN_TIMEOUT
 from watchdog.observers import Observer
 
 from .manifest_handler import SteamManifestHandler
@@ -18,7 +18,6 @@ class SteamMonitoringService:
         self._change_callback: Callable[[str, Path], None] = change_callback
         self._monitor_flag: bool = False
         self._observer: Observer | None = None
-
         self.manifest_handler: SteamManifestHandler | None = None
 
     def start_monitoring(self, library_paths: list[Path]) -> None:

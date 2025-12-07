@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.utils import get_logger
 
 from .parsing_service import SteamParsingService
 from .path_service import SteamPathService
@@ -15,7 +15,6 @@ class SteamLibraryService:
     def __init__(self):
         self._steam_path: Path | None = None
         self._library_paths: list[Path] = []
-
         self.parsing_service: SteamParsingService | None = None
 
     def initialize(self) -> bool:

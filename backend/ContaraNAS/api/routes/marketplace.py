@@ -1,6 +1,6 @@
-from backend.ContaraNAS.api.routes.auth import require_auth
-from backend.ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.api.routes.auth import require_auth
+from ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
+from ContaraNAS.core.utils import get_logger
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 

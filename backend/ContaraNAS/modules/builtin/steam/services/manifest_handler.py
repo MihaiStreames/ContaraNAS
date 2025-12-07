@@ -2,8 +2,8 @@ from collections.abc import Callable
 from pathlib import Path
 import traceback
 
-from backend.ContaraNAS.core.utils import get_logger
-from backend.ContaraNAS.modules.builtin.steam.utils import is_manifest_file
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.builtin.steam.utils import is_manifest_file
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 
 

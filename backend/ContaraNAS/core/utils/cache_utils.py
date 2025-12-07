@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from backend.ContaraNAS.core.utils.logger import get_logger
+from ContaraNAS.core.utils.logger import get_logger
 
 
 logger = get_logger(__name__)

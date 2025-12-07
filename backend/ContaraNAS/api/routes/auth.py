@@ -1,10 +1,10 @@
 import contextlib
 from typing import Annotated
 
-from backend.ContaraNAS.api.requests import PairRequest
-from backend.ContaraNAS.api.responses import PairResponse, SuccessResponse
-from backend.ContaraNAS.core.exceptions import PairingError
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.api.requests import PairRequest
+from ContaraNAS.api.responses import PairResponse, SuccessResponse
+from ContaraNAS.core.exceptions import PairingError
+from ContaraNAS.core.utils import get_logger
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 

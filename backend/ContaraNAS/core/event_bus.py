@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from typing import Any
 
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)
@@ -37,9 +37,8 @@ class EventBus:
                 f"Emitting event: {event_type} to {len(self._listeners[event_type])} listeners"
             )
 
-            for callback in self._listeners[event_type][
-                :
-            ]:  # Copy list to avoid modification during iteration
+            # Copy list to avoid modification during iteration
+            for callback in self._listeners[event_type][:]:
                 try:
                     callback(data)
                 except Exception as e:

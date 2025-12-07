@@ -56,10 +56,7 @@ def _get_dir_size_win(directory: str | Path) -> int | None:
 
 
 async def get_dir_size(directory: str | Path) -> int | None:
-    """Calculate the total size of files in a directory (async)
-
-    Runs the blocking subprocess operation in a thread pool to avoid blocking the event loop.
-    """
+    """Calculate the total size of files in a directory"""
 
     def _sync_get_dir_size() -> int | None:
         system = platform.system()

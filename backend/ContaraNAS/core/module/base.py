@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from backend.ContaraNAS.core.event_bus import event_bus
-from backend.ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.event_bus import event_bus
+from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
+from ContaraNAS.core.utils import get_logger
 
 from .metadata import ModuleMetadata
 

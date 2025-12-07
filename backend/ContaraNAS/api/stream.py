@@ -3,14 +3,14 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from backend.ContaraNAS.core.auth import AuthService
-from backend.ContaraNAS.core.event_bus import event_bus
-from backend.ContaraNAS.core.utils import get_logger
+from ContaraNAS.core.auth import AuthService
+from ContaraNAS.core.event_bus import event_bus
+from ContaraNAS.core.utils import get_logger
 from fastapi import WebSocket, WebSocketDisconnect, status
 
 
 if TYPE_CHECKING:
-    from backend.ContaraNAS.core.module_manager import ModuleManager
+    from ContaraNAS.core.module_manager import ModuleManager
 
 logger = get_logger(__name__)
 
