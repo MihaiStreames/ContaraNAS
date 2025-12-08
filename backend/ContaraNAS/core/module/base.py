@@ -50,7 +50,7 @@ class Module(ABC):
                 "Metadata not available. Metadata should be provided by ModuleLoader during instantiation.",
             )
         return self._metadata
-    
+
     @property
     def typed_state(self) -> ModuleState | None:
         """Get typed state if available"""

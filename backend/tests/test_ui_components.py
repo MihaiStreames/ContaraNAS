@@ -187,7 +187,9 @@ def test_button_with_action():
 
 
 def test_input():
-    input_field = Input(name="email", label="Email", input_type="email", placeholder="you@example.com")
+    input_field = Input(
+        name="email", label="Email", input_type="email", placeholder="you@example.com"
+    )
     data = input_field.to_dict()
 
     assert data["type"] == "input"
@@ -199,7 +201,10 @@ def test_select():
     select = Select(
         name="theme",
         label="Theme",
-        options=[SelectOption(value="light", label="Light"), SelectOption(value="dark", label="Dark")],
+        options=[
+            SelectOption(value="light", label="Light"),
+            SelectOption(value="dark", label="Dark"),
+        ],
         value="dark",
     )
     data = select.to_dict()
