@@ -31,40 +31,40 @@ uv run uvicorn server:app --port 8001 --reload
 
 ```json
 {
-	"schema_version": 1,
-	"modules": {
-		"example-module": {
-			"display_name": "Example Module",
-			"short_description": "Short description here",
-			"description": "Full description here",
-			"author": "Author Name",
-			"license": "MIT",
-			"repository": "https://github.com/...",
-			"category": "utilities",
-			"tags": [
-				"example",
-				"demo"
-			],
-			"has_icon": true,
-			"versions": {
-				"1.0.0": {
-					"min_backend_version": "0.1.0",
-					"platforms": [
-						"linux",
-						"windows"
-					],
-					"changelog": "Initial release",
-					"published_at": "2025-01-15T10:00:00Z",
-					"size_bytes": 12345,
-					"dependencies": {
-						"python": {
-							"requests": ">=2.28.0"
-						},
-						"system": []
-					}
-				}
-			}
-		}
-	}
+ "schema_version": 1,
+ "modules": {
+  "example-module": {
+   "display_name": "Example Module",
+   "short_description": "Short description here",
+   "description": "Full description here",
+   "author": "Author Name",
+   "license": "MIT",
+   "repository": "https://github.com/...",
+   "category": "utilities",
+   "tags": [
+    "example",
+    "demo"
+   ],
+   "has_icon": true,
+   "versions": {
+    "1.0.0": {
+     "min_backend_version": "0.1.0",
+     "platforms": [
+      "linux",
+      "windows"
+     ],
+     "changelog": "Initial release",
+     "published_at": "2025-01-15T10:00:00Z",
+     "size_bytes": 12345,
+     "dependencies": {
+      "python": {
+       "requests": ">=2.28.0"
+      },
+      "system": []
+     }
+    }
+   }
+  }
+ }
 }
 ```
