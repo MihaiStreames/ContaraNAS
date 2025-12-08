@@ -2,6 +2,9 @@ import json
 import subprocess
 from typing import Any
 
+import psutil
+import wmi
+
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.builtin.sys_monitor.constants import DEFAULT_IO_UPDATE_INTERVAL
 from ContaraNAS.modules.builtin.sys_monitor.dtos import DiskInfo
@@ -9,8 +12,6 @@ from ContaraNAS.modules.builtin.sys_monitor.services import (
     DiskService,
     HardwareCacheService,
 )
-import psutil
-import wmi
 
 
 logger = get_logger(__name__)

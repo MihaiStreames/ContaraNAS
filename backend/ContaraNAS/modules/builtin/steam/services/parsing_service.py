@@ -1,10 +1,11 @@
 from pathlib import Path
 from typing import Any
 
+import vdf
+
 from ContaraNAS.core.utils import get_logger
 from ContaraNAS.modules.builtin.steam.constants import LIBRARY_FOLDERS_FILE, STEAMAPPS_DIR
 from ContaraNAS.modules.builtin.steam.dtos import SteamGame
-import vdf
 
 
 logger = get_logger(__name__)

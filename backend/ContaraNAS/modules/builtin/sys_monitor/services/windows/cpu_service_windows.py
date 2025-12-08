@@ -2,9 +2,6 @@ import contextlib
 import time
 from typing import Any
 
-from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.dtos import CPUInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import CPUService, HardwareCacheService
 import psutil
 from win32pdh import (
     PDH_FMT_DOUBLE,
@@ -15,6 +12,10 @@ from win32pdh import (
     OpenQuery,
 )
 import wmi
+
+from ContaraNAS.core.utils import get_logger
+from ContaraNAS.modules.builtin.sys_monitor.dtos import CPUInfo
+from ContaraNAS.modules.builtin.sys_monitor.services import CPUService, HardwareCacheService
 
 
 logger = get_logger(__name__)

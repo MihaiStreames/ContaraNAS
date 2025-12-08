@@ -1,12 +1,13 @@
 import contextlib
 from typing import Annotated
 
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
 from ContaraNAS.api.requests import PairRequest
 from ContaraNAS.api.responses import PairResponse, SuccessResponse
 from ContaraNAS.core.exceptions import PairingError
 from ContaraNAS.core.utils import get_logger
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 
 logger = get_logger(__name__)

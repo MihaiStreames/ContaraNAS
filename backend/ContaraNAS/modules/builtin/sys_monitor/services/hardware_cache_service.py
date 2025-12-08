@@ -2,9 +2,10 @@ from collections.abc import Callable
 import time
 from typing import Any
 
+import psutil
+
 from ContaraNAS.core import settings
 from ContaraNAS.core.utils import get_logger, load_json, save_json
-import psutil
 
 
 logger = get_logger(__name__)

@@ -3,10 +3,11 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
+from fastapi import WebSocket, WebSocketDisconnect, status
+
 from ContaraNAS.core.auth import AuthService
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.utils import get_logger
-from fastapi import WebSocket, WebSocketDisconnect, status
 
 
 if TYPE_CHECKING:

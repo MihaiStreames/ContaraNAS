@@ -2,14 +2,15 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime
 
-from ContaraNAS.core import MarketplaceClient, ModuleManager, settings
-from ContaraNAS.core.auth import AuthService, PairingConfig
-from ContaraNAS.core.exceptions import ContaraNASError
-from ContaraNAS.core.utils import get_logger, setup_logging
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
+
+from ContaraNAS.core import MarketplaceClient, ModuleManager, settings
+from ContaraNAS.core.auth import AuthService, PairingConfig
+from ContaraNAS.core.exceptions import ContaraNASError
+from ContaraNAS.core.utils import get_logger, setup_logging
 
 from .responses import HealthResponse, InfoResponse
 from .routes import create_auth_routes, create_command_routes, create_marketplace_routes

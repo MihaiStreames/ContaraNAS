@@ -3,14 +3,15 @@
 *.log
 
 # Python
-__pycache__
-.venv
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
 *.egg-info/
 
-# Directories
-.idea
-.cache
-resources
+# IDEs and editors
+.idea/
+.vscode/
 
 # Community modules (user-installed)
 backend/ContaraNAS/modules/community/*

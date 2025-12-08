@@ -16,6 +16,10 @@ class StateManager:
         self._enabled_modules: set[str] = set()
         self._load_state()
 
+    @staticmethod
+    def _ensure_cache_dir() -> None:
+        settings.cache_dir.mkdir(parents=True, exist_ok=True)
+
     def _load_state(self) -> None:
         """Load module states from disk"""
         try:
@@ -35,6 +39,7 @@ class StateManager:
     def _save_state(self) -> None:
         """Save module states to disk"""
         try:
+            self._ensure_cache_dir()
             data = {"enabled_modules": list(self._enabled_modules)}
 
             with Path.open(self._state_file, "w", encoding="utf-8") as f:

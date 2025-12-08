@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, ClassVar
 
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
 from ContaraNAS.core.utils import get_logger
 
 from .metadata import ModuleMetadata
+from .state import ModuleState
 
 
 logger = get_logger(__name__)
@@ -13,6 +14,9 @@ logger = get_logger(__name__)
 
 class Module(ABC):
     """Base class for all modules"""
+
+    # Subclasses can define a State inner class
+    State: ClassVar[type[ModuleState] | None] = None
 
     def __init__(
         self,
@@ -33,6 +37,10 @@ class Module(ABC):
         if metadata and not display_name:
             self.display_name = metadata.name
 
+        # Initialize typed state if State class is defined
+        self._typed_state: ModuleState | None = None
+        self._init_typed_state()
+
     @property
     def metadata(self) -> ModuleMetadata:
         """Get module metadata"""
@@ -42,6 +50,11 @@ class Module(ABC):
                 "Metadata not available. Metadata should be provided by ModuleLoader during instantiation.",
             )
         return self._metadata
+    
+    @property
+    def typed_state(self) -> ModuleState | None:
+        """Get typed state if available"""
+        return self._typed_state
 
     @abstractmethod
     async def initialize(self):
@@ -115,6 +128,39 @@ class Module(ABC):
                 "old_state": old_state,
                 "new_state": self.state,
                 "changes": kwargs,
+            },
+        )
+
+    def _init_typed_state(self) -> None:
+        """Initialize typed state from State inner class"""
+        state_class = self._get_state_class()
+        if state_class is None:
+            return
+
+        self._typed_state = state_class()
+        self._typed_state.set_commit_callback(self._on_state_commit)
+
+    def _get_state_class(self) -> type[ModuleState] | None:
+        """Get the State class defined on this module"""
+        for cls in type(self).__mro__:
+            if cls is Module:
+                break
+            if "State" in cls.__dict__:
+                state_cls = cls.__dict__["State"]
+                if isinstance(state_cls, type) and issubclass(state_cls, ModuleState):
+                    return state_cls
+        return None
+
+    def _on_state_commit(self) -> None:
+        """Called when typed state is committed"""
+        if self._typed_state is None:
+            return
+
+        event_bus.emit(
+            f"module.{self.name}.state_committed",
+            {
+                "name": self.name,
+                "state": self._typed_state.to_dict(),
             },
         )
 
