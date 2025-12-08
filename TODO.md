@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
 > **Estimated time:** 4-6 weeks  
-> **Status:** In Progress (Phase 1 Complete)  
+> **Status:** In Progress (Phase 2 Complete)  
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -14,6 +14,8 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 2. Modules define UI as component trees
 3. Framework handles rendering, updates, and actions
 4. Frontend renders from JSON with a consistent design system
+
+**Inspiration:** Simplified version of [Airbnb's server-driven UI](https://medium.com/airbnb-engineering/a-deep-dive-into-airbnbs-server-driven-ui-system-842244c5f5) - backend defines UI structure, frontend renders it.
 
 ---
 
@@ -54,61 +56,57 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 
 ## Phase 2: UI Components
 
-**Goal:** Define all UI primitives as Pydantic models.
+**Goal:** Define UI primitives as Pydantic models (matching DesignPlayground.svelte).
 
 ### 2.1 Base component
 
-- [ ] Create `Component(BaseModel)` base class
-- [ ] Implement `to_dict()` serialization
-- [ ] Handle children serialization (recursive)
-- [ ] Handle callable serialization (actions)
+- [x] Create `Component(BaseModel)` base class
+- [x] Implement `to_dict()` serialization
+- [x] Handle children serialization (recursive)
+- [x] Handle callable serialization (actions)
 
 ### 2.2 Layout components
 
-- [ ] `Card` - title, subtitle, icon, children
-- [ ] `Stack` - direction, gap, align, justify, children
-- [ ] `Grid` - columns, gap, children
-- [ ] `Divider` - optional label
-- [ ] `Spacer` - size
+- [x] `Stack` - direction, gap, align, justify, children (CSS flexbox)
+- [x] `Grid` - columns, gap, children (CSS grid)
 
-### 2.3 Data display components
+### 2.3 Card components
 
-- [ ] `Text` - content, variant, color
-- [ ] `Heading` - content, level
-- [ ] `Stat` - label, value, unit, icon, color, trend
-- [ ] `Progress` - value, max, label, color
-- [ ] `Badge` - text, variant
-- [ ] `Table` - columns, data, empty_message
-- [ ] `TableColumn` - key, label, width, align
-- [ ] `List` - items, divided
-- [ ] `ListItem` - title, subtitle, icon, trailing, on_click
-- [ ] `Image` - src, alt, width, height, fit
-- [ ] `Icon` - name, size, color
-- [ ] `Empty` - icon, title, description, action
+- [x] `Card` - icon, title, children, footer
+- [x] `Tile` - module tile variant (icon, title, badge, stats, actions)
+- [x] `Stat` - inline stat for tiles (label, value)
 
-### 2.4 Interactive components
+### 2.4 Data display components
 
-- [ ] `Button` - label, on_click, variant, size, icon, disabled, loading
-- [ ] `IconButton` - icon, on_click, variant, size, tooltip
-- [ ] `Input` - name, label, value, type, placeholder, on_change
-- [ ] `Select` - name, label, options, value, on_change
-- [ ] `SelectOption` - value, label
-- [ ] `Toggle` - name, label, checked, on_change
-- [ ] `Checkbox` - name, label, checked, on_change
-- [ ] `Form` - on_submit, children
+- [x] `Text` - content, variant (body, secondary, muted, code)
+- [x] `StatCard` - standalone stat card (label, value, icon, color, trend)
+- [x] `Progress` - value, max, label, color
+- [x] `Badge` - text, variant (default, primary, success, warning, error, info)
+- [x] `Table` - columns, data, empty_message
+- [x] `TableColumn` - key, label, width, align
 
-### 2.5 Modal components
+### 2.5 Interactive components
 
-- [ ] `Modal` - id, title, size, children, footer, closable
+- [x] `Button` - label, on_click, variant, size, icon, disabled, loading
+- [x] `Input` - name, label, value, type, placeholder, disabled
+- [x] `Select` - name, label, options, value, disabled
+- [x] `SelectOption` - value, label
+- [x] `Toggle` - name, label, checked, disabled
+- [x] `Checkbox` - name, label, checked, disabled
 
-### 2.6 Feedback components
+### 2.6 Modal component
 
-- [ ] `Alert` - message, variant, title
-- [ ] `Spinner` - size, label
+- [x] `Modal` - id, title, children, footer, closable
 
-### 2.7 Exports
+### 2.7 Feedback components
 
-- [ ] Create `ContaraNAS/core/ui/__init__.py` with all exports
+- [x] `Alert` - message, variant (info, success, warning, error), title
+- [x] `Spinner` - size, label
+
+### 2.8 Exports
+
+- [x] Create `ContaraNAS/core/ui/__init__.py` with all exports
+- [x] Tests for all components (22 tests)
 
 **Deliverable:** Can import and instantiate all components.
 
@@ -147,6 +145,14 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 - [ ] Serialize action references in component props
 - [ ] Map action IDs back to methods on invoke
 
+### 3.5 Tests
+
+- [ ] Test `@action` decorator registration
+- [ ] Test action dispatching to correct method
+- [ ] Test action results (OpenModal, Notify, etc.)
+- [ ] Test async actions
+- [ ] Test error handling
+
 **Deliverable:** Can call module methods from frontend, get structured results.
 
 ---
@@ -176,6 +182,12 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 - [ ] Serialize component tree
 - [ ] Compare with previous (optional optimization)
 - [ ] Emit update event
+
+### 4.4 Tests
+
+- [ ] Test `get_tile()` returns Component
+- [ ] Test `render_ui()` serialization
+- [ ] Test backwards compatibility with `get_tile_data()`
 
 **Deliverable:** Modules can define UI, serializes to JSON.
 
