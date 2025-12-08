@@ -40,7 +40,6 @@ class Component(BaseModel):
 
     def _serialize_action(self, func: Callable) -> dict[str, Any]:
         """Serialize a callable action reference"""
-        # Action serialization will be handled by ActionDispatcher in Phase 3
         action_name = getattr(func, "__action_name__", None)
         if action_name:
             return {"__action__": action_name}

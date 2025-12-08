@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
 > **Estimated time:** 4-6 weeks  
-> **Status:** In Progress (Phase 2 Complete)  
+> **Status:** In Progress (Phase 3 Complete)  
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -118,40 +118,40 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 
 ### 3.1 Action decorator
 
-- [ ] Create `@action` decorator
-- [ ] Register decorated methods
-- [ ] Handle async actions
-- [ ] Auto-commit state after action completes
+- [x] Create `@action` decorator
+- [x] Register decorated methods
+- [x] Handle async actions
+- [x] Auto-commit state after action completes
 
 ### 3.2 Action results
 
-- [ ] `OpenModal(modal_id)` - signal to open a modal
-- [ ] `CloseModal(modal_id)` - signal to close a modal  
-- [ ] `Notify(message, variant)` - show notification
-- [ ] `Refresh()` - force UI refresh
-- [ ] Support returning multiple results as list
+- [x] `OpenModal(modal_id)` - signal to open a modal
+- [x] `CloseModal(modal_id)` - signal to close a modal
+- [x] `Notify(message, variant)` - show notification
+- [x] `Refresh()` - force UI refresh
+- [x] Support returning multiple results as list
 
 ### 3.3 ActionDispatcher
 
-- [ ] Create `ActionDispatcher` class
-- [ ] Route action calls to correct module/method
-- [ ] Handle action payloads (form data, etc.)
-- [ ] Process action results
-- [ ] Error handling
+- [x] Create `ActionDispatcher` class
+- [x] Route action calls to correct module/method
+- [x] Handle action payloads (form data, etc.)
+- [x] Process action results
+- [x] Error handling
 
 ### 3.4 Action serialization
 
-- [ ] Generate action IDs for callables
-- [ ] Serialize action references in component props
-- [ ] Map action IDs back to methods on invoke
+- [x] Generate action IDs for callables
+- [x] Serialize action references in component props
+- [x] Map action IDs back to methods on invoke
 
 ### 3.5 Tests
 
-- [ ] Test `@action` decorator registration
-- [ ] Test action dispatching to correct method
-- [ ] Test action results (OpenModal, Notify, etc.)
-- [ ] Test async actions
-- [ ] Test error handling
+- [x] Test `@action` decorator registration
+- [x] Test action dispatching to correct method
+- [x] Test action results (OpenModal, Notify, etc.)
+- [x] Test async actions
+- [x] Test error handling
 
 **Deliverable:** Can call module methods from frontend, get structured results.
 

@@ -50,3 +50,12 @@ class AuthError(ContaraNASError):
 
 class PairingError(AuthError):
     """Pairing-specific errors"""
+
+
+class ActionError(ContaraNASError):
+    """Raised when an action fails"""
+
+    def __init__(self, action_name: str, message: str):
+        self.action_name = action_name
+        self.message = message
+        super().__init__(f"Action '{action_name}' failed: {message}")

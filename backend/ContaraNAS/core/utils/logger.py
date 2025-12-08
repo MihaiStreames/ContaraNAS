@@ -61,5 +61,5 @@ def setup_logging(
     logger.info("Logging initialized", log_dir=str(log_dir))
 
 
-def get_logger(name: str) -> loguru.logger:
+def get_logger(name: str) -> "loguru.Logger":
     return logger.bind(name=name)
