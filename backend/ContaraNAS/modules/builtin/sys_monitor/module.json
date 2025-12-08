@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"author": "MihaiStreames",
 	"description": "Real-time CPU, memory, and disk monitoring",
-	"icon": "💻",
+	"icon": "monitor",
 	"engine": {
 		"contaranas": "^0.1.0"
 	},

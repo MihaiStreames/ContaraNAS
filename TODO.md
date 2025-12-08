@@ -163,17 +163,19 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 
 ### 4.1 Module base class updates
 
-- [ ] Add `get_tile(self) -> Component | None` method
-- [ ] Add `get_modals(self) -> list[Modal]` method
+- [x] Add `get_tile(self) -> Tile` method (sync - just builds UI from state)
+- [ ] Add `get_modals(self) -> list[Modal]` method (sync - just builds UI from state)
 - [ ] Add `render_tile()` - serializes tile to dict
 - [ ] Add `render_modals()` - serializes modals to dicts
 - [ ] Add `render_ui()` - returns complete UI state
 
+**Note:** `get_tile()` and `get_modals()` are synchronous because they only construct UI objects from existing state. No I/O is needed - state is already loaded via `start_monitoring()` or updated via actions.
+
 ### 4.2 Backwards compatibility
 
-- [ ] Keep `get_tile_data()` working
-- [ ] If `get_tile()` returns None, fall back to `get_tile_data()`
-- [ ] Log deprecation warnings
+- [x] Keep `get_tile_data()` working (deprecated, emits warning)
+- [x] If `get_tile()` raises NotImplementedError, fall back to `get_tile_data()`
+- [x] Log deprecation warnings
 
 ### 4.3 UI rendering pipeline
 
@@ -288,16 +290,18 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 - [x] Border radius
 - [x] Shadows
 
-### 8.2 Component designs
+### 8.2 Component designs (see DesignPlayground.svelte)
 
-- [x] Card - sketch/design
-- [x] Stat - sketch/design
-- [x] Button variants - sketch/design
-- [x] Table - sketch/design
-- [x] Modal - sketch/design
-- [x] Form inputs - sketch/design
-- [x] Progress - sketch/design
-- [x] Badge - sketch/design
+- [x] Card (with header, content, footer)
+- [x] Module Tile (icon, title, badge, stats, actions)
+- [x] Stat / StatCard (value + label, with optional icon/trend)
+- [x] Button (primary, secondary, ghost, danger + sizes + loading)
+- [x] Table (with header, rows, badges)
+- [x] Modal (header, body, footer, close button)
+- [x] Form inputs (Input, Select, Toggle, Checkbox)
+- [x] Progress bar (with labels)
+- [x] Badge (default, primary, success, warning, error, info)
+- [x] Alert (info, success, warning, error)
 
 ### 8.3 Design documentation
 
@@ -310,7 +314,7 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 
 ## Phase 9: Frontend Components
 
-**Goal:** Svelte components that render from JSON.
+**Goal:** Svelte components that render from JSON (matching DesignPlayground.svelte).
 
 ### 9.1 Setup
 
@@ -320,49 +324,44 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 
 ### 9.2 Layout components
 
-- [ ] `Card.svelte`
-- [ ] `Stack.svelte`
-- [ ] `Grid.svelte`
-- [ ] `Divider.svelte`
-- [ ] `Spacer.svelte`
+- [ ] `Stack.svelte` (flex container, direction, gap, align, justify)
+- [ ] `Grid.svelte` (CSS grid, columns, gap)
 
-### 9.3 Data display components
+### 9.3 Card components
 
-- [ ] `Text.svelte`
-- [ ] `Heading.svelte`
-- [ ] `Stat.svelte`
-- [ ] `Progress.svelte`
-- [ ] `Badge.svelte`
-- [ ] `Table.svelte`
-- [ ] `List.svelte`
-- [ ] `ListItem.svelte`
-- [ ] `Image.svelte`
-- [ ] `Icon.svelte`
-- [ ] `Empty.svelte`
+- [ ] `Card.svelte` (icon, title, content, footer)
+- [ ] `Tile.svelte` (module tile: icon, title, badge, stats, content, actions)
+- [ ] `Stat.svelte` (inline stat for tiles: label, value)
+- [ ] `StatCard.svelte` (standalone stat: label, value, icon, color, trend)
 
-### 9.4 Interactive components
+### 9.4 Data display components
 
-- [ ] `Button.svelte`
-- [ ] `IconButton.svelte`
-- [ ] `Input.svelte`
-- [ ] `Select.svelte`
-- [ ] `Toggle.svelte`
+- [ ] `Text.svelte` (body, secondary, muted, code variants)
+- [ ] `Progress.svelte` (value, max, label, sublabel, color)
+- [ ] `Badge.svelte` (default, primary, success, warning, error, info)
+- [ ] `Table.svelte` (columns, data, empty_message)
+
+### 9.5 Interactive components
+
+- [ ] `Button.svelte` (primary, secondary, ghost, danger + sizes + icon + loading)
+- [ ] `Input.svelte` (text, password, email, number)
+- [ ] `Select.svelte` (options, value)
+- [ ] `Toggle.svelte` (switch)
 - [ ] `Checkbox.svelte`
-- [ ] `Form.svelte`
 
-### 9.5 Modal system
+### 9.6 Modal system
 
-- [ ] `Modal.svelte`
+- [ ] `Modal.svelte` (id, title, children, footer, closable)
 - [ ] Modal state management (open/close)
 - [ ] Backdrop and focus trap
 
-### 9.6 Feedback components
+### 9.7 Feedback components
 
-- [ ] `Alert.svelte`
-- [ ] `Spinner.svelte`
-- [ ] Notification system
+- [ ] `Alert.svelte` (info, success, warning, error + optional title)
+- [ ] `Spinner.svelte` (sm, md, lg + optional label)
+- [ ] Notification toast system
 
-### 9.7 Component registry
+### 9.8 Component registry
 
 - [ ] Create `registry.ts` mapping type names to components
 - [ ] Handle unknown component types gracefully

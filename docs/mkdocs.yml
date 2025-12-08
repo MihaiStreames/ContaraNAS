@@ -5,66 +5,78 @@ repo_url: https://github.com/MihaiStreames/ContaraNAS
 repo_name: MihaiStreames/ContaraNAS
 
 theme:
-    name: material
-    palette:
-        -   scheme: slate
-            primary: indigo
-            accent: indigo
-            toggle:
-                icon: material/brightness-4
-                name: Switch to light mode
-        -   scheme: default
-            primary: indigo
-            accent: indigo
-            toggle:
-                icon: material/brightness-7
-                name: Switch to dark mode
-    features:
-        - navigation.instant
-        - navigation.tracking
-        - navigation.sections
-        - navigation.expand
-        - navigation.top
-        - search.highlight
-        - search.share
-        - content.code.copy
-        - content.code.annotate
-    icon:
-        repo: fontawesome/brands/github
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
 
 nav:
-    -   Home: index.md
+  - Home: index.md
+  - Module Development:
+      - Overview: modules/index.md
+      - State Management: modules/state.md
+      - Actions: modules/actions.md
+      - Declarative UI:
+          - Overview: modules/ui/index.md
+          - Layout: modules/ui/layout.md
+          - Cards: modules/ui/cards.md
+          - Display: modules/ui/display.md
+          - Interactive: modules/ui/interactive.md
+          - Modal: modules/ui/modal.md
+          - Feedback: modules/ui/feedback.md
 
 markdown_extensions:
-    -   pymdownx.highlight:
-            anchor_linenums: true
-            line_spans: __span
-            pygments_lang_class: true
-    - pymdownx.inlinehilite
-    - pymdownx.snippets
-    -   pymdownx.superfences:
-            custom_fences:
-                -   name: mermaid
-                    class: mermaid
-                    format: !!python/name:pymdownx.superfences.fence_code_format
-    -   pymdownx.tabbed:
-            alternate_style: true
-    - pymdownx.details
-    - admonition
-    - tables
-    - attr_list
-    - md_in_html
-    -   toc:
-            permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
 
 plugins:
-    - search
-    - tags
+  - search
+  - tags
 
 extra:
-    social:
-        -   icon: fontawesome/brands/github
-            link: https://github.com/MihaiStreames/ContaraNAS
-    generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MihaiStreames/ContaraNAS
+  generator: false
 
 copyright: Copyright &copy; 2024 Sincos — MIT License

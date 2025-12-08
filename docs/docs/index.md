@@ -17,7 +17,18 @@ Built-in modules track Steam libraries, system resources, and more. Community mo
 - **Community marketplace** — Install third-party modules
 - **Cross-platform** — Tauri-based desktop app
 
-## Quick Start
+## Documentation
+
+### For Module Developers
+
+Build your own modules to extend ContaraNAS:
+
+- **[Module Development](modules/index.md)** — Overview and getting started
+- **[State Management](modules/state.md)** — Typed state with dirty tracking
+- **[Declarative UI](modules/ui/index.md)** — Build UIs in Python
+- **[Actions](modules/actions.md)** — Handle user interactions
+
+## Development Setup
 
 ```bash
 # Backend
@@ -33,7 +44,7 @@ pnpm tauri dev
 
 The backend runs on `localhost:8000`. The frontend will open automatically and prompt for pairing.
 
-## Requirements
+### Requirements
 
 | Component | Version            |
 |-----------|--------------------|

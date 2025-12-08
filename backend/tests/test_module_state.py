@@ -1,5 +1,6 @@
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.module import Module, ModuleState
+from ContaraNAS.core.ui import Tile, Stat
 
 
 class SampleState(ModuleState):
@@ -22,8 +23,12 @@ class SampleModule(Module):
     async def stop_monitoring(self):
         pass
 
-    async def get_tile_data(self):
-        return {}
+    def get_tile(self) -> Tile:
+        return Tile(
+            icon="box",
+            title="Sample",
+            stats=[Stat(label="Counter", value=self.typed_state.counter if self.typed_state else 0)],
+        )
 
 
 def test_state_creation():
@@ -114,8 +119,8 @@ def test_module_without_state():
         async def stop_monitoring(self):
             pass
 
-        async def get_tile_data(self):
-            return {}
+        def get_tile(self) -> Tile:
+            return Tile(icon="box", title="No State", stats=[])
 
     module = NoStateModule(name="nostate")
     assert module.typed_state is None

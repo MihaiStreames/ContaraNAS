@@ -41,6 +41,15 @@ Builtin modules in `ContaraNAS/modules/builtin/`:
 
 Community modules installed to `ContaraNAS/modules/community/`.
 
+## Module Development
+
+See the [Module Development documentation](https://contaranas.xyz/modules/) for:
+
+- Creating custom modules
+- State management with `ModuleState`
+- Declarative UI components
+- Action handling
+
 ## System Dependencies
 
 | Module      | Dependency        | Required                          |

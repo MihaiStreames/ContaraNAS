@@ -10,7 +10,18 @@ A modular desktop application for monitoring and managing NAS systems at home.
 - **Modular Architecture** - Enable/disable features as needed
 - **Marketplace** - Community modules (coming soon)
 
-## Quick Start
+## Documentation
+
+Full documentation available at [contaranas.xyz](https://contaranas.xyz/) (or run `mkdocs serve` in `/docs`).
+
+### For Module Developers
+
+- [Module Development](https://contaranas.xyz/modules/) - Overview and getting started
+- [State Management](https://contaranas.xyz/modules/state/) - Typed state with dirty tracking
+- [Declarative UI](https://contaranas.xyz/modules/ui/) - Build UIs in Python
+- [Actions](https://contaranas.xyz/modules/actions/) - Handle user interactions
+
+## Development Setup
 
 ### Backend
 
@@ -28,7 +39,7 @@ pnpm install
 pnpm tauri dev
 ```
 
-## Requirements
+### Requirements
 
 - Python 3.13+
 - Node.js 18+ / pnpm

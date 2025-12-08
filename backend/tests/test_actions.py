@@ -11,6 +11,7 @@ from ContaraNAS.core.action import (
     get_actions,
 )
 from ContaraNAS.core.module import Module, ModuleState
+from ContaraNAS.core.ui import Tile, Stat
 
 
 class MockState(ModuleState):
@@ -32,8 +33,12 @@ class MockModule(Module):
     async def stop_monitoring(self):
         pass
 
-    async def get_tile_data(self):
-        return {}
+    def get_tile(self) -> Tile:
+        return Tile(
+            icon="box",
+            title="Mock Module",
+            stats=[Stat(label="Count", value=self.typed_state.count if self.typed_state else 0)],
+        )
 
     @action
     async def increment(self):

@@ -21,6 +21,7 @@ class ModuleMetadata:
     version: str
     author: str
     description: str
+    icon: str  # Lucide icon name (e.g., "gamepad-2", "monitor")
 
     # Requirements
     min_backend_version: str
@@ -59,6 +60,7 @@ class ModuleMetadata:
             version=data["version"],
             author=data.get("author", "Unknown"),
             description=data.get("description", ""),
+            icon=data.get("icon", "box"),
             min_backend_version=min_version,
             platforms=data.get("platforms", ["linux", "windows"]),
             dependencies=dependencies,
@@ -73,6 +75,7 @@ class ModuleMetadata:
             "version": self.version,
             "author": self.author,
             "description": self.description,
+            "icon": self.icon,
             "min_backend_version": self.min_backend_version,
             "platforms": self.platforms,
             "dependencies": {

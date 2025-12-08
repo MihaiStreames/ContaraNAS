@@ -1,0 +1,300 @@
+# Card Components
+
+Card components are container elements that group related content.
+
+## Card
+
+A general-purpose container with optional icon, title, and footer.
+
+```python
+from ContaraNAS.core.ui import Card, Text, Button, Stack
+
+card = Card(
+    icon="chart-bar",
+    title="Analytics",
+    children=[
+        Text(content="View your usage statistics and trends."),
+        Text(content="Updated daily.", variant="secondary"),
+    ],
+    footer=[
+        Button(label="View Details", on_click=self.view_details),
+    ],
+)
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `str \| None` | `None` | Lucide icon name for the header |
+| `title` | `str \| None` | `None` | Card title text |
+| `children` | `list[Component]` | `[]` | Main content components |
+| `footer` | `list[Component] \| None` | `None` | Footer components (typically buttons) |
+
+### Examples
+
+**Simple Card:**
+
+```python
+Card(
+    title="Welcome",
+    children=[
+        Text(content="Get started by enabling a module."),
+    ],
+)
+```
+
+**Card with Icon:**
+
+```python
+Card(
+    icon="settings",
+    title="Settings",
+    children=[
+        Text(content="Configure your preferences."),
+    ],
+)
+```
+
+**Card with Footer:**
+
+```python
+Card(
+    title="Confirmation",
+    children=[
+        Text(content="Are you sure you want to delete this item?"),
+    ],
+    footer=[
+        Button(label="Cancel", variant="secondary", on_click=self.cancel),
+        Button(label="Delete", variant="danger", on_click=self.delete),
+    ],
+)
+```
+
+---
+
+## Tile
+
+A specialized card designed for module tiles on the dashboard. Tiles have a consistent structure: icon, title, optional badge, stats, optional content, and actions.
+
+```python
+from ContaraNAS.core.ui import Tile, Stat, Badge, Button
+
+tile = Tile(
+    icon="gamepad-2",
+    title="Steam",
+    badge=Badge(text="Active", variant="success"),
+    stats=[
+        Stat(label="Games", value=150),
+        Stat(label="Size", value="2.3 TB"),
+        Stat(label="Libraries", value=3),
+    ],
+    actions=[
+        Button(label="Refresh", on_click=self.refresh),
+        Button(label="Details", variant="secondary", on_click=self.open_details),
+    ],
+)
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `str` | Required | Lucide icon name for the tile |
+| `title` | `str` | Required | Module display name |
+| `badge` | `Badge \| None` | `None` | Status badge next to title |
+| `stats` | `list[Stat]` | `[]` | Key metrics to display |
+| `content` | `list[Component] \| None` | `None` | Additional content below stats |
+| `actions` | `list[Component]` | `[]` | Action buttons |
+
+### Using with get_tile()
+
+The `Tile` component is returned from your module's `get_tile()` method:
+
+```python
+class MyModule(Module):
+    def get_tile(self) -> Tile:
+        state = self._typed_state
+        if not state:
+            return Tile(icon="package", title="My Module", stats=[])
+
+        return Tile(
+            icon="package",
+            title="My Module",
+            stats=[
+                Stat(label="Items", value=state.item_count),
+                Stat(label="Status", value=state.status),
+            ],
+            actions=[
+                Button(label="Refresh", on_click=self.refresh),
+            ],
+        )
+```
+
+!!! warning "Deprecation Notice"
+    The older `get_tile_data()` method that returns a dict is deprecated. Use `get_tile()` which returns a `Tile` component directly.
+
+### Badge Variants
+
+Use badges to show module status:
+
+```python
+# Module is active/running
+badge=Badge(text="Active", variant="success")
+
+# Module has warnings
+badge=Badge(text="Warning", variant="warning")
+
+# Module has errors
+badge=Badge(text="Error", variant="error")
+
+# Module is syncing/updating
+badge=Badge(text="Syncing", variant="info")
+
+# Module is disabled
+badge=Badge(text="Disabled", variant="default")
+```
+
+### Content Section
+
+The `content` prop allows custom components below the stats:
+
+```python
+tile = Tile(
+    icon="clipboard-list",
+    title="Tasks",
+    stats=[
+        Stat(label="Pending", value=5),
+    ],
+    content=[
+        Stack(
+            direction="vertical",
+            gap="1",
+            children=[
+                Text(content="• Review pull request"),
+                Text(content="• Update documentation"),
+                Text(content="• Fix login bug"),
+            ],
+        ),
+    ],
+    actions=[...],
+)
+```
+
+---
+
+## Stat
+
+An inline statistic display, typically used inside Tiles.
+
+```python
+from ContaraNAS.core.ui import Stat
+
+# Basic stat
+stat = Stat(label="Users", value=1234)
+
+# With formatted value
+stat = Stat(label="Size", value="2.3 TB")
+
+# With percentage
+stat = Stat(label="Usage", value="85%")
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `str` | Required | Description of the statistic |
+| `value` | `str \| int \| float` | Required | The statistic value |
+
+### Formatting Values
+
+The `value` prop accepts numbers or strings. Format as needed:
+
+```python
+# Integer
+Stat(label="Count", value=42)
+
+# Float (consider formatting)
+Stat(label="Percentage", value=f"{percentage:.1f}%")
+
+# String
+Stat(label="Status", value="Healthy")
+
+# Size formatting
+def format_size(bytes: int) -> str:
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if bytes < 1024:
+            return f"{bytes:.1f} {unit}"
+        bytes /= 1024
+    return f"{bytes:.1f} PB"
+
+Stat(label="Size", value=format_size(state.size_bytes))
+```
+
+### Best Practices for Stats
+
+- **Keep labels short** — "CPU" not "CPU Usage Percentage"
+- **Format values appropriately** — "2.3 TB" not "2534023491584 bytes"
+- **Limit to 3-4 stats** — Too many stats are hard to scan
+- **Order by importance** — Most relevant stat first
+
+---
+
+## Complete Tile Example
+
+Here's a `get_tile()` implementation showing all Tile features:
+
+```python
+def get_tile(self) -> Tile:
+    state = self._typed_state
+    if not state:
+        return Tile(icon="download", title="Downloader", stats=[])
+
+    # Determine badge based on state
+    if state.error:
+        badge = Badge(text="Error", variant="error")
+    elif state.active_downloads > 0:
+        badge = Badge(text="Downloading", variant="info")
+    else:
+        badge = Badge(text="Idle", variant="default")
+
+    # Build content section for active download
+    content = None
+    if state.current_file:
+        content = [
+            Stack(
+                direction="vertical",
+                gap="2",
+                children=[
+                    Text(content=state.current_file, variant="secondary"),
+                    Progress(
+                        value=state.progress,
+                        max=100,
+                        label=f"{state.progress:.0f}%",
+                    ),
+                ],
+            ),
+        ]
+
+    return Tile(
+        icon="download",
+        title="Downloader",
+        badge=badge,
+        stats=[
+            Stat(label="Active", value=state.active_downloads),
+            Stat(label="Today", value=state.completed_today),
+            Stat(label="Speed", value=f"{state.download_speed_mbps:.1f} MB/s"),
+        ],
+        content=content,
+        actions=[
+            Button(
+                label="Pause All" if state.active_downloads > 0 else "Resume",
+                on_click=self.toggle_pause,
+            ),
+            Button(label="Queue", variant="secondary", on_click=self.open_queue),
+        ],
+    )
+```
+
+For complete module examples including state and actions, see [State Management](../state.md#full-example) and [Actions](../actions.md#complete-example).

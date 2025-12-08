@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
+from warnings import warn
 
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
@@ -7,6 +8,9 @@ from ContaraNAS.core.utils import get_logger
 
 from .metadata import ModuleMetadata
 from .state import ModuleState
+
+if TYPE_CHECKING:
+    from ContaraNAS.core.ui import Tile
 
 
 logger = get_logger(__name__)
@@ -68,9 +72,35 @@ class Module(ABC):
     async def stop_monitoring(self):
         """Stop all event handlers/watchers"""
 
-    @abstractmethod
-    async def get_tile_data(self):
-        """Get data for dashboard tile display"""
+    def get_tile(self) -> "Tile":
+        """Return the dashboard tile UI component
+
+        Override this method to provide your module's tile. This is the preferred
+        method over the deprecated get_tile_data().
+
+        Returns:
+            Tile: The tile component for the dashboard.
+
+        Raises:
+            NotImplementedError: If neither get_tile() nor get_tile_data() is implemented.
+        """
+        raise NotImplementedError(
+            f"Module {self.name} must implement get_tile()"
+        )
+
+    async def get_tile_data(self) -> dict[str, Any]:
+        """Get data for dashboard tile display
+
+        .. deprecated::
+            Use get_tile() instead which returns a Tile component directly.
+        """
+        warn(
+            f"{self.__class__.__name__}.get_tile_data() is deprecated. "
+            "Override get_tile() instead which returns a Tile component directly.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return {}
 
     async def enable(self):
         """Enable the module and start monitoring"""
@@ -164,15 +194,42 @@ class Module(ABC):
             },
         )
 
+    def _get_tile_data_compat(self) -> dict[str, Any]:
+        """Get tile data with backwards compatibility.
+
+        Tries get_tile() first, falls back to get_tile_data() for legacy modules.
+        """
+        try:
+            tile = self.get_tile()
+            return tile.to_dict()
+        except NotImplementedError:
+            # Fall back to legacy get_tile_data() - will emit deprecation warning
+            import asyncio
+
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                # We're in an async context, need to handle differently
+                # For now, return empty dict - the async version will be called
+                return {}
+            return loop.run_until_complete(self.get_tile_data())
+
     async def _emit_event(self, change_type: str, data: dict | None = None):
         """Emit state change event"""
+        # Try get_tile() first, fall back to get_tile_data() for backwards compat
+        try:
+            tile = self.get_tile()
+            tile_data = tile.to_dict()
+        except NotImplementedError:
+            # Legacy module using get_tile_data()
+            tile_data = await self.get_tile_data()
+
         event_data = {
             "name": self.name,
             "display_name": self.display_name,
             "enabled": self.enable_flag,
             "initialized": self.init_flag,
             "state": self.state.copy(),
-            "tile_data": await self.get_tile_data(),
+            "tile_data": tile_data,
             "change_type": change_type,
         }
 
