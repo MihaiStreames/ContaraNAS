@@ -24,19 +24,19 @@ Text(content="npm install contaranas", variant="code")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `content` | `str` | Required | The text to display |
-| `variant` | `"body"` \| `"secondary"` \| `"muted"` \| `"code"` | `"body"` | Visual style |
+| Prop      | Type                                               | Default  | Description         |
+|-----------|----------------------------------------------------|----------|---------------------|
+| `content` | `str`                                              | Required | The text to display |
+| `variant` | `"body"` \| `"secondary"` \| `"muted"` \| `"code"` | `"body"` | Visual style        |
 
 ### Variants
 
-| Variant | Use Case |
-|---------|----------|
-| `"body"` | Primary content, normal text |
+| Variant       | Use Case                             |
+|---------------|--------------------------------------|
+| `"body"`      | Primary content, normal text         |
 | `"secondary"` | Supporting information, descriptions |
-| `"muted"` | Timestamps, metadata, hints |
-| `"code"` | Code snippets, paths, commands |
+| `"muted"`     | Timestamps, metadata, hints          |
+| `"code"`      | Code snippets, paths, commands       |
 
 ### Examples
 
@@ -77,13 +77,13 @@ stats = Grid(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Description of the statistic |
-| `value` | `str \| int \| float` | Required | The statistic value |
-| `icon` | `str \| None` | `None` | Lucide icon name |
-| `color` | `"default"` \| `"success"` \| `"warning"` \| `"error"` | `"default"` | Color theme |
-| `trend` | `tuple[Literal["up", "down"], str] \| None` | `None` | Trend indicator |
+| Prop    | Type                                                   | Default     | Description                  |
+|---------|--------------------------------------------------------|-------------|------------------------------|
+| `label` | `str`                                                  | Required    | Description of the statistic |
+| `value` | `str \| int \| float`                                  | Required    | The statistic value          |
+| `icon`  | `str \| None`                                          | `None`      | Lucide icon name             |
+| `color` | `"default"` \| `"success"` \| `"warning"` \| `"error"` | `"default"` | Color theme                  |
+| `trend` | `tuple[Literal["up", "down"], str] \| None`            | `None`      | Trend indicator              |
 
 ### Color Usage
 
@@ -144,13 +144,13 @@ Progress(value=90, max=100, label="90%", color="warning")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `int \| float` | Required | Current value |
-| `max` | `int \| float` | `100` | Maximum value |
-| `label` | `str \| None` | `None` | Primary label (e.g., percentage) |
-| `sublabel` | `str \| None` | `None` | Secondary label (e.g., status text) |
-| `color` | `"default"` \| `"success"` \| `"warning"` \| `"error"` | `"default"` | Bar color |
+| Prop       | Type                                                   | Default     | Description                         |
+|------------|--------------------------------------------------------|-------------|-------------------------------------|
+| `value`    | `int \| float`                                         | Required    | Current value                       |
+| `max`      | `int \| float`                                         | `100`       | Maximum value                       |
+| `label`    | `str \| None`                                          | `None`      | Primary label (e.g., percentage)    |
+| `sublabel` | `str \| None`                                          | `None`      | Secondary label (e.g., status text) |
+| `color`    | `"default"` \| `"success"` \| `"warning"` \| `"error"` | `"default"` | Bar color                           |
 
 ### Color Thresholds
 
@@ -190,21 +190,21 @@ Badge(text="Beta", variant="info")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `text` | `str` | Required | Badge text |
+| Prop      | Type                                                                              | Default     | Description   |
+|-----------|-----------------------------------------------------------------------------------|-------------|---------------|
+| `text`    | `str`                                                                             | Required    | Badge text    |
 | `variant` | `"default"` \| `"primary"` \| `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"default"` | Color variant |
 
 ### Variants
 
-| Variant | Use Case |
-|---------|----------|
-| `"default"` | Neutral, inactive states |
-| `"primary"` | Brand accent, highlights |
+| Variant     | Use Case                    |
+|-------------|-----------------------------|
+| `"default"` | Neutral, inactive states    |
+| `"primary"` | Brand accent, highlights    |
 | `"success"` | Positive states, completion |
-| `"warning"` | Needs attention, caution |
-| `"error"` | Errors, critical issues |
-| `"info"` | Informational, in-progress |
+| `"warning"` | Needs attention, caution    |
+| `"error"`   | Errors, critical issues     |
+| `"info"`    | Informational, in-progress  |
 
 ### Common Patterns
 
@@ -251,20 +251,20 @@ table = Table(
 
 ### Table Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `columns` | `list[TableColumn]` | Required | Column definitions |
-| `data` | `list[dict[str, Any]]` | Required | Row data |
-| `empty_message` | `str` | `"No data"` | Message when data is empty |
+| Prop            | Type                   | Default     | Description                |
+|-----------------|------------------------|-------------|----------------------------|
+| `columns`       | `list[TableColumn]`    | Required    | Column definitions         |
+| `data`          | `list[dict[str, Any]]` | Required    | Row data                   |
+| `empty_message` | `str`                  | `"No data"` | Message when data is empty |
 
 ### TableColumn Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `key` | `str` | Required | Key in data dict |
-| `label` | `str` | Required | Column header text |
-| `width` | `str \| None` | `None` | CSS width (e.g., "100px", "20%") |
-| `align` | `"left"` \| `"center"` \| `"right"` | `"left"` | Text alignment |
+| Prop    | Type                                | Default  | Description                      |
+|---------|-------------------------------------|----------|----------------------------------|
+| `key`   | `str`                               | Required | Key in data dict                 |
+| `label` | `str`                               | Required | Column header text               |
+| `width` | `str \| None`                       | `None`   | CSS width (e.g., "100px", "20%") |
+| `align` | `"left"` \| `"center"` \| `"right"` | `"left"` | Text alignment                   |
 
 ### Examples
 

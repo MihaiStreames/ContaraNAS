@@ -4,7 +4,8 @@ This page explains how to handle user interactions in your ContaraNAS module.
 
 ## Overview
 
-Actions are module methods that can be called from the frontend. When a user clicks a button, submits a form, or triggers any interactive element, an action is invoked.
+Actions are module methods that can be called from the frontend. When a user clicks a button, submits a form, or
+triggers any interactive element, an action is invoked.
 
 The action system provides:
 
@@ -159,12 +160,12 @@ Actions can return results that control the frontend behavior.
 
 ### Available Results
 
-| Result | Purpose |
-|--------|---------|
-| `OpenModal(modal_id)` | Open a modal dialog |
-| `CloseModal(modal_id)` | Close a modal dialog |
-| `Notify(message, variant)` | Show a notification |
-| `Refresh()` | Force UI refresh |
+| Result                     | Purpose              |
+|----------------------------|----------------------|
+| `OpenModal(modal_id)`      | Open a modal dialog  |
+| `CloseModal(modal_id)`     | Close a modal dialog |
+| `Notify(message, variant)` | Show a notification  |
+| `Refresh()`                | Force UI refresh     |
 
 ### Importing Results
 
@@ -234,11 +235,11 @@ async def delete_item(self):
 
 #### Notify Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `message` | `str` | Required | Notification text |
+| Prop      | Type                                                | Default  | Description        |
+|-----------|-----------------------------------------------------|----------|--------------------|
+| `message` | `str`                                               | Required | Notification text  |
 | `variant` | `"info"` \| `"success"` \| `"warning"` \| `"error"` | `"info"` | Notification style |
-| `title` | `str \| None` | `None` | Optional title |
+| `title`   | `str \| None`                                       | `None`   | Optional title     |
 
 ### Refresh
 

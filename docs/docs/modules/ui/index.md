@@ -4,7 +4,8 @@ This section explains how to build user interfaces for your ContaraNAS module.
 
 ## Overview
 
-ContaraNAS uses a **server-driven UI** approach. Instead of writing HTML, CSS, or frontend code, you define your UI in Python using component classes. The framework serializes these to JSON and the frontend renders them automatically.
+ContaraNAS uses a **server-driven UI** approach. Instead of writing HTML, CSS, or frontend code, you define your UI in
+Python using component classes. The framework serializes these to JSON and the frontend renders them automatically.
 
 ```
 Python Component → JSON → Frontend Renders
@@ -62,14 +63,14 @@ The frontend has a component for each `type` and renders them recursively.
 
 Components are organized into categories based on their purpose:
 
-| Category | Purpose | Examples |
-|----------|---------|----------|
-| [Layout](layout.md) | Structure and arrangement | Stack, Grid |
-| [Card](cards.md) | Container elements | Card, Tile, Stat |
-| [Display](display.md) | Show information | Text, Progress, Badge, Table |
-| [Interactive](interactive.md) | User input | Button, Input, Select, Toggle |
-| [Modal](modal.md) | Popup dialogs | Modal |
-| [Feedback](feedback.md) | Status indicators | Alert, Spinner |
+| Category                      | Purpose                   | Examples                      |
+|-------------------------------|---------------------------|-------------------------------|
+| [Layout](layout.md)           | Structure and arrangement | Stack, Grid                   |
+| [Card](cards.md)              | Container elements        | Card, Tile, Stat              |
+| [Display](display.md)         | Show information          | Text, Progress, Badge, Table  |
+| [Interactive](interactive.md) | User input                | Button, Input, Select, Toggle |
+| [Modal](modal.md)             | Popup dialogs             | Modal                         |
+| [Feedback](feedback.md)       | Status indicators         | Alert, Spinner                |
 
 ## Base Component
 
@@ -79,7 +80,7 @@ All components inherit from the `Component` base class:
 from pydantic import BaseModel, ConfigDict
 
 class Component(BaseModel):
-    """Base class for all UI components."""
+    """Base class for all UI components"""
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
@@ -89,17 +90,17 @@ class Component(BaseModel):
     _type: ClassVar[str] = "component"
 
     def to_dict(self) -> dict[str, Any]:
-        """Serialize component to dictionary for frontend."""
+        """Serialize component to dictionary for frontend"""
         ...
 ```
 
 ### Key Methods
 
-| Method | Description |
-|--------|-------------|
-| `to_dict()` | Serialize the component to a JSON-compatible dict |
-| `_serialize_value()` | Handle nested components and special types |
-| `_serialize_action()` | Convert callable actions to references |
+| Method                | Description                                       |
+|-----------------------|---------------------------------------------------|
+| `to_dict()`           | Serialize the component to a JSON-compatible dict |
+| `_serialize_value()`  | Handle nested components and special types        |
+| `_serialize_action()` | Convert callable actions to references            |
 
 ### The `_type` Field
 
@@ -154,7 +155,8 @@ from ContaraNAS.core.ui import (
 
 ## Building a Tile
 
-Every module provides a tile for the dashboard via `get_tile()`. See [Card Components - Tile](cards.md#tile) for the full Tile API and examples.
+Every module provides a tile for the dashboard via `get_tile()`. See [Card Components - Tile](cards.md#tile) for the
+full Tile API and examples.
 
 !!! warning "Deprecation Notice"
     The older `get_tile_data()` method that returns a dict is deprecated. Use `get_tile()` which returns a `Tile` component directly.
@@ -275,7 +277,8 @@ def get_tile(self) -> Tile:
 
 ### Loading States
 
-Show loading indicators during async operations. See [Feedback Components](feedback.md#loading-states) for detailed patterns with Spinner.
+Show loading indicators during async operations. See [Feedback Components](feedback.md#loading-states) for detailed
+patterns with Spinner.
 
 ## Best Practices
 

@@ -15,7 +15,9 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 3. Framework handles rendering, updates, and actions
 4. Frontend renders from JSON with a consistent design system
 
-**Inspiration:** Simplified version of [Airbnb's server-driven UI](https://medium.com/airbnb-engineering/a-deep-dive-into-airbnbs-server-driven-ui-system-842244c5f5) - backend defines UI structure, frontend renders it.
+**Inspiration:** Simplified version
+of [Airbnb's server-driven UI](https://medium.com/airbnb-engineering/a-deep-dive-into-airbnbs-server-driven-ui-system-842244c5f5) -
+backend defines UI structure, frontend renders it.
 
 ---
 
@@ -169,7 +171,8 @@ Replace the current `get_tile_data() -> dict` pattern with a typed, declarative 
 - [ ] Add `render_modals()` - serializes modals to dicts
 - [ ] Add `render_ui()` - returns complete UI state
 
-**Note:** `get_tile()` and `get_modals()` are synchronous because they only construct UI objects from existing state. No I/O is needed - state is already loaded via `start_monitoring()` or updated via actions.
+**Note:** `get_tile()` and `get_modals()` are synchronous because they only construct UI objects from existing state. No
+I/O is needed - state is already loaded via `start_monitoring()` or updated via actions.
 
 ### 4.2 Backwards compatibility
 

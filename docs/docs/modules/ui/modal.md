@@ -31,13 +31,13 @@ modal = Modal(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `id` | `str` | Required | Unique identifier for the modal |
-| `title` | `str` | Required | Modal header title |
-| `children` | `list[Component]` | `[]` | Main content components |
-| `footer` | `list[Component] \| None` | `None` | Footer components (usually buttons) |
-| `closable` | `bool` | `True` | Show close button in header |
+| Prop       | Type                      | Default  | Description                         |
+|------------|---------------------------|----------|-------------------------------------|
+| `id`       | `str`                     | Required | Unique identifier for the modal     |
+| `title`    | `str`                     | Required | Modal header title                  |
+| `children` | `list[Component]`         | `[]`     | Main content components             |
+| `footer`   | `list[Component] \| None` | `None`   | Footer components (usually buttons) |
+| `closable` | `bool`                    | `True`   | Show close button in header         |
 
 ## Opening Modals
 
@@ -85,7 +85,7 @@ from ContaraNAS.core.action import action, CloseModal, Notify
 
 @action
 async def save_and_close(self) -> list:
-    """Save data and close the modal."""
+    """Save data and close the modal"""
     # Save logic here...
 
     return [
@@ -180,7 +180,8 @@ def get_edit_modal(self) -> Modal:
     )
 ```
 
-The `save_settings` action receives form field values as parameters. See [Actions - Form Data](../actions.md#form-data) for details.
+The `save_settings` action receives form field values as parameters. See [Actions - Form Data](../actions.md#form-data)
+for details.
 
 ### Detail View Modal
 

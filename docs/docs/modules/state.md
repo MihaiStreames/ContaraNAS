@@ -31,16 +31,16 @@ class MyModule(Module):
 
 Because `ModuleState` inherits from Pydantic's `BaseModel`, you can use any type that Pydantic supports:
 
-| Type | Example | Notes |
-|------|---------|-------|
-| `int` | `count: int = 0` | Integer numbers |
-| `float` | `percentage: float = 0.0` | Floating point numbers |
-| `str` | `name: str = ""` | Text strings |
-| `bool` | `enabled: bool = False` | True/False values |
-| `list` | `items: list[str] = []` | Lists of any type |
-| `dict` | `data: dict[str, int] = {}` | Dictionaries |
-| `None` | `value: str \| None = None` | Optional values |
-| Nested models | `config: MyConfig` | Custom Pydantic models |
+| Type          | Example                     | Notes                  |
+|---------------|-----------------------------|------------------------|
+| `int`         | `count: int = 0`            | Integer numbers        |
+| `float`       | `percentage: float = 0.0`   | Floating point numbers |
+| `str`         | `name: str = ""`            | Text strings           |
+| `bool`        | `enabled: bool = False`     | True/False values      |
+| `list`        | `items: list[str] = []`     | Lists of any type      |
+| `dict`        | `data: dict[str, int] = {}` | Dictionaries           |
+| `None`        | `value: str \| None = None` | Optional values        |
+| Nested models | `config: MyConfig`          | Custom Pydantic models |
 
 ### Default Values
 
@@ -271,7 +271,7 @@ from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.action import action
 
 class DownloadModule(Module):
-    """Module for tracking downloads."""
+    """Module for tracking downloads"""
 
     class State(ModuleState):
         # Basic fields with defaults
@@ -288,7 +288,7 @@ class DownloadModule(Module):
         last_updated: str | None = None
 
     async def initialize(self) -> None:
-        """Initialize the download tracker."""
+        """Initialize the download tracker"""
         # State is already created, optionally set initial values
         if self._typed_state:
             self._typed_state.last_updated = datetime.now().isoformat()

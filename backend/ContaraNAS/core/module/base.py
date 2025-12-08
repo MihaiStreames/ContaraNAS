@@ -73,17 +73,7 @@ class Module(ABC):
         """Stop all event handlers/watchers"""
 
     def get_tile(self) -> "Tile":
-        """Return the dashboard tile UI component
-
-        Override this method to provide your module's tile. This is the preferred
-        method over the deprecated get_tile_data().
-
-        Returns:
-            Tile: The tile component for the dashboard.
-
-        Raises:
-            NotImplementedError: If neither get_tile() nor get_tile_data() is implemented.
-        """
+        """Return the dashboard tile UI component"""
         raise NotImplementedError(
             f"Module {self.name} must implement get_tile()"
         )
@@ -92,11 +82,11 @@ class Module(ABC):
         """Get data for dashboard tile display
 
         .. deprecated::
-            Use get_tile() instead which returns a Tile component directly.
+            Use get_tile() instead which returns a Tile component directly
         """
         warn(
-            f"{self.__class__.__name__}.get_tile_data() is deprecated. "
-            "Override get_tile() instead which returns a Tile component directly.",
+            f"{self.__class__.__name__}.get_tile_data() is deprecated"
+            "Override get_tile() instead which returns a Tile component directly",
             DeprecationWarning,
             stacklevel=2,
         )

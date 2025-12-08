@@ -28,24 +28,24 @@ class MyModule(Module):
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Button text |
-| `on_click` | `Callable \| None` | `None` | Action to call when clicked |
-| `variant` | `"primary"` \| `"secondary"` \| `"ghost"` \| `"danger"` | `"primary"` | Visual style |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Button size |
-| `icon` | `str \| None` | `None` | Lucide icon name |
-| `disabled` | `bool` | `False` | Disable the button |
-| `loading` | `bool` | `False` | Show loading spinner |
+| Prop       | Type                                                    | Default     | Description                 |
+|------------|---------------------------------------------------------|-------------|-----------------------------|
+| `label`    | `str`                                                   | Required    | Button text                 |
+| `on_click` | `Callable \| None`                                      | `None`      | Action to call when clicked |
+| `variant`  | `"primary"` \| `"secondary"` \| `"ghost"` \| `"danger"` | `"primary"` | Visual style                |
+| `size`     | `"sm"` \| `"md"` \| `"lg"`                              | `"md"`      | Button size                 |
+| `icon`     | `str \| None`                                           | `None`      | Lucide icon name            |
+| `disabled` | `bool`                                                  | `False`     | Disable the button          |
+| `loading`  | `bool`                                                  | `False`     | Show loading spinner        |
 
 ### Variants
 
-| Variant | Use Case |
-|---------|----------|
-| `"primary"` | Main action, submit buttons |
-| `"secondary"` | Alternative actions, cancel buttons |
-| `"ghost"` | Subtle actions, links |
-| `"danger"` | Destructive actions (delete, remove) |
+| Variant       | Use Case                             |
+|---------------|--------------------------------------|
+| `"primary"`   | Main action, submit buttons          |
+| `"secondary"` | Alternative actions, cancel buttons  |
+| `"ghost"`     | Subtle actions, links                |
+| `"danger"`    | Destructive actions (delete, remove) |
 
 ```python
 # Primary action
@@ -132,23 +132,23 @@ Input(name="count", label="Count", input_type="number")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name (used in form submission) |
-| `label` | `str \| None` | `None` | Label text above input |
-| `value` | `str` | `""` | Initial value |
-| `input_type` | `"text"` \| `"password"` \| `"email"` \| `"number"` | `"text"` | Input type |
-| `placeholder` | `str \| None` | `None` | Placeholder text |
-| `disabled` | `bool` | `False` | Disable the input |
+| Prop          | Type                                                | Default  | Description                          |
+|---------------|-----------------------------------------------------|----------|--------------------------------------|
+| `name`        | `str`                                               | Required | Field name (used in form submission) |
+| `label`       | `str \| None`                                       | `None`   | Label text above input               |
+| `value`       | `str`                                               | `""`     | Initial value                        |
+| `input_type`  | `"text"` \| `"password"` \| `"email"` \| `"number"` | `"text"` | Input type                           |
+| `placeholder` | `str \| None`                                       | `None`   | Placeholder text                     |
+| `disabled`    | `bool`                                              | `False`  | Disable the input                    |
 
 ### Input Types
 
-| Type | Description |
-|------|-------------|
-| `"text"` | General text input |
+| Type         | Description           |
+|--------------|-----------------------|
+| `"text"`     | General text input    |
 | `"password"` | Masked password input |
-| `"email"` | Email with validation |
-| `"number"` | Numeric input |
+| `"email"`    | Email with validation |
+| `"number"`   | Numeric input         |
 
 ### Form Example
 
@@ -198,20 +198,20 @@ select = Select(
 
 ### Select Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name |
-| `label` | `str \| None` | `None` | Label text |
-| `options` | `list[SelectOption]` | Required | Available options |
-| `value` | `str \| None` | `None` | Currently selected value |
-| `disabled` | `bool` | `False` | Disable the select |
+| Prop       | Type                 | Default  | Description              |
+|------------|----------------------|----------|--------------------------|
+| `name`     | `str`                | Required | Field name               |
+| `label`    | `str \| None`        | `None`   | Label text               |
+| `options`  | `list[SelectOption]` | Required | Available options        |
+| `value`    | `str \| None`        | `None`   | Currently selected value |
+| `disabled` | `bool`               | `False`  | Disable the select       |
 
 ### SelectOption Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop    | Type  | Default  | Description             |
+|---------|-------|----------|-------------------------|
 | `value` | `str` | Required | Value sent on selection |
-| `label` | `str` | Required | Display text |
+| `label` | `str` | Required | Display text            |
 
 ### Dynamic Options
 
@@ -252,12 +252,12 @@ Toggle(name="feature", label="Experimental Feature", disabled=True)
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name |
-| `label` | `str \| None` | `None` | Label text |
-| `checked` | `bool` | `False` | Whether toggle is on |
-| `disabled` | `bool` | `False` | Disable the toggle |
+| Prop       | Type          | Default  | Description          |
+|------------|---------------|----------|----------------------|
+| `name`     | `str`         | Required | Field name           |
+| `label`    | `str \| None` | `None`   | Label text           |
+| `checked`  | `bool`        | `False`  | Whether toggle is on |
+| `disabled` | `bool`        | `False`  | Disable the toggle   |
 
 ### Example: Settings Form
 
@@ -309,12 +309,12 @@ Checkbox(name="locked", label="Locked option", checked=True, disabled=True)
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name |
-| `label` | `str \| None` | `None` | Label text |
-| `checked` | `bool` | `False` | Whether checkbox is checked |
-| `disabled` | `bool` | `False` | Disable the checkbox |
+| Prop       | Type          | Default  | Description                 |
+|------------|---------------|----------|-----------------------------|
+| `name`     | `str`         | Required | Field name                  |
+| `label`    | `str \| None` | `None`   | Label text                  |
+| `checked`  | `bool`        | `False`  | Whether checkbox is checked |
+| `disabled` | `bool`        | `False`  | Disable the checkbox        |
 
 ### Toggle vs Checkbox
 
@@ -363,10 +363,7 @@ class MyModule(Module):
         password: str = "",
         auto_refresh: bool = False,
     ) -> None:
-        """Handle form submission.
-
-        Parameters are populated from form field names.
-        """
+        """Handle form submission"""
         if not server or not username:
             from ContaraNAS.core.action import Notify
             return Notify(message="Server and username required", variant="error")

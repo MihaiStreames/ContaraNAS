@@ -4,7 +4,8 @@ This section covers everything you need to know to build modules for ContaraNAS.
 
 ## Overview
 
-ContaraNAS uses a **modular architecture** where functionality is provided through independent modules. Each module is a self-contained Python package that:
+ContaraNAS uses a **modular architecture** where functionality is provided through independent modules. Each module is a
+self-contained Python package that:
 
 - Defines its own **state** (data it manages)
 - Provides a **tile** for the dashboard (how it appears to users)
@@ -128,15 +129,14 @@ class MyModule(Module):
 1. **[State Management](state.md)** — How to define and manage module state
 2. **[Declarative UI](ui/index.md)** — How to build your module's interface
 3. **[Actions](actions.md)** — How to handle user interactions
-4. **[Module Lifecycle](lifecycle.md)** — Initialize, enable, disable, cleanup
 
 ## Key Concepts
 
-| Concept | Description |
-|---------|-------------|
-| **ModuleState** | A Pydantic model that holds your module's data. Changes are tracked automatically. |
-| **Component** | A UI building block (Button, Card, Table, etc.) defined in Python, rendered in frontend. |
-| **Action** | A method decorated with `@action` that can be called from the frontend. |
-| **Tile** | The card shown on the dashboard representing your module. |
-| **Modal** | A popup dialog for detailed views or forms. |
-| **commit()** | Signals that state changes should be pushed to the frontend. |
+| Concept         | Description                                                                              |
+|-----------------|------------------------------------------------------------------------------------------|
+| **ModuleState** | A Pydantic model that holds your module's data. Changes are tracked automatically.       |
+| **Component**   | A UI building block (Button, Card, Table, etc.) defined in Python, rendered in frontend. |
+| **Action**      | A method decorated with `@action` that can be called from the frontend.                  |
+| **Tile**        | The card shown on the dashboard representing your module.                                |
+| **Modal**       | A popup dialog for detailed views or forms.                                              |
+| **commit()**    | Signals that state changes should be pushed to the frontend.                             |

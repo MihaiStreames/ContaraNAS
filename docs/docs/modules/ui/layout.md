@@ -34,13 +34,13 @@ horizontal = Stack(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `direction` | `"horizontal"` \| `"vertical"` | `"vertical"` | Main axis direction |
-| `gap` | `"0"` \| `"1"` \| `"2"` \| `"3"` \| `"4"` \| `"5"` \| `"6"` \| `"8"` | `"4"` | Space between children |
-| `align` | `"start"` \| `"center"` \| `"end"` \| `"stretch"` | `"stretch"` | Cross-axis alignment |
-| `justify` | `"start"` \| `"center"` \| `"end"` \| `"between"` \| `"around"` | `"start"` | Main-axis alignment |
-| `children` | `list[Component]` | `[]` | Child components |
+| Prop        | Type                                                                 | Default      | Description            |
+|-------------|----------------------------------------------------------------------|--------------|------------------------|
+| `direction` | `"horizontal"` \| `"vertical"`                                       | `"vertical"` | Main axis direction    |
+| `gap`       | `"0"` \| `"1"` \| `"2"` \| `"3"` \| `"4"` \| `"5"` \| `"6"` \| `"8"` | `"4"`        | Space between children |
+| `align`     | `"start"` \| `"center"` \| `"end"` \| `"stretch"`                    | `"stretch"`  | Cross-axis alignment   |
+| `justify`   | `"start"` \| `"center"` \| `"end"` \| `"between"` \| `"around"`      | `"start"`    | Main-axis alignment    |
+| `children`  | `list[Component]`                                                    | `[]`         | Child components       |
 
 ### Gap Scale
 
@@ -48,14 +48,14 @@ The gap values correspond to a spacing scale:
 
 | Value | Approximate Size |
 |-------|------------------|
-| `"0"` | 0px |
-| `"1"` | 4px |
-| `"2"` | 8px |
-| `"3"` | 12px |
-| `"4"` | 16px |
-| `"5"` | 20px |
-| `"6"` | 24px |
-| `"8"` | 32px |
+| `"0"` | 0px              |
+| `"1"` | 4px              |
+| `"2"` | 8px              |
+| `"3"` | 12px             |
+| `"4"` | 16px             |
+| `"5"` | 20px             |
+| `"6"` | 24px             |
+| `"8"` | 32px             |
 
 ### Alignment Examples
 
@@ -150,11 +150,11 @@ grid_3col = Grid(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `columns` | `int` \| `str` | `2` | Number of columns or CSS grid-template-columns |
-| `gap` | `"0"` \| `"1"` \| `"2"` \| `"3"` \| `"4"` \| `"5"` \| `"6"` \| `"8"` | `"4"` | Space between grid items |
-| `children` | `list[Component]` | `[]` | Child components |
+| Prop       | Type                                                                 | Default | Description                                    |
+|------------|----------------------------------------------------------------------|---------|------------------------------------------------|
+| `columns`  | `int` \| `str`                                                       | `2`     | Number of columns or CSS grid-template-columns |
+| `gap`      | `"0"` \| `"1"` \| `"2"` \| `"3"` \| `"4"` \| `"5"` \| `"6"` \| `"8"` | `"4"`   | Space between grid items                       |
+| `children` | `list[Component]`                                                    | `[]`    | Child components                               |
 
 ### Column Options
 

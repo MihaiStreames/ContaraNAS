@@ -24,12 +24,12 @@ card = Card(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `str \| None` | `None` | Lucide icon name for the header |
-| `title` | `str \| None` | `None` | Card title text |
-| `children` | `list[Component]` | `[]` | Main content components |
-| `footer` | `list[Component] \| None` | `None` | Footer components (typically buttons) |
+| Prop       | Type                      | Default | Description                           |
+|------------|---------------------------|---------|---------------------------------------|
+| `icon`     | `str \| None`             | `None`  | Lucide icon name for the header       |
+| `title`    | `str \| None`             | `None`  | Card title text                       |
+| `children` | `list[Component]`         | `[]`    | Main content components               |
+| `footer`   | `list[Component] \| None` | `None`  | Footer components (typically buttons) |
 
 ### Examples
 
@@ -75,7 +75,8 @@ Card(
 
 ## Tile
 
-A specialized card designed for module tiles on the dashboard. Tiles have a consistent structure: icon, title, optional badge, stats, optional content, and actions.
+A specialized card designed for module tiles on the dashboard. Tiles have a consistent structure: icon, title, optional
+badge, stats, optional content, and actions.
 
 ```python
 from ContaraNAS.core.ui import Tile, Stat, Badge, Button
@@ -98,14 +99,14 @@ tile = Tile(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `str` | Required | Lucide icon name for the tile |
-| `title` | `str` | Required | Module display name |
-| `badge` | `Badge \| None` | `None` | Status badge next to title |
-| `stats` | `list[Stat]` | `[]` | Key metrics to display |
-| `content` | `list[Component] \| None` | `None` | Additional content below stats |
-| `actions` | `list[Component]` | `[]` | Action buttons |
+| Prop      | Type                      | Default  | Description                    |
+|-----------|---------------------------|----------|--------------------------------|
+| `icon`    | `str`                     | Required | Lucide icon name for the tile  |
+| `title`   | `str`                     | Required | Module display name            |
+| `badge`   | `Badge \| None`           | `None`   | Status badge next to title     |
+| `stats`   | `list[Stat]`              | `[]`     | Key metrics to display         |
+| `content` | `list[Component] \| None` | `None`   | Additional content below stats |
+| `actions` | `list[Component]`         | `[]`     | Action buttons                 |
 
 ### Using with get_tile()
 
@@ -202,10 +203,10 @@ stat = Stat(label="Usage", value="85%")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Description of the statistic |
-| `value` | `str \| int \| float` | Required | The statistic value |
+| Prop    | Type                  | Default  | Description                  |
+|---------|-----------------------|----------|------------------------------|
+| `label` | `str`                 | Required | Description of the statistic |
+| `value` | `str \| int \| float` | Required | The statistic value          |
 
 ### Formatting Values
 
@@ -297,4 +298,5 @@ def get_tile(self) -> Tile:
     )
 ```
 
-For complete module examples including state and actions, see [State Management](../state.md#full-example) and [Actions](../actions.md#complete-example).
+For complete module examples including state and actions, see [State Management](../state.md#full-example)
+and [Actions](../actions.md#complete-example).
