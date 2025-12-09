@@ -423,8 +423,8 @@
 
   .tile-disable-btn {
     position: absolute;
-    top: var(--space-2);
-    right: var(--space-2);
+    top: var(--space-4);
+    right: var(--space-4);
     width: 24px;
     height: 24px;
     display: flex;

@@ -164,7 +164,7 @@
 
 .stat-value {
   font-size: var(--text-xl);
-  font-weight: var(--font-semibold);
+  font-weight: var(--font-normal);
 }
 
 .stat-label {
@@ -817,6 +817,7 @@
 }
 .text-size-xl {
   font-size: var(--text-xl) !important;
+  font-weight: var(--font-bold);
 }
 
 /* ========================================
@@ -837,11 +838,11 @@
 
 .stat-small-value {
   font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-normal);
   color: var(--text-primary);
   text-align: left;
   white-space: nowrap;
-  min-width: 80px;
+  min-width: 120px;
 }
 
 /* ========================================
