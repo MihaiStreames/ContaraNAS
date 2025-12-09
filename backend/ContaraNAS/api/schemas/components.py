@@ -9,6 +9,9 @@ class ActionRef(BaseModel):
     model_config = {"populate_by_name": True}
 
     action: str = Field(..., serialization_alias="__action__", validation_alias="__action__")
+    params: dict[str, Any] | None = Field(
+        default=None, serialization_alias="__params__", validation_alias="__params__"
+    )
 
 
 class StackSchema(BaseModel):
@@ -63,6 +66,7 @@ class TileSchema(BaseModel):
     type: Literal["tile"] = "tile"
     icon: str
     title: str
+    colspan: Literal[1, 2, 3] = 1
     badge: BadgeSchema | None = None
     stats: list[StatSchema] = []
     content: list["ComponentSchema"] | None = None
@@ -213,6 +217,57 @@ class SpinnerSchema(BaseModel):
     label: str | None = None
 
 
+class SegmentedProgressSegmentSchema(BaseModel):
+    """Segment for SegmentedProgress bar"""
+
+    type: Literal["segment"] = "segment"
+    value: int | float
+    color: str  # CSS color or semantic: "primary", "success", etc.
+    label: str | None = None  # Tooltip/legend label
+
+
+class SegmentedProgressSchema(BaseModel):
+    """Progress bar with multiple colored segments"""
+
+    type: Literal["segmented_progress"] = "segmented_progress"
+    segments: list[SegmentedProgressSegmentSchema]
+    max: int | float = 100
+    size: Literal["sm", "lg"] = "sm"
+    show_legend: bool = False
+
+
+class LineChartSchema(BaseModel):
+    """Simple line chart for time-series data"""
+
+    type: Literal["line_chart"] = "line_chart"
+    data: list[float]  # Y values, rendered left-to-right
+    max: float = 100
+    min: float = 0
+    height: int = 80  # px
+    color: Literal["default", "primary", "success", "warning", "error"] = "primary"
+    fill: bool = True  # Fill area under line
+    label: str | None = None  # Current value label overlay
+
+
+class TabSchema(BaseModel):
+    """Single tab within Tabs component"""
+
+    type: Literal["tab"] = "tab"
+    id: str
+    label: str
+    icon: str | None = None
+    children: list["ComponentSchema"] = []
+
+
+class TabsSchema(BaseModel):
+    """Tab container with switchable content panels"""
+
+    type: Literal["tabs"] = "tabs"
+    tabs: list[TabSchema]
+    default_tab: str | None = None  # Tab id to show by default
+    size: Literal["sm", "md"] = "md"
+
+
 ComponentSchema = Annotated[
     StackSchema
     | GridSchema
@@ -222,6 +277,9 @@ ComponentSchema = Annotated[
     | TextSchema
     | StatCardSchema
     | ProgressSchema
+    | SegmentedProgressSchema
+    | SegmentedProgressSegmentSchema
+    | LineChartSchema
     | BadgeSchema
     | TableSchema
     | TableColumnSchema
@@ -231,6 +289,8 @@ ComponentSchema = Annotated[
     | SelectOptionSchema
     | ToggleSchema
     | CheckboxSchema
+    | TabsSchema
+    | TabSchema
     | ModalSchema
     | AlertSchema
     | SpinnerSchema,
@@ -244,3 +304,5 @@ GridSchema.model_rebuild()
 CardSchema.model_rebuild()
 TileSchema.model_rebuild()
 ModalSchema.model_rebuild()
+TabSchema.model_rebuild()
+TabsSchema.model_rebuild()

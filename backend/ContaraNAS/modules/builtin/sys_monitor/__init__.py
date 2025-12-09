@@ -1,25 +1,19 @@
 from dataclasses import asdict
 from datetime import datetime
 
-from ContaraNAS.core.action import Notify, OpenModal, action
+from ContaraNAS.core.action import Notify, action
 from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Modal, Tile
+from ContaraNAS.core.ui import Tile
 from ContaraNAS.core.utils import get_logger
 
-from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL
+from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL, HISTORY_SIZE
 from .services import (
     CPUService,
     DiskService,
     MemService,
     SysMonitorMonitoringService,
 )
-from .views import (
-    build_cpu_modal,
-    build_details_modal,
-    build_disks_modal,
-    build_memory_modal,
-    build_tile,
-)
+from .views import build_tile
 
 
 logger = get_logger(__name__)
@@ -37,6 +31,9 @@ class SysMonitorModule(Module):
         memory: dict | None = None
         disks: list[dict] = []
         error: str | None = None
+        # History buffers for graphs
+        cpu_history: list[float] = []
+        memory_history: list[float] = []
 
     def __init__(
         self,
@@ -104,6 +101,18 @@ class SysMonitorModule(Module):
             self.state.disks = [asdict(d) for d in disk_info] if disk_info else []
             self.state.last_update = datetime.now()
             self.state.error = None
+
+            # Update history buffers
+            if cpu_info:
+                self.state.cpu_history.append(cpu_info.total_usage)
+                if len(self.state.cpu_history) > HISTORY_SIZE:
+                    self.state.cpu_history = self.state.cpu_history[-HISTORY_SIZE:]
+
+            if mem_info:
+                self.state.memory_history.append(mem_info.usage)
+                if len(self.state.memory_history) > HISTORY_SIZE:
+                    self.state.memory_history = self.state.memory_history[-HISTORY_SIZE:]
+
             self.state.commit()
 
         except Exception as e:
@@ -117,25 +126,10 @@ class SysMonitorModule(Module):
             cpu=self.state.cpu,
             mem=self.state.memory,
             disks=self.state.disks,
+            cpu_history=self.state.cpu_history,
+            memory_history=self.state.memory_history,
             last_update=self.state.last_update,
-            open_details_action=self.open_details,
         )
-
-    def get_modals(self) -> list[Modal]:
-        """Return modal definitions for this module"""
-        return [
-            build_details_modal(
-                cpu=self.state.cpu,
-                mem=self.state.memory,
-                disks=self.state.disks,
-                open_cpu_action=self.open_cpu_details,
-                open_memory_action=self.open_memory_details,
-                open_disk_action=self.open_disk_details,
-            ),
-            build_cpu_modal(self.state.cpu),
-            build_memory_modal(self.state.memory),
-            build_disks_modal(self.state.disks),
-        ]
 
     # --- Actions ---
 
@@ -144,25 +138,3 @@ class SysMonitorModule(Module):
         """Manually refresh system stats"""
         await self._collect_stats()
         return Notify(message="System stats refreshed", variant="success")
-
-    @action
-    async def open_details(self) -> OpenModal:
-        """Open the details modal"""
-        # Refresh data before showing
-        await self._collect_stats()
-        return OpenModal(modal_id="sys_monitor_details")
-
-    @action
-    async def open_cpu_details(self) -> OpenModal:
-        """Open the CPU details modal"""
-        return OpenModal(modal_id="sys_monitor_cpu")
-
-    @action
-    async def open_memory_details(self) -> OpenModal:
-        """Open the memory details modal"""
-        return OpenModal(modal_id="sys_monitor_memory")
-
-    @action
-    async def open_disk_details(self) -> OpenModal:
-        """Open the disk details modal"""
-        return OpenModal(modal_id="sys_monitor_disks")

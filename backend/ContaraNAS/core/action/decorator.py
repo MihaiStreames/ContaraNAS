@@ -46,3 +46,25 @@ def get_actions(obj: Any) -> dict[str, Callable[..., Any]]:
         if callable(method) and getattr(method, "__action__", False):
             actions[name] = method
     return actions
+
+
+class ActionRef:
+    """
+    A reference to an action with parameters.
+
+    Used to create clickable actions that pass parameters to the backend.
+    Example: ActionRef(self.open_library, library_path="/home/steam")
+    """
+
+    __slots__ = ("__action_name__", "__action_params__")
+
+    def __init__(self, method: Callable[..., Any], **params: Any) -> None:
+        action_name = getattr(method, "__action_name__", None)
+        if not action_name:
+            raise ValueError(f"Method {method} is not decorated with @action")
+        self.__action_name__ = action_name
+        self.__action_params__ = params if params else None
+
+    def __call__(self) -> None:
+        """Dummy callable - actual execution happens via serialization"""
+        pass

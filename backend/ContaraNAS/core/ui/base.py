@@ -41,8 +41,13 @@ class Component(BaseModel):
     def _serialize_action(self, func: Callable) -> dict[str, Any]:
         """Serialize a callable action reference"""
         action_name = getattr(func, "__action_name__", None)
+        action_params = getattr(func, "__action_params__", None)
+
         if action_name:
-            return {"__action__": action_name}
+            result: dict[str, Any] = {"__action__": action_name}
+            if action_params:
+                result["__params__"] = action_params
+            return result
 
         if hasattr(func, "__name__"):
             return {"__action__": func.__name__}

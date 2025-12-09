@@ -1,46 +1,40 @@
 """Tile view for the System Monitor module"""
 
-from ContaraNAS.core.ui import Badge, Button, Stat, Tile
+from ContaraNAS.core.ui import Badge, Tabs, Tile
 
-from .helpers import format_uptime
+from .cpu_tab import build_cpu_tab
+from .disk_tab import build_disk_tab
+from .memory_tab import build_memory_tab
 
 
 def build_tile(
     cpu: dict | None,
     mem: dict | None,
     disks: list[dict],
+    cpu_history: list[float],
+    memory_history: list[float],
     last_update,
-    open_details_action,
 ) -> Tile:
-    """Build the dashboard tile UI component"""
-    stats = []
+    """Build the dashboard tile UI component with tabs"""
+    tabs = [
+        build_cpu_tab(cpu, cpu_history),
+        build_memory_tab(mem, memory_history),
+    ]
 
-    if cpu:
-        stats.append(Stat(label="CPU", value=f"{cpu.get('total_usage', 0):.1f}%"))
-
-    if mem:
-        usage = mem.get("usage", 0)
-        total_gb = mem.get("total", 0) / (1024**3)
-        stats.append(Stat(label="Memory", value=f"{usage:.1f}% of {total_gb:.0f}GB"))
-
-    if disks:
-        primary_disk = disks[0]
-        stats.append(
-            Stat(
-                label="Disk",
-                value=f"{primary_disk.get('usage_percent', 0):.1f}%",
-            )
-        )
-
-    if cpu and cpu.get("uptime"):
-        stats.append(Stat(label="Uptime", value=format_uptime(cpu["uptime"])))
+    # Add a tab for each disk
+    for i, disk in enumerate(disks):
+        tabs.append(build_disk_tab(disk, i))
 
     return Tile(
         icon="Activity",
         title="System Monitor",
+        colspan=2,
         badge=Badge(text="Live", variant="success") if last_update else None,
-        stats=stats,
-        actions=[
-            Button(label="Details", variant="secondary", on_click=open_details_action),
+        content=[
+            Tabs(
+                tabs=tabs,
+                default_tab="cpu",
+                size="sm",
+            )
         ],
     )

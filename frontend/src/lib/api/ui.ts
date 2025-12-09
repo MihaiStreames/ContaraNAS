@@ -21,6 +21,9 @@ export type StatSchema = components["schemas"]["StatSchema"];
 export type TextSchema = components["schemas"]["TextSchema"];
 export type StatCardSchema = components["schemas"]["StatCardSchema"];
 export type ProgressSchema = components["schemas"]["ProgressSchema"];
+export type SegmentedProgressSchema = components["schemas"]["SegmentedProgressSchema"];
+export type SegmentedProgressSegmentSchema = components["schemas"]["SegmentedProgressSegmentSchema"];
+export type LineChartSchema = components["schemas"]["LineChartSchema"];
 export type BadgeSchema = components["schemas"]["BadgeSchema"];
 export type TableSchema = components["schemas"]["TableSchema"];
 export type TableColumnSchema = components["schemas"]["TableColumnSchema"];
@@ -32,6 +35,8 @@ export type SelectSchema = components["schemas"]["SelectSchema"];
 export type SelectOptionSchema = components["schemas"]["SelectOptionSchema"];
 export type ToggleSchema = components["schemas"]["ToggleSchema"];
 export type CheckboxSchema = components["schemas"]["CheckboxSchema"];
+export type TabsSchema = components["schemas"]["TabsSchema"];
+export type TabSchema = components["schemas"]["TabSchema"];
 
 // Modal components
 export type ModalSchema = components["schemas"]["ModalSchema"];
@@ -50,6 +55,9 @@ export type ComponentSchema =
 	| TextSchema
 	| StatCardSchema
 	| ProgressSchema
+	| SegmentedProgressSchema
+	| SegmentedProgressSegmentSchema
+	| LineChartSchema
 	| BadgeSchema
 	| TableSchema
 	| TableColumnSchema
@@ -59,6 +67,8 @@ export type ComponentSchema =
 	| SelectOptionSchema
 	| ToggleSchema
 	| CheckboxSchema
+	| TabsSchema
+	| TabSchema
 	| ModalSchema
 	| AlertSchema
 	| SpinnerSchema;

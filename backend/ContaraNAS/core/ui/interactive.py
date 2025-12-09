@@ -73,3 +73,24 @@ class Checkbox(Component):
     label: str | None = None
     checked: bool = False
     disabled: bool = False
+
+
+class Tab(Component):
+    """Single tab within Tabs component"""
+
+    _type: ClassVar[str] = "tab"
+
+    id: str
+    label: str
+    icon: str | None = None
+    children: list[Component] = []
+
+
+class Tabs(Component):
+    """Tab container with switchable content panels"""
+
+    _type: ClassVar[str] = "tabs"
+
+    tabs: list["Tab"]
+    default_tab: str | None = None  # Tab id to show by default
+    size: Literal["sm", "md"] = "md"

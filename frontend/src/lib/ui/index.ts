@@ -20,6 +20,8 @@ export { default as StatCard } from "./card/StatCard.svelte";
 export { default as Text } from "./display/Text.svelte";
 export { default as Badge } from "./display/Badge.svelte";
 export { default as Progress } from "./display/Progress.svelte";
+export { default as SegmentedProgress } from "./display/SegmentedProgress.svelte";
+export { default as LineChart } from "./display/LineChart.svelte";
 export { default as Table } from "./display/Table.svelte";
 
 // Interactive
@@ -28,6 +30,7 @@ export { default as Input } from "./interactive/Input.svelte";
 export { default as Select } from "./interactive/Select.svelte";
 export { default as Toggle } from "./interactive/Toggle.svelte";
 export { default as Checkbox } from "./interactive/Checkbox.svelte";
+export { default as Tabs } from "./interactive/Tabs.svelte";
 
 // Modal
 export { default as Modal } from "./modal/Modal.svelte";

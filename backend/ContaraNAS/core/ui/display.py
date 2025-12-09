@@ -65,3 +65,38 @@ class Table(Component):
     columns: list[TableColumn]
     data: list[dict[str, Any]]
     empty_message: str = "No data"
+
+
+class SegmentedProgressSegment(Component):
+    """Segment for SegmentedProgress bar"""
+
+    _type: ClassVar[str] = "segment"
+
+    value: int | float
+    color: str  # CSS color or semantic: "primary", "success", "warning", "error", "info"
+    label: str | None = None  # Tooltip/legend label
+
+
+class SegmentedProgress(Component):
+    """Progress bar with multiple colored segments"""
+
+    _type: ClassVar[str] = "segmented_progress"
+
+    segments: list[SegmentedProgressSegment]
+    max: int | float = 100
+    size: Literal["sm", "lg"] = "sm"
+    show_legend: bool = False
+
+
+class LineChart(Component):
+    """Simple line chart for time-series data"""
+
+    _type: ClassVar[str] = "line_chart"
+
+    data: list[float]  # Y values, rendered left-to-right
+    max: float = 100
+    min: float = 0
+    height: int = 80  # px
+    color: Literal["default", "primary", "success", "warning", "error"] = "primary"
+    fill: bool = True  # Fill area under line
+    label: str | None = None  # Current value label overlay

@@ -75,7 +75,7 @@ backend defines UI structure, frontend renders it.
 ### 2.3 Card components
 
 - [x] `Card` - icon, title, children, footer
-- [x] `Tile` - module tile variant (icon, title, badge, stats, actions)
+- [x] `Tile` - module tile variant (icon, title, colspan, badge, stats, actions)
 - [x] `Stat` - inline stat for tiles (label, value)
 
 ### 2.4 Data display components
@@ -83,6 +83,8 @@ backend defines UI structure, frontend renders it.
 - [x] `Text` - content, variant (body, secondary, muted, code)
 - [x] `StatCard` - standalone stat card (label, value, icon, color, trend)
 - [x] `Progress` - value, max, label, color
+- [x] `SegmentedProgress` - multi-segment progress bar (segments, max, show_legend)
+- [x] `LineChart` - simple line chart for time-series (data, min, max, color, fill, label)
 - [x] `Badge` - text, variant (default, primary, success, warning, error, info)
 - [x] `Table` - columns, data, empty_message
 - [x] `TableColumn` - key, label, width, align
@@ -95,6 +97,8 @@ backend defines UI structure, frontend renders it.
 - [x] `SelectOption` - value, label
 - [x] `Toggle` - name, label, checked, disabled
 - [x] `Checkbox` - name, label, checked, disabled
+- [x] `Tabs` - tabbed container (tabs, default_tab, size)
+- [x] `Tab` - single tab (id, label, icon, children)
 
 ### 2.6 Modal component
 
@@ -108,7 +112,7 @@ backend defines UI structure, frontend renders it.
 ### 2.8 Exports
 
 - [x] Create `ContaraNAS/core/ui/__init__.py` with all exports
-- [x] Tests for all components (22 tests)
+- [x] Tests for all components (27 tests)
 
 **Deliverable:** Can import and instantiate all components.
 
@@ -515,9 +519,8 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 13.3 Testing
 
-- [ ] Unit tests for components
+- [x] Unit tests for components (27 tests covering all UI components)
 - [ ] Integration tests for full flow
-- [ ] Visual regression tests (optional)
 
 ### 13.4 Cleanup
 

@@ -7,16 +7,21 @@ from ContaraNAS.core.ui import (
     Component,
     Grid,
     Input,
+    LineChart,
     Modal,
     Progress,
+    SegmentedProgress,
+    SegmentedProgressSegment,
     Select,
     SelectOption,
     Spinner,
     Stack,
     Stat,
     StatCard,
+    Tab,
     Table,
     TableColumn,
+    Tabs,
     Text,
     Tile,
     Toggle,
@@ -290,3 +295,114 @@ def test_nested_serialization():
     assert data["children"][0]["children"][0]["type"] == "toggle"
     assert data["children"][0]["children"][1]["type"] == "select"
     assert data["footer"][0]["type"] == "button"
+
+
+def test_tile_colspan():
+    """Test tile with colspan for wider tiles"""
+    tile = Tile(
+        icon="activity",
+        title="System Monitor",
+        colspan=2,
+        stats=[Stat(label="CPU", value="45%")],
+    )
+    data = tile.to_dict()
+
+    assert data["type"] == "tile"
+    assert data["colspan"] == 2
+
+
+def test_segmented_progress():
+    """Test segmented progress bar"""
+    progress = SegmentedProgress(
+        segments=[
+            SegmentedProgressSegment(value=40, color="primary", label="Games"),
+            SegmentedProgressSegment(value=30, color="success", label="Shaders"),
+            SegmentedProgressSegment(value=30, color="default", label="Other"),
+        ],
+        max=100,
+        show_legend=True,
+    )
+    data = progress.to_dict()
+
+    assert data["type"] == "segmented_progress"
+    assert len(data["segments"]) == 3
+    assert data["segments"][0]["value"] == 40
+    assert data["segments"][0]["color"] == "primary"
+    assert data["segments"][0]["label"] == "Games"
+    assert data["max"] == 100
+    assert data["show_legend"] is True
+
+
+def test_line_chart():
+    """Test line chart component"""
+    chart = LineChart(
+        data=[10, 25, 45, 30, 55, 70],
+        max=100,
+        min=0,
+        height=80,
+        color="primary",
+        fill=True,
+        label="55%",
+    )
+    data = chart.to_dict()
+
+    assert data["type"] == "line_chart"
+    assert data["data"] == [10, 25, 45, 30, 55, 70]
+    assert data["max"] == 100
+    assert data["min"] == 0
+    assert data["height"] == 80
+    assert data["color"] == "primary"
+    assert data["fill"] is True
+    assert data["label"] == "55%"
+
+
+def test_tabs():
+    """Test tabs component"""
+    tabs = Tabs(
+        tabs=[
+            Tab(
+                id="cpu",
+                label="CPU",
+                icon="Cpu",
+                children=[Text(content="CPU info")],
+            ),
+            Tab(
+                id="memory",
+                label="Memory",
+                icon="MemoryStick",
+                children=[Text(content="Memory info")],
+            ),
+        ],
+        default_tab="cpu",
+        size="sm",
+    )
+    data = tabs.to_dict()
+
+    assert data["type"] == "tabs"
+    assert len(data["tabs"]) == 2
+    assert data["tabs"][0]["id"] == "cpu"
+    assert data["tabs"][0]["label"] == "CPU"
+    assert data["tabs"][0]["icon"] == "Cpu"
+    assert data["tabs"][0]["children"][0]["content"] == "CPU info"
+    assert data["default_tab"] == "cpu"
+    assert data["size"] == "sm"
+
+
+def test_tab():
+    """Test single tab component"""
+    tab = Tab(
+        id="disk_0",
+        label="nvme0n1",
+        icon="HardDrive",
+        children=[
+            Text(content="/home"),
+            Progress(value=75, max=100),
+        ],
+    )
+    data = tab.to_dict()
+
+    assert data["type"] == "tab"
+    assert data["id"] == "disk_0"
+    assert data["label"] == "nvme0n1"
+    assert data["icon"] == "HardDrive"
+    assert len(data["children"]) == 2

@@ -3,6 +3,7 @@ import pytest
 from ContaraNAS.core.action import (
     ActionDispatcher,
     ActionError,
+    ActionRef,
     CloseModal,
     Notify,
     OpenModal,
@@ -281,3 +282,45 @@ def test_refresh_result():
     data = result.to_dict()
 
     assert data["type"] == "refresh"
+
+
+def test_action_ref_creation():
+    """Test ActionRef with parameters"""
+    module = MockModule()
+    ref = ActionRef(module.greet, name="Alice")
+
+    assert ref.__action_name__ == "greet"
+    assert ref.__action_params__ == {"name": "Alice"}
+
+
+def test_action_ref_no_params():
+    """Test ActionRef without parameters"""
+    module = MockModule()
+    ref = ActionRef(module.increment)
+
+    assert ref.__action_name__ == "increment"
+    assert ref.__action_params__ is None
+
+
+def test_action_ref_requires_action_decorator():
+    """Test ActionRef raises for non-action methods"""
+    module = MockModule()
+
+    with pytest.raises(ValueError) as exc_info:
+        ActionRef(module.not_an_action)
+
+    assert "not decorated with @action" in str(exc_info.value)
+
+
+def test_action_ref_serialization():
+    """Test ActionRef serializes correctly via Button"""
+    from ContaraNAS.core.ui import Button
+
+    module = MockModule()
+    ref = ActionRef(module.greet, name="Bob")
+
+    button = Button(label="Greet Bob", on_click=ref)
+    data = button.to_dict()
+
+    assert data["on_click"]["__action__"] == "greet"
+    assert data["on_click"]["__params__"] == {"name": "Bob"}

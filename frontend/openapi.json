@@ -638,6 +638,18 @@
           "__action__": {
             "type": "string",
             "title": "Action"
+          },
+          "__params__": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Params"
           }
         },
         "type": "object",
@@ -885,6 +897,15 @@
                   "$ref": "#/components/schemas/ProgressSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/SegmentedProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/LineChartSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -912,6 +933,12 @@
                   "$ref": "#/components/schemas/CheckboxSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/TabsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabSchema"
+                },
+                {
                   "$ref": "#/components/schemas/ModalSchema"
                 },
                 {
@@ -931,16 +958,21 @@
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
                   "input": "#/components/schemas/InputSchema",
+                  "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
                   "progress": "#/components/schemas/ProgressSchema",
+                  "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                  "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                   "select": "#/components/schemas/SelectSchema",
                   "select_option": "#/components/schemas/SelectOptionSchema",
                   "spinner": "#/components/schemas/SpinnerSchema",
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
+                  "tabs": "#/components/schemas/TabsSchema",
                   "text": "#/components/schemas/TextSchema",
                   "tile": "#/components/schemas/TileSchema",
                   "toggle": "#/components/schemas/ToggleSchema"
@@ -981,6 +1013,15 @@
                       "$ref": "#/components/schemas/ProgressSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/SegmentedProgressSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LineChartSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/BadgeSchema"
                     },
                     {
@@ -1008,6 +1049,12 @@
                       "$ref": "#/components/schemas/CheckboxSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/TabsSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TabSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/ModalSchema"
                     },
                     {
@@ -1027,16 +1074,21 @@
                       "checkbox": "#/components/schemas/CheckboxSchema",
                       "grid": "#/components/schemas/GridSchema",
                       "input": "#/components/schemas/InputSchema",
+                      "line_chart": "#/components/schemas/LineChartSchema",
                       "modal": "#/components/schemas/ModalSchema",
                       "progress": "#/components/schemas/ProgressSchema",
+                      "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                      "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                       "select": "#/components/schemas/SelectSchema",
                       "select_option": "#/components/schemas/SelectOptionSchema",
                       "spinner": "#/components/schemas/SpinnerSchema",
                       "stack": "#/components/schemas/StackSchema",
                       "stat": "#/components/schemas/StatSchema",
                       "stat_card": "#/components/schemas/StatCardSchema",
+                      "tab": "#/components/schemas/TabSchema",
                       "table": "#/components/schemas/TableSchema",
                       "table_column": "#/components/schemas/TableColumnSchema",
+                      "tabs": "#/components/schemas/TabsSchema",
                       "text": "#/components/schemas/TextSchema",
                       "tile": "#/components/schemas/TileSchema",
                       "toggle": "#/components/schemas/ToggleSchema"
@@ -1160,6 +1212,15 @@
                   "$ref": "#/components/schemas/ProgressSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/SegmentedProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/LineChartSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -1187,6 +1248,12 @@
                   "$ref": "#/components/schemas/CheckboxSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/TabsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabSchema"
+                },
+                {
                   "$ref": "#/components/schemas/ModalSchema"
                 },
                 {
@@ -1206,16 +1273,21 @@
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
                   "input": "#/components/schemas/InputSchema",
+                  "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
                   "progress": "#/components/schemas/ProgressSchema",
+                  "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                  "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                   "select": "#/components/schemas/SelectSchema",
                   "select_option": "#/components/schemas/SelectOptionSchema",
                   "spinner": "#/components/schemas/SpinnerSchema",
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
+                  "tabs": "#/components/schemas/TabsSchema",
                   "text": "#/components/schemas/TextSchema",
                   "tile": "#/components/schemas/TileSchema",
                   "toggle": "#/components/schemas/ToggleSchema"
@@ -1358,6 +1430,72 @@
         "title": "InputSchema",
         "description": "Text input field"
       },
+      "LineChartSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "line_chart",
+            "title": "Type",
+            "default": "line_chart"
+          },
+          "data": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "max": {
+            "type": "number",
+            "title": "Max",
+            "default": 100
+          },
+          "min": {
+            "type": "number",
+            "title": "Min",
+            "default": 0
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height",
+            "default": 80
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "default",
+              "primary",
+              "success",
+              "warning",
+              "error"
+            ],
+            "title": "Color",
+            "default": "primary"
+          },
+          "fill": {
+            "type": "boolean",
+            "title": "Fill",
+            "default": true
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "title": "LineChartSchema",
+        "description": "Simple line chart for time-series data"
+      },
       "ModalSchema": {
         "properties": {
           "type": {
@@ -1413,6 +1551,15 @@
                   "$ref": "#/components/schemas/ProgressSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/SegmentedProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/LineChartSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -1440,6 +1587,12 @@
                   "$ref": "#/components/schemas/CheckboxSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/TabsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabSchema"
+                },
+                {
                   "$ref": "#/components/schemas/ModalSchema"
                 },
                 {
@@ -1459,16 +1612,21 @@
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
                   "input": "#/components/schemas/InputSchema",
+                  "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
                   "progress": "#/components/schemas/ProgressSchema",
+                  "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                  "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                   "select": "#/components/schemas/SelectSchema",
                   "select_option": "#/components/schemas/SelectOptionSchema",
                   "spinner": "#/components/schemas/SpinnerSchema",
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
+                  "tabs": "#/components/schemas/TabsSchema",
                   "text": "#/components/schemas/TextSchema",
                   "tile": "#/components/schemas/TileSchema",
                   "toggle": "#/components/schemas/ToggleSchema"
@@ -1509,6 +1667,15 @@
                       "$ref": "#/components/schemas/ProgressSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/SegmentedProgressSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LineChartSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/BadgeSchema"
                     },
                     {
@@ -1536,6 +1703,12 @@
                       "$ref": "#/components/schemas/CheckboxSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/TabsSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TabSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/ModalSchema"
                     },
                     {
@@ -1555,16 +1728,21 @@
                       "checkbox": "#/components/schemas/CheckboxSchema",
                       "grid": "#/components/schemas/GridSchema",
                       "input": "#/components/schemas/InputSchema",
+                      "line_chart": "#/components/schemas/LineChartSchema",
                       "modal": "#/components/schemas/ModalSchema",
                       "progress": "#/components/schemas/ProgressSchema",
+                      "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                      "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                       "select": "#/components/schemas/SelectSchema",
                       "select_option": "#/components/schemas/SelectOptionSchema",
                       "spinner": "#/components/schemas/SpinnerSchema",
                       "stack": "#/components/schemas/StackSchema",
                       "stat": "#/components/schemas/StatSchema",
                       "stat_card": "#/components/schemas/StatCardSchema",
+                      "tab": "#/components/schemas/TabSchema",
                       "table": "#/components/schemas/TableSchema",
                       "table_column": "#/components/schemas/TableColumnSchema",
+                      "tabs": "#/components/schemas/TabsSchema",
                       "text": "#/components/schemas/TextSchema",
                       "tile": "#/components/schemas/TileSchema",
                       "toggle": "#/components/schemas/ToggleSchema"
@@ -1927,6 +2105,98 @@
         "title": "ProgressSchema",
         "description": "Progress bar with optional labels"
       },
+      "SegmentedProgressSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "segmented_progress",
+            "title": "Type",
+            "default": "segmented_progress"
+          },
+          "segments": {
+            "items": {
+              "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+            },
+            "type": "array",
+            "title": "Segments"
+          },
+          "max": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Max",
+            "default": 100
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "lg"
+            ],
+            "title": "Size",
+            "default": "sm"
+          },
+          "show_legend": {
+            "type": "boolean",
+            "title": "Show Legend",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "segments"
+        ],
+        "title": "SegmentedProgressSchema",
+        "description": "Progress bar with multiple colored segments"
+      },
+      "SegmentedProgressSegmentSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "segment",
+            "title": "Type",
+            "default": "segment"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Value"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "color"
+        ],
+        "title": "SegmentedProgressSegmentSchema",
+        "description": "Segment for SegmentedProgress bar"
+      },
       "SelectOptionSchema": {
         "properties": {
           "type": {
@@ -2124,6 +2394,15 @@
                   "$ref": "#/components/schemas/ProgressSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/SegmentedProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/LineChartSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -2151,6 +2430,12 @@
                   "$ref": "#/components/schemas/CheckboxSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/TabsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabSchema"
+                },
+                {
                   "$ref": "#/components/schemas/ModalSchema"
                 },
                 {
@@ -2170,16 +2455,21 @@
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
                   "input": "#/components/schemas/InputSchema",
+                  "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
                   "progress": "#/components/schemas/ProgressSchema",
+                  "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                  "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                   "select": "#/components/schemas/SelectSchema",
                   "select_option": "#/components/schemas/SelectOptionSchema",
                   "spinner": "#/components/schemas/SpinnerSchema",
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
+                  "tabs": "#/components/schemas/TabsSchema",
                   "text": "#/components/schemas/TextSchema",
                   "tile": "#/components/schemas/TileSchema",
                   "toggle": "#/components/schemas/ToggleSchema"
@@ -2331,6 +2621,156 @@
         "title": "SuccessResponse",
         "description": "Generic success response"
       },
+      "TabSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "tab",
+            "title": "Type",
+            "default": "tab"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon"
+          },
+          "children": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StackSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GridSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TileSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatCardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/LineChartSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/BadgeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ButtonSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/InputSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectOptionSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ToggleSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CheckboxSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ModalSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AlertSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SpinnerSchema"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "alert": "#/components/schemas/AlertSchema",
+                  "badge": "#/components/schemas/BadgeSchema",
+                  "button": "#/components/schemas/ButtonSchema",
+                  "card": "#/components/schemas/CardSchema",
+                  "checkbox": "#/components/schemas/CheckboxSchema",
+                  "grid": "#/components/schemas/GridSchema",
+                  "input": "#/components/schemas/InputSchema",
+                  "line_chart": "#/components/schemas/LineChartSchema",
+                  "modal": "#/components/schemas/ModalSchema",
+                  "progress": "#/components/schemas/ProgressSchema",
+                  "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                  "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
+                  "select": "#/components/schemas/SelectSchema",
+                  "select_option": "#/components/schemas/SelectOptionSchema",
+                  "spinner": "#/components/schemas/SpinnerSchema",
+                  "stack": "#/components/schemas/StackSchema",
+                  "stat": "#/components/schemas/StatSchema",
+                  "stat_card": "#/components/schemas/StatCardSchema",
+                  "tab": "#/components/schemas/TabSchema",
+                  "table": "#/components/schemas/TableSchema",
+                  "table_column": "#/components/schemas/TableColumnSchema",
+                  "tabs": "#/components/schemas/TabsSchema",
+                  "text": "#/components/schemas/TextSchema",
+                  "tile": "#/components/schemas/TileSchema",
+                  "toggle": "#/components/schemas/ToggleSchema"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "TabSchema",
+        "description": "Single tab within Tabs component"
+      },
       "TableColumnSchema": {
         "properties": {
           "type": {
@@ -2414,6 +2854,49 @@
         "title": "TableSchema",
         "description": "Data table"
       },
+      "TabsSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "tabs",
+            "title": "Type",
+            "default": "tabs"
+          },
+          "tabs": {
+            "items": {
+              "$ref": "#/components/schemas/TabSchema"
+            },
+            "type": "array",
+            "title": "Tabs"
+          },
+          "default_tab": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Tab"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "md"
+            ],
+            "title": "Size",
+            "default": "md"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tabs"
+        ],
+        "title": "TabsSchema",
+        "description": "Tab container with switchable content panels"
+      },
       "TextSchema": {
         "properties": {
           "type": {
@@ -2460,6 +2943,16 @@
           "title": {
             "type": "string",
             "title": "Title"
+          },
+          "colspan": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "title": "Colspan",
+            "default": 1
           },
           "badge": {
             "anyOf": [
@@ -2509,6 +3002,15 @@
                       "$ref": "#/components/schemas/ProgressSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/SegmentedProgressSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LineChartSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/BadgeSchema"
                     },
                     {
@@ -2536,6 +3038,12 @@
                       "$ref": "#/components/schemas/CheckboxSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/TabsSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TabSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/ModalSchema"
                     },
                     {
@@ -2555,16 +3063,21 @@
                       "checkbox": "#/components/schemas/CheckboxSchema",
                       "grid": "#/components/schemas/GridSchema",
                       "input": "#/components/schemas/InputSchema",
+                      "line_chart": "#/components/schemas/LineChartSchema",
                       "modal": "#/components/schemas/ModalSchema",
                       "progress": "#/components/schemas/ProgressSchema",
+                      "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                      "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                       "select": "#/components/schemas/SelectSchema",
                       "select_option": "#/components/schemas/SelectOptionSchema",
                       "spinner": "#/components/schemas/SpinnerSchema",
                       "stack": "#/components/schemas/StackSchema",
                       "stat": "#/components/schemas/StatSchema",
                       "stat_card": "#/components/schemas/StatCardSchema",
+                      "tab": "#/components/schemas/TabSchema",
                       "table": "#/components/schemas/TableSchema",
                       "table_column": "#/components/schemas/TableColumnSchema",
+                      "tabs": "#/components/schemas/TabsSchema",
                       "text": "#/components/schemas/TextSchema",
                       "tile": "#/components/schemas/TileSchema",
                       "toggle": "#/components/schemas/ToggleSchema"
@@ -2607,6 +3120,15 @@
                   "$ref": "#/components/schemas/ProgressSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/SegmentedProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SegmentedProgressSegmentSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/LineChartSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -2634,6 +3156,12 @@
                   "$ref": "#/components/schemas/CheckboxSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/TabsSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TabSchema"
+                },
+                {
                   "$ref": "#/components/schemas/ModalSchema"
                 },
                 {
@@ -2653,16 +3181,21 @@
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
                   "input": "#/components/schemas/InputSchema",
+                  "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
                   "progress": "#/components/schemas/ProgressSchema",
+                  "segment": "#/components/schemas/SegmentedProgressSegmentSchema",
+                  "segmented_progress": "#/components/schemas/SegmentedProgressSchema",
                   "select": "#/components/schemas/SelectSchema",
                   "select_option": "#/components/schemas/SelectOptionSchema",
                   "spinner": "#/components/schemas/SpinnerSchema",
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
+                  "tabs": "#/components/schemas/TabsSchema",
                   "text": "#/components/schemas/TextSchema",
                   "tile": "#/components/schemas/TileSchema",
                   "toggle": "#/components/schemas/ToggleSchema"

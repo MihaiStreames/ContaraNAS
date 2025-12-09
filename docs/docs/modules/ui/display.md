@@ -315,6 +315,176 @@ Table(
 
 ---
 
+## SegmentedProgress
+
+A progress bar with multiple colored segments, useful for showing breakdowns (e.g., disk usage by category).
+
+```python
+from ContaraNAS.core.ui import SegmentedProgress, SegmentedProgressSegment
+
+# Basic segmented progress
+progress = SegmentedProgress(
+    segments=[
+        SegmentedProgressSegment(value=40, color="primary", label="Games"),
+        SegmentedProgressSegment(value=20, color="success", label="Shaders"),
+        SegmentedProgressSegment(value=15, color="warning", label="Workshop"),
+        SegmentedProgressSegment(value=25, color="default", label="Other"),
+    ],
+    max=100,
+)
+
+# With legend
+progress = SegmentedProgress(
+    segments=[
+        SegmentedProgressSegment(value=450, color="primary", label="Games"),
+        SegmentedProgressSegment(value=50, color="success", label="Shaders"),
+        SegmentedProgressSegment(value=100, color="warning", label="Workshop"),
+    ],
+    max=1000,
+    show_legend=True,
+)
+```
+
+### SegmentedProgress Props
+
+| Prop          | Type                            | Default | Description                     |
+|---------------|---------------------------------|---------|---------------------------------|
+| `segments`    | `list[SegmentedProgressSegment]`| Required| Segments to display             |
+| `max`         | `int \| float`                  | `100`   | Maximum value (sum of segments) |
+| `size`        | `"sm"` \| `"lg"`                | `"sm"`  | Bar height                      |
+| `show_legend` | `bool`                          | `False` | Show segment labels below bar   |
+
+### SegmentedProgressSegment Props
+
+| Prop    | Type             | Default  | Description                        |
+|---------|------------------|----------|------------------------------------|
+| `value` | `int \| float`   | Required | Segment size                       |
+| `color` | `str`            | Required | CSS color or semantic color name   |
+| `label` | `str \| None`    | `None`   | Label for legend/tooltip           |
+
+### Color Options
+
+Use semantic colors or CSS color values:
+
+```python
+# Semantic colors
+SegmentedProgressSegment(value=50, color="primary", label="Primary")
+SegmentedProgressSegment(value=30, color="success", label="Success")
+SegmentedProgressSegment(value=20, color="warning", label="Warning")
+SegmentedProgressSegment(value=10, color="error", label="Error")
+SegmentedProgressSegment(value=40, color="default", label="Default")
+
+# CSS colors
+SegmentedProgressSegment(value=50, color="#3b82f6", label="Blue")
+SegmentedProgressSegment(value=30, color="rgb(34, 197, 94)", label="Green")
+```
+
+### Example: Disk Usage Breakdown
+
+```python
+def build_disk_usage(library: dict) -> SegmentedProgress:
+    total = library.get("total_size", 0)
+    games = library.get("games_size", 0)
+    shaders = library.get("shader_size", 0)
+    workshop = library.get("workshop_size", 0)
+    other = total - games - shaders - workshop
+
+    return SegmentedProgress(
+        segments=[
+            SegmentedProgressSegment(value=games, color="primary", label="Games"),
+            SegmentedProgressSegment(value=shaders, color="success", label="Shaders"),
+            SegmentedProgressSegment(value=workshop, color="warning", label="Workshop"),
+            SegmentedProgressSegment(value=other, color="default", label="Other"),
+        ],
+        max=total,
+        show_legend=True,
+    )
+```
+
+---
+
+## LineChart
+
+A simple line chart for time-series data, rendered as SVG with no external dependencies.
+
+```python
+from ContaraNAS.core.ui import LineChart
+
+# Basic line chart
+chart = LineChart(
+    data=[10, 25, 45, 30, 55, 70, 65, 80, 75, 90],
+    max=100,
+    min=0,
+)
+
+# With label overlay
+chart = LineChart(
+    data=cpu_history,  # list of CPU % values
+    max=100,
+    min=0,
+    height=80,
+    color="primary",
+    fill=True,
+    label="45.2%",  # Current value shown on chart
+)
+```
+
+### Props
+
+| Prop     | Type                                                           | Default     | Description                    |
+|----------|----------------------------------------------------------------|-------------|--------------------------------|
+| `data`   | `list[float]`                                                  | Required    | Y values (rendered left-right) |
+| `max`    | `float`                                                        | `100`       | Maximum Y value                |
+| `min`    | `float`                                                        | `0`         | Minimum Y value                |
+| `height` | `int`                                                          | `80`        | Chart height in pixels         |
+| `color`  | `"default"` \| `"primary"` \| `"success"` \| `"warning"` \| `"error"` | `"primary"` | Line/fill color       |
+| `fill`   | `bool`                                                         | `True`      | Fill area under line           |
+| `label`  | `str \| None`                                                  | `None`      | Current value overlay          |
+
+### Example: CPU Usage Over Time
+
+```python
+class SysMonitorModule(Module):
+    class State(ModuleState):
+        cpu_history: list[float] = []  # Last 60 readings
+        current_cpu: float = 0.0
+
+    def get_tile(self) -> Tile:
+        return Tile(
+            icon="cpu",
+            title="CPU Monitor",
+            content=[
+                LineChart(
+                    data=self.state.cpu_history,
+                    max=100,
+                    min=0,
+                    height=80,
+                    color="primary",
+                    fill=True,
+                    label=f"{self.state.current_cpu:.1f}%",
+                ),
+            ],
+        )
+```
+
+### Color Usage
+
+```python
+# CPU - primary blue
+LineChart(data=cpu_history, color="primary")
+
+# Memory - success green
+LineChart(data=memory_history, color="success")
+
+# Temperature - warning orange
+LineChart(data=temp_history, color="warning")
+
+# Errors - error red
+LineChart(data=error_history, color="error")
+```
+
+---
+
 ## Combining Display Components
 
 Display components work together to create rich interfaces:

@@ -91,6 +91,98 @@ When serialized, the action reference becomes:
 
 The frontend uses this to call the correct action when clicked.
 
+## ActionRef: Actions with Parameters
+
+When you need to bind specific parameter values to an action at UI construction time, use `ActionRef`:
+
+```python
+from ContaraNAS.core.action import ActionRef, action
+
+class SteamModule(Module):
+    @action
+    async def open_library(self, library_path: str) -> OpenModal:
+        """Open the modal for a specific library"""
+        return OpenModal(modal_id=f"library_{library_path}")
+
+    def get_tile(self) -> Tile:
+        return Tile(
+            icon="gamepad",
+            title="Steam",
+            content=[
+                # Each button calls open_library with a different path
+                Button(
+                    label="Main Library",
+                    on_click=ActionRef(self.open_library, library_path="/home/steam"),
+                ),
+                Button(
+                    label="Games Drive",
+                    on_click=ActionRef(self.open_library, library_path="/mnt/games"),
+                ),
+            ],
+        )
+```
+
+### How ActionRef Works
+
+`ActionRef` wraps an action method and pre-binds parameter values:
+
+```python
+# Create a reference to an action with parameters
+ref = ActionRef(self.some_action, param1="value1", param2=42)
+
+# When serialized, it becomes:
+# {"__action__": "some_action", "__params__": {"param1": "value1", "param2": 42}}
+```
+
+The frontend automatically passes these parameters when invoking the action.
+
+### When to Use ActionRef
+
+Use `ActionRef` when:
+
+- You need the same action to behave differently based on context
+- Building dynamic lists where each item triggers the action with different data
+- Creating buttons in loops that each need different parameter values
+
+```python
+# Dynamic button list example
+def get_tile(self) -> Tile:
+    buttons = []
+    for lib in self.state.libraries:
+        buttons.append(
+            Button(
+                label=lib["name"],
+                on_click=ActionRef(self.open_library, library_path=lib["path"]),
+            )
+        )
+
+    return Tile(
+        icon="folder",
+        title="Libraries",
+        content=[Stack(direction="vertical", children=buttons)],
+    )
+```
+
+### ActionRef Requirements
+
+1. The method must be decorated with `@action`
+2. Parameter names must match the action's parameter names
+3. Parameter values are serialized as JSON (use basic types)
+
+```python
+# This will raise ValueError - method not decorated with @action
+ActionRef(self.some_regular_method, param="value")  # Error!
+
+# Correct usage
+@action
+async def my_action(self, name: str, count: int = 0) -> None:
+    pass
+
+ActionRef(self.my_action, name="test", count=5)  # OK
+```
+
+---
+
 ## Action Parameters
 
 Actions can accept parameters from the frontend:
@@ -172,6 +264,7 @@ Actions can return results that control the frontend behavior.
 ```python
 from ContaraNAS.core.action import (
     action,
+    ActionRef,
     OpenModal,
     CloseModal,
     Notify,

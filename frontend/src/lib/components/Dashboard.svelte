@@ -4,7 +4,7 @@
   import { uiStore, authStore } from "$lib/stores";
   import { api, wsService, ApiError } from "$lib/services";
   import { processActionResult } from "$lib/actions";
-  import type { ActionRef } from "$lib/api";
+  import type { ActionRefWithParams } from "$lib/actions";
 
   interface Props {
     onDisconnect: () => void;
@@ -95,10 +95,14 @@
   }
 
   // Action handler for components
-  async function handleAction(moduleName: string, actionRef: ActionRef) {
-    console.log("[Dashboard] handleAction:", moduleName, actionRef.__action__);
+  async function handleAction(moduleName: string, actionRef: ActionRefWithParams) {
+    console.log("[Dashboard] handleAction:", moduleName, actionRef.__action__, actionRef.__params__);
     try {
-      const result = await api.executeAction(moduleName, actionRef.__action__);
+      const result = await api.executeAction(
+        moduleName,
+        actionRef.__action__,
+        actionRef.__params__
+      );
       console.log("[Dashboard] Action result:", result);
       processActionResult(result, {
         openModal: (id) => {
@@ -189,7 +193,11 @@
     {:else}
       <Grid columns={3} gap="4">
         {#each uiStore.allModulesWithTiles as { module: mod, tile } (mod.name)}
-          <div class="tile-wrapper" class:tile-disabled={!mod.enabled}>
+          <div
+            class="tile-wrapper"
+            class:tile-disabled={!mod.enabled}
+            style:grid-column="span {tile?.colspan ?? 1}"
+          >
             {#if tile}
               <ModuleRenderer
                 moduleName={mod.name}

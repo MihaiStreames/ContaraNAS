@@ -15,6 +15,8 @@ import StatCard from "./card/StatCard.svelte";
 import Text from "./display/Text.svelte";
 import Badge from "./display/Badge.svelte";
 import Progress from "./display/Progress.svelte";
+import SegmentedProgress from "./display/SegmentedProgress.svelte";
+import LineChart from "./display/LineChart.svelte";
 import Table from "./display/Table.svelte";
 
 // Interactive
@@ -23,6 +25,7 @@ import Input from "./interactive/Input.svelte";
 import Select from "./interactive/Select.svelte";
 import Toggle from "./interactive/Toggle.svelte";
 import Checkbox from "./interactive/Checkbox.svelte";
+import Tabs from "./interactive/Tabs.svelte";
 
 // Modal
 import Modal from "./modal/Modal.svelte";
@@ -50,6 +53,8 @@ export const componentRegistry: Record<ComponentType, Component<any>> = {
   text: Text,
   badge: Badge,
   progress: Progress,
+  segmented_progress: SegmentedProgress,
+  line_chart: LineChart,
   table: Table,
 
   // Interactive
@@ -58,6 +63,7 @@ export const componentRegistry: Record<ComponentType, Component<any>> = {
   select: Select,
   toggle: Toggle,
   checkbox: Checkbox,
+  tabs: Tabs,
 
   // Modal
   modal: Modal,
@@ -69,6 +75,8 @@ export const componentRegistry: Record<ComponentType, Component<any>> = {
   // Helper types (not rendered directly)
   table_column: null as any, // Handled within Table component
   select_option: null as any, // Handled within Select component
+  segment: null as any, // Handled within SegmentedProgress component
+  tab: null as any, // Handled within Tabs component
 };
 
 /**

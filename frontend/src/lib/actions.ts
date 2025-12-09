@@ -38,9 +38,16 @@ export interface ActionResult {
 }
 
 /**
+ * Extended ActionRef with optional params
+ */
+export interface ActionRefWithParams extends ActionRef {
+  __params__?: Record<string, unknown>;
+}
+
+/**
  * Check if a value is an ActionRef
  */
-export function isActionRef(value: unknown): value is ActionRef {
+export function isActionRef(value: unknown): value is ActionRefWithParams {
   return (
     typeof value === "object" &&
     value !== null &&

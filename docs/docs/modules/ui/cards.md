@@ -99,14 +99,32 @@ tile = Tile(
 
 ### Props
 
-| Prop      | Type                      | Default  | Description                    |
-|-----------|---------------------------|----------|--------------------------------|
-| `icon`    | `str`                     | Required | Lucide icon name for the tile  |
-| `title`   | `str`                     | Required | Module display name            |
-| `badge`   | `Badge \| None`           | `None`   | Status badge next to title     |
-| `stats`   | `list[Stat]`              | `[]`     | Key metrics to display         |
-| `content` | `list[Component] \| None` | `None`   | Additional content below stats |
-| `actions` | `list[Component]`         | `[]`     | Action buttons                 |
+| Prop      | Type                      | Default  | Description                         |
+|-----------|---------------------------|----------|-------------------------------------|
+| `icon`    | `str`                     | Required | Lucide icon name for the tile       |
+| `title`   | `str`                     | Required | Module display name                 |
+| `colspan` | `1` \| `2` \| `3`         | `1`      | Number of grid columns to span      |
+| `badge`   | `Badge \| None`           | `None`   | Status badge next to title          |
+| `stats`   | `list[Stat]`              | `[]`     | Key metrics to display              |
+| `content` | `list[Component] \| None` | `None`   | Additional content below stats      |
+| `actions` | `list[Component]`         | `[]`     | Action buttons                      |
+
+### Colspan
+
+Use `colspan` to make tiles wider on the dashboard grid:
+
+```python
+# Normal width (1 column)
+Tile(icon="package", title="My Module", colspan=1)
+
+# Double width (2 columns) - good for complex dashboards
+Tile(icon="activity", title="System Monitor", colspan=2)
+
+# Triple width (3 columns) - full width on most layouts
+Tile(icon="chart-bar", title="Analytics", colspan=3)
+```
+
+This is useful for modules with tabbed content, charts, or multiple stats that benefit from extra horizontal space.
 
 ### Using with get_tile()
 

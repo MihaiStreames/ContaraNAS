@@ -15,18 +15,23 @@
     children,
   }: Props = $props();
 
-  // Check if children is an array (from backend) or a snippet (from Svelte)
-  const isArrayChildren = $derived(Array.isArray(children));
+  // Derive typed versions for template use
+  const arrayChildren = $derived(Array.isArray(children) ? children : null);
+  const snippetChildren = $derived(
+    !Array.isArray(children) && typeof children === "function"
+      ? (children as Snippet)
+      : null
+  );
 </script>
 
 <div
   class="stack stack-{direction} stack-align-{align} stack-justify-{justify} gap-{gap}"
 >
-  {#if isArrayChildren}
-    {#each children as child}
+  {#if arrayChildren}
+    {#each arrayChildren as child}
       <ComponentRenderer component={child} />
     {/each}
-  {:else if children}
-    {@render children()}
+  {:else if snippetChildren}
+    {@render snippetChildren()}
   {/if}
 </div>

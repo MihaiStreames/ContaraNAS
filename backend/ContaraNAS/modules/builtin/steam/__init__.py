@@ -2,7 +2,7 @@ import asyncio
 from datetime import datetime
 from pathlib import Path
 
-from ContaraNAS.core.action import Notify, OpenModal, action
+from ContaraNAS.core.action import ActionRef, Notify, OpenModal, action
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Modal, Tile
 from ContaraNAS.core.utils import get_logger
@@ -16,7 +16,7 @@ from .services import (
     SteamParsingService,
 )
 from .utils import extract_app_id, get_drive_info
-from .views import build_games_modal, build_libraries_modal, build_tile
+from .views import build_library_modal, build_tile, get_library_modal_id
 
 
 logger = get_logger(__name__)
@@ -242,6 +242,15 @@ class SteamModule(Module):
         await self._load_data()
         self.state.commit()
 
+    def _get_library_open_actions(self) -> dict:
+        """Build a map of library paths to their ActionRef objects"""
+        actions = {}
+        for lib in self.state.libraries:
+            path = lib.get("path", "")
+            if path:
+                actions[path] = ActionRef(self.open_library, library_path=path)
+        return actions
+
     def get_tile(self) -> Tile:
         """Return the dashboard tile UI component"""
         return build_tile(
@@ -249,16 +258,16 @@ class SteamModule(Module):
             total_games=self.state.total_games,
             total_libraries=self.state.total_libraries,
             total_size=self.state.total_size,
-            open_games_action=self.open_games,
-            open_libraries_action=self.open_libraries,
+            libraries=self.state.libraries,
+            open_library_actions=self._get_library_open_actions(),
         )
 
     def get_modals(self) -> list[Modal]:
-        """Return modal definitions for this module"""
-        return [
-            build_games_modal(self.state.games),
-            build_libraries_modal(self.state.libraries),
-        ]
+        """Return modal definitions for this module - one per library"""
+        modals = []
+        for lib in self.state.libraries:
+            modals.append(build_library_modal(lib, self.state.games))
+        return modals
 
     # --- Actions ---
 
@@ -272,13 +281,8 @@ class SteamModule(Module):
         return Notify(message="Steam data refreshed", variant="success")
 
     @action
-    async def open_games(self) -> OpenModal:
-        """Open the games list modal"""
+    async def open_library(self, library_path: str) -> OpenModal:
+        """Open the modal for a specific library"""
         await self._load_data()
-        return OpenModal(modal_id="steam_games")
-
-    @action
-    async def open_libraries(self) -> OpenModal:
-        """Open the libraries modal"""
-        await self._load_data()
-        return OpenModal(modal_id="steam_libraries")
+        modal_id = get_library_modal_id(library_path)
+        return OpenModal(modal_id=modal_id)

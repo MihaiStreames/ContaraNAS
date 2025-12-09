@@ -14,15 +14,21 @@
     typeof columns === "number" ? `repeat(${columns}, 1fr)` : columns
   );
 
-  const isArrayChildren = $derived(Array.isArray(children));
+  // Derive typed versions for template use
+  const arrayChildren = $derived(Array.isArray(children) ? children : null);
+  const snippetChildren = $derived(
+    !Array.isArray(children) && typeof children === "function"
+      ? (children as Snippet)
+      : null
+  );
 </script>
 
 <div class="grid gap-{gap}" style="grid-template-columns: {gridColumns}">
-  {#if isArrayChildren}
-    {#each children as child}
+  {#if arrayChildren}
+    {#each arrayChildren as child}
       <ComponentRenderer component={child} />
     {/each}
-  {:else if children}
-    {@render children()}
+  {:else if snippetChildren}
+    {@render snippetChildren()}
   {/if}
 </div>

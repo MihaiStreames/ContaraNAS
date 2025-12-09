@@ -1,8 +1,18 @@
 from .base import Component
 from .card import Card, Stat, Tile
-from .display import Badge, Progress, StatCard, Table, TableColumn, Text
+from .display import (
+    Badge,
+    LineChart,
+    Progress,
+    SegmentedProgress,
+    SegmentedProgressSegment,
+    StatCard,
+    Table,
+    TableColumn,
+    Text,
+)
 from .feedback import Alert, Spinner
-from .interactive import Button, Checkbox, Input, Select, SelectOption, Toggle
+from .interactive import Button, Checkbox, Input, Select, SelectOption, Tab, Tabs, Toggle
 from .layout import Grid, Stack
 from .modal import Modal
 
@@ -21,6 +31,9 @@ __all__ = [
     "Text",
     "StatCard",
     "Progress",
+    "SegmentedProgress",
+    "SegmentedProgressSegment",
+    "LineChart",
     "Badge",
     "Table",
     "TableColumn",
@@ -31,6 +44,8 @@ __all__ = [
     "SelectOption",
     "Toggle",
     "Checkbox",
+    "Tabs",
+    "Tab",
     # Modal
     "Modal",
     # Feedback

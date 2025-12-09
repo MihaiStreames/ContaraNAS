@@ -349,6 +349,106 @@ selection = Stack(
 
 ---
 
+## Tabs
+
+A tabbed container for organizing content into switchable panels.
+
+```python
+from ContaraNAS.core.ui import Tabs, Tab, Text, Progress
+
+tabs = Tabs(
+    tabs=[
+        Tab(
+            id="cpu",
+            label="CPU",
+            icon="Cpu",
+            children=[
+                Text(content="CPU usage information"),
+                Progress(value=45, max=100, label="45%"),
+            ],
+        ),
+        Tab(
+            id="memory",
+            label="Memory",
+            icon="MemoryStick",
+            children=[
+                Text(content="Memory usage information"),
+                Progress(value=72, max=100, label="72%"),
+            ],
+        ),
+    ],
+    default_tab="cpu",
+)
+```
+
+### Tabs Props
+
+| Prop          | Type         | Default | Description                      |
+|---------------|--------------|---------|----------------------------------|
+| `tabs`        | `list[Tab]`  | Required| List of Tab components           |
+| `default_tab` | `str \| None`| `None`  | ID of tab to show by default     |
+| `size`        | `"sm"` \| `"md"` | `"md"` | Tab button size               |
+
+### Tab Props
+
+| Prop       | Type              | Default  | Description              |
+|------------|-------------------|----------|--------------------------|
+| `id`       | `str`             | Required | Unique identifier        |
+| `label`    | `str`             | Required | Tab button text          |
+| `icon`     | `str \| None`     | `None`   | Lucide icon name         |
+| `children` | `list[Component]` | `[]`     | Tab panel content        |
+
+### Dynamic Tabs
+
+Build tabs from state:
+
+```python
+def build_disk_tabs(disks: list[dict]) -> Tabs:
+    tabs = []
+    for i, disk in enumerate(disks):
+        tabs.append(
+            Tab(
+                id=f"disk_{i}",
+                label=disk["device"].split("/")[-1],
+                icon="HardDrive",
+                children=[
+                    Text(content=disk["mountpoint"]),
+                    Progress(
+                        value=disk["usage_percent"],
+                        max=100,
+                        label=f"{disk['usage_percent']:.0f}%",
+                    ),
+                ],
+            )
+        )
+
+    return Tabs(tabs=tabs, default_tab="disk_0")
+```
+
+### Example: System Monitor Tile
+
+```python
+def get_tile(self) -> Tile:
+    return Tile(
+        icon="Activity",
+        title="System Monitor",
+        colspan=2,  # Wide tile
+        content=[
+            Tabs(
+                tabs=[
+                    Tab(id="cpu", label="CPU", icon="Cpu", children=[...]),
+                    Tab(id="memory", label="Memory", icon="MemoryStick", children=[...]),
+                    Tab(id="disk_0", label="nvme0n1", icon="HardDrive", children=[...]),
+                ],
+                default_tab="cpu",
+                size="sm",
+            )
+        ],
+    )
+```
+
+---
+
 ## Handling Form Submissions
 
 When a button with `on_click` is clicked, the form data is collected and sent to your action:

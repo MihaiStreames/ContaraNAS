@@ -1,9 +1,9 @@
-from .modals import build_games_modal, build_libraries_modal
+from .modals import build_library_modal, get_library_modal_id
 from .tile import build_tile
 
 
 __all__ = [
     "build_tile",
-    "build_games_modal",
-    "build_libraries_modal",
+    "build_library_modal",
+    "get_library_modal_id",
 ]
