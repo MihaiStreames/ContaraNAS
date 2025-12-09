@@ -199,12 +199,13 @@
         <Text content="No modules available" variant="muted" />
       </div>
     {:else}
-      <Grid columns={3} gap="4">
+      <Grid columns={3} gap="4" row_height="minmax(200px, auto)">
         {#each uiStore.allModulesWithTiles as { module: mod, tile } (mod.name)}
           <div
             class="tile-wrapper"
             class:tile-disabled={!mod.enabled}
             style:grid-column="span {tile?.colspan ?? 1}"
+            style:grid-row="span {tile?.rowspan ?? 1}"
           >
             {#if tile}
               <ModuleRenderer

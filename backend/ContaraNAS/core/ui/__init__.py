@@ -7,6 +7,7 @@ from .display import (
     SegmentedProgress,
     SegmentedProgressSegment,
     StatCard,
+    StatSmall,
     Table,
     TableColumn,
     Text,
@@ -30,6 +31,7 @@ __all__ = [
     # Display
     "Text",
     "StatCard",
+    "StatSmall",
     "Progress",
     "SegmentedProgress",
     "SegmentedProgressSegment",

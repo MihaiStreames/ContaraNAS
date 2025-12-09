@@ -451,9 +451,9 @@ export interface components {
              * Children
              * @default []
              */
-            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
+            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
             /** Footer */
-            footer?: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[] | null;
+            footer?: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[] | null;
         };
         /**
          * CheckboxSchema
@@ -501,11 +501,13 @@ export interface components {
              * @enum {string}
              */
             gap: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "8";
+            /** Row Height */
+            row_height?: string | null;
             /**
              * Children
              * @default []
              */
-            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
+            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -636,9 +638,9 @@ export interface components {
              * Children
              * @default []
              */
-            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
+            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
             /** Footer */
-            footer?: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[] | null;
+            footer?: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[] | null;
             /**
              * Closable
              * @default true
@@ -935,10 +937,15 @@ export interface components {
              */
             justify: "start" | "center" | "end" | "between" | "around";
             /**
+             * Grow
+             * @default false
+             */
+            grow: boolean;
+            /**
              * Children
              * @default []
              */
-            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
+            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
         };
         /**
          * StatCardSchema
@@ -984,6 +991,21 @@ export interface components {
             value: string | number;
         };
         /**
+         * StatSmallSchema
+         * @description Compact inline stat with label and value side by side
+         */
+        StatSmallSchema: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "stat_small";
+            /** Label */
+            label: string;
+            /** Value */
+            value: string | number;
+        };
+        /**
          * SuccessResponse
          * @description Generic success response
          */
@@ -1013,7 +1035,7 @@ export interface components {
              * Children
              * @default []
              */
-            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
+            children: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
         };
         /**
          * TableColumnSchema
@@ -1099,6 +1121,12 @@ export interface components {
              * @enum {string}
              */
             variant: "body" | "secondary" | "muted" | "code";
+            /**
+             * Size
+             * @default base
+             * @enum {string}
+             */
+            size: "sm" | "base" | "lg" | "xl";
         };
         /**
          * TileSchema
@@ -1120,6 +1148,12 @@ export interface components {
              * @enum {integer}
              */
             colspan: 1 | 2 | 3;
+            /**
+             * Rowspan
+             * @default 1
+             * @enum {integer}
+             */
+            rowspan: 1 | 2 | 3;
             badge?: components["schemas"]["BadgeSchema"] | null;
             /**
              * Stats
@@ -1127,12 +1161,12 @@ export interface components {
              */
             stats: components["schemas"]["StatSchema"][];
             /** Content */
-            content?: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[] | null;
+            content?: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[] | null;
             /**
              * Actions
              * @default []
              */
-            actions: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
+            actions: (components["schemas"]["StackSchema"] | components["schemas"]["GridSchema"] | components["schemas"]["CardSchema"] | components["schemas"]["TileSchema"] | components["schemas"]["StatSchema"] | components["schemas"]["TextSchema"] | components["schemas"]["StatSmallSchema"] | components["schemas"]["StatCardSchema"] | components["schemas"]["ProgressSchema"] | components["schemas"]["SegmentedProgressSchema"] | components["schemas"]["SegmentedProgressSegmentSchema"] | components["schemas"]["LineChartSchema"] | components["schemas"]["BadgeSchema"] | components["schemas"]["TableSchema"] | components["schemas"]["TableColumnSchema"] | components["schemas"]["ButtonSchema"] | components["schemas"]["InputSchema"] | components["schemas"]["SelectSchema"] | components["schemas"]["SelectOptionSchema"] | components["schemas"]["ToggleSchema"] | components["schemas"]["CheckboxSchema"] | components["schemas"]["TabsSchema"] | components["schemas"]["TabSchema"] | components["schemas"]["ModalSchema"] | components["schemas"]["AlertSchema"] | components["schemas"]["SpinnerSchema"])[];
         };
         /**
          * ToggleSchema

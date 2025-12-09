@@ -29,6 +29,7 @@ def build_tile(
         icon="Activity",
         title="System Monitor",
         colspan=2,
+        rowspan=2,
         badge=Badge(text="Live", variant="success") if last_update else None,
         content=[
             Tabs(

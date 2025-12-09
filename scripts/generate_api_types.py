@@ -15,6 +15,7 @@ UI_COMPONENTS = {
     "display": [
         "TextSchema",
         "StatCardSchema",
+        "StatSmallSchema",
         "ProgressSchema",
         "SegmentedProgressSchema",
         "SegmentedProgressSegmentSchema",

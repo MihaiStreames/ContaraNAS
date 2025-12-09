@@ -805,6 +805,46 @@
   border-radius: var(--radius-sm);
 }
 
+/* Text sizes - override font-size from variant */
+.text-size-sm {
+  font-size: var(--text-sm) !important;
+}
+.text-size-base {
+  font-size: var(--text-base) !important;
+}
+.text-size-lg {
+  font-size: var(--text-lg) !important;
+}
+.text-size-xl {
+  font-size: var(--text-xl) !important;
+}
+
+/* ========================================
+   Stat Small
+   ======================================== */
+
+.stat-small {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 240px;
+}
+
+.stat-small-label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.stat-small-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  text-align: left;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
 /* ========================================
    Utilities
    ======================================== */

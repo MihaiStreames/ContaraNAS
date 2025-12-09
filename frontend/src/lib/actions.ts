@@ -45,7 +45,7 @@ export interface ActionResult {
  * Extended ActionRef with optional params
  */
 export interface ActionRefWithParams extends ActionRef {
-  __params__?: Record<string, unknown>;
+  __params__?: Record<string, unknown> | null;
 }
 
 /**

@@ -22,6 +22,7 @@ class StackSchema(BaseModel):
     gap: Literal["0", "1", "2", "3", "4", "5", "6", "8"] = "4"
     align: Literal["start", "center", "end", "stretch"] = "stretch"
     justify: Literal["start", "center", "end", "between", "around"] = "start"
+    grow: bool = False  # If True, children will grow to fill available space
     children: list["ComponentSchema"] = []
 
 
@@ -31,6 +32,7 @@ class GridSchema(BaseModel):
     type: Literal["grid"] = "grid"
     columns: int | str = 2
     gap: Literal["0", "1", "2", "3", "4", "5", "6", "8"] = "4"
+    row_height: str | None = None  # CSS value for grid-auto-rows
     children: list["ComponentSchema"] = []
 
 
@@ -67,6 +69,7 @@ class TileSchema(BaseModel):
     icon: str
     title: str
     colspan: Literal[1, 2, 3] = 1
+    rowspan: Literal[1, 2, 3] = 1
     badge: BadgeSchema | None = None
     stats: list[StatSchema] = []
     content: list["ComponentSchema"] | None = None
@@ -79,6 +82,15 @@ class TextSchema(BaseModel):
     type: Literal["text"] = "text"
     content: str
     variant: Literal["body", "secondary", "muted", "code"] = "body"
+    size: Literal["sm", "base", "lg", "xl"] = "base"
+
+
+class StatSmallSchema(BaseModel):
+    """Compact inline stat with label and value side by side"""
+
+    type: Literal["stat_small"] = "stat_small"
+    label: str
+    value: str | int | float
 
 
 class StatCardSchema(BaseModel):
@@ -275,6 +287,7 @@ ComponentSchema = Annotated[
     | TileSchema
     | StatSchema
     | TextSchema
+    | StatSmallSchema
     | StatCardSchema
     | ProgressSchema
     | SegmentedProgressSchema

@@ -20,6 +20,7 @@ export type StatSchema = components["schemas"]["StatSchema"];
 // Display components
 export type TextSchema = components["schemas"]["TextSchema"];
 export type StatCardSchema = components["schemas"]["StatCardSchema"];
+export type StatSmallSchema = components["schemas"]["StatSmallSchema"];
 export type ProgressSchema = components["schemas"]["ProgressSchema"];
 export type SegmentedProgressSchema = components["schemas"]["SegmentedProgressSchema"];
 export type SegmentedProgressSegmentSchema = components["schemas"]["SegmentedProgressSegmentSchema"];
@@ -54,6 +55,7 @@ export type ComponentSchema =
 	| StatSchema
 	| TextSchema
 	| StatCardSchema
+	| StatSmallSchema
 	| ProgressSchema
 	| SegmentedProgressSchema
 	| SegmentedProgressSegmentSchema

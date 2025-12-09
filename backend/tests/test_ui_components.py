@@ -18,6 +18,7 @@ from ContaraNAS.core.ui import (
     Stack,
     Stat,
     StatCard,
+    StatSmall,
     Tab,
     Table,
     TableColumn,
@@ -406,3 +407,89 @@ def test_tab():
     assert data["label"] == "nvme0n1"
     assert data["icon"] == "HardDrive"
     assert len(data["children"]) == 2
+
+
+def test_stat_small():
+    """Test compact inline stat component"""
+    stat = StatSmall(label="Base Speed", value="3.60 GHz")
+    data = stat.to_dict()
+
+    assert data["type"] == "stat_small"
+    assert data["label"] == "Base Speed"
+    assert data["value"] == "3.60 GHz"
+
+
+def test_stat_small_numeric_value():
+    """Test StatSmall with numeric value"""
+    stat = StatSmall(label="Cores", value=8)
+    data = stat.to_dict()
+
+    assert data["type"] == "stat_small"
+    assert data["label"] == "Cores"
+    assert data["value"] == 8
+
+
+def test_text_with_size():
+    """Test text component with size variants"""
+    text_sm = Text(content="Small", variant="body", size="sm")
+    text_xl = Text(content="Extra Large", variant="body", size="xl")
+
+    data_sm = text_sm.to_dict()
+    data_xl = text_xl.to_dict()
+
+    assert data_sm["type"] == "text"
+    assert data_sm["content"] == "Small"
+    assert data_sm["size"] == "sm"
+
+    assert data_xl["size"] == "xl"
+
+
+def test_text_default_size():
+    """Test text component default size is 'base'"""
+    text = Text(content="Default")
+    data = text.to_dict()
+
+    assert data["size"] == "base"
+
+
+def test_tile_rowspan():
+    """Test tile with rowspan for taller tiles"""
+    tile = Tile(
+        icon="activity",
+        title="System Monitor",
+        colspan=2,
+        rowspan=2,
+        stats=[Stat(label="CPU", value="45%")],
+    )
+    data = tile.to_dict()
+
+    assert data["type"] == "tile"
+    assert data["colspan"] == 2
+    assert data["rowspan"] == 2
+
+
+def test_tile_default_rowspan():
+    """Test tile default rowspan is 1"""
+    tile = Tile(icon="box", title="Test")
+    data = tile.to_dict()
+
+    assert data["rowspan"] == 1
+
+
+def test_grid_row_height():
+    """Test grid with row_height for supporting rowspan"""
+    grid = Grid(columns=3, gap="4", row_height="minmax(200px, auto)")
+    data = grid.to_dict()
+
+    assert data["type"] == "grid"
+    assert data["columns"] == 3
+    assert data["row_height"] == "minmax(200px, auto)"
+
+
+def test_grid_default_row_height():
+    """Test grid default row_height is None (excluded from dict)"""
+    grid = Grid(columns=2)
+    data = grid.to_dict()
+
+    # None values are excluded from serialization
+    assert "row_height" not in data or data.get("row_height") is None

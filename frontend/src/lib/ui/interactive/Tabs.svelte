@@ -103,12 +103,11 @@
   }
 
   .tabs-content {
-    padding: var(--space-3);
-    min-height: 0;
-  }
-
-  .tabs-sm .tabs-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
     padding: var(--space-2);
+    min-height: 0;
   }
 
   .tab-label {

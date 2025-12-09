@@ -10,6 +10,16 @@ class Text(Component):
 
     content: str
     variant: Literal["body", "secondary", "muted", "code"] = "body"
+    size: Literal["sm", "base", "lg", "xl"] = "base"
+
+
+class StatSmall(Component):
+    """Compact inline stat with label and value side by side"""
+
+    _type: ClassVar[str] = "stat_small"
+
+    label: str
+    value: str | int | float
 
 
 class StatCard(Component):

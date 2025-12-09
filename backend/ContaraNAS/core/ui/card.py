@@ -34,6 +34,7 @@ class Tile(Component):
     icon: str
     title: str
     colspan: int = 1  # Number of columns to span (1, 2, or 3)
+    rowspan: int = 1  # Number of rows to span (1, 2, or 3)
     badge: Badge | None = None
     stats: list[Stat] = []
     content: list[Component] | None = None  # Alternative to stats (e.g., progress bar)

@@ -24,14 +24,15 @@
     icon = "box",
     title = "",
     colspan = 1,
+    rowspan = 1,
     badge = null,
     stats = [],
     content,
     actions,
   }: Props = $props();
 
-  // Export colspan for parent to use in grid layout
-  export { colspan };
+  // Export colspan and rowspan for parent to use in grid layout
+  export { colspan, rowspan };
 
   // Check if value is a Snippet (function) or an array of components
   const isSnippet = (val: unknown): val is Snippet => typeof val === "function";
@@ -73,7 +74,7 @@
     </div>
   {/if}
 
-  {#if actions}
+  {#if actions && (isSnippet(actions) || (Array.isArray(actions) && actions.length > 0))}
     <div class="tile-actions">
       {#if isSnippet(actions)}
         {@render actions()}

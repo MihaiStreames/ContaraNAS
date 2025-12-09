@@ -7,11 +7,16 @@
     children?: Snippet | ComponentSchema[];
   }
 
-  let { columns = 2, gap = "4", children }: Props = $props();
+  let { columns = 2, gap = "4", row_height, children }: Props = $props();
 
   // Handle columns - can be number or string like "repeat(auto-fill, minmax(300px, 1fr))"
   const gridColumns = $derived(
     typeof columns === "number" ? `repeat(${columns}, 1fr)` : columns
+  );
+
+  // Build style string
+  const gridStyle = $derived(
+    `grid-template-columns: ${gridColumns}${row_height ? `; grid-auto-rows: ${row_height}` : ""}`
   );
 
   // Derive typed versions for template use
@@ -23,7 +28,7 @@
   );
 </script>
 
-<div class="grid gap-{gap}" style="grid-template-columns: {gridColumns}">
+<div class="grid gap-{gap}" style={gridStyle}>
   {#if arrayChildren}
     {#each arrayChildren as child}
       <ComponentRenderer component={child} />

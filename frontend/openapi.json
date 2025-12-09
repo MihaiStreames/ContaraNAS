@@ -891,6 +891,9 @@
                   "$ref": "#/components/schemas/TextSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/StatSmallSchema"
+                },
+                {
                   "$ref": "#/components/schemas/StatCardSchema"
                 },
                 {
@@ -969,6 +972,7 @@
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "stat_small": "#/components/schemas/StatSmallSchema",
                   "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
@@ -1005,6 +1009,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/TextSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatSmallSchema"
                     },
                     {
                       "$ref": "#/components/schemas/StatCardSchema"
@@ -1085,6 +1092,7 @@
                       "stack": "#/components/schemas/StackSchema",
                       "stat": "#/components/schemas/StatSchema",
                       "stat_card": "#/components/schemas/StatCardSchema",
+                      "stat_small": "#/components/schemas/StatSmallSchema",
                       "tab": "#/components/schemas/TabSchema",
                       "table": "#/components/schemas/TableSchema",
                       "table_column": "#/components/schemas/TableColumnSchema",
@@ -1184,6 +1192,17 @@
             "title": "Gap",
             "default": "4"
           },
+          "row_height": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Row Height"
+          },
           "children": {
             "items": {
               "oneOf": [
@@ -1204,6 +1223,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSmallSchema"
                 },
                 {
                   "$ref": "#/components/schemas/StatCardSchema"
@@ -1284,6 +1306,7 @@
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "stat_small": "#/components/schemas/StatSmallSchema",
                   "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
@@ -1545,6 +1568,9 @@
                   "$ref": "#/components/schemas/TextSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/StatSmallSchema"
+                },
+                {
                   "$ref": "#/components/schemas/StatCardSchema"
                 },
                 {
@@ -1623,6 +1649,7 @@
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "stat_small": "#/components/schemas/StatSmallSchema",
                   "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
@@ -1659,6 +1686,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/TextSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatSmallSchema"
                     },
                     {
                       "$ref": "#/components/schemas/StatCardSchema"
@@ -1739,6 +1769,7 @@
                       "stack": "#/components/schemas/StackSchema",
                       "stat": "#/components/schemas/StatSchema",
                       "stat_card": "#/components/schemas/StatCardSchema",
+                      "stat_small": "#/components/schemas/StatSmallSchema",
                       "tab": "#/components/schemas/TabSchema",
                       "table": "#/components/schemas/TableSchema",
                       "table_column": "#/components/schemas/TableColumnSchema",
@@ -2366,6 +2397,11 @@
             "title": "Justify",
             "default": "start"
           },
+          "grow": {
+            "type": "boolean",
+            "title": "Grow",
+            "default": false
+          },
           "children": {
             "items": {
               "oneOf": [
@@ -2386,6 +2422,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSmallSchema"
                 },
                 {
                   "$ref": "#/components/schemas/StatCardSchema"
@@ -2466,6 +2505,7 @@
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "stat_small": "#/components/schemas/StatSmallSchema",
                   "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
@@ -2602,6 +2642,41 @@
         "title": "StatSchema",
         "description": "Inline stat display (value + label) for tiles"
       },
+      "StatSmallSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "stat_small",
+            "title": "Type",
+            "default": "stat_small"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "StatSmallSchema",
+        "description": "Compact inline stat with label and value side by side"
+      },
       "SuccessResponse": {
         "properties": {
           "success": {
@@ -2668,6 +2743,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSmallSchema"
                 },
                 {
                   "$ref": "#/components/schemas/StatCardSchema"
@@ -2748,6 +2826,7 @@
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "stat_small": "#/components/schemas/StatSmallSchema",
                   "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",
@@ -2919,6 +2998,17 @@
             ],
             "title": "Variant",
             "default": "body"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "base",
+              "lg",
+              "xl"
+            ],
+            "title": "Size",
+            "default": "base"
           }
         },
         "type": "object",
@@ -2952,6 +3042,16 @@
               3
             ],
             "title": "Colspan",
+            "default": 1
+          },
+          "rowspan": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "title": "Rowspan",
             "default": 1
           },
           "badge": {
@@ -2994,6 +3094,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/TextSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatSmallSchema"
                     },
                     {
                       "$ref": "#/components/schemas/StatCardSchema"
@@ -3074,6 +3177,7 @@
                       "stack": "#/components/schemas/StackSchema",
                       "stat": "#/components/schemas/StatSchema",
                       "stat_card": "#/components/schemas/StatCardSchema",
+                      "stat_small": "#/components/schemas/StatSmallSchema",
                       "tab": "#/components/schemas/TabSchema",
                       "table": "#/components/schemas/TableSchema",
                       "table_column": "#/components/schemas/TableColumnSchema",
@@ -3112,6 +3216,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSmallSchema"
                 },
                 {
                   "$ref": "#/components/schemas/StatCardSchema"
@@ -3192,6 +3299,7 @@
                   "stack": "#/components/schemas/StackSchema",
                   "stat": "#/components/schemas/StatSchema",
                   "stat_card": "#/components/schemas/StatCardSchema",
+                  "stat_small": "#/components/schemas/StatSmallSchema",
                   "tab": "#/components/schemas/TabSchema",
                   "table": "#/components/schemas/TableSchema",
                   "table_column": "#/components/schemas/TableColumnSchema",

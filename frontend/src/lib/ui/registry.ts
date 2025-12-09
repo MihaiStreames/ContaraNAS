@@ -18,6 +18,7 @@ import Progress from "./display/Progress.svelte";
 import SegmentedProgress from "./display/SegmentedProgress.svelte";
 import LineChart from "./display/LineChart.svelte";
 import Table from "./display/Table.svelte";
+import StatSmall from "./display/StatSmall.svelte";
 
 // Interactive
 import Button from "./interactive/Button.svelte";
@@ -56,6 +57,7 @@ export const componentRegistry: Record<ComponentType, Component<any>> = {
   segmented_progress: SegmentedProgress,
   line_chart: LineChart,
   table: Table,
+  stat_small: StatSmall,
 
   // Interactive
   button: Button,

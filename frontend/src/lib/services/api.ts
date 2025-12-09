@@ -142,7 +142,7 @@ class ApiClient {
   async executeAction(
     moduleName: string,
     actionName: string,
-    payload: Record<string, unknown> = {}
+    payload: Record<string, unknown> | null = {}
   ): Promise<ActionResult> {
     return this.request<ActionResult>(
       `/api/modules/${moduleName}/action/${actionName}`,

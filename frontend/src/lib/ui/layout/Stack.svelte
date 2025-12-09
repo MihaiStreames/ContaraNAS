@@ -12,6 +12,7 @@
     gap = "4",
     align = "stretch",
     justify = "start",
+    grow = false,
     children,
   }: Props = $props();
 
@@ -26,12 +27,26 @@
 
 <div
   class="stack stack-{direction} stack-align-{align} stack-justify-{justify} gap-{gap}"
+  class:stack-grow={grow}
 >
   {#if arrayChildren}
     {#each arrayChildren as child}
-      <ComponentRenderer component={child} />
+      <div class:stack-child-grow={grow}>
+        <ComponentRenderer component={child} />
+      </div>
     {/each}
   {:else if snippetChildren}
     {@render snippetChildren()}
   {/if}
 </div>
+
+<style>
+  .stack-grow {
+    width: 100%;
+  }
+
+  .stack-child-grow {
+    flex: 1;
+    min-width: 0; /* Prevent flex items from overflowing */
+  }
+</style>
