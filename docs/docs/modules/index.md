@@ -87,7 +87,7 @@ class MyModule(Module):
         """Return the dashboard tile UI"""
         from ContaraNAS.core.ui import Tile, Stat, Button
         return Tile(
-            icon="counter",
+            icon="Counter",
             title="My Module",
             stats=[Stat(label="Count", value=self._typed_state.counter if self._typed_state else 0)],
             actions=[Button(label="Increment", on_click=self.increment)],

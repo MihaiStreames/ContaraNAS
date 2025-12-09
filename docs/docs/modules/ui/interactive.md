@@ -11,9 +11,9 @@ from ContaraNAS.core.ui import Button
 
 Button(label="Save", on_click=self.save_settings, variant="primary")
 Button(label="Cancel", variant="secondary")
-Button(label="Delete", variant="danger", icon="trash-2")
+Button(label="Delete", variant="danger", icon="Trash2")
 Button(label="Saving...", loading=True, disabled=True)
-Button(label="Settings", icon="settings", icon_only=True)  # Icon-only button
+Button(label="Settings", icon="Settings", icon_only=True)  # Icon-only button
 ```
 
 ### Props

@@ -22,7 +22,7 @@ This approach provides:
 from ContaraNAS.core.ui import Tile, Stat, Button, Stack
 
 tile = Tile(
-    icon="gamepad-2",
+    icon="Gamepad2",
     title="Steam",
     stats=[
         Stat(label="Games", value=150),
@@ -215,7 +215,7 @@ class MyModule(Module):
 
     def get_tile(self) -> Tile:
         return Tile(
-            icon="box",
+            icon="Box",
             title="My Module",
             actions=[
                 Button(label="Do Something", on_click=self.do_something),
@@ -249,7 +249,7 @@ Show different content based on state:
 def get_tile(self) -> Tile:
     state = self._typed_state
     if not state:
-        return Tile(icon="box", title="Module", stats=[])
+        return Tile(icon="Box", title="Module", stats=[])
 
     # Show error in content if present
     content = None
@@ -257,7 +257,7 @@ def get_tile(self) -> Tile:
         content = [Alert(message=state.error, variant="error")]
 
     return Tile(
-        icon="box",
+        icon="Box",
         title="Module",
         stats=[...],
         content=content,
@@ -274,7 +274,7 @@ def get_tile(self) -> Tile:
     items = state.items if state else []
 
     return Tile(
-        icon="clipboard-list",
+        icon="ClipboardList",
         title="Tasks",
         stats=[
             Stat(label="Total", value=len(items)),

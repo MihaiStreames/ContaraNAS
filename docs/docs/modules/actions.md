@@ -70,7 +70,7 @@ class MyModule(Module):
 
     def get_tile(self) -> Tile:
         return Tile(
-            icon="box",
+            icon="Box",
             title="My Module",
             actions=[
                 Button(label="Do Something", on_click=self.do_something),
@@ -108,7 +108,7 @@ class SteamModule(Module):
 
     def get_tile(self) -> Tile:
         return Tile(
-            icon="gamepad",
+            icon="Gamepad",
             title="Steam",
             content=[
                 # Each button calls open_library with a different path
@@ -159,7 +159,7 @@ def get_tile(self) -> Tile:
         )
 
     return Tile(
-        icon="folder",
+        icon="Folder",
         title="Libraries",
         content=[Stack(direction="vertical", children=buttons)],
     )
@@ -578,7 +578,7 @@ class DockerModule(Module):
 
     def get_tile(self) -> Tile:
         return Tile(
-            icon="container",
+            icon="Container",
             title="Docker",
             badge=Badge(text=f"{self._typed_state.running_count} running", variant="success"),
             stats=[

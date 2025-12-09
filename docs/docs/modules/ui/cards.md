@@ -10,7 +10,7 @@ A general-purpose container with optional icon, title, and footer.
 from ContaraNAS.core.ui import Card, Text, Button, Stack
 
 card = Card(
-    icon="chart-bar",
+    icon="ChartBar",
     title="Analytics",
     children=[
         Text(content="View your usage statistics and trends."),
@@ -48,7 +48,7 @@ Card(
 
 ```python
 Card(
-    icon="settings",
+    icon="Settings",
     title="Settings",
     children=[
         Text(content="Configure your preferences."),
@@ -82,7 +82,7 @@ badge, stats, optional content, and actions.
 from ContaraNAS.core.ui import Tile, Stat, Badge, Button
 
 tile = Tile(
-    icon="gamepad-2",
+    icon="Gamepad2",
     title="Steam",
     badge=Badge(text="Active", variant="success"),
     stats=[
@@ -116,16 +116,16 @@ Use `colspan` and `rowspan` to control tile size on the dashboard grid:
 
 ```python
 # Normal size (1x1)
-Tile(icon="package", title="My Module")
+Tile(icon="Package", title="My Module")
 
 # Double width (2 columns)
-Tile(icon="activity", title="System Monitor", colspan=2)
+Tile(icon="Activity", title="System Monitor", colspan=2)
 
 # Double height (2 rows)
-Tile(icon="chart-bar", title="Analytics", rowspan=2)
+Tile(icon="ChartBar", title="Analytics", rowspan=2)
 
 # Large tile (2x2)
-Tile(icon="server", title="Dashboard", colspan=2, rowspan=2)
+Tile(icon="Server", title="Dashboard", colspan=2, rowspan=2)
 ```
 
 ### Using with get_tile()
@@ -137,10 +137,10 @@ class MyModule(Module):
     def get_tile(self) -> Tile:
         state = self._typed_state
         if not state:
-            return Tile(icon="package", title="My Module", stats=[])
+            return Tile(icon="Package", title="My Module", stats=[])
 
         return Tile(
-            icon="package",
+            icon="Package",
             title="My Module",
             stats=[
                 Stat(label="Items", value=state.item_count),
@@ -179,7 +179,7 @@ The `content` prop allows custom components below the stats:
 
 ```python
 tile = Tile(
-    icon="clipboard-list",
+    icon="ClipboardList",
     title="Tasks",
     stats=[
         Stat(label="Pending", value=5),

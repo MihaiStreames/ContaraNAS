@@ -118,7 +118,7 @@ class MyModule(Module):
 
     def get_tile(self) -> Tile:
         return Tile(
-            icon="counter",
+            icon="Counter",
             title="Counter",
             stats=[Stat(label="Count", value=self.state.count)],
             actions=[Button(label="+1", on_click=self.increment)],

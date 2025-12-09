@@ -314,7 +314,7 @@ class DiskModule(Module):
                         if self._typed_state.total_capacity > 0 else 0)
 
         return Tile(
-            icon="hard-drive",
+            icon="HardDrive",
             title="Storage",
             stats=[
                 Stat(label="Used", value=f"{used_percent:.1f}%"),

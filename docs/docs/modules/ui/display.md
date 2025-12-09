@@ -76,10 +76,10 @@ stats = Grid(
     columns=4,
     gap="4",
     children=[
-        StatCard(label="CPU Usage", value="45%", icon="cpu"),
-        StatCard(label="Memory", value="8.2 GB", icon="memory-stick"),
-        StatCard(label="Disk", value="234 GB", icon="hard-drive"),
-        StatCard(label="Uptime", value="5 days", icon="clock", color="success"),
+        StatCard(label="CPU Usage", value="45%", icon="Cpu"),
+        StatCard(label="Memory", value="8.2 GB", icon="MemoryStick"),
+        StatCard(label="Disk", value="234 GB", icon="HardDrive"),
+        StatCard(label="Uptime", value="5 days", icon="Clock", color="success"),
     ],
 )
 ```
