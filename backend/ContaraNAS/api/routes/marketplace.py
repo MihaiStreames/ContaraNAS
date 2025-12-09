@@ -2,25 +2,27 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from ContaraNAS.api.routes.auth import require_auth
 from ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
+from ContaraNAS.core.marketplace import MarketplaceClient
 from ContaraNAS.core.utils import get_logger
 
 
 logger = get_logger(__name__)
 
 
+def _get_client(request: Request) -> MarketplaceClient:
+    """Get marketplace client from app state"""
+    client = getattr(request.app.state, "marketplace_client", None)
+    if client is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Marketplace not configured",
+        )
+    return client
+
+
 def create_marketplace_routes() -> APIRouter:
     """Create API router for marketplace endpoints"""
     router = APIRouter(prefix="/api/marketplace", tags=["marketplace"])
-
-    def get_client(request: Request):
-        """Get marketplace client from app state"""
-        client = getattr(request.app.state, "marketplace_client", None)
-        if client is None:
-            raise HTTPException(
-                status_code=503,
-                detail="Marketplace not configured",
-            )
-        return client
 
     @router.get("/modules")
     async def list_modules(
@@ -28,7 +30,7 @@ def create_marketplace_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ):
         """List all available modules from marketplace"""
-        client = get_client(request)
+        client = _get_client(request)
 
         try:
             registry = await client.get_registry()
@@ -58,7 +60,7 @@ def create_marketplace_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ):
         """Get detailed information about a specific module"""
-        client = get_client(request)
+        client = _get_client(request)
 
         try:
             module = await client.get_module(module_id)
@@ -84,7 +86,7 @@ def create_marketplace_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ):
         """Force refresh the marketplace registry cache"""
-        client = get_client(request)
+        client = _get_client(request)
 
         try:
             registry = await client.get_registry(force_refresh=True)

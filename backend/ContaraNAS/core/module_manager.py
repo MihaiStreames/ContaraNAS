@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Any
 
 from ContaraNAS.core.module import Module
@@ -33,6 +34,11 @@ class ModuleManager:
                 logger.info(f"Registered module: {module_id} v{metadata.version}")
             except Exception as e:
                 logger.error(f"Failed to register {module_id}: {e}")
+
+    def set_ui_update_callback(self, callback: Callable[[Module], None]) -> None:
+        """Set UI update callback on all modules"""
+        for module in self.modules.values():
+            module.set_ui_update_callback(callback)
 
     async def enable_module(self, name: str) -> None:
         """Enable a module and persist the state"""
@@ -85,7 +91,7 @@ class ModuleManager:
                 except Exception as e:
                     logger.error(f"Error shutting down {name}: {e}")
 
-    async def get_module_state(self, module_name: str) -> dict[str, Any] | None:
+    def get_module_state(self, module_name: str) -> dict[str, Any] | None:
         """Get current state of a specific module"""
         if module_name not in self.modules:
             return None
@@ -96,10 +102,9 @@ class ModuleManager:
             "display_name": module.display_name,
             "enabled": module.enable_flag,
             "initialized": module.init_flag,
-            "state": module.state.copy(),
-            "tile_data": await module.get_tile_data(),
+            "ui": module.render_ui() if module.enable_flag else None,
         }
 
-    async def get_all_states(self) -> dict[str, dict | None]:
+    def get_all_states(self) -> dict[str, dict | None]:
         """Get states of all modules"""
-        return {name: await self.get_module_state(name) for name in self.modules}
+        return {name: self.get_module_state(name) for name in self.modules}

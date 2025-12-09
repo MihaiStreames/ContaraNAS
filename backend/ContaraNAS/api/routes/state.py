@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 
 from ContaraNAS.api.responses import AppStateResponse, ModuleSnapshot
+from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
 
 from .auth import require_auth
@@ -9,13 +10,14 @@ from .auth import require_auth
 logger = get_logger(__name__)
 
 
+def _get_manager(request: Request) -> ModuleManager:
+    """Extract module manager from app state"""
+    return request.app.state.module_manager
+
+
 def create_state_routes() -> APIRouter:
     """Create API router for app state endpoints"""
     router = APIRouter(prefix="/api", tags=["state"])
-
-    def get_manager(request: Request):
-        """Extract module manager from app state"""
-        return request.app.state.module_manager
 
     @router.get("/state", response_model=AppStateResponse)
     async def get_app_state(
@@ -23,7 +25,7 @@ def create_state_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ) -> AppStateResponse:
         """Get full application state"""
-        manager = get_manager(request)
+        manager = _get_manager(request)
 
         modules = []
         for name, module in manager.modules.items():

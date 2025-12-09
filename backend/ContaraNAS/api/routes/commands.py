@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from ContaraNAS.api.responses import ModuleInfo, ModuleListResponse, ModuleToggleResponse
+from ContaraNAS.core.module_manager import ModuleManager
 from ContaraNAS.core.utils import get_logger
 
 from .auth import require_auth
@@ -9,13 +10,21 @@ from .auth import require_auth
 logger = get_logger(__name__)
 
 
+def _get_manager(request: Request) -> ModuleManager:
+    """Extract module manager from app state"""
+    return request.app.state.module_manager
+
+
+def _require_module(request: Request, name: str) -> None:
+    """Raise 404 if module doesn't exist"""
+    manager = _get_manager(request)
+    if name not in manager.modules:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
+
+
 def create_command_routes() -> APIRouter:
     """Create API router with module control endpoints"""
     router = APIRouter(prefix="/api", tags=["commands"])
-
-    def get_manager(request: Request):
-        """Extract module manager from app state"""
-        return request.app.state.module_manager
 
     @router.get("/modules", response_model=ModuleListResponse)
     async def list_modules(
@@ -23,7 +32,7 @@ def create_command_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ) -> ModuleListResponse:
         """List all registered modules with their current state"""
-        manager = get_manager(request)
+        manager = _get_manager(request)
 
         modules = []
         for name, module in manager.modules.items():
@@ -55,10 +64,8 @@ def create_command_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ) -> ModuleToggleResponse:
         """Enable a registered module"""
-        manager = get_manager(request)
-
-        if name not in manager.modules:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
+        _require_module(request, name)
+        manager = _get_manager(request)
 
         try:
             await manager.enable_module(name)
@@ -74,10 +81,8 @@ def create_command_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ) -> ModuleToggleResponse:
         """Disable an enabled module"""
-        manager = get_manager(request)
-
-        if name not in manager.modules:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
+        _require_module(request, name)
+        manager = _get_manager(request)
 
         try:
             await manager.disable_module(name)

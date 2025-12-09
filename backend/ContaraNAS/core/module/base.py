@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from typing import Any, ClassVar
-from warnings import warn
 
-from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
 from ContaraNAS.core.ui import Modal, Tile
 from ContaraNAS.core.utils import get_logger
@@ -30,7 +29,6 @@ class Module(ABC):
         self.display_name: str = display_name or name.replace("_", " ").title()
         self.enable_flag: bool = False
         self.init_flag: bool = False
-        self.state: dict[str, Any] = {}
 
         # Store metadata
         self._metadata: ModuleMetadata | None = metadata
@@ -41,7 +39,33 @@ class Module(ABC):
 
         # Initialize typed state if State class is defined
         self._typed_state: ModuleState | None = None
+        self._ui_update_callback: Callable[[Module], None] | None = None
         self._init_typed_state()
+
+    def _init_typed_state(self) -> None:
+        """Initialize typed state from State inner class"""
+        state_class = self._get_state_class()
+        if state_class is None:
+            return
+
+        self._typed_state = state_class()
+        self._typed_state.set_commit_callback(self._on_state_commit)
+
+    def _get_state_class(self) -> type[ModuleState] | None:
+        """Get the State class defined on this module"""
+        for cls in type(self).__mro__:
+            if cls is Module:
+                break
+            if "State" in cls.__dict__:
+                state_cls = cls.__dict__["State"]
+                if isinstance(state_cls, type) and issubclass(state_cls, ModuleState):
+                    return state_cls
+        return None
+
+    def _on_state_commit(self) -> None:
+        """Called when typed state is committed - triggers UI push"""
+        if self._ui_update_callback is not None:
+            self._ui_update_callback(self)
 
     @property
     def metadata(self) -> ModuleMetadata:
@@ -49,7 +73,7 @@ class Module(ABC):
         if self._metadata is None:
             raise ModuleError(
                 self.name,
-                "Metadata not available. Metadata should be provided by ModuleLoader during instantiation.",
+                "Metadata not available",
             )
         return self._metadata
 
@@ -57,6 +81,10 @@ class Module(ABC):
     def typed_state(self) -> ModuleState | None:
         """Get typed state if available"""
         return self._typed_state
+
+    def set_ui_update_callback(self, callback: Callable[["Module"], None]) -> None:
+        """Set callback to be called when UI should be pushed to clients"""
+        self._ui_update_callback = callback
 
     @abstractmethod
     async def initialize(self):
@@ -96,20 +124,6 @@ class Module(ABC):
             "modals": self.render_modals(),
         }
 
-    async def get_tile_data(self) -> dict[str, Any]:
-        """Get data for dashboard tile display
-
-        .. deprecated::
-            Use get_tile() instead which returns a Tile component directly
-        """
-        warn(
-            f"{self.__class__.__name__}.get_tile_data() is deprecated"
-            "Override get_tile() instead which returns a Tile component directly",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return {}
-
     async def enable(self):
         """Enable the module and start monitoring"""
         if self.enable_flag:
@@ -134,7 +148,7 @@ class Module(ABC):
             logger.error(f"Failed to enable module {self.name}: {e!s}")
             raise ModuleInitializationError(self.name, str(e)) from e
 
-        await self._emit_event("enabled")
+        self._on_state_commit()
 
     async def disable(self):
         """Disable the module and stop monitoring"""
@@ -148,84 +162,7 @@ class Module(ABC):
             await self.stop_monitoring()
             self.enable_flag = False
             logger.info(f"Module {self.name} disabled successfully")
-            await self._emit_event("disabled")
+            self._on_state_commit()
         except Exception as e:
             logger.error(f"Failed to disable module {self.name}: {e!s}")
             raise ModuleError(self.name, str(e)) from e
-
-    async def update_state(self, **kwargs):
-        """Update module state"""
-        old_state = self.state.copy()
-        self.state.update(kwargs)
-        logger.trace(f"Module {self.name} state updated: {kwargs}")
-
-        await self._emit_event(
-            "state_updated",
-            {
-                "module_name": self.name,
-                "old_state": old_state,
-                "new_state": self.state,
-                "changes": kwargs,
-            },
-        )
-
-    def _init_typed_state(self) -> None:
-        """Initialize typed state from State inner class"""
-        state_class = self._get_state_class()
-        if state_class is None:
-            return
-
-        self._typed_state = state_class()
-        self._typed_state.set_commit_callback(self._on_state_commit)
-
-    def _get_state_class(self) -> type[ModuleState] | None:
-        """Get the State class defined on this module"""
-        for cls in type(self).__mro__:
-            if cls is Module:
-                break
-            if "State" in cls.__dict__:
-                state_cls = cls.__dict__["State"]
-                if isinstance(state_cls, type) and issubclass(state_cls, ModuleState):
-                    return state_cls
-        return None
-
-    def _on_state_commit(self) -> None:
-        """Called when typed state is committed - triggers UI re-render"""
-        if self._typed_state is None:
-            return
-
-        event_bus.emit(
-            f"module.{self.name}.state_committed",
-            {
-                "name": self.name,
-                "state": self._typed_state.to_dict(),
-                "ui": self.render_ui(),
-            },
-        )
-
-    async def _emit_event(self, change_type: str, data: dict | None = None):
-        """Emit state change event"""
-        # Try new render methods first, fall back to get_tile_data() for legacy
-        tile_data = self.render_tile()
-        if not tile_data:
-            # Legacy module using get_tile_data()
-            tile_data = await self.get_tile_data()
-
-        event_data = {
-            "name": self.name,
-            "display_name": self.display_name,
-            "enabled": self.enable_flag,
-            "initialized": self.init_flag,
-            "state": self.state.copy(),
-            "tile_data": tile_data,
-            "modals": self.render_modals(),
-            "change_type": change_type,
-        }
-
-        if self._metadata:
-            event_data["metadata"] = self.metadata.to_dict()
-
-        if data:
-            event_data.update(data)
-
-        event_bus.emit(f"module.{self.name}.state_changed", event_data)

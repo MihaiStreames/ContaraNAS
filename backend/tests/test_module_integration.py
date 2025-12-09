@@ -1,4 +1,3 @@
-from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Button, Modal, Stat, Text, Tile
 
@@ -120,21 +119,22 @@ def test_render_ui():
     assert len(ui["modals"]) == 2
 
 
-def test_state_commit_includes_ui():
+def test_state_commit_triggers_callback():
     module = ModuleWithModals(name="commit_ui_test")
-    events = []
+    calls = []
 
-    def capture_event(data):
-        events.append(data)
+    def capture_callback(m):
+        calls.append(m)
 
-    event_bus.subscribe("module.commit_ui_test.state_committed", capture_event)
+    module.set_ui_update_callback(capture_callback)
 
     module._typed_state.count = 10
     module._typed_state.commit()
 
-    assert len(events) == 1
-    assert "ui" in events[0]
-    assert events[0]["ui"]["tile"]["type"] == "tile"
-    assert len(events[0]["ui"]["modals"]) == 2
+    assert len(calls) == 1
+    assert calls[0] is module
 
-    event_bus.unsubscribe("module.commit_ui_test.state_committed", capture_event)
+    # Verify UI can be rendered from the module
+    ui = module.render_ui()
+    assert ui["tile"]["type"] == "tile"
+    assert len(ui["modals"]) == 2

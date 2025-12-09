@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
-> **Estimated time:** 4-6 weeks  
-> **Status:** In Progress (Phase 5 Complete)  
+> **Estimated time:** 2-3 weeks remaining
+> **Status:** In Progress (Phase 6 Complete)
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -231,20 +231,26 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 6.1 New message types
 
-- [ ] `module_ui` - full UI update for a module
-- [ ] `app_state` - app-level state (active modal, notifications)
-- [ ] Document message format
+- [x] `module_ui` - full UI update for a module
+- [x] `app_state` - app-level state (active modal, notifications)
+- [x] `full_state` - complete app state on connect
 
 ### 6.2 Update triggers
 
-- [ ] On `commit()`, push `module_ui` message
-- [ ] On action result, push relevant updates
-- [ ] On module enable/disable, push UI or removal
+- [x] On `commit()`, push `module_ui` message
+- [x] On module enable/disable, push UI update
+- [ ] On action result, push relevant updates (handled by commit())
 
 ### 6.3 Connection handling
 
-- [ ] On new connection, send full state
-- [ ] Handle reconnection (resend full state)
+- [x] On new connection, send full state
+- [x] Handle reconnection (resend full state)
+
+### 6.4 EventBus decoupling
+
+- [x] StreamManager uses direct callbacks instead of EventBus
+- [x] Modules call `_on_state_commit()` which triggers callback
+- [x] ModuleManager wires up callback to StreamManager
 
 **Deliverable:** State changes push to frontend automatically.
 
@@ -412,6 +418,13 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 **Goal:** Convert existing modules to new system.
 
+### 11.0 Legacy code removal (done in Phase 6)
+
+- [x] Remove `get_tile_data()` from Module base
+- [x] Remove `update_state()` from Module base
+- [x] Remove `self.state` dict from Module base
+- [x] Update tests to use callback pattern instead of EventBus
+
 ### 11.1 Steam module
 
 - [ ] Define `SteamState(ModuleState)`
@@ -419,7 +432,6 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 - [ ] Implement `get_tile()`
 - [ ] Implement `get_modals()` (games list, libraries)
 - [ ] Convert actions (refresh, etc.)
-- [ ] Remove old `get_tile_data()`
 - [ ] Test thoroughly
 
 ### 11.2 System Monitor module
@@ -429,13 +441,11 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 - [ ] Implement `get_tile()`
 - [ ] Implement `get_modals()` (system details, processes, etc.)
 - [ ] Convert actions (refresh, etc.)
-- [ ] Remove old `get_tile_data()`
 - [ ] Test thoroughly
 
 ### 11.3 Cleanup
 
-- [ ] Remove legacy code paths when all migrated
-- [ ] Remove EventBus (replaced by commit/WebSocket updates)
+- [ ] Remove EventBus entirely
 
 **Deliverable:** All modules use new system.
 

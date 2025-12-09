@@ -46,9 +46,14 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     )
     app.state.auth_service = AuthService(auth_config)
 
-    # Module manager
+    # Module manager and streaming
     app.state.module_manager = ModuleManager()
     app.state.stream_manager = StreamManager(app.state.module_manager)
+
+    # Wire up UI updates: modules -> stream manager
+    app.state.module_manager.set_ui_update_callback(
+        app.state.stream_manager.notify_module_ui_update
+    )
 
     # Action dispatcher - register all modules
     app.state.action_dispatcher = ActionDispatcher()

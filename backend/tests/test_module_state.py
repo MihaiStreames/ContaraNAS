@@ -1,4 +1,3 @@
-from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Stat, Tile
 
@@ -128,20 +127,18 @@ def test_module_without_state():
     assert module.typed_state is None
 
 
-def test_state_commit_emits_event():
-    module = SampleModule(name="event_test")
-    events = []
+def test_state_commit_triggers_callback():
+    module = SampleModule(name="callback_test")
+    calls = []
 
-    def capture_event(data):
-        events.append(data)
+    def capture_callback(m):
+        calls.append(m)
 
-    event_bus.subscribe("module.event_test.state_committed", capture_event)
+    module.set_ui_update_callback(capture_callback)
 
     module.typed_state.counter = 5
     module.typed_state.commit()
 
-    assert len(events) == 1
-    assert events[0]["name"] == "event_test"
-    assert events[0]["state"]["counter"] == 5
-
-    event_bus.unsubscribe("module.event_test.state_committed", capture_event)
+    assert len(calls) == 1
+    assert calls[0] is module
+    assert module.typed_state.counter == 5
