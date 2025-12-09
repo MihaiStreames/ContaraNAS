@@ -4,7 +4,7 @@ from ContaraNAS.core.exceptions import ActionError
 from ContaraNAS.core.utils import get_logger
 
 from .decorator import get_actions
-from .results import ActionResult
+from .results import ActionResult, Notify
 
 
 if TYPE_CHECKING:
@@ -42,6 +42,7 @@ class ActionDispatcher:
         module_name: str,
         action_name: str,
         payload: dict[str, Any] | None = None,
+        catch_errors: bool = True,
     ) -> list[dict[str, Any]]:
         """Dispatch an action to a module method"""
         module = self._modules.get(module_name)
@@ -61,7 +62,10 @@ class ActionDispatcher:
         try:
             result = await action_method(**(payload or {}))
         except Exception as e:
-            logger.error(f"Action {module_name}.{action_name} failed: {e}")
+            logger.exception(f"Action {module_name}.{action_name} failed: {e}")
+            if catch_errors:
+                # Return error as notification instead of crashing
+                return self._error_result(action_name, str(e))
             raise ActionError(action_name, str(e)) from e
 
         return self._process_results(result)
@@ -78,3 +82,13 @@ class ActionDispatcher:
             return [item.to_dict() for item in result if isinstance(item, ActionResult)]
 
         return []
+
+    def _error_result(self, action_name: str, error_message: str) -> list[dict[str, Any]]:
+        """Create an error notification result"""
+        return [
+            Notify(
+                message=f"Action failed: {error_message}",
+                variant="error",
+                title=f"{action_name} error",
+            ).to_dict()
+        ]

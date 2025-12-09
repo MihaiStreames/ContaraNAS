@@ -516,178 +516,71 @@ results = await dispatcher.dispatch(
 
 This is handled by the framework; you don't need to use it directly.
 
-## Complete Example
+For complete module examples, see the [GitHub repository](https://github.com/MihaiStreames/ContaraNAS).
+
+---
+
+## Complete Example: Docker Module
+
+A practical example showing actions for Docker container management:
 
 ```python
+from ContaraNAS.core.action import action, ActionRef, Notify, OpenModal, Refresh
 from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.action import action, OpenModal, CloseModal, Notify, Refresh
-from ContaraNAS.core.ui import Tile, Stat, Button, Modal, Stack, Input
+from ContaraNAS.core.ui import Button, Stack, Tile, Badge, Stat
 
-class TaskModule(Module):
-    """A simple task management module"""
-
+class DockerModule(Module):
     class State(ModuleState):
-        tasks: list[dict] = []
-        loading: bool = False
-        error: str | None = None
+        containers: list[dict] = []
+        running_count: int = 0
+        stopped_count: int = 0
 
-    async def initialize(self) -> None:
-        """Load tasks on startup"""
-        await self.load_tasks()
+    @action
+    async def restart_container(self, container_id: str, timeout: int = 30) -> Notify:
+        """Restart a Docker container"""
+        await self._docker.restart(container_id, timeout=timeout)
+        return Notify(message="Container restarting...", variant="info")
 
-    async def start_monitoring(self) -> None:
-        pass
+    @action
+    async def stop_container(self, container_id: str) -> Notify:
+        """Stop a running container"""
+        await self._docker.stop(container_id)
+        await self._refresh_containers()
+        return Notify(message="Container stopped", variant="success")
 
-    async def stop_monitoring(self) -> None:
-        pass
+    @action
+    async def view_logs(self, container_id: str, tail: int = 100) -> OpenModal:
+        """Open container logs modal"""
+        return OpenModal(modal_id=f"logs_{container_id}")
 
-    async def load_tasks(self) -> None:
-        """Load tasks from storage"""
-        # Implementation...
-        pass
+    @action
+    async def pull_image(self, image: str) -> list:
+        """Pull a Docker image with error handling"""
+        try:
+            await self._docker.pull(image)
+            return [
+                Notify(message=f"Pulled {image}", variant="success"),
+                Refresh(),
+            ]
+        except Exception as e:
+            return [Notify(message=f"Pull failed: {e}", variant="error")]
 
     def get_tile(self) -> Tile:
-        state = self._typed_state
-        if not state:
-            return Tile(icon="check-square", title="Tasks", stats=[])
-
-        pending = sum(1 for t in state.tasks if not t.get("done"))
-        completed = sum(1 for t in state.tasks if t.get("done"))
-
         return Tile(
-            icon="check-square",
-            title="Tasks",
+            icon="container",
+            title="Docker",
+            badge=Badge(text=f"{self._typed_state.running_count} running", variant="success"),
             stats=[
-                Stat(label="Pending", value=pending),
-                Stat(label="Completed", value=completed),
-                Stat(label="Total", value=len(state.tasks)),
+                Stat(label="Running", value=self._typed_state.running_count),
+                Stat(label="Stopped", value=self._typed_state.stopped_count),
             ],
             actions=[
-                Button(label="Add Task", on_click=self.open_add_task),
-                Button(label="View All", variant="secondary", on_click=self.open_task_list),
-            ],
-        )
-
-    # --- Actions ---
-
-    @action
-    async def open_add_task(self):
-        """Open the add task modal"""
-        return OpenModal(modal_id="add_task")
-
-    @action
-    async def open_task_list(self):
-        """Open the task list modal"""
-        return OpenModal(modal_id="task_list")
-
-    @action
-    async def add_task(self, title: str = "", description: str = "") -> list:
-        """Add a new task"""
-        if not title.strip():
-            return [Notify(message="Task title is required", variant="error")]
-
-        state = self._typed_state
-        if state:
-            state.tasks.append({
-                "id": len(state.tasks) + 1,
-                "title": title.strip(),
-                "description": description.strip(),
-                "done": False,
-            })
-
-        return [
-            Notify(message="Task added!", variant="success"),
-            CloseModal(modal_id="add_task"),
-        ]
-
-    @action
-    async def toggle_task(self, task_id: int = 0) -> Notify:
-        """Toggle task completion status"""
-        state = self._typed_state
-        if not state:
-            return Notify(message="Module not ready", variant="error")
-
-        for task in state.tasks:
-            if task["id"] == task_id:
-                task["done"] = not task["done"]
-                status = "completed" if task["done"] else "reopened"
-                return Notify(message=f"Task {status}", variant="success")
-
-        return Notify(message="Task not found", variant="error")
-
-    @action
-    async def delete_task(self, task_id: int = 0) -> Notify:
-        """Delete a task"""
-        state = self._typed_state
-        if not state:
-            return Notify(message="Module not ready", variant="error")
-
-        original_len = len(state.tasks)
-        state.tasks = [t for t in state.tasks if t["id"] != task_id]
-
-        if len(state.tasks) < original_len:
-            return Notify(message="Task deleted", variant="success")
-        else:
-            return Notify(message="Task not found", variant="error")
-
-    @action
-    async def clear_completed(self) -> Notify:
-        """Remove all completed tasks"""
-        state = self._typed_state
-        if not state:
-            return Notify(message="Module not ready", variant="error")
-
-        before = len(state.tasks)
-        state.tasks = [t for t in state.tasks if not t.get("done")]
-        removed = before - len(state.tasks)
-
-        return Notify(message=f"Cleared {removed} completed tasks", variant="success")
-
-    # --- Modals ---
-
-    def get_modals(self) -> list:
-        """Return modal definitions"""
-        return [
-            self._get_add_task_modal(),
-            self._get_task_list_modal(),
-        ]
-
-    def _get_add_task_modal(self) -> Modal:
-        return Modal(
-            id="add_task",
-            title="Add Task",
-            children=[
-                Stack(
-                    direction="vertical",
-                    gap="4",
-                    children=[
-                        Input(name="title", label="Title", placeholder="Task title..."),
-                        Input(name="description", label="Description", placeholder="Optional description..."),
-                    ],
-                ),
-            ],
-            footer=[
-                Button(label="Cancel", variant="secondary"),
-                Button(label="Add", on_click=self.add_task),
-            ],
-        )
-
-    def _get_task_list_modal(self) -> Modal:
-        state = self._typed_state
-        tasks = state.tasks if state else []
-
-        return Modal(
-            id="task_list",
-            title=f"All Tasks ({len(tasks)})",
-            children=[
-                # Task list would go here
-            ],
-            footer=[
-                Button(label="Clear Completed", variant="secondary", on_click=self.clear_completed),
-                Button(label="Close"),
+                Button(label="Refresh", on_click=self.refresh, variant="ghost"),
             ],
         )
 ```
+
+---
 
 ## Best Practices
 

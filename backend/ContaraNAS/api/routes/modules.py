@@ -85,14 +85,13 @@ def create_module_routes() -> APIRouter:
         dispatcher = _get_dispatcher(request)
 
         try:
-            results = await dispatcher.dispatch(name, action_name, payload)
+            # catch_errors=True means action exceptions become error notifications
+            results = await dispatcher.dispatch(name, action_name, payload, catch_errors=True)
             return {"success": True, "module": name, "action": action_name, "results": results}
         except ActionError as e:
+            # Infrastructure errors (module/action not found) - return 400
             logger.error(f"Action error: {e}")
             raise HTTPException(status.HTTP_400_BAD_REQUEST, str(e)) from e
-        except Exception as e:
-            logger.exception(f"Unexpected error invoking action {name}.{action_name}")
-            raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"Action failed: {e}") from e
 
     @router.get("/{name}/actions")
     async def list_module_actions(

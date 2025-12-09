@@ -24,12 +24,12 @@ card = Card(
 
 ### Props
 
-| Prop       | Type                      | Default | Description                           |
-|------------|---------------------------|---------|---------------------------------------|
-| `icon`     | `str \| None`             | `None`  | Lucide icon name for the header       |
-| `title`    | `str \| None`             | `None`  | Card title text                       |
-| `children` | `list[Component]`         | `[]`    | Main content components               |
-| `footer`   | `list[Component] \| None` | `None`  | Footer components (typically buttons) |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `str` or `None` | `None` | Lucide icon name for the header |
+| `title` | `str` or `None` | `None` | Card title text |
+| `children` | `list[Component]` | `[]` | Main content components |
+| `footer` | `list[Component]` or `None` | `None` | Footer components (typically buttons) |
 
 ### Examples
 
@@ -99,15 +99,15 @@ tile = Tile(
 
 ### Props
 
-| Prop      | Type                      | Default  | Description                         |
-|-----------|---------------------------|----------|-------------------------------------|
-| `icon`    | `str`                     | Required | Lucide icon name for the tile       |
-| `title`   | `str`                     | Required | Module display name                 |
-| `colspan` | `1` \| `2` \| `3`         | `1`      | Number of grid columns to span      |
-| `badge`   | `Badge \| None`           | `None`   | Status badge next to title          |
-| `stats`   | `list[Stat]`              | `[]`     | Key metrics to display              |
-| `content` | `list[Component] \| None` | `None`   | Additional content below stats      |
-| `actions` | `list[Component]`         | `[]`     | Action buttons                      |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `str` | Required | Lucide icon name for the tile |
+| `title` | `str` | Required | Module display name |
+| `colspan` | `1`, `2`, `3` | `1` | Number of grid columns to span |
+| `badge` | `Badge` or `None` | `None` | Status badge next to title |
+| `stats` | `list[Stat]` | `[]` | Key metrics to display |
+| `content` | `list[Component]` or `None` | `None` | Additional content below stats |
+| `actions` | `list[Component]` | `[]` | Action buttons |
 
 ### Colspan
 
@@ -221,10 +221,10 @@ stat = Stat(label="Usage", value="85%")
 
 ### Props
 
-| Prop    | Type                  | Default  | Description                  |
-|---------|-----------------------|----------|------------------------------|
-| `label` | `str`                 | Required | Description of the statistic |
-| `value` | `str \| int \| float` | Required | The statistic value          |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `str` | Required | Description of the statistic |
+| `value` | `str`, `int`, `float` | Required | The statistic value |
 
 ### Formatting Values
 
@@ -258,63 +258,4 @@ Stat(label="Size", value=format_size(state.size_bytes))
 - **Limit to 3-4 stats** — Too many stats are hard to scan
 - **Order by importance** — Most relevant stat first
 
----
-
-## Complete Tile Example
-
-Here's a `get_tile()` implementation showing all Tile features:
-
-```python
-def get_tile(self) -> Tile:
-    state = self._typed_state
-    if not state:
-        return Tile(icon="download", title="Downloader", stats=[])
-
-    # Determine badge based on state
-    if state.error:
-        badge = Badge(text="Error", variant="error")
-    elif state.active_downloads > 0:
-        badge = Badge(text="Downloading", variant="info")
-    else:
-        badge = Badge(text="Idle", variant="default")
-
-    # Build content section for active download
-    content = None
-    if state.current_file:
-        content = [
-            Stack(
-                direction="vertical",
-                gap="2",
-                children=[
-                    Text(content=state.current_file, variant="secondary"),
-                    Progress(
-                        value=state.progress,
-                        max=100,
-                        label=f"{state.progress:.0f}%",
-                    ),
-                ],
-            ),
-        ]
-
-    return Tile(
-        icon="download",
-        title="Downloader",
-        badge=badge,
-        stats=[
-            Stat(label="Active", value=state.active_downloads),
-            Stat(label="Today", value=state.completed_today),
-            Stat(label="Speed", value=f"{state.download_speed_mbps:.1f} MB/s"),
-        ],
-        content=content,
-        actions=[
-            Button(
-                label="Pause All" if state.active_downloads > 0 else "Resume",
-                on_click=self.toggle_pause,
-            ),
-            Button(label="Queue", variant="secondary", on_click=self.open_queue),
-        ],
-    )
-```
-
-For complete module examples including state and actions, see [State Management](../state.md#full-example)
-and [Actions](../actions.md#complete-example).
+For complete module examples, see the [GitHub repository](https://github.com/MihaiStreames/ContaraNAS).

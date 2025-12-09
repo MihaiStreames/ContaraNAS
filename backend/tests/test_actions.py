@@ -12,7 +12,7 @@ from ContaraNAS.core.action import (
     get_actions,
 )
 from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Stat, Tile
+from ContaraNAS.core.ui import Button, Stat, Tile
 
 
 class MockState(ModuleState):
@@ -38,7 +38,12 @@ class MockModule(Module):
         return Tile(
             icon="box",
             title="Mock Module",
-            stats=[Stat(label="Count", value=self.typed_state.count if self.typed_state else 0)],
+            stats=[
+                Stat(
+                    label="Count",
+                    value=self.typed_state.count if self.typed_state else 0,
+                )
+            ],
         )
 
     @action
@@ -218,15 +223,30 @@ async def test_dispatcher_module_not_found():
 
 @pytest.mark.asyncio
 async def test_dispatcher_action_error():
-    """Test dispatcher wraps exceptions in ActionError"""
+    """Test dispatcher wraps exceptions in ActionError when catch_errors=False"""
     dispatcher = ActionDispatcher()
     module = MockModule()
     dispatcher.register_module(module)
 
     with pytest.raises(ActionError) as exc_info:
-        await dispatcher.dispatch("mock", "failing_action")
+        await dispatcher.dispatch("mock", "failing_action", catch_errors=False)
 
     assert "Something went wrong" in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_dispatcher_action_error_returns_notify():
+    """Test dispatcher returns error Notify when catch_errors=True (default)"""
+    dispatcher = ActionDispatcher()
+    module = MockModule()
+    dispatcher.register_module(module)
+
+    results = await dispatcher.dispatch("mock", "failing_action")
+
+    assert len(results) == 1
+    assert results[0]["type"] == "notify"
+    assert results[0]["variant"] == "error"
+    assert "Something went wrong" in results[0]["message"]
 
 
 def test_open_modal_result():
@@ -314,8 +334,6 @@ def test_action_ref_requires_action_decorator():
 
 def test_action_ref_serialization():
     """Test ActionRef serializes correctly via Button"""
-    from ContaraNAS.core.ui import Button
-
     module = MockModule()
     ref = ActionRef(module.greet, name="Bob")
 

@@ -9,25 +9,20 @@ Renders text content with optional styling variants.
 ```python
 from ContaraNAS.core.ui import Text
 
-# Default body text
 Text(content="This is regular body text.")
-
-# Secondary (muted) text
 Text(content="Additional information", variant="secondary")
-
-# Muted text (even lighter)
 Text(content="Timestamp: 2 hours ago", variant="muted")
-
-# Code/monospace text
 Text(content="npm install contaranas", variant="code")
+Text(content="Large heading", size="xl")
 ```
 
 ### Props
 
-| Prop      | Type                                               | Default  | Description         |
-|-----------|----------------------------------------------------|----------|---------------------|
-| `content` | `str`                                              | Required | The text to display |
-| `variant` | `"body"` \| `"secondary"` \| `"muted"` \| `"code"` | `"body"` | Visual style        |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `content` | `str` | Required | The text to display |
+| `variant` | `"body"`, `"secondary"`, `"muted"`, `"code"` | `"body"` | Visual style |
+| `size` | `"sm"`, `"base"`, `"lg"`, `"xl"` | `"base"` | Font size |
 
 ### Variants
 
@@ -38,21 +33,35 @@ Text(content="npm install contaranas", variant="code")
 | `"muted"`     | Timestamps, metadata, hints          |
 | `"code"`      | Code snippets, paths, commands       |
 
-### Examples
+### Sizes
+
+| Size     | Use Case                          |
+|----------|-----------------------------------|
+| `"sm"`   | Small labels, captions            |
+| `"base"` | Default body text                 |
+| `"lg"`   | Subheadings, emphasis             |
+| `"xl"`   | Headings, large text              |
+
+---
+
+## StatSmall
+
+A compact inline statistic with label and value side by side.
 
 ```python
-from ContaraNAS.core.ui import Stack, Text
+from ContaraNAS.core.ui import StatSmall
 
-description = Stack(
-    direction="vertical",
-    gap="2",
-    children=[
-        Text(content="Steam Library", variant="body"),
-        Text(content="150 games installed across 3 libraries", variant="secondary"),
-        Text(content="Last scanned: 5 minutes ago", variant="muted"),
-    ],
-)
+StatSmall(label="Games", value=150)
+StatSmall(label="Size", value="2.3 TB")
+StatSmall(label="Status", value="Active")
 ```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `str` | Required | Description of the statistic |
+| `value` | `str`, `int`, `float` | Required | The statistic value |
 
 ---
 
@@ -77,41 +86,18 @@ stats = Grid(
 
 ### Props
 
-| Prop    | Type                                                   | Default     | Description                  |
-|---------|--------------------------------------------------------|-------------|------------------------------|
-| `label` | `str`                                                  | Required    | Description of the statistic |
-| `value` | `str \| int \| float`                                  | Required    | The statistic value          |
-| `icon`  | `str \| None`                                          | `None`      | Lucide icon name             |
-| `color` | `"default"` \| `"success"` \| `"warning"` \| `"error"` | `"default"` | Color theme                  |
-| `trend` | `tuple[Literal["up", "down"], str] \| None`            | `None`      | Trend indicator              |
-
-### Color Usage
-
-Use colors semantically:
-
-```python
-# Default - neutral information
-StatCard(label="Total", value=1234)
-
-# Success - positive metrics
-StatCard(label="Uptime", value="99.9%", color="success")
-
-# Warning - needs attention
-StatCard(label="Disk Usage", value="85%", color="warning")
-
-# Error - critical issues
-StatCard(label="Errors", value=12, color="error")
-```
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `str` | Required | Description of the statistic |
+| `value` | `str`, `int`, `float` | Required | The statistic value |
+| `icon` | `str` or `None` | `None` | Lucide icon name |
+| `color` | `"default"`, `"success"`, `"warning"`, `"error"` | `"default"` | Color theme |
+| `trend` | `tuple["up"/"down", str]` or `None` | `None` | Trend indicator |
 
 ### Trend Indicators
 
-Show whether a value is increasing or decreasing:
-
 ```python
-# Value increased by 12%
 StatCard(label="Users", value=1234, trend=("up", "+12%"))
-
-# Value decreased by 5%
 StatCard(label="Errors", value=8, trend=("down", "-5%"), color="success")
 ```
 
@@ -124,54 +110,33 @@ A progress bar showing completion percentage.
 ```python
 from ContaraNAS.core.ui import Progress
 
-# Basic progress
 Progress(value=75, max=100)
-
-# With label
 Progress(value=75, max=100, label="75%")
-
-# With label and sublabel
-Progress(
-    value=750,
-    max=1000,
-    label="750 MB / 1 GB",
-    sublabel="Downloading..."
-)
-
-# Colored progress
+Progress(value=750, max=1000, label="750 MB / 1 GB", sublabel="Downloading...")
 Progress(value=90, max=100, label="90%", color="warning")
+Progress(value=50, max=100, size="lg")  # Large size
 ```
 
 ### Props
 
-| Prop       | Type                                                   | Default     | Description                         |
-|------------|--------------------------------------------------------|-------------|-------------------------------------|
-| `value`    | `int \| float`                                         | Required    | Current value                       |
-| `max`      | `int \| float`                                         | `100`       | Maximum value                       |
-| `label`    | `str \| None`                                          | `None`      | Primary label (e.g., percentage)    |
-| `sublabel` | `str \| None`                                          | `None`      | Secondary label (e.g., status text) |
-| `color`    | `"default"` \| `"success"` \| `"warning"` \| `"error"` | `"default"` | Bar color                           |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `int`, `float` | Required | Current value |
+| `max` | `int`, `float` | `100` | Maximum value |
+| `label` | `str` or `None` | `None` | Primary label (e.g., percentage) |
+| `sublabel` | `str` or `None` | `None` | Secondary label (e.g., status text) |
+| `color` | `"default"`, `"success"`, `"warning"`, `"error"` | `"default"` | Bar color |
+| `size` | `"sm"`, `"lg"` | `"sm"` | Bar height |
 
-### Color Thresholds
-
-A common pattern is to change color based on value:
+### Color by Threshold
 
 ```python
-def get_progress_color(percent: float) -> str:
-    if percent >= 90:
-        return "error"
-    elif percent >= 75:
-        return "warning"
-    else:
-        return "default"
+def get_color(percent: float) -> str:
+    if percent >= 90: return "error"
+    if percent >= 75: return "warning"
+    return "default"
 
-usage_percent = (used / total) * 100
-Progress(
-    value=usage_percent,
-    max=100,
-    label=f"{usage_percent:.0f}%",
-    color=get_progress_color(usage_percent),
-)
+Progress(value=usage, max=100, color=get_color(usage))
 ```
 
 ---
@@ -190,10 +155,10 @@ Badge(text="Beta", variant="info")
 
 ### Props
 
-| Prop      | Type                                                                              | Default     | Description   |
-|-----------|-----------------------------------------------------------------------------------|-------------|---------------|
-| `text`    | `str`                                                                             | Required    | Badge text    |
-| `variant` | `"default"` \| `"primary"` \| `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"default"` | Color variant |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `text` | `str` | Required | Badge text |
+| `variant` | `"default"`, `"primary"`, `"success"`, `"warning"`, `"error"`, `"info"` | `"default"` | Color variant |
 
 ### Variants
 
@@ -235,7 +200,7 @@ Display tabular data with columns and rows.
 ```python
 from ContaraNAS.core.ui import Table, TableColumn
 
-table = Table(
+Table(
     columns=[
         TableColumn(key="name", label="Name"),
         TableColumn(key="size", label="Size", align="right"),
@@ -244,73 +209,65 @@ table = Table(
     data=[
         {"name": "Game A", "size": "50 GB", "status": "Installed"},
         {"name": "Game B", "size": "25 GB", "status": "Updating"},
-        {"name": "Game C", "size": "100 GB", "status": "Installed"},
     ],
+)
+
+# With sorting enabled
+Table(
+    columns=[...],
+    data=[...],
+    sortable=True,
+    default_sort_key="name",
+    default_sort_desc=False,
 )
 ```
 
 ### Table Props
 
-| Prop            | Type                   | Default     | Description                |
-|-----------------|------------------------|-------------|----------------------------|
-| `columns`       | `list[TableColumn]`    | Required    | Column definitions         |
-| `data`          | `list[dict[str, Any]]` | Required    | Row data                   |
-| `empty_message` | `str`                  | `"No data"` | Message when data is empty |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `list[TableColumn]` | Required | Column definitions |
+| `data` | `list[dict[str, Any]]` | Required | Row data |
+| `empty_message` | `str` | `"No data"` | Message when data is empty |
+| `sortable` | `bool` | `False` | Enable column sorting |
+| `default_sort_key` | `str` or `None` | `None` | Column key to sort by initially |
+| `default_sort_desc` | `bool` | `True` | Sort descending by default |
 
 ### TableColumn Props
 
-| Prop    | Type                                | Default  | Description                      |
-|---------|-------------------------------------|----------|----------------------------------|
-| `key`   | `str`                               | Required | Key in data dict                 |
-| `label` | `str`                               | Required | Column header text               |
-| `width` | `str \| None`                       | `None`   | CSS width (e.g., "100px", "20%") |
-| `align` | `"left"` \| `"center"` \| `"right"` | `"left"` | Text alignment                   |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `key` | `str` | Required | Key in data dict |
+| `label` | `str` | Required | Column header text |
+| `width` | `str` or `None` | `None` | CSS width (e.g., "100px", "20%") |
+| `align` | `"left"`, `"center"`, `"right"` | `"left"` | Text alignment |
+| `render` | `"text"`, `"image"` | `"text"` | How to render cell values |
+| `sortable` | `bool` | `True` | Whether this column can be sorted |
 
-### Examples
+### Sorting
 
-**File listing:**
+Enable sorting with `sortable=True` on the table. Control per-column sorting with `sortable` on each column:
 
 ```python
 Table(
     columns=[
-        TableColumn(key="name", label="Name"),
-        TableColumn(key="size", label="Size", width="100px", align="right"),
-        TableColumn(key="modified", label="Modified", width="150px"),
+        TableColumn(key="header", label="", width="60px", render="image", sortable=False),
+        TableColumn(key="name", label="Game", sortable=True),
+        TableColumn(key="size", label="Size", align="right", sortable=True),
     ],
-    data=[
-        {"name": "document.pdf", "size": "2.5 MB", "modified": "2024-01-15"},
-        {"name": "image.png", "size": "500 KB", "modified": "2024-01-14"},
-    ],
-    empty_message="No files found",
+    data=[...],
+    sortable=True,
+    default_sort_key="name",
+    default_sort_desc=False,
 )
 ```
 
-**Dynamic data from state:**
+### Image Columns
+
+Use `render="image"` to display images in table cells:
 
 ```python
-table = Table(
-    columns=[
-        TableColumn(key="name", label="Game"),
-        TableColumn(key="size", label="Size", align="right"),
-    ],
-    data=[
-        {"name": game.name, "size": format_size(game.size)}
-        for game in state.games[:10]  # Show first 10
-    ],
-    empty_message="No games found",
-)
-```
-
-### Empty State
-
-The `empty_message` is shown when `data` is an empty list:
-
-```python
-Table(
-    columns=[...],
-    data=[],  # Empty
-    empty_message="No items to display. Add some items to get started.",
-)
+TableColumn(key="header", label="", width="60px", render="image", sortable=False)
 ```
 
 ---
@@ -347,190 +304,70 @@ progress = SegmentedProgress(
 
 ### SegmentedProgress Props
 
-| Prop          | Type                            | Default | Description                     |
-|---------------|---------------------------------|---------|---------------------------------|
-| `segments`    | `list[SegmentedProgressSegment]`| Required| Segments to display             |
-| `max`         | `int \| float`                  | `100`   | Maximum value (sum of segments) |
-| `size`        | `"sm"` \| `"lg"`                | `"sm"`  | Bar height                      |
-| `show_legend` | `bool`                          | `False` | Show segment labels below bar   |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `segments` | `list[SegmentedProgressSegment]` | Required | Segments to display |
+| `max` | `int`, `float` | `100` | Maximum value (sum of segments) |
+| `size` | `"sm"`, `"lg"` | `"sm"` | Bar height |
+| `show_legend` | `bool` | `False` | Show segment labels below bar |
 
 ### SegmentedProgressSegment Props
 
-| Prop    | Type             | Default  | Description                        |
-|---------|------------------|----------|------------------------------------|
-| `value` | `int \| float`   | Required | Segment size                       |
-| `color` | `str`            | Required | CSS color or semantic color name   |
-| `label` | `str \| None`    | `None`   | Label for legend/tooltip           |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `int`, `float` | Required | Segment size |
+| `color` | `str` | Required | CSS color or semantic color name |
+| `label` | `str` or `None` | `None` | Label for legend/tooltip |
 
 ### Color Options
 
-Use semantic colors or CSS color values:
-
-```python
-# Semantic colors
-SegmentedProgressSegment(value=50, color="primary", label="Primary")
-SegmentedProgressSegment(value=30, color="success", label="Success")
-SegmentedProgressSegment(value=20, color="warning", label="Warning")
-SegmentedProgressSegment(value=10, color="error", label="Error")
-SegmentedProgressSegment(value=40, color="default", label="Default")
-
-# CSS colors
-SegmentedProgressSegment(value=50, color="#3b82f6", label="Blue")
-SegmentedProgressSegment(value=30, color="rgb(34, 197, 94)", label="Green")
-```
-
-### Example: Disk Usage Breakdown
-
-```python
-def build_disk_usage(library: dict) -> SegmentedProgress:
-    total = library.get("total_size", 0)
-    games = library.get("games_size", 0)
-    shaders = library.get("shader_size", 0)
-    workshop = library.get("workshop_size", 0)
-    other = total - games - shaders - workshop
-
-    return SegmentedProgress(
-        segments=[
-            SegmentedProgressSegment(value=games, color="primary", label="Games"),
-            SegmentedProgressSegment(value=shaders, color="success", label="Shaders"),
-            SegmentedProgressSegment(value=workshop, color="warning", label="Workshop"),
-            SegmentedProgressSegment(value=other, color="default", label="Other"),
-        ],
-        max=total,
-        show_legend=True,
-    )
-```
+Use semantic colors (`"primary"`, `"success"`, `"warning"`, `"error"`, `"default"`) or CSS color values (`"#3b82f6"`, `"rgb(34, 197, 94)"`).
 
 ---
 
 ## LineChart
 
-A simple line chart for time-series data, rendered as SVG with no external dependencies.
+A simple line chart for time-series data, rendered as SVG.
 
 ```python
 from ContaraNAS.core.ui import LineChart
 
-# Basic line chart
-chart = LineChart(
-    data=[10, 25, 45, 30, 55, 70, 65, 80, 75, 90],
-    max=100,
-    min=0,
-)
-
-# With label overlay
-chart = LineChart(
-    data=cpu_history,  # list of CPU % values
-    max=100,
-    min=0,
-    height=80,
-    color="primary",
-    fill=True,
-    label="45.2%",  # Current value shown on chart
-)
+LineChart(data=[10, 25, 45, 30, 55, 70, 65, 80, 75, 90], max=100, min=0)
+LineChart(data=cpu_history, color="primary", fill=True, label="45.2%")
 ```
 
 ### Props
 
-| Prop     | Type                                                           | Default     | Description                    |
-|----------|----------------------------------------------------------------|-------------|--------------------------------|
-| `data`   | `list[float]`                                                  | Required    | Y values (rendered left-right) |
-| `max`    | `float`                                                        | `100`       | Maximum Y value                |
-| `min`    | `float`                                                        | `0`         | Minimum Y value                |
-| `height` | `int`                                                          | `80`        | Chart height in pixels         |
-| `color`  | `"default"` \| `"primary"` \| `"success"` \| `"warning"` \| `"error"` | `"primary"` | Line/fill color       |
-| `fill`   | `bool`                                                         | `True`      | Fill area under line           |
-| `label`  | `str \| None`                                                  | `None`      | Current value overlay          |
-
-### Example: CPU Usage Over Time
-
-```python
-class SysMonitorModule(Module):
-    class State(ModuleState):
-        cpu_history: list[float] = []  # Last 60 readings
-        current_cpu: float = 0.0
-
-    def get_tile(self) -> Tile:
-        return Tile(
-            icon="cpu",
-            title="CPU Monitor",
-            content=[
-                LineChart(
-                    data=self.state.cpu_history,
-                    max=100,
-                    min=0,
-                    height=80,
-                    color="primary",
-                    fill=True,
-                    label=f"{self.state.current_cpu:.1f}%",
-                ),
-            ],
-        )
-```
-
-### Color Usage
-
-```python
-# CPU - primary blue
-LineChart(data=cpu_history, color="primary")
-
-# Memory - success green
-LineChart(data=memory_history, color="success")
-
-# Temperature - warning orange
-LineChart(data=temp_history, color="warning")
-
-# Errors - error red
-LineChart(data=error_history, color="error")
-```
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `data` | `list[float]` | Required | Y values (rendered left-right) |
+| `max` | `float` | `100` | Maximum Y value |
+| `min` | `float` | `0` | Minimum Y value |
+| `height` | `int` | `80` | Chart height in pixels |
+| `color` | `"default"`, `"primary"`, `"success"`, `"warning"`, `"error"` | `"primary"` | Line/fill color |
+| `fill` | `bool` | `True` | Fill area under line |
+| `label` | `str` or `None` | `None` | Current value overlay |
 
 ---
 
-## Combining Display Components
+## Image
 
-Display components work together to create rich interfaces:
+Display an image with optional sizing and border radius.
 
 ```python
-from ContaraNAS.core.ui import Stack, Text, Progress, Badge, StatCard, Grid
+from ContaraNAS.core.ui import Image
 
-status_section = Stack(
-    direction="vertical",
-    gap="4",
-    children=[
-        # Header with badge
-        Stack(
-            direction="horizontal",
-            justify="between",
-            align="center",
-            children=[
-                Text(content="Download Progress"),
-                Badge(text="Active", variant="success"),
-            ],
-        ),
-
-        # Progress bar
-        Progress(
-            value=65,
-            max=100,
-            label="65%",
-            sublabel="game_installer.exe (650 MB / 1 GB)",
-        ),
-
-        # Stats grid
-        Grid(
-            columns=3,
-            gap="3",
-            children=[
-                StatCard(label="Speed", value="12.5 MB/s"),
-                StatCard(label="ETA", value="5 min"),
-                StatCard(label="Queue", value=3),
-            ],
-        ),
-
-        # Status text
-        Text(
-            content="2 downloads queued after this one",
-            variant="secondary"
-        ),
-    ],
-)
+Image(src="https://example.com/image.png", alt="Description")
+Image(src="/path/to/image.jpg", width=200, height=150)
+Image(src=game.header_url, border_radius="md")
 ```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `str` | Required | Image URL |
+| `alt` | `str` | `""` | Alt text for accessibility |
+| `width` | `int` or `None` | `None` | Width in pixels |
+| `height` | `int` or `None` | `None` | Height in pixels |
+| `border_radius` | `"none"`, `"sm"`, `"md"`, `"lg"` | `"sm"` | Corner rounding |

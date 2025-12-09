@@ -6,6 +6,7 @@ from ContaraNAS.core.ui import (
     Checkbox,
     Component,
     Grid,
+    Image,
     Input,
     LineChart,
     Modal,
@@ -493,3 +494,135 @@ def test_grid_default_row_height():
 
     # None values are excluded from serialization
     assert "row_height" not in data or data.get("row_height") is None
+
+
+def test_image():
+    """Test image component"""
+    image = Image(
+        src="https://example.com/image.png",
+        alt="Test image",
+        width=200,
+        height=150,
+        border_radius="md",
+    )
+    data = image.to_dict()
+
+    assert data["type"] == "image"
+    assert data["src"] == "https://example.com/image.png"
+    assert data["alt"] == "Test image"
+    assert data["width"] == 200
+    assert data["height"] == 150
+    assert data["border_radius"] == "md"
+
+
+def test_image_defaults():
+    """Test image component default values"""
+    image = Image(src="https://example.com/image.png")
+    data = image.to_dict()
+
+    assert data["type"] == "image"
+    assert data["src"] == "https://example.com/image.png"
+    assert data["alt"] == ""
+    assert data["border_radius"] == "sm"
+
+
+def test_stack_on_click():
+    """Test stack with on_click handler"""
+
+    def my_handler():
+        pass
+
+    stack = Stack(
+        direction="horizontal",
+        children=[Text(content="Click me")],
+        on_click=my_handler,
+    )
+    data = stack.to_dict()
+
+    assert data["type"] == "stack"
+    assert data["on_click"]["__action__"] == "my_handler"
+
+
+def test_stack_grow():
+    """Test stack with grow prop"""
+    stack = Stack(direction="horizontal", grow=True, children=[])
+    data = stack.to_dict()
+
+    assert data["type"] == "stack"
+    assert data["grow"] is True
+
+
+def test_stack_default_grow():
+    """Test stack default grow is False"""
+    stack = Stack()
+    data = stack.to_dict()
+
+    assert data["grow"] is False
+
+
+def test_table_sortable():
+    """Test table with sorting enabled"""
+    table = Table(
+        columns=[
+            TableColumn(key="name", label="Name"),
+            TableColumn(key="size", label="Size", align="right"),
+        ],
+        data=[{"name": "Game A", "size": "50 GB"}],
+        sortable=True,
+        default_sort_key="name",
+        default_sort_desc=False,
+    )
+    data = table.to_dict()
+
+    assert data["type"] == "table"
+    assert data["sortable"] is True
+    assert data["default_sort_key"] == "name"
+    assert data["default_sort_desc"] is False
+
+
+def test_table_sortable_defaults():
+    """Test table sorting default values"""
+    table = Table(
+        columns=[TableColumn(key="name", label="Name")],
+        data=[],
+    )
+    data = table.to_dict()
+
+    assert data["sortable"] is False
+    assert data["default_sort_desc"] is True
+
+
+def test_table_column_render():
+    """Test table column with render type"""
+    col = TableColumn(key="image", label="", render="image", sortable=False)
+    data = col.to_dict()
+
+    assert data["type"] == "table_column"
+    assert data["render"] == "image"
+    assert data["sortable"] is False
+
+
+def test_table_column_defaults():
+    """Test table column default values"""
+    col = TableColumn(key="name", label="Name")
+    data = col.to_dict()
+
+    assert data["render"] == "text"
+    assert data["sortable"] is True
+
+
+def test_progress_size():
+    """Test progress bar with size"""
+    progress = Progress(value=50, max=100, size="lg")
+    data = progress.to_dict()
+
+    assert data["type"] == "progress"
+    assert data["size"] == "lg"
+
+
+def test_progress_default_size():
+    """Test progress bar default size"""
+    progress = Progress(value=50, max=100)
+    data = progress.to_dict()
+
+    assert data["size"] == "sm"

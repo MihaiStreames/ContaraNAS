@@ -3,7 +3,7 @@ from collections.abc import Callable
 from typing import Any, ClassVar
 
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
-from ContaraNAS.core.ui import Modal, Tile
+from ContaraNAS.core.ui import Alert, Badge, Modal, Stat, Tile
 from ContaraNAS.core.utils import get_logger
 
 from .metadata import ModuleMetadata
@@ -63,9 +63,25 @@ class Module(ABC):
         return None
 
     def _on_state_commit(self) -> None:
-        """Called when typed state is committed - triggers UI push"""
+        """Called when typed state is committed"""
         if self._ui_update_callback is not None:
             self._ui_update_callback(self)
+
+    def _error_tile(self, error_message: str) -> Tile:
+        """Return an error tile when get_tile() fails"""
+        return Tile(
+            icon="AlertTriangle",
+            title=self.display_name,
+            badge=Badge(text="Error", variant="error"),
+            stats=[Stat(label="Status", value="Failed")],
+            content=[
+                Alert(
+                    message=f"Module error: {error_message}",
+                    variant="error",
+                    title="Render Failed",
+                )
+            ],
+        )
 
     @property
     def metadata(self) -> ModuleMetadata:
@@ -107,15 +123,22 @@ class Module(ABC):
         return []
 
     def render_tile(self) -> dict[str, Any]:
-        """Serialize tile to dict for frontend"""
+        """Serialize tile to dict for frontend - catches errors gracefully"""
         try:
             return self.get_tile().to_dict()
         except NotImplementedError:
             return {}
+        except Exception as e:
+            logger.exception(f"Error rendering tile for module {self.name}")
+            return self._error_tile(str(e)).to_dict()
 
     def render_modals(self) -> list[dict[str, Any]]:
-        """Serialize modals to dicts for frontend"""
-        return [modal.to_dict() for modal in self.get_modals()]
+        """Serialize modals to dicts for frontend - catches errors gracefully"""
+        try:
+            return [modal.to_dict() for modal in self.get_modals()]
+        except Exception:
+            logger.exception(f"Error rendering modals for module {self.name}")
+            return []
 
     def render_ui(self) -> dict[str, Any]:
         """Return complete UI state for frontend"""

@@ -20,7 +20,10 @@ class SimpleModule(Module):
             icon="box",
             title="Simple",
             stats=[
-                Stat(label="Counter", value=self._typed_state.counter if self._typed_state else 0)
+                Stat(
+                    label="Counter",
+                    value=self._typed_state.counter if self._typed_state else 0,
+                )
             ],
         )
 
@@ -42,7 +45,12 @@ class ModuleWithModals(Module):
         return Tile(
             icon="settings",
             title="With Modals",
-            stats=[Stat(label="Count", value=self._typed_state.count if self._typed_state else 0)],
+            stats=[
+                Stat(
+                    label="Count",
+                    value=self._typed_state.count if self._typed_state else 0,
+                )
+            ],
             actions=[Button(label="Open", variant="primary")],
         )
 

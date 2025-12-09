@@ -261,97 +261,78 @@ class State(ModuleState):
         return dt.isoformat()
 ```
 
-## Full Example
+For complete module examples, see the [GitHub repository](https://github.com/MihaiStreames/ContaraNAS).
 
-Here's a complete example showing all state concepts:
+---
+
+## Complete Example: Disk Monitor State
+
+A practical example showing state for disk/volume monitoring with history tracking:
 
 ```python
 from datetime import datetime
 from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.action import action
+from ContaraNAS.core.ui import Tile, Stat, Progress, LineChart, Stack
 
-class DownloadModule(Module):
-    """Module for tracking downloads"""
-
+class DiskModule(Module):
     class State(ModuleState):
-        # Basic fields with defaults
-        total_downloads: int = 0
-        active_downloads: int = 0
-        download_speed: float = 0.0
+        """State for disk and volume monitoring"""
 
-        # Complex types
-        queue: list[str] = []
-        completed: list[dict] = []
+        # Volume information
+        volumes: list[dict] = []  # [{path, size, used, free, filesystem}]
+        total_capacity: int = 0   # Total bytes across all volumes
+        total_used: int = 0       # Total used bytes
 
-        # Optional fields
-        last_error: str | None = None
-        last_updated: str | None = None
+        # SMART health
+        smart_status: dict[str, str] = {}  # {"/dev/sda": "PASSED", ...}
+        temperature: dict[str, int] = {}   # {"/dev/sda": 35, ...}
 
-    async def initialize(self) -> None:
-        """Initialize the download tracker"""
-        # State is already created, optionally set initial values
-        if self._typed_state:
-            self._typed_state.last_updated = datetime.now().isoformat()
-            self._typed_state.commit()
+        # I/O history for graphs (last 60 readings)
+        io_read_history: list[float] = []
+        io_write_history: list[float] = []
+        max_history: int = 60
 
-    async def start_monitoring(self) -> None:
-        """Start watching for download events"""
-        # Set up file watchers, etc.
-        pass
+        # Status
+        last_scan: datetime | None = None
+        error: str | None = None
 
-    async def stop_monitoring(self) -> None:
-        """Stop monitoring"""
-        pass
+        def add_io_reading(self, read_mbps: float, write_mbps: float) -> None:
+            """Add I/O reading and trim history"""
+            self.io_read_history.append(read_mbps)
+            self.io_write_history.append(write_mbps)
 
-    def get_tile(self) -> "Tile":
-        """Provide tile for dashboard"""
-        from ContaraNAS.core.ui import Tile, Stat, Button
-        state = self._typed_state
-        if not state:
-            return Tile(icon="download", title="Downloads", stats=[])
+            if len(self.io_read_history) > self.max_history:
+                self.io_read_history = self.io_read_history[-self.max_history:]
+            if len(self.io_write_history) > self.max_history:
+                self.io_write_history = self.io_write_history[-self.max_history:]
+
+    def get_tile(self) -> Tile:
+        used_percent = (self._typed_state.total_used / self._typed_state.total_capacity * 100
+                        if self._typed_state.total_capacity > 0 else 0)
 
         return Tile(
-            icon="download",
-            title="Downloads",
+            icon="hard-drive",
+            title="Storage",
             stats=[
-                Stat(label="Total", value=state.total_downloads),
-                Stat(label="Active", value=state.active_downloads),
-                Stat(label="Speed", value=f"{state.download_speed:.1f} MB/s"),
+                Stat(label="Used", value=f"{used_percent:.1f}%"),
+                Stat(label="Volumes", value=len(self._typed_state.volumes)),
             ],
-            actions=[
-                Button(label="Add URL", on_click=self.add_to_queue),
+            content=[
+                Progress(
+                    value=self._typed_state.total_used,
+                    max=self._typed_state.total_capacity,
+                    label="Total Usage",
+                ),
+                LineChart(
+                    data=self._typed_state.io_read_history,
+                    label="Read I/O",
+                    color="primary",
+                ),
             ],
         )
-
-    @action
-    async def add_to_queue(self, url: str) -> None:
-        """Add a URL to the download queue"""
-        if self._typed_state:
-            self._typed_state.queue.append(url)
-            # Auto-committed by @action decorator
-
-    @action
-    async def clear_completed(self) -> None:
-        """Clear the completed downloads list"""
-        if self._typed_state:
-            self._typed_state.completed = []
-            self._typed_state.total_downloads = 0
-            # Auto-committed by @action decorator
-
-    async def on_download_complete(self, url: str, path: str) -> None:
-        """Called when a download finishes (internal method)"""
-        if self._typed_state:
-            self._typed_state.queue.remove(url)
-            self._typed_state.completed.append({
-                "url": url,
-                "path": path,
-                "completed_at": datetime.now().isoformat()
-            })
-            self._typed_state.total_downloads += 1
-            self._typed_state.active_downloads -= 1
-            self._typed_state.last_updated = datetime.now().isoformat()
-            self._typed_state.commit()  # Manual commit for non-action methods
 ```
+
+---
 
 ## Best Practices
 
