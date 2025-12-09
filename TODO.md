@@ -2,47 +2,9 @@
 
 ---
 
-## 🟡 Medium Priority - Inconsistencies & Improvements
-
-### 1. Tile Props - Missing `rowspan`
-
-**File to update:** `docs/docs/modules/ui/cards.md`
-
-- [ ] Add `rowspan` to Tile props table (backend supports `rowspan: int = 1`)
-- [ ] Document that `rowspan` controls vertical spanning in dashboard grid
-
-### 2. Stack Props - Missing `grow` and `on_click`
-
-**File to update:** `docs/docs/modules/ui/layout.md`
-
-- [ ] Add `grow` prop to Stack props table (`bool`, default `False`)
-- [ ] Add `on_click` prop to Stack props table (makes Stack clickable)
-- [ ] Document use case for clickable Stacks
-
-### 3. Grid Props - Missing `row_height`
-
-**File to update:** `docs/docs/modules/ui/layout.md`
-
-- [ ] Add `row_height` prop to Grid props table (`str | None`, e.g., `"200px"`, `"minmax(200px, auto)"`)
-
-### 4. Button Props - Missing `icon_only`
-
-**File to update:** `docs/docs/modules/ui/interactive.md`
-
-- [ ] Add `icon_only` prop to Button props table (`bool`, default `False`)
-- [ ] Document icon-only button pattern
-
-### 5. Modal Props - Missing `size`
-
-**File to update:** `docs/docs/modules/ui/modal.md`
-
-- [ ] Add `size` prop to Modal props table (`"sm"` | `"md"` | `"lg"` | `"xl"`, default `"md"`)
-
----
-
 ## 🟢 Low Priority - Enhancements
 
-### 6. Remove Redundant Examples
+### 1. Remove Redundant Examples
 
 **Files to update:** `actions.md`, `modal.md`
 
@@ -50,7 +12,7 @@
 - [ ] Consider moving complete examples to a dedicated `examples.md` or keeping in one place only
 - [ ] Add cross-references instead of duplicating
 
-### 7. Architecture Overview Page
+### 2. Architecture Overview Page
 
 **File to create:** `docs/docs/architecture.md` (NEW)
 
@@ -59,7 +21,7 @@
 - [ ] Document type generation pipeline (Python → OpenAPI → TypeScript)
 - [ ] Document WebSocket message types (`module_ui`, `app_state`, `full_state`)
 
-### 8. API Reference
+### 3. API Reference
 
 **File to create:** `docs/docs/api/reference.md` (NEW)
 
@@ -77,7 +39,7 @@
 
 ## 🔵 Style & Consistency
 
-### 9. Unify Documentation Style
+### 4. Unify Documentation Style
 
 **Files to update:** All docs in `docs/docs/`
 
@@ -90,38 +52,7 @@
 
 ## 🔵 Verification Tasks
 
-### 10. Verify All Backend Components Are Documented
-
-| Component | Backend | Docs | Status |
-|-----------|---------|------|--------|
-| Stack | ✅ | ✅ | `grow`, `on_click` missing |
-| Grid | ✅ | ✅ | `row_height` missing |
-| Card | ✅ | ✅ | OK |
-| Tile | ✅ | ✅ | `rowspan` missing |
-| Stat | ✅ | ✅ | OK |
-| StatSmall | ✅ | ✅ | OK |
-| StatCard | ✅ | ✅ | OK |
-| Text | ✅ | ✅ | OK |
-| Progress | ✅ | ✅ | OK |
-| SegmentedProgress | ✅ | ✅ | OK |
-| LineChart | ✅ | ✅ | OK |
-| Badge | ✅ | ✅ | OK |
-| Table | ✅ | ✅ | OK |
-| TableColumn | ✅ | ✅ | OK |
-| Image | ✅ | ✅ | OK |
-| Button | ✅ | ✅ | `icon_only` missing |
-| Input | ✅ | ✅ | OK |
-| Select | ✅ | ✅ | OK |
-| SelectOption | ✅ | ✅ | OK |
-| Toggle | ✅ | ✅ | OK |
-| Checkbox | ✅ | ✅ | OK |
-| Tabs | ✅ | ✅ | OK |
-| Tab | ✅ | ✅ | OK |
-| Modal | ✅ | ✅ | `size` missing |
-| Alert | ✅ | ✅ | OK |
-| Spinner | ✅ | ✅ | OK |
-
-### 11. Cross-Reference Check
+### 5. Cross-Reference Check
 
 - [ ] All "See Also" links work
 - [ ] All internal doc links are valid
@@ -130,6 +61,17 @@
 ---
 
 ## ✅ Completed
+
+### Missing Props Documentation
+
+**Files updated:** `cards.md`, `layout.md`, `interactive.md`, `modal.md`
+
+- [x] Add `rowspan` to Tile props table
+- [x] Add `grow` prop to Stack props table (already documented)
+- [x] Add `on_click` prop to Stack props table (already documented)
+- [x] Add `row_height` to Grid props table (already documented)
+- [x] Add `icon_only` prop to Button props table
+- [x] Add `size` prop to Modal props table
 
 ### Module Lifecycle Documentation
 
@@ -208,9 +150,8 @@
 
 | Priority | Count | Description |
 |----------|-------|-------------|
-| 🟡 Medium | 5 | Missing props (rowspan, grow, on_click, row_height, icon_only, size) |
 | 🟢 Low | 3 | Architecture, API reference, redundant examples |
 | 🔵 Style | 1 | Unify documentation style |
-| 🔵 Verify | 2 | Component verification, cross-references |
+| 🔵 Verify | 1 | Cross-references |
 
-**Total remaining: ~15 tasks**
+**Total remaining: ~5 tasks**

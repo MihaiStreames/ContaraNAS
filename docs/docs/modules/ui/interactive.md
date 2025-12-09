@@ -13,19 +13,21 @@ Button(label="Save", on_click=self.save_settings, variant="primary")
 Button(label="Cancel", variant="secondary")
 Button(label="Delete", variant="danger", icon="trash-2")
 Button(label="Saving...", loading=True, disabled=True)
+Button(label="Settings", icon="settings", icon_only=True)  # Icon-only button
 ```
 
 ### Props
 
-| Prop       | Type                                              | Default     | Description                 |
-|------------|---------------------------------------------------|-------------|-----------------------------|
-| `label`    | `str`                                             | Required    | Button text                 |
-| `on_click` | `Callable` or `None`                              | `None`      | Action to call when clicked |
-| `variant`  | `"primary"`, `"secondary"`, `"ghost"`, `"danger"` | `"primary"` | Visual style                |
-| `size`     | `"sm"`, `"md"`, `"lg"`                            | `"md"`      | Button size                 |
-| `icon`     | `str` or `None`                                   | `None`      | Lucide icon name            |
-| `disabled` | `bool`                                            | `False`     | Disable the button          |
-| `loading`  | `bool`                                            | `False`     | Show loading spinner        |
+| Prop        | Type                                              | Default     | Description                  |
+|-------------|---------------------------------------------------|-------------|------------------------------|
+| `label`     | `str`                                             | Required    | Button text                  |
+| `on_click`  | `Callable` or `None`                              | `None`      | Action to call when clicked  |
+| `variant`   | `"primary"`, `"secondary"`, `"ghost"`, `"danger"` | `"primary"` | Visual style                 |
+| `size`      | `"sm"`, `"md"`, `"lg"`                            | `"md"`      | Button size                  |
+| `icon`      | `str` or `None`                                   | `None`      | Lucide icon name             |
+| `icon_only` | `bool`                                            | `False`     | Show only icon (hides label) |
+| `disabled`  | `bool`                                            | `False`     | Disable the button           |
+| `loading`   | `bool`                                            | `False`     | Show loading spinner         |
 
 ### Variants
 

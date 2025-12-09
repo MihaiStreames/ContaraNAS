@@ -104,27 +104,29 @@ tile = Tile(
 | `icon`    | `str`                       | Required | Lucide icon name for the tile  |
 | `title`   | `str`                       | Required | Module display name            |
 | `colspan` | `1`, `2`, `3`               | `1`      | Number of grid columns to span |
+| `rowspan` | `1`, `2`, `3`               | `1`      | Number of grid rows to span    |
 | `badge`   | `Badge` or `None`           | `None`   | Status badge next to title     |
 | `stats`   | `list[Stat]`                | `[]`     | Key metrics to display         |
 | `content` | `list[Component]` or `None` | `None`   | Additional content below stats |
 | `actions` | `list[Component]`           | `[]`     | Action buttons                 |
 
-### Colspan
+### Spanning
 
-Use `colspan` to make tiles wider on the dashboard grid:
+Use `colspan` and `rowspan` to control tile size on the dashboard grid:
 
 ```python
-# Normal width (1 column)
-Tile(icon="package", title="My Module", colspan=1)
+# Normal size (1x1)
+Tile(icon="package", title="My Module")
 
-# Double width (2 columns) - good for complex dashboards
+# Double width (2 columns)
 Tile(icon="activity", title="System Monitor", colspan=2)
 
-# Triple width (3 columns) - full width on most layouts
-Tile(icon="chart-bar", title="Analytics", colspan=3)
-```
+# Double height (2 rows)
+Tile(icon="chart-bar", title="Analytics", rowspan=2)
 
-This is useful for modules with tabbed content, charts, or multiple stats that benefit from extra horizontal space.
+# Large tile (2x2)
+Tile(icon="server", title="Dashboard", colspan=2, rowspan=2)
+```
 
 ### Using with get_tile()
 

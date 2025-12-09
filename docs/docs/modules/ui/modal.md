@@ -35,6 +35,7 @@ modal = Modal(
 |------------|-----------------------------|----------|-------------------------------------|
 | `id`       | `str`                       | Required | Unique identifier for the modal     |
 | `title`    | `str`                       | Required | Modal header title                  |
+| `size`     | `"sm"`, `"md"`, `"lg"`, `"xl"` | `"md"` | Modal width                         |
 | `children` | `list[Component]`           | `[]`     | Main content components             |
 | `footer`   | `list[Component]` or `None` | `None`   | Footer components (usually buttons) |
 | `closable` | `bool`                      | `True`   | Show close button in header         |
