@@ -49,6 +49,11 @@ nav:
           - Interactive: modules/ui/interactive.md
           - Modals: modules/ui/modal.md
           - Feedback: modules/ui/feedback.md
+  - Internals:
+      - Overview: internals/index.md
+      - Render Pipeline: internals/render-pipeline.md
+      - Server-Driven UI: internals/server-driven-ui.md
+      - Type Generation: internals/type-generation.md
 
 markdown_extensions:
   - pymdownx.highlight:

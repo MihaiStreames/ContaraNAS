@@ -32,13 +32,11 @@ Then explore:
 - [UI Components](modules/ui/index.md) — Build UIs in Python
 - [Lifecycle](modules/lifecycle.md) — Module initialization and monitoring
 
-<!-- TODO: Uncomment when internals section is created
 ### For the Curious
 
 Want to understand how ContaraNAS works under the hood?
 
-→ **[Internals](internals/index.md)** — Render pipeline, WebSocket protocol, type generation
--->
+→ **[Internals](internals/index.md)** — Render pipeline, server-driven UI, type generation
 
 ## Development Setup
 
