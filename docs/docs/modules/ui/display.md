@@ -18,11 +18,11 @@ Text(content="Large heading", size="xl")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `content` | `str` | Required | The text to display |
-| `variant` | `"body"`, `"secondary"`, `"muted"`, `"code"` | `"body"` | Visual style |
-| `size` | `"sm"`, `"base"`, `"lg"`, `"xl"` | `"base"` | Font size |
+| Prop      | Type                                         | Default  | Description         |
+|-----------|----------------------------------------------|----------|---------------------|
+| `content` | `str`                                        | Required | The text to display |
+| `variant` | `"body"`, `"secondary"`, `"muted"`, `"code"` | `"body"` | Visual style        |
+| `size`    | `"sm"`, `"base"`, `"lg"`, `"xl"`             | `"base"` | Font size           |
 
 ### Variants
 
@@ -35,12 +35,12 @@ Text(content="Large heading", size="xl")
 
 ### Sizes
 
-| Size     | Use Case                          |
-|----------|-----------------------------------|
-| `"sm"`   | Small labels, captions            |
-| `"base"` | Default body text                 |
-| `"lg"`   | Subheadings, emphasis             |
-| `"xl"`   | Headings, large text              |
+| Size     | Use Case               |
+|----------|------------------------|
+| `"sm"`   | Small labels, captions |
+| `"base"` | Default body text      |
+| `"lg"`   | Subheadings, emphasis  |
+| `"xl"`   | Headings, large text   |
 
 ---
 
@@ -58,10 +58,10 @@ StatSmall(label="Status", value="Active")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Description of the statistic |
-| `value` | `str`, `int`, `float` | Required | The statistic value |
+| Prop    | Type                  | Default  | Description                  |
+|---------|-----------------------|----------|------------------------------|
+| `label` | `str`                 | Required | Description of the statistic |
+| `value` | `str`, `int`, `float` | Required | The statistic value          |
 
 ---
 
@@ -86,13 +86,13 @@ stats = Grid(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Description of the statistic |
-| `value` | `str`, `int`, `float` | Required | The statistic value |
-| `icon` | `str` or `None` | `None` | Lucide icon name |
-| `color` | `"default"`, `"success"`, `"warning"`, `"error"` | `"default"` | Color theme |
-| `trend` | `tuple["up"/"down", str]` or `None` | `None` | Trend indicator |
+| Prop    | Type                                             | Default     | Description                  |
+|---------|--------------------------------------------------|-------------|------------------------------|
+| `label` | `str`                                            | Required    | Description of the statistic |
+| `value` | `str`, `int`, `float`                            | Required    | The statistic value          |
+| `icon`  | `str` or `None`                                  | `None`      | Lucide icon name             |
+| `color` | `"default"`, `"success"`, `"warning"`, `"error"` | `"default"` | Color theme                  |
+| `trend` | `tuple["up"/"down", str]` or `None`              | `None`      | Trend indicator              |
 
 ### Trend Indicators
 
@@ -119,14 +119,14 @@ Progress(value=50, max=100, size="lg")  # Large size
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `int`, `float` | Required | Current value |
-| `max` | `int`, `float` | `100` | Maximum value |
-| `label` | `str` or `None` | `None` | Primary label (e.g., percentage) |
-| `sublabel` | `str` or `None` | `None` | Secondary label (e.g., status text) |
-| `color` | `"default"`, `"success"`, `"warning"`, `"error"` | `"default"` | Bar color |
-| `size` | `"sm"`, `"lg"` | `"sm"` | Bar height |
+| Prop       | Type                                             | Default     | Description                         |
+|------------|--------------------------------------------------|-------------|-------------------------------------|
+| `value`    | `int`, `float`                                   | Required    | Current value                       |
+| `max`      | `int`, `float`                                   | `100`       | Maximum value                       |
+| `label`    | `str` or `None`                                  | `None`      | Primary label (e.g., percentage)    |
+| `sublabel` | `str` or `None`                                  | `None`      | Secondary label (e.g., status text) |
+| `color`    | `"default"`, `"success"`, `"warning"`, `"error"` | `"default"` | Bar color                           |
+| `size`     | `"sm"`, `"lg"`                                   | `"sm"`      | Bar height                          |
 
 ### Color by Threshold
 
@@ -135,6 +135,7 @@ def get_color(percent: float) -> str:
     if percent >= 90: return "error"
     if percent >= 75: return "warning"
     return "default"
+
 
 Progress(value=usage, max=100, color=get_color(usage))
 ```
@@ -155,9 +156,9 @@ Badge(text="Beta", variant="info")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `text` | `str` | Required | Badge text |
+| Prop      | Type                                                                    | Default     | Description   |
+|-----------|-------------------------------------------------------------------------|-------------|---------------|
+| `text`    | `str`                                                                   | Required    | Badge text    |
 | `variant` | `"default"`, `"primary"`, `"success"`, `"warning"`, `"error"`, `"info"` | `"default"` | Color variant |
 
 ### Variants
@@ -224,25 +225,25 @@ Table(
 
 ### Table Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `columns` | `list[TableColumn]` | Required | Column definitions |
-| `data` | `list[dict[str, Any]]` | Required | Row data |
-| `empty_message` | `str` | `"No data"` | Message when data is empty |
-| `sortable` | `bool` | `False` | Enable column sorting |
-| `default_sort_key` | `str` or `None` | `None` | Column key to sort by initially |
-| `default_sort_desc` | `bool` | `True` | Sort descending by default |
+| Prop                | Type                   | Default     | Description                     |
+|---------------------|------------------------|-------------|---------------------------------|
+| `columns`           | `list[TableColumn]`    | Required    | Column definitions              |
+| `data`              | `list[dict[str, Any]]` | Required    | Row data                        |
+| `empty_message`     | `str`                  | `"No data"` | Message when data is empty      |
+| `sortable`          | `bool`                 | `False`     | Enable column sorting           |
+| `default_sort_key`  | `str` or `None`        | `None`      | Column key to sort by initially |
+| `default_sort_desc` | `bool`                 | `True`      | Sort descending by default      |
 
 ### TableColumn Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `key` | `str` | Required | Key in data dict |
-| `label` | `str` | Required | Column header text |
-| `width` | `str` or `None` | `None` | CSS width (e.g., "100px", "20%") |
-| `align` | `"left"`, `"center"`, `"right"` | `"left"` | Text alignment |
-| `render` | `"text"`, `"image"` | `"text"` | How to render cell values |
-| `sortable` | `bool` | `True` | Whether this column can be sorted |
+| Prop       | Type                            | Default  | Description                       |
+|------------|---------------------------------|----------|-----------------------------------|
+| `key`      | `str`                           | Required | Key in data dict                  |
+| `label`    | `str`                           | Required | Column header text                |
+| `width`    | `str` or `None`                 | `None`   | CSS width (e.g., "100px", "20%")  |
+| `align`    | `"left"`, `"center"`, `"right"` | `"left"` | Text alignment                    |
+| `render`   | `"text"`, `"image"`             | `"text"` | How to render cell values         |
+| `sortable` | `bool`                          | `True`   | Whether this column can be sorted |
 
 ### Sorting
 
@@ -304,24 +305,25 @@ progress = SegmentedProgress(
 
 ### SegmentedProgress Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `segments` | `list[SegmentedProgressSegment]` | Required | Segments to display |
-| `max` | `int`, `float` | `100` | Maximum value (sum of segments) |
-| `size` | `"sm"`, `"lg"` | `"sm"` | Bar height |
-| `show_legend` | `bool` | `False` | Show segment labels below bar |
+| Prop          | Type                             | Default  | Description                     |
+|---------------|----------------------------------|----------|---------------------------------|
+| `segments`    | `list[SegmentedProgressSegment]` | Required | Segments to display             |
+| `max`         | `int`, `float`                   | `100`    | Maximum value (sum of segments) |
+| `size`        | `"sm"`, `"lg"`                   | `"sm"`   | Bar height                      |
+| `show_legend` | `bool`                           | `False`  | Show segment labels below bar   |
 
 ### SegmentedProgressSegment Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `int`, `float` | Required | Segment size |
-| `color` | `str` | Required | CSS color or semantic color name |
-| `label` | `str` or `None` | `None` | Label for legend/tooltip |
+| Prop    | Type            | Default  | Description                      |
+|---------|-----------------|----------|----------------------------------|
+| `value` | `int`, `float`  | Required | Segment size                     |
+| `color` | `str`           | Required | CSS color or semantic color name |
+| `label` | `str` or `None` | `None`   | Label for legend/tooltip         |
 
 ### Color Options
 
-Use semantic colors (`"primary"`, `"success"`, `"warning"`, `"error"`, `"default"`) or CSS color values (`"#3b82f6"`, `"rgb(34, 197, 94)"`).
+Use semantic colors (`"primary"`, `"success"`, `"warning"`, `"error"`, `"default"`) or CSS color values (`"#3b82f6"`,
+`"rgb(34, 197, 94)"`).
 
 ---
 
@@ -338,15 +340,15 @@ LineChart(data=cpu_history, color="primary", fill=True, label="45.2%")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `data` | `list[float]` | Required | Y values (rendered left-right) |
-| `max` | `float` | `100` | Maximum Y value |
-| `min` | `float` | `0` | Minimum Y value |
-| `height` | `int` | `80` | Chart height in pixels |
-| `color` | `"default"`, `"primary"`, `"success"`, `"warning"`, `"error"` | `"primary"` | Line/fill color |
-| `fill` | `bool` | `True` | Fill area under line |
-| `label` | `str` or `None` | `None` | Current value overlay |
+| Prop     | Type                                                          | Default     | Description                    |
+|----------|---------------------------------------------------------------|-------------|--------------------------------|
+| `data`   | `list[float]`                                                 | Required    | Y values (rendered left-right) |
+| `max`    | `float`                                                       | `100`       | Maximum Y value                |
+| `min`    | `float`                                                       | `0`         | Minimum Y value                |
+| `height` | `int`                                                         | `80`        | Chart height in pixels         |
+| `color`  | `"default"`, `"primary"`, `"success"`, `"warning"`, `"error"` | `"primary"` | Line/fill color                |
+| `fill`   | `bool`                                                        | `True`      | Fill area under line           |
+| `label`  | `str` or `None`                                               | `None`      | Current value overlay          |
 
 ---
 
@@ -364,10 +366,10 @@ Image(src=game.header_url, border_radius="md")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `str` | Required | Image URL |
-| `alt` | `str` | `""` | Alt text for accessibility |
-| `width` | `int` or `None` | `None` | Width in pixels |
-| `height` | `int` or `None` | `None` | Height in pixels |
-| `border_radius` | `"none"`, `"sm"`, `"md"`, `"lg"` | `"sm"` | Corner rounding |
+| Prop            | Type                             | Default  | Description                |
+|-----------------|----------------------------------|----------|----------------------------|
+| `src`           | `str`                            | Required | Image URL                  |
+| `alt`           | `str`                            | `""`     | Alt text for accessibility |
+| `width`         | `int` or `None`                  | `None`   | Width in pixels            |
+| `height`        | `int` or `None`                  | `None`   | Height in pixels           |
+| `border_radius` | `"none"`, `"sm"`, `"md"`, `"lg"` | `"sm"`   | Corner rounding            |

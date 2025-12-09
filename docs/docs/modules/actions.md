@@ -21,6 +21,7 @@ Use the `@action` decorator to mark a method as callable from the frontend:
 ```python
 from ContaraNAS.core.action import action
 
+
 class MyModule(Module):
     @action
     async def refresh_data(self) -> None:
@@ -49,6 +50,7 @@ async def fetch_from_api(self) -> None:
     data = await self.client.get("/data")
     self._typed_state.data = data
 
+
 # Sync (fine for quick operations)
 @action
 def increment_counter(self) -> None:
@@ -63,6 +65,7 @@ Connect actions to interactive components using the `on_click` prop:
 
 ```python
 from ContaraNAS.core.ui import Button
+
 
 class MyModule(Module):
     @action
@@ -83,9 +86,11 @@ When serialized, the action reference becomes:
 
 ```json
 {
-  "type": "button",
-  "label": "Do Something",
-  "on_click": {"__action__": "do_something"}
+	"type": "button",
+	"label": "Do Something",
+	"on_click": {
+		"__action__": "do_something"
+	}
 }
 ```
 
@@ -97,6 +102,7 @@ When you need to bind specific parameter values to an action at UI construction 
 
 ```python
 from ContaraNAS.core.action import ActionRef, action
+
 
 class SteamModule(Module):
     @action
@@ -173,10 +179,12 @@ def get_tile(self) -> Tile:
 # This will raise ValueError - method not decorated with @action
 ActionRef(self.some_regular_method, param="value")  # Error!
 
+
 # Correct usage
 @action
 async def my_action(self, name: str, count: int = 0) -> None:
     pass
+
 
 ActionRef(self.my_action, name="test", count=5)  # OK
 ```
@@ -193,6 +201,7 @@ async def update_name(self, name: str) -> None:
     """Update the name field"""
     if self._typed_state:
         self._typed_state.name = name
+
 
 @action
 async def set_count(self, count: int = 0) -> None:
@@ -219,6 +228,7 @@ form = Stack(
     ],
 )
 
+
 # In your action
 @action
 async def login(self, username: str = "", password: str = "") -> None:
@@ -236,11 +246,11 @@ Parameter values come from the frontend as strings or basic JSON types. Use type
 ```python
 @action
 async def set_settings(
-    self,
-    name: str = "",
-    count: int = 0,
-    enabled: bool = False,
-    ratio: float = 1.0,
+        self,
+        name: str = "",
+        count: int = 0,
+        enabled: bool = False,
+        ratio: float = 1.0,
 ) -> None:
     """Parameters are coerced to their annotated types"""
     pass
@@ -295,6 +305,7 @@ async def save_and_close(self):
 
     return CloseModal(modal_id="edit_form")
 
+
 # Or close whatever modal is open
 @action
 async def cancel(self):
@@ -315,6 +326,7 @@ async def save_settings(self):
         message="Settings saved successfully!",
         variant="success",
     )
+
 
 @action
 async def delete_item(self):
@@ -360,6 +372,7 @@ async def save_and_close(self) -> list:
         Notify(message="Saved!", variant="success"),
         CloseModal(modal_id="edit_form"),
     ]
+
 
 @action
 async def submit_form(self, **form_data) -> list:
@@ -464,6 +477,7 @@ class State(ModuleState):
     error: str | None = None
     loading: bool = False
 
+
 @action
 async def fetch_data(self) -> None:
     """Fetch with error handling"""
@@ -528,6 +542,7 @@ A practical example showing actions for Docker container management:
 from ContaraNAS.core.action import action, ActionRef, Notify, OpenModal, Refresh
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Button, Stack, Tile, Badge, Stat
+
 
 class DockerModule(Module):
     class State(ModuleState):

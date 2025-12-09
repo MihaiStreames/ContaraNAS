@@ -17,24 +17,24 @@ Button(label="Saving...", loading=True, disabled=True)
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Button text |
-| `on_click` | `Callable` or `None` | `None` | Action to call when clicked |
-| `variant` | `"primary"`, `"secondary"`, `"ghost"`, `"danger"` | `"primary"` | Visual style |
-| `size` | `"sm"`, `"md"`, `"lg"` | `"md"` | Button size |
-| `icon` | `str` or `None` | `None` | Lucide icon name |
-| `disabled` | `bool` | `False` | Disable the button |
-| `loading` | `bool` | `False` | Show loading spinner |
+| Prop       | Type                                              | Default     | Description                 |
+|------------|---------------------------------------------------|-------------|-----------------------------|
+| `label`    | `str`                                             | Required    | Button text                 |
+| `on_click` | `Callable` or `None`                              | `None`      | Action to call when clicked |
+| `variant`  | `"primary"`, `"secondary"`, `"ghost"`, `"danger"` | `"primary"` | Visual style                |
+| `size`     | `"sm"`, `"md"`, `"lg"`                            | `"md"`      | Button size                 |
+| `icon`     | `str` or `None`                                   | `None`      | Lucide icon name            |
+| `disabled` | `bool`                                            | `False`     | Disable the button          |
+| `loading`  | `bool`                                            | `False`     | Show loading spinner        |
 
 ### Variants
 
-| Variant | Use Case |
-|---------|----------|
-| `"primary"` | Main action, submit buttons |
-| `"secondary"` | Alternative actions, cancel buttons |
-| `"ghost"` | Subtle actions, links |
-| `"danger"` | Destructive actions (delete, remove) |
+| Variant       | Use Case                             |
+|---------------|--------------------------------------|
+| `"primary"`   | Main action, submit buttons          |
+| `"secondary"` | Alternative actions, cancel buttons  |
+| `"ghost"`     | Subtle actions, links                |
+| `"danger"`    | Destructive actions (delete, remove) |
 
 ---
 
@@ -53,14 +53,14 @@ Input(name="count", label="Count", input_type="number")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name (used in form submission) |
-| `label` | `str` or `None` | `None` | Label text above input |
-| `value` | `str` | `""` | Initial value |
-| `input_type` | `"text"`, `"password"`, `"email"`, `"number"` | `"text"` | Input type |
-| `placeholder` | `str` or `None` | `None` | Placeholder text |
-| `disabled` | `bool` | `False` | Disable the input |
+| Prop          | Type                                          | Default  | Description                          |
+|---------------|-----------------------------------------------|----------|--------------------------------------|
+| `name`        | `str`                                         | Required | Field name (used in form submission) |
+| `label`       | `str` or `None`                               | `None`   | Label text above input               |
+| `value`       | `str`                                         | `""`     | Initial value                        |
+| `input_type`  | `"text"`, `"password"`, `"email"`, `"number"` | `"text"` | Input type                           |
+| `placeholder` | `str` or `None`                               | `None`   | Placeholder text                     |
+| `disabled`    | `bool`                                        | `False`  | Disable the input                    |
 
 ---
 
@@ -84,20 +84,20 @@ Select(
 
 ### Select Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name |
-| `label` | `str` or `None` | `None` | Label text |
-| `options` | `list[SelectOption]` | Required | Available options |
-| `value` | `str` or `None` | `None` | Currently selected value |
-| `disabled` | `bool` | `False` | Disable the select |
+| Prop       | Type                 | Default  | Description              |
+|------------|----------------------|----------|--------------------------|
+| `name`     | `str`                | Required | Field name               |
+| `label`    | `str` or `None`      | `None`   | Label text               |
+| `options`  | `list[SelectOption]` | Required | Available options        |
+| `value`    | `str` or `None`      | `None`   | Currently selected value |
+| `disabled` | `bool`               | `False`  | Disable the select       |
 
 ### SelectOption Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop    | Type  | Default  | Description             |
+|---------|-------|----------|-------------------------|
 | `value` | `str` | Required | Value sent on selection |
-| `label` | `str` | Required | Display text |
+| `label` | `str` | Required | Display text            |
 
 ---
 
@@ -115,12 +115,12 @@ Toggle(name="feature", label="Experimental Feature", disabled=True)
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name |
-| `label` | `str` or `None` | `None` | Label text |
-| `checked` | `bool` | `False` | Whether toggle is on |
-| `disabled` | `bool` | `False` | Disable the toggle |
+| Prop       | Type            | Default  | Description          |
+|------------|-----------------|----------|----------------------|
+| `name`     | `str`           | Required | Field name           |
+| `label`    | `str` or `None` | `None`   | Label text           |
+| `checked`  | `bool`          | `False`  | Whether toggle is on |
+| `disabled` | `bool`          | `False`  | Disable the toggle   |
 
 ---
 
@@ -137,12 +137,12 @@ Checkbox(name="remember", label="Remember me", checked=True)
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `name` | `str` | Required | Field name |
-| `label` | `str` or `None` | `None` | Label text |
-| `checked` | `bool` | `False` | Whether checkbox is checked |
-| `disabled` | `bool` | `False` | Disable the checkbox |
+| Prop       | Type            | Default  | Description                 |
+|------------|-----------------|----------|-----------------------------|
+| `name`     | `str`           | Required | Field name                  |
+| `label`    | `str` or `None` | `None`   | Label text                  |
+| `checked`  | `bool`          | `False`  | Whether checkbox is checked |
+| `disabled` | `bool`          | `False`  | Disable the checkbox        |
 
 ### Toggle vs Checkbox
 
@@ -170,20 +170,20 @@ Tabs(
 
 ### Tabs Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `tabs` | `list[Tab]` | Required | List of Tab components |
-| `default_tab` | `str` or `None` | `None` | ID of tab to show by default |
-| `size` | `"sm"`, `"md"` | `"md"` | Tab button size |
+| Prop          | Type            | Default  | Description                  |
+|---------------|-----------------|----------|------------------------------|
+| `tabs`        | `list[Tab]`     | Required | List of Tab components       |
+| `default_tab` | `str` or `None` | `None`   | ID of tab to show by default |
+| `size`        | `"sm"`, `"md"`  | `"md"`   | Tab button size              |
 
 ### Tab Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `id` | `str` | Required | Unique identifier |
-| `label` | `str` | Required | Tab button text |
-| `icon` | `str` or `None` | `None` | Lucide icon name |
-| `children` | `list[Component]` | `[]` | Tab panel content |
+| Prop       | Type              | Default  | Description       |
+|------------|-------------------|----------|-------------------|
+| `id`       | `str`             | Required | Unique identifier |
+| `label`    | `str`             | Required | Tab button text   |
+| `icon`     | `str` or `None`   | `None`   | Lucide icon name  |
+| `children` | `list[Component]` | `[]`     | Tab panel content |
 
 ---
 

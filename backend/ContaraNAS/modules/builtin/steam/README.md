@@ -12,14 +12,14 @@ Monitors Steam game libraries and displays installed games.
 
 ## Services
 
-| Service | Purpose |
-|---------|---------|
-| `SteamLibraryService` | Find Steam path and library folders |
-| `SteamCacheService` | Cache manifest data for quick access |
+| Service                  | Purpose                               |
+|--------------------------|---------------------------------------|
+| `SteamLibraryService`    | Find Steam path and library folders   |
+| `SteamCacheService`      | Cache manifest data for quick access  |
 | `SteamGameLoaderService` | Parse ACF manifests into game objects |
-| `SteamImageService` | Download and cache game header images |
-| `SteamMonitoringService` | Watch for manifest file changes |
-| `SteamParsingService` | Parse VDF and ACF file formats |
+| `SteamImageService`      | Download and cache game header images |
+| `SteamMonitoringService` | Watch for manifest file changes       |
+| `SteamParsingService`    | Parse VDF and ACF file formats        |
 
 ## State
 
@@ -36,9 +36,9 @@ class State(ModuleState):
 
 ## Actions
 
-| Action | Description |
-|--------|-------------|
-| `refresh` | Manually rescan all libraries |
+| Action                       | Description                     |
+|------------------------------|---------------------------------|
+| `refresh`                    | Manually rescan all libraries   |
 | `open_library(library_path)` | Open modal for specific library |
 
 ## Platform Support

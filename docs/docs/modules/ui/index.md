@@ -42,16 +42,30 @@ tile = Tile(
 
 ```json
 {
-  "type": "tile",
-  "icon": "gamepad-2",
-  "title": "Steam",
-  "stats": [
-    {"type": "stat", "label": "Games", "value": 150},
-    {"type": "stat", "label": "Size", "value": "2.3 TB"}
-  ],
-  "actions": [
-    {"type": "button", "label": "Refresh", "on_click": {"__action__": "refresh"}}
-  ]
+	"type": "tile",
+	"icon": "gamepad-2",
+	"title": "Steam",
+	"stats": [
+		{
+			"type": "stat",
+			"label": "Games",
+			"value": 150
+		},
+		{
+			"type": "stat",
+			"label": "Size",
+			"value": "2.3 TB"
+		}
+	],
+	"actions": [
+		{
+			"type": "button",
+			"label": "Refresh",
+			"on_click": {
+				"__action__": "refresh"
+			}
+		}
+	]
 }
 ```
 
@@ -78,6 +92,7 @@ All components inherit from the `Component` base class:
 
 ```python
 from pydantic import BaseModel, ConfigDict
+
 
 class Component(BaseModel):
     """Base class for all UI components"""
@@ -158,9 +173,6 @@ from ContaraNAS.core.ui import (
 Every module provides a tile for the dashboard via `get_tile()`. See [Card Components - Tile](cards.md#tile) for the
 full Tile API and examples.
 
-!!! warning "Deprecation Notice"
-    The older `get_tile_data()` method that returns a dict is deprecated. Use `get_tile()` which returns a `Tile` component directly.
-
 ## Nesting Components
 
 Components can contain other components. The `children` prop accepts a list of components:
@@ -212,9 +224,11 @@ The method reference is serialized as:
 
 ```json
 {
-  "type": "button",
-  "label": "Do Something",
-  "on_click": {"__action__": "do_something"}
+	"type": "button",
+	"label": "Do Something",
+	"on_click": {
+		"__action__": "do_something"
+	}
 }
 ```
 

@@ -1,48 +1,33 @@
 {
-	"name": "sys_monitor",
-	"displayName": "System Monitor",
-	"version": "1.0.0",
-	"author": "MihaiStreames",
-	"description": "Real-time CPU, memory, and disk monitoring",
-	"icon": "Monitor",
-	"engine": {
-		"contaranas": "^0.1.0"
-	},
-	"platforms": [
-		"linux",
-		"windows"
-	],
-	"dependencies": {
-		"python": {
-			"psutil": ">=7.1.3"
-		},
-		"python_platform": {
-			"windows": [
-				"wmi>=1.5.1",
-				"pywin32>=311"
-			]
-		},
-		"system": [
-			"dmidecode"
-		]
-	},
-	"capabilities": {
-		"websocket": true,
-		"dashboard": true,
-		"detailPage": false,
-		"settings": false
-	},
-	"category": "monitoring",
-	"tags": [
-		"cpu",
-		"memory",
-		"disk",
-		"monitoring",
-		"hardware",
-		"system"
-	],
-	"homepage": "https://github.com/MihaiStreames/ContaraNAS",
-	"repository": "https://github.com/MihaiStreames/ContaraNAS",
-	"source": "builtin",
-	"requires_network": false
+  "name": "sys_monitor",
+  "displayName": "System Monitor",
+  "version": "1.0.0",
+  "author": "MihaiStreames",
+  "description": "Real-time CPU, memory, and disk monitoring",
+  "icon": "Monitor",
+  "engine": {
+    "contaranas": "^0.1.0"
+  },
+  "platforms": ["linux", "windows"],
+  "dependencies": {
+    "python": {
+      "psutil": ">=7.1.3"
+    },
+    "python_platform": {
+      "windows": ["wmi>=1.5.1", "pywin32>=311"]
+    },
+    "system": ["dmidecode"]
+  },
+  "capabilities": {
+    "websocket": true,
+    "dashboard": true,
+    "detailPage": false,
+    "settings": false
+  },
+  "category": "monitoring",
+  "tags": ["cpu", "memory", "disk", "monitoring", "hardware", "system"],
+  "homepage": "https://github.com/MihaiStreames/ContaraNAS",
+  "repository": "https://github.com/MihaiStreames/ContaraNAS",
+  "source": "builtin",
+  "requires_network": false
 }

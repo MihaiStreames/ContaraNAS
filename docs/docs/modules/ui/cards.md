@@ -24,12 +24,12 @@ card = Card(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `str` or `None` | `None` | Lucide icon name for the header |
-| `title` | `str` or `None` | `None` | Card title text |
-| `children` | `list[Component]` | `[]` | Main content components |
-| `footer` | `list[Component]` or `None` | `None` | Footer components (typically buttons) |
+| Prop       | Type                        | Default | Description                           |
+|------------|-----------------------------|---------|---------------------------------------|
+| `icon`     | `str` or `None`             | `None`  | Lucide icon name for the header       |
+| `title`    | `str` or `None`             | `None`  | Card title text                       |
+| `children` | `list[Component]`           | `[]`    | Main content components               |
+| `footer`   | `list[Component]` or `None` | `None`  | Footer components (typically buttons) |
 
 ### Examples
 
@@ -99,15 +99,15 @@ tile = Tile(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `str` | Required | Lucide icon name for the tile |
-| `title` | `str` | Required | Module display name |
-| `colspan` | `1`, `2`, `3` | `1` | Number of grid columns to span |
-| `badge` | `Badge` or `None` | `None` | Status badge next to title |
-| `stats` | `list[Stat]` | `[]` | Key metrics to display |
-| `content` | `list[Component]` or `None` | `None` | Additional content below stats |
-| `actions` | `list[Component]` | `[]` | Action buttons |
+| Prop      | Type                        | Default  | Description                    |
+|-----------|-----------------------------|----------|--------------------------------|
+| `icon`    | `str`                       | Required | Lucide icon name for the tile  |
+| `title`   | `str`                       | Required | Module display name            |
+| `colspan` | `1`, `2`, `3`               | `1`      | Number of grid columns to span |
+| `badge`   | `Badge` or `None`           | `None`   | Status badge next to title     |
+| `stats`   | `list[Stat]`                | `[]`     | Key metrics to display         |
+| `content` | `list[Component]` or `None` | `None`   | Additional content below stats |
+| `actions` | `list[Component]`           | `[]`     | Action buttons                 |
 
 ### Colspan
 
@@ -150,28 +150,25 @@ class MyModule(Module):
         )
 ```
 
-!!! warning "Deprecation Notice"
-    The older `get_tile_data()` method that returns a dict is deprecated. Use `get_tile()` which returns a `Tile` component directly.
-
 ### Badge Variants
 
 Use badges to show module status:
 
 ```python
 # Module is active/running
-badge=Badge(text="Active", variant="success")
+badge = Badge(text="Active", variant="success")
 
 # Module has warnings
-badge=Badge(text="Warning", variant="warning")
+badge = Badge(text="Warning", variant="warning")
 
 # Module has errors
-badge=Badge(text="Error", variant="error")
+badge = Badge(text="Error", variant="error")
 
 # Module is syncing/updating
-badge=Badge(text="Syncing", variant="info")
+badge = Badge(text="Syncing", variant="info")
 
 # Module is disabled
-badge=Badge(text="Disabled", variant="default")
+badge = Badge(text="Disabled", variant="default")
 ```
 
 ### Content Section
@@ -221,10 +218,10 @@ stat = Stat(label="Usage", value="85%")
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `str` | Required | Description of the statistic |
-| `value` | `str`, `int`, `float` | Required | The statistic value |
+| Prop    | Type                  | Default  | Description                  |
+|---------|-----------------------|----------|------------------------------|
+| `label` | `str`                 | Required | Description of the statistic |
+| `value` | `str`, `int`, `float` | Required | The statistic value          |
 
 ### Formatting Values
 
@@ -240,6 +237,7 @@ Stat(label="Percentage", value=f"{percentage:.1f}%")
 # String
 Stat(label="Status", value="Healthy")
 
+
 # Size formatting
 def format_size(bytes: int) -> str:
     for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
@@ -247,6 +245,7 @@ def format_size(bytes: int) -> str:
             return f"{bytes:.1f} {unit}"
         bytes /= 1024
     return f"{bytes:.1f} PB"
+
 
 Stat(label="Size", value=format_size(state.size_bytes))
 ```

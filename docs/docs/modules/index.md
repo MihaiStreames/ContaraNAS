@@ -68,6 +68,7 @@ Here is a minimal working module:
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.action import action
 
+
 class MyModule(Module):
     """A simple example module"""
 
@@ -107,17 +108,21 @@ class MyModule(Module):
 ```json
 // my_module/module.json
 {
-  "name": "my_module",
-  "displayName": "My Module",
-  "version": "1.0.0",
-  "author": "Your Name",
-  "description": "A simple example module",
-  "icon": "wrench",
-  "engine": {
-    "contaranas": "^0.1.0"
-  },
-  "platforms": ["linux", "windows", "darwin"],
-  "dependencies": {}
+	"name": "my_module",
+	"displayName": "My Module",
+	"version": "1.0.0",
+	"author": "Your Name",
+	"description": "A simple example module",
+	"icon": "wrench",
+	"engine": {
+		"contaranas": "^0.1.0"
+	},
+	"platforms": [
+		"linux",
+		"windows",
+		"darwin"
+	],
+	"dependencies": {}
 }
 ```
 

@@ -31,13 +31,13 @@ modal = Modal(
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `id` | `str` | Required | Unique identifier for the modal |
-| `title` | `str` | Required | Modal header title |
-| `children` | `list[Component]` | `[]` | Main content components |
-| `footer` | `list[Component]` or `None` | `None` | Footer components (usually buttons) |
-| `closable` | `bool` | `True` | Show close button in header |
+| Prop       | Type                        | Default  | Description                         |
+|------------|-----------------------------|----------|-------------------------------------|
+| `id`       | `str`                       | Required | Unique identifier for the modal     |
+| `title`    | `str`                       | Required | Modal header title                  |
+| `children` | `list[Component]`           | `[]`     | Main content components             |
+| `footer`   | `list[Component]` or `None` | `None`   | Footer components (usually buttons) |
+| `closable` | `bool`                      | `True`   | Show close button in header         |
 
 ## Opening Modals
 
@@ -45,6 +45,7 @@ To open a modal, return an `OpenModal` result from an action:
 
 ```python
 from ContaraNAS.core.action import action, OpenModal
+
 
 class MyModule(Module):
     @action
@@ -82,6 +83,7 @@ Return `CloseModal` from an action:
 
 ```python
 from ContaraNAS.core.action import action, CloseModal, Notify
+
 
 @action
 async def save_and_close(self) -> list:

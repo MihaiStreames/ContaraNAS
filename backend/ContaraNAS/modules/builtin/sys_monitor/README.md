@@ -12,12 +12,12 @@ Monitors CPU, memory, and disk usage with real-time updates.
 
 ## Services
 
-| Service | Purpose |
-|---------|---------|
-| `CPUService` | CPU info, usage, temperature |
-| `MemService` | Memory usage, RAM details |
-| `DiskService` | Disk space, I/O statistics |
-| `SysMonitorMonitoringService` | Periodic data collection |
+| Service                       | Purpose                      |
+|-------------------------------|------------------------------|
+| `CPUService`                  | CPU info, usage, temperature |
+| `MemService`                  | Memory usage, RAM details    |
+| `DiskService`                 | Disk space, I/O statistics   |
+| `SysMonitorMonitoringService` | Periodic data collection     |
 
 ## State
 
@@ -33,8 +33,8 @@ class State(ModuleState):
 
 ## Actions
 
-| Action | Description |
-|--------|-------------|
+| Action    | Description               |
+|-----------|---------------------------|
 | `refresh` | Manually update all stats |
 
 ## Platform Support
@@ -46,9 +46,9 @@ Services use factory pattern to select platform-specific implementations:
 
 ## System Dependencies
 
-| Dependency | Required | Purpose |
-|------------|----------|---------|
-| dmidecode | Optional | RAM module details on Linux |
+| Dependency | Required | Purpose                     |
+|------------|----------|-----------------------------|
+| dmidecode  | Optional | RAM module details on Linux |
 
 ## Files
 

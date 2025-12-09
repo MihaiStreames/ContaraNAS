@@ -18,6 +18,7 @@ State is defined as an inner class named `State` that inherits from `ModuleState
 ```python
 from ContaraNAS.core.module import Module, ModuleState
 
+
 class MyModule(Module):
     class State(ModuleState):
         # Define your state fields here
@@ -89,6 +90,7 @@ The `_typed_state` attribute can be `None` if your module doesn't define a `Stat
 if self._typed_state:
     self._typed_state.counter += 1
 
+
 # Or use a property for cleaner access
 @property
 def state(self) -> "MyModule.State":
@@ -116,6 +118,7 @@ Pydantic validates assignments at runtime. If you assign an invalid type, you'll
 ```python
 class State(ModuleState):
     count: int = 0
+
 
 # This will raise a ValidationError
 self._typed_state.count = "not a number"
@@ -193,11 +196,13 @@ async def refresh(self):
     self._typed_state.data = data
     self._typed_state.commit()
 
+
 # After processing user input
 @action
 async def save_settings(self, **settings):
     self._typed_state.settings = settings
     self._typed_state.commit()
+
 
 # After a background task updates state
 async def on_file_changed(self, path: str):
@@ -251,6 +256,7 @@ For complex types, you can override serialization:
 from datetime import datetime
 from pydantic import field_serializer
 
+
 class State(ModuleState):
     last_updated: datetime | None = None
 
@@ -273,6 +279,7 @@ A practical example showing state for disk/volume monitoring with history tracki
 from datetime import datetime
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Tile, Stat, Progress, LineChart, Stack
+
 
 class DiskModule(Module):
     class State(ModuleState):
