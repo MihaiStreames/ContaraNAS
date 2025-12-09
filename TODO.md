@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
-> **Estimated time:** 2-3 weeks remaining
-> **Status:** In Progress (Phase 7 Complete)
+> **Estimated time:** 1-2 weeks remaining
+> **Status:** In Progress (Phase 9 Complete)
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -328,53 +328,62 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 9.1 Setup
 
-- [ ] Create `frontend/src/lib/ui/` directory structure
-- [ ] Import generated types
-- [ ] Set up component registry pattern
+- [x] Create `frontend/src/lib/ui/` directory structure
+- [x] Import generated types
+- [x] Set up component registry pattern
+- [x] Extract shared CSS to `components.css`
+- [x] Create `+layout.svelte` for global CSS imports
 
 ### 9.2 Layout components
 
-- [ ] `Stack.svelte` (flex container, direction, gap, align, justify)
-- [ ] `Grid.svelte` (CSS grid, columns, gap)
+- [x] `Stack.svelte` (flex container, direction, gap, align, justify)
+- [x] `Grid.svelte` (CSS grid, columns, gap)
 
 ### 9.3 Card components
 
-- [ ] `Card.svelte` (icon, title, content, footer)
-- [ ] `Tile.svelte` (module tile: icon, title, badge, stats, content, actions)
-- [ ] `Stat.svelte` (inline stat for tiles: label, value)
-- [ ] `StatCard.svelte` (standalone stat: label, value, icon, color, trend)
+- [x] `Card.svelte` (icon, title, content, footer)
+- [x] `Tile.svelte` (module tile: icon, title, badge, stats, content, actions)
+- [x] `Stat.svelte` (inline stat for tiles: label, value)
+- [x] `StatCard.svelte` (standalone stat: label, value, icon, color, trend)
 
 ### 9.4 Data display components
 
-- [ ] `Text.svelte` (body, secondary, muted, code variants)
-- [ ] `Progress.svelte` (value, max, label, sublabel, color)
-- [ ] `Badge.svelte` (default, primary, success, warning, error, info)
-- [ ] `Table.svelte` (columns, data, empty_message)
+- [x] `Text.svelte` (body, secondary, muted, code variants)
+- [x] `Progress.svelte` (value, max, label, sublabel, color)
+- [x] `Badge.svelte` (default, primary, success, warning, error, info)
+- [x] `Table.svelte` (columns, data, empty_message)
 
 ### 9.5 Interactive components
 
-- [ ] `Button.svelte` (primary, secondary, ghost, danger + sizes + icon + loading)
-- [ ] `Input.svelte` (text, password, email, number)
-- [ ] `Select.svelte` (options, value)
-- [ ] `Toggle.svelte` (switch)
-- [ ] `Checkbox.svelte`
+- [x] `Button.svelte` (primary, secondary, ghost, danger + sizes + icon + loading)
+- [x] `Input.svelte` (text, password, email, number)
+- [x] `Select.svelte` (options, value)
+- [x] `Toggle.svelte` (switch)
+- [x] `Checkbox.svelte`
 
 ### 9.6 Modal system
 
-- [ ] `Modal.svelte` (id, title, children, footer, closable)
-- [ ] Modal state management (open/close)
-- [ ] Backdrop and focus trap
+- [x] `Modal.svelte` (id, title, children, footer, closable)
+- [x] Modal state management (open/close)
+- [x] Backdrop and ESC key handling
 
 ### 9.7 Feedback components
 
-- [ ] `Alert.svelte` (info, success, warning, error + optional title)
-- [ ] `Spinner.svelte` (sm, md, lg + optional label)
-- [ ] Notification toast system
+- [x] `Alert.svelte` (info, success, warning, error + optional title)
+- [x] `Spinner.svelte` (sm, md, lg + optional label)
+- [ ] Notification toast system (deferred to Phase 10)
 
 ### 9.8 Component registry
 
-- [ ] Create `registry.ts` mapping type names to components
-- [ ] Handle unknown component types gracefully
+- [x] Create `registry.ts` mapping type names to components
+- [x] Create `ComponentRenderer.svelte` for dynamic rendering
+- [x] Create `Icon.svelte` for dynamic icon loading
+- [x] Handle unknown component types gracefully
+
+### 9.9 Refactoring
+
+- [x] Refactor `DesignPlayground.svelte` to use imported components
+- [x] Verify build succeeds
 
 **Deliverable:** All Svelte components built and styled.
 

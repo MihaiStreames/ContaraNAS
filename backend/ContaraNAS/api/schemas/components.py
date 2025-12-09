@@ -213,7 +213,26 @@ class SpinnerSchema(BaseModel):
 
 
 ComponentSchema = Annotated[
-    StackSchema | GridSchema | CardSchema | TileSchema | StatSchema | TextSchema | StatCardSchema | ProgressSchema | BadgeSchema | TableSchema | TableColumnSchema | ButtonSchema | InputSchema | SelectSchema | SelectOptionSchema | ToggleSchema | CheckboxSchema | ModalSchema | AlertSchema | SpinnerSchema,
+    StackSchema
+    | GridSchema
+    | CardSchema
+    | TileSchema
+    | StatSchema
+    | TextSchema
+    | StatCardSchema
+    | ProgressSchema
+    | BadgeSchema
+    | TableSchema
+    | TableColumnSchema
+    | ButtonSchema
+    | InputSchema
+    | SelectSchema
+    | SelectOptionSchema
+    | ToggleSchema
+    | CheckboxSchema
+    | ModalSchema
+    | AlertSchema
+    | SpinnerSchema,
     Field(discriminator="type"),
 ]
 
