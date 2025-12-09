@@ -1,7 +1,7 @@
 import hashlib
 
+from ContaraNAS.core import settings
 from ContaraNAS.core.ui import (
-    Grid,
     Modal,
     Stack,
     Stat,
@@ -11,6 +11,11 @@ from ContaraNAS.core.ui import (
 )
 
 from .helpers import format_bytes
+
+
+def _get_image_path(app_id: int) -> str:
+    """Get the file path for a cached game image"""
+    return str(settings.cache_dir / "steam" / "images" / f"{app_id}.jpg")
 
 
 def get_library_modal_id(library_path: str) -> str:
@@ -28,13 +33,10 @@ def build_library_modal(library: dict, games: list[dict]) -> Modal:
     # Filter games for this library
     library_games = [g for g in games if g.get("library_path") == path]
 
-    # Short path for display
-    short_path = path.split("/")[-1] if "/" in path else path
-
     if not library_games:
         return Modal(
             id=modal_id,
-            title=f"Library: {short_path}",
+            title=path,  # Full path as title
             size="lg",
             children=[Text(content="No games found in this library", variant="muted")],
         )
@@ -43,16 +45,20 @@ def build_library_modal(library: dict, games: list[dict]) -> Modal:
     games_size = library.get("total_games_size", 0)
     drive_free = library.get("drive_free", 0)
 
-    # Build game table - default sorted by size (largest first)
+    # Build table columns with image support
     columns = [
-        TableColumn(key="name", label="Game", width="50%"),
-        TableColumn(key="size", label="Size", align="right"),
-        TableColumn(key="last_played", label="Last Played", align="right"),
+        TableColumn(key="image", label="", render="image", sortable=False),
+        TableColumn(key="name", label="Game"),
+        TableColumn(key="size", label="Size"),
+        TableColumn(key="last_played", label="Last Played"),
     ]
 
-    # Format game data for table, sorted by size descending
+    # Build table data (use _sort suffix for sortable values)
     table_data = []
-    for game in sorted(library_games, key=lambda g: g.get("total_size", 0), reverse=True):
+    for game in library_games:
+        app_id = game.get("app_id")
+        game_size = game.get("total_size", 0)
+
         last_played = game.get("last_played_date")
         if last_played:
             last_played_str = last_played if isinstance(last_played, str) else "—"
@@ -61,36 +67,44 @@ def build_library_modal(library: dict, games: list[dict]) -> Modal:
 
         table_data.append(
             {
+                "image": _get_image_path(app_id),
                 "name": game.get("name", "Unknown"),
-                "size": format_bytes(game.get("total_size", 0)),
+                "size": format_bytes(game_size),
+                "size_sort": game_size,  # Raw bytes for sorting
                 "last_played": last_played_str,
             }
         )
 
     return Modal(
         id=modal_id,
-        title=f"Library: {short_path}",
+        title=path,  # Full path as title
         size="lg",
         children=[
             Stack(
                 direction="vertical",
                 gap="4",
                 children=[
-                    # Summary stats
-                    Grid(
-                        columns=3,
-                        gap="3",
+                    # Summary stats - evenly distributed across full width
+                    Stack(
+                        direction="horizontal",
+                        gap="6",
+                        justify="around",
+                        align="center",
+                        grow=True,
                         children=[
                             Stat(label="Games", value=str(len(library_games))),
                             Stat(label="Total Size", value=format_bytes(games_size)),
                             Stat(label="Free Space", value=format_bytes(drive_free)),
                         ],
                     ),
-                    # Games table
+                    # Games table with images, sortable by size (default)
                     Table(
                         columns=columns,
                         data=table_data,
                         empty_message="No games in this library",
+                        sortable=True,
+                        default_sort_key="size",
+                        default_sort_desc=True,
                     ),
                 ],
             ),

@@ -2,6 +2,7 @@ from .base import Component
 from .card import Card, Stat, Tile
 from .display import (
     Badge,
+    Image,
     LineChart,
     Progress,
     SegmentedProgress,
@@ -39,6 +40,7 @@ __all__ = [
     "Badge",
     "Table",
     "TableColumn",
+    "Image",
     # Interactive
     "Button",
     "Input",

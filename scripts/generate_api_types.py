@@ -20,6 +20,7 @@ UI_COMPONENTS = {
         "SegmentedProgressSchema",
         "SegmentedProgressSegmentSchema",
         "LineChartSchema",
+        "ImageSchema",
         "BadgeSchema",
         "TableSchema",
         "TableColumnSchema",

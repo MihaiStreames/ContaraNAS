@@ -909,6 +909,9 @@
                   "$ref": "#/components/schemas/LineChartSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/ImageSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -960,6 +963,7 @@
                   "card": "#/components/schemas/CardSchema",
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
+                  "image": "#/components/schemas/ImageSchema",
                   "input": "#/components/schemas/InputSchema",
                   "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
@@ -1029,6 +1033,9 @@
                       "$ref": "#/components/schemas/LineChartSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/ImageSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/BadgeSchema"
                     },
                     {
@@ -1080,6 +1087,7 @@
                       "card": "#/components/schemas/CardSchema",
                       "checkbox": "#/components/schemas/CheckboxSchema",
                       "grid": "#/components/schemas/GridSchema",
+                      "image": "#/components/schemas/ImageSchema",
                       "input": "#/components/schemas/InputSchema",
                       "line_chart": "#/components/schemas/LineChartSchema",
                       "modal": "#/components/schemas/ModalSchema",
@@ -1243,6 +1251,9 @@
                   "$ref": "#/components/schemas/LineChartSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/ImageSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -1294,6 +1305,7 @@
                   "card": "#/components/schemas/CardSchema",
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
+                  "image": "#/components/schemas/ImageSchema",
                   "input": "#/components/schemas/InputSchema",
                   "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
@@ -1365,6 +1377,64 @@
         ],
         "title": "HealthResponse",
         "description": "Health check response"
+      },
+      "ImageSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "image",
+            "title": "Type",
+            "default": "image"
+          },
+          "src": {
+            "type": "string",
+            "title": "Src"
+          },
+          "alt": {
+            "type": "string",
+            "title": "Alt",
+            "default": ""
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width"
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height"
+          },
+          "border_radius": {
+            "type": "string",
+            "enum": [
+              "none",
+              "sm",
+              "md",
+              "lg"
+            ],
+            "title": "Border Radius",
+            "default": "sm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "src"
+        ],
+        "title": "ImageSchema",
+        "description": "Image display component"
       },
       "InfoResponse": {
         "properties": {
@@ -1586,6 +1656,9 @@
                   "$ref": "#/components/schemas/LineChartSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/ImageSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -1637,6 +1710,7 @@
                   "card": "#/components/schemas/CardSchema",
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
+                  "image": "#/components/schemas/ImageSchema",
                   "input": "#/components/schemas/InputSchema",
                   "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
@@ -1706,6 +1780,9 @@
                       "$ref": "#/components/schemas/LineChartSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/ImageSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/BadgeSchema"
                     },
                     {
@@ -1757,6 +1834,7 @@
                       "card": "#/components/schemas/CardSchema",
                       "checkbox": "#/components/schemas/CheckboxSchema",
                       "grid": "#/components/schemas/GridSchema",
+                      "image": "#/components/schemas/ImageSchema",
                       "input": "#/components/schemas/InputSchema",
                       "line_chart": "#/components/schemas/LineChartSchema",
                       "modal": "#/components/schemas/ModalSchema",
@@ -2442,6 +2520,9 @@
                   "$ref": "#/components/schemas/LineChartSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/ImageSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -2493,6 +2574,7 @@
                   "card": "#/components/schemas/CardSchema",
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
+                  "image": "#/components/schemas/ImageSchema",
                   "input": "#/components/schemas/InputSchema",
                   "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
@@ -2519,6 +2601,16 @@
             "type": "array",
             "title": "Children",
             "default": []
+          },
+          "on_click": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ActionRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -2763,6 +2855,9 @@
                   "$ref": "#/components/schemas/LineChartSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/ImageSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -2814,6 +2909,7 @@
                   "card": "#/components/schemas/CardSchema",
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
+                  "image": "#/components/schemas/ImageSchema",
                   "input": "#/components/schemas/InputSchema",
                   "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",
@@ -2886,6 +2982,20 @@
             ],
             "title": "Align",
             "default": "left"
+          },
+          "render": {
+            "type": "string",
+            "enum": [
+              "text",
+              "image"
+            ],
+            "title": "Render",
+            "default": "text"
+          },
+          "sortable": {
+            "type": "boolean",
+            "title": "Sortable",
+            "default": true
           }
         },
         "type": "object",
@@ -2923,6 +3033,27 @@
             "type": "string",
             "title": "Empty Message",
             "default": "No data"
+          },
+          "sortable": {
+            "type": "boolean",
+            "title": "Sortable",
+            "default": false
+          },
+          "default_sort_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Sort Key"
+          },
+          "default_sort_desc": {
+            "type": "boolean",
+            "title": "Default Sort Desc",
+            "default": true
           }
         },
         "type": "object",
@@ -3114,6 +3245,9 @@
                       "$ref": "#/components/schemas/LineChartSchema"
                     },
                     {
+                      "$ref": "#/components/schemas/ImageSchema"
+                    },
+                    {
                       "$ref": "#/components/schemas/BadgeSchema"
                     },
                     {
@@ -3165,6 +3299,7 @@
                       "card": "#/components/schemas/CardSchema",
                       "checkbox": "#/components/schemas/CheckboxSchema",
                       "grid": "#/components/schemas/GridSchema",
+                      "image": "#/components/schemas/ImageSchema",
                       "input": "#/components/schemas/InputSchema",
                       "line_chart": "#/components/schemas/LineChartSchema",
                       "modal": "#/components/schemas/ModalSchema",
@@ -3236,6 +3371,9 @@
                   "$ref": "#/components/schemas/LineChartSchema"
                 },
                 {
+                  "$ref": "#/components/schemas/ImageSchema"
+                },
+                {
                   "$ref": "#/components/schemas/BadgeSchema"
                 },
                 {
@@ -3287,6 +3425,7 @@
                   "card": "#/components/schemas/CardSchema",
                   "checkbox": "#/components/schemas/CheckboxSchema",
                   "grid": "#/components/schemas/GridSchema",
+                  "image": "#/components/schemas/ImageSchema",
                   "input": "#/components/schemas/InputSchema",
                   "line_chart": "#/components/schemas/LineChartSchema",
                   "modal": "#/components/schemas/ModalSchema",

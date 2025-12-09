@@ -13,12 +13,16 @@
 		"windows": [
 			{
 				"title": "ContaraNAS",
-				"width": 800,
-				"height": 600
+				"width": 1280,
+				"height": 720
 			}
 		],
 		"security": {
-			"csp": null
+			"csp": null,
+			"assetProtocol": {
+				"enable": true,
+				"scope": ["$CACHE/**", "$HOME/.cache/**", "/home/**/.cache/**"]
+			}
 		}
 	},
 	"bundle": {

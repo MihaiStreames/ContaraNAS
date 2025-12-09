@@ -17,6 +17,7 @@ import Badge from "./display/Badge.svelte";
 import Progress from "./display/Progress.svelte";
 import SegmentedProgress from "./display/SegmentedProgress.svelte";
 import LineChart from "./display/LineChart.svelte";
+import Image from "./display/Image.svelte";
 import Table from "./display/Table.svelte";
 import StatSmall from "./display/StatSmall.svelte";
 
@@ -56,6 +57,7 @@ export const componentRegistry: Record<ComponentType, Component<any>> = {
   progress: Progress,
   segmented_progress: SegmentedProgress,
   line_chart: LineChart,
+  image: Image,
   table: Table,
   stat_small: StatSmall,
 

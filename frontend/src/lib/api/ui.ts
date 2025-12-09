@@ -25,6 +25,7 @@ export type ProgressSchema = components["schemas"]["ProgressSchema"];
 export type SegmentedProgressSchema = components["schemas"]["SegmentedProgressSchema"];
 export type SegmentedProgressSegmentSchema = components["schemas"]["SegmentedProgressSegmentSchema"];
 export type LineChartSchema = components["schemas"]["LineChartSchema"];
+export type ImageSchema = components["schemas"]["ImageSchema"];
 export type BadgeSchema = components["schemas"]["BadgeSchema"];
 export type TableSchema = components["schemas"]["TableSchema"];
 export type TableColumnSchema = components["schemas"]["TableColumnSchema"];
@@ -60,6 +61,7 @@ export type ComponentSchema =
 	| SegmentedProgressSchema
 	| SegmentedProgressSegmentSchema
 	| LineChartSchema
+	| ImageSchema
 	| BadgeSchema
 	| TableSchema
 	| TableColumnSchema

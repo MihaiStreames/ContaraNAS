@@ -65,6 +65,8 @@ class TableColumn(Component):
     label: str
     width: str | None = None
     align: Literal["left", "center", "right"] = "left"
+    render: Literal["text", "image"] = "text"  # How to render cell values
+    sortable: bool = True  # Whether this column can be sorted
 
 
 class Table(Component):
@@ -75,6 +77,9 @@ class Table(Component):
     columns: list[TableColumn]
     data: list[dict[str, Any]]
     empty_message: str = "No data"
+    sortable: bool = False  # Enable column sorting
+    default_sort_key: str | None = None  # Column key to sort by initially
+    default_sort_desc: bool = True  # Sort descending by default
 
 
 class SegmentedProgressSegment(Component):
@@ -110,3 +115,15 @@ class LineChart(Component):
     color: Literal["default", "primary", "success", "warning", "error"] = "primary"
     fill: bool = True  # Fill area under line
     label: str | None = None  # Current value label overlay
+
+
+class Image(Component):
+    """Image display component"""
+
+    _type: ClassVar[str] = "image"
+
+    src: str  # Image URL
+    alt: str = ""  # Alt text for accessibility
+    width: int | None = None  # Width in pixels
+    height: int | None = None  # Height in pixels
+    border_radius: Literal["none", "sm", "md", "lg"] = "sm"

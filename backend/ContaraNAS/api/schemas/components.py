@@ -24,6 +24,7 @@ class StackSchema(BaseModel):
     justify: Literal["start", "center", "end", "between", "around"] = "start"
     grow: bool = False  # If True, children will grow to fill available space
     children: list["ComponentSchema"] = []
+    on_click: ActionRef | None = None  # Optional click handler (makes stack clickable)
 
 
 class GridSchema(BaseModel):
@@ -124,6 +125,8 @@ class TableColumnSchema(BaseModel):
     label: str
     width: str | None = None
     align: Literal["left", "center", "right"] = "left"
+    render: Literal["text", "image"] = "text"  # How to render cell values
+    sortable: bool = True  # Whether this column can be sorted
 
 
 class TableSchema(BaseModel):
@@ -133,6 +136,9 @@ class TableSchema(BaseModel):
     columns: list[TableColumnSchema]
     data: list[dict[str, Any]]
     empty_message: str = "No data"
+    sortable: bool = False  # Enable column sorting
+    default_sort_key: str | None = None  # Column key to sort by initially
+    default_sort_desc: bool = True  # Sort descending by default
 
 
 class ButtonSchema(BaseModel):
@@ -261,6 +267,17 @@ class LineChartSchema(BaseModel):
     label: str | None = None  # Current value label overlay
 
 
+class ImageSchema(BaseModel):
+    """Image display component"""
+
+    type: Literal["image"] = "image"
+    src: str  # Image URL
+    alt: str = ""  # Alt text for accessibility
+    width: int | None = None  # Width in pixels
+    height: int | None = None  # Height in pixels
+    border_radius: Literal["none", "sm", "md", "lg"] = "sm"
+
+
 class TabSchema(BaseModel):
     """Single tab within Tabs component"""
 
@@ -293,6 +310,7 @@ ComponentSchema = Annotated[
     | SegmentedProgressSchema
     | SegmentedProgressSegmentSchema
     | LineChartSchema
+    | ImageSchema
     | BadgeSchema
     | TableSchema
     | TableColumnSchema

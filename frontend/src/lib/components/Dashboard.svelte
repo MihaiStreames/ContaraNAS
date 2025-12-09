@@ -296,6 +296,7 @@
   <!-- Modals -->
   {#if activeModalData}
     {@const { module: modalModule, modal } = activeModalData}
+    {@const hasFooter = modal.footer && modal.footer.length > 0}
     <Modal
       open={true}
       id={modal.id}
@@ -315,8 +316,8 @@
           {/each}
         {/if}
       {/snippet}
-      {#snippet footer()}
-        {#if modal.footer}
+      {#if hasFooter}
+        {#snippet footer()}
           {#each modal.footer as footerChild}
             <ModuleRenderer
               moduleName={modalModule}
@@ -324,8 +325,8 @@
               onAction={handleAction}
             />
           {/each}
-        {/if}
-      {/snippet}
+        {/snippet}
+      {/if}
     </Modal>
   {/if}
 

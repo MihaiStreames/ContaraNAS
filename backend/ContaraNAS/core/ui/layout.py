@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import ClassVar, Literal
 
 from .base import Component
@@ -14,6 +15,7 @@ class Stack(Component):
     justify: Literal["start", "center", "end", "between", "around"] = "start"
     grow: bool = False  # If True, children will grow to fill available space (flex: 1)
     children: list[Component] = []
+    on_click: Callable | None = None  # Optional click handler (makes stack clickable)
 
 
 class Grid(Component):

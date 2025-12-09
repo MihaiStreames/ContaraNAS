@@ -1,7 +1,6 @@
 from ContaraNAS.core.ui import (
     Alert,
     Badge,
-    Button,
     SegmentedProgress,
     SegmentedProgressSegment,
     Stack,
@@ -10,7 +9,7 @@ from ContaraNAS.core.ui import (
     Tile,
 )
 
-from .helpers import format_bytes
+from .helpers import format_bytes, get_mountpoint
 
 
 def build_tile(
@@ -52,46 +51,51 @@ def build_tile(
         steam_total = games_size + shader_size + workshop_size
         other_used = drive_used - steam_total if drive_used > steam_total else 0
 
-        # Build segments for the segmented progress bar
+        # Build segments for the segmented progress bar (with sizes in labels)
         segments = []
         if games_size > 0:
             segments.append(
                 SegmentedProgressSegment(
-                    value=games_size, color="var(--color-primary)", label="Games"
+                    value=games_size,
+                    color="var(--color-primary)",
+                    label=f"Games ({format_bytes(games_size)})",
                 )
             )
         if shader_size > 0:
             segments.append(
                 SegmentedProgressSegment(
                     value=shader_size,
-                    color="#9333ea",
-                    label="Shaders",  # Purple
+                    color="#9333ea",  # Purple
+                    label=f"Shaders ({format_bytes(shader_size)})",
                 )
             )
         if workshop_size > 0:
             segments.append(
                 SegmentedProgressSegment(
                     value=workshop_size,
-                    color="#14b8a6",
-                    label="Workshop",  # Teal
+                    color="#14b8a6",  # Teal
+                    label=f"Workshop ({format_bytes(workshop_size)})",
                 )
             )
         if other_used > 0:
             segments.append(
-                SegmentedProgressSegment(value=other_used, color="var(--text-muted)", label="Other")
+                SegmentedProgressSegment(
+                    value=other_used,
+                    color="var(--text-muted)",
+                    label=f"Other ({format_bytes(other_used)})",
+                )
             )
 
-        # Get a short display name for the path
-        short_path = path.split("/")[-1] if "/" in path else path
-        if len(short_path) > 20:
-            short_path = "..." + short_path[-17:]
+        # Get mountpoint for display (e.g., "C:/" or "/home")
+        mountpoint = get_mountpoint(path)
 
         action = open_library_actions.get(path)
 
         library_content.append(
             Stack(
                 direction="vertical",
-                gap="1",
+                gap="2",
+                on_click=action,
                 children=[
                     Stack(
                         direction="horizontal",
@@ -99,12 +103,7 @@ def build_tile(
                         justify="between",
                         align="center",
                         children=[
-                            Button(
-                                label=short_path,
-                                variant="ghost",
-                                size="sm",
-                                on_click=action,
-                            ),
+                            Text(content=mountpoint),
                             Text(
                                 content=f"{game_count} games",
                                 variant="muted",
@@ -115,6 +114,7 @@ def build_tile(
                         segments=segments,
                         max=drive_total,
                         size="sm",
+                        show_legend=True,
                     ),
                     Text(
                         content=f"{format_bytes(drive_used)} / {format_bytes(drive_total)}",
