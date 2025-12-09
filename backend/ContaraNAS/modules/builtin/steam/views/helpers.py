@@ -1,6 +1,3 @@
-"""Helper functions for Steam views"""
-
-
 def format_bytes(bytes_value: int) -> str:
     """Format bytes as human readable string"""
     for unit in ["B", "KB", "MB", "GB", "TB"]:

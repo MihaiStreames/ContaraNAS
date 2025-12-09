@@ -1,5 +1,3 @@
-"""CPU tab view for System Monitor"""
-
 from ContaraNAS.core.ui import (
     Grid,
     LineChart,

@@ -1,5 +1,3 @@
-"""Memory tab view for System Monitor"""
-
 from ContaraNAS.core.ui import (
     Grid,
     LineChart,
@@ -91,7 +89,7 @@ def build_memory_tab(mem: dict | None, memory_history: list[float]) -> Tab:
         size = stick.get("size", 0)
         ram_type = stick.get("type", "")
         speed = stick.get("speed", 0)
-        value = f"{size} GB\u00A0\u00A0\u00A0{ram_type}\u00A0\u00A0\u00A0{speed} MT/s"
+        value = f"{size} GB\u00a0\u00a0\u00a0{ram_type}\u00a0\u00a0\u00a0{speed} MT/s"
         grid2_children.append(StatSmall(label=locator, value=value))
 
     children.append(

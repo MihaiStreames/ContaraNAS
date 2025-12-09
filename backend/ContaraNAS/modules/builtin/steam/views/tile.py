@@ -1,5 +1,3 @@
-"""Tile view for the Steam module"""
-
 from ContaraNAS.core.ui import (
     Alert,
     Badge,
@@ -148,8 +146,10 @@ def build_tile(
         title="Steam",
         badge=Badge(text="Ready", variant="success") if status == "ready" else None,
         stats=stats,
-        content=[Stack(direction="vertical", gap="3", children=library_content)]
-        if library_content
-        else None,
+        content=(
+            [Stack(direction="vertical", gap="3", children=library_content)]
+            if library_content
+            else None
+        ),
         actions=[],
     )

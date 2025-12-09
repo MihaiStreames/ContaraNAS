@@ -23,5 +23,7 @@ class Grid(Component):
 
     columns: int | str = 2  # number or template string
     gap: Literal["0", "1", "2", "3", "4", "5", "6", "8"] = "4"
-    row_height: str | None = None  # CSS value for grid-auto-rows (e.g., "200px", "minmax(200px, auto)")
+    row_height: str | None = (
+        None  # CSS value for grid-auto-rows (e.g., "200px", "minmax(200px, auto)")
+    )
     children: list[Component] = []

@@ -34,6 +34,7 @@ class SysMonitorModule(Module):
         # History buffers for graphs
         cpu_history: list[float] = []
         memory_history: list[float] = []
+        disk_history: dict[str, list[float]] = {}  # device -> busy_time history
 
     def __init__(
         self,
@@ -113,6 +114,18 @@ class SysMonitorModule(Module):
                 if len(self.state.memory_history) > HISTORY_SIZE:
                     self.state.memory_history = self.state.memory_history[-HISTORY_SIZE:]
 
+            # Update disk history (keyed by device)
+            if disk_info:
+                for disk in disk_info:
+                    device = disk.device
+                    if device not in self.state.disk_history:
+                        self.state.disk_history[device] = []
+                    self.state.disk_history[device].append(disk.busy_time)
+                    if len(self.state.disk_history[device]) > HISTORY_SIZE:
+                        self.state.disk_history[device] = self.state.disk_history[device][
+                            -HISTORY_SIZE:
+                        ]
+
             self.state.commit()
 
         except Exception as e:
@@ -128,6 +141,7 @@ class SysMonitorModule(Module):
             disks=self.state.disks,
             cpu_history=self.state.cpu_history,
             memory_history=self.state.memory_history,
+            disk_history=self.state.disk_history,
             last_update=self.state.last_update,
         )
 

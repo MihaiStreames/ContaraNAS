@@ -1,5 +1,3 @@
-"""Tile view for the System Monitor module"""
-
 from ContaraNAS.core.ui import Badge, Tabs, Tile
 
 from .cpu_tab import build_cpu_tab
@@ -13,6 +11,7 @@ def build_tile(
     disks: list[dict],
     cpu_history: list[float],
     memory_history: list[float],
+    disk_history: dict[str, list[float]],
     last_update,
 ) -> Tile:
     """Build the dashboard tile UI component with tabs"""
@@ -23,7 +22,9 @@ def build_tile(
 
     # Add a tab for each disk
     for i, disk in enumerate(disks):
-        tabs.append(build_disk_tab(disk, i))
+        device = disk.get("device", "")
+        history = disk_history.get(device, [])
+        tabs.append(build_disk_tab(disk, i, history))
 
     return Tile(
         icon="Activity",

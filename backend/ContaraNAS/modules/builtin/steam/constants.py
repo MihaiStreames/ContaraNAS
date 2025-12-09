@@ -1,5 +1,3 @@
-"""Steam module constants"""
-
 # Steam directory paths
 STEAMAPPS_DIR = "steamapps"
 SHADERCACHE_DIR = "shadercache"

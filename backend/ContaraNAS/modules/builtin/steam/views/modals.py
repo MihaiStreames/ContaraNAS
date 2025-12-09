@@ -1,5 +1,3 @@
-"""Modal views for the Steam module"""
-
 import hashlib
 
 from ContaraNAS.core.ui import (
