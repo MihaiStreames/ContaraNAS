@@ -84,7 +84,7 @@ def build_library_modal(library: dict, games: list[dict]) -> Modal:
                 direction="vertical",
                 gap="4",
                 children=[
-                    # Summary stats - evenly distributed across full width
+                    # Summary stats
                     Stack(
                         direction="horizontal",
                         gap="6",

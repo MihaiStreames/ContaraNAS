@@ -81,8 +81,6 @@
   .stack-child-grow {
     flex: 1;
     min-width: 0; /* Prevent flex items from overflowing */
-    display: flex;
-    justify-content: center;
   }
 
   .stack-clickable {

@@ -154,5 +154,6 @@
     height: 56px;
     object-fit: cover;
     border-radius: var(--radius-sm);
+    vertical-align: middle;
   }
 </style>
