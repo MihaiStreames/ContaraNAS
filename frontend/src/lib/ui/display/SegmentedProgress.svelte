@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SegmentedProgressSchema, SegmentedProgressSegmentSchema } from "$lib/api";
+  import type { SegmentedProgressSchema } from "$lib/api";
 
   interface Props extends Partial<Omit<SegmentedProgressSchema, "type">> {}
 
@@ -33,13 +33,20 @@
 </script>
 
 <div class="segmented-progress-container">
-  <div class="segmented-progress-bar" class:segmented-progress-lg={size === "lg"}>
+  <div
+    class="segmented-progress-bar"
+    class:segmented-progress-lg={size === "lg"}
+  >
     {#each segmentWidths as segment}
       {#if segment.width > 0}
         <div
           class="segmented-progress-segment"
-          style="width: {segment.width}%; background-color: {getSegmentColor(segment.color)}"
-          title={segment.label ? `${segment.label}: ${segment.value}` : undefined}
+          style="width: {segment.width}%; background-color: {getSegmentColor(
+            segment.color
+          )}"
+          title={segment.label
+            ? `${segment.label}: ${segment.value}`
+            : undefined}
         ></div>
       {/if}
     {/each}

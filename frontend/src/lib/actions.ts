@@ -27,7 +27,11 @@ interface RefreshResult {
   type: "refresh";
 }
 
-type ResultItem = OpenModalResult | CloseModalResult | NotifyResult | RefreshResult;
+type ResultItem =
+  | OpenModalResult
+  | CloseModalResult
+  | NotifyResult
+  | RefreshResult;
 
 export interface ActionResult {
   success: boolean;

@@ -95,8 +95,16 @@
   }
 
   // Action handler for components
-  async function handleAction(moduleName: string, actionRef: ActionRefWithParams) {
-    console.log("[Dashboard] handleAction:", moduleName, actionRef.__action__, actionRef.__params__);
+  async function handleAction(
+    moduleName: string,
+    actionRef: ActionRefWithParams
+  ) {
+    console.log(
+      "[Dashboard] handleAction:",
+      moduleName,
+      actionRef.__action__,
+      actionRef.__params__
+    );
     try {
       const result = await api.executeAction(
         moduleName,
