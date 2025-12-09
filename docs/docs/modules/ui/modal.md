@@ -137,11 +137,39 @@ Form field values are passed to your action. See [Actions - Form Data](../action
 
 ## Providing Modals
 
-Implement `get_modals()` in your module to provide modals:
+Implement `get_modals()` in your module to define available modals:
 
 ```python
 def get_modals(self) -> list[Modal]:
-    return [self.get_details_modal(), self.get_delete_modal()]
+    """Return modal definitions for this module"""
+    return [
+        self._build_details_modal(),
+        self._build_settings_modal(),
+    ]
+```
+
+Key points:
+
+- Modals are defined once and reused (not recreated each time they open)
+- Return an empty list if your module has no modals (default behavior)
+- Use helper methods to build complex modals
+- Modal IDs must be unique within your module
+
+### Dynamic Modals
+
+Build modals based on state:
+
+```python
+def get_modals(self) -> list[Modal]:
+    """Create one modal per library"""
+    modals = []
+    for lib in self.state.libraries:
+        modals.append(Modal(
+            id=f"library_{lib['path']}",
+            title=lib["name"],
+            children=[...],
+        ))
+    return modals
 ```
 
 ## Best Practices

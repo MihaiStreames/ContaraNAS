@@ -145,11 +145,16 @@ from ContaraNAS.core.ui import (
 
     # Display
     Text,
+    StatSmall,
     StatCard,
     Progress,
+    SegmentedProgress,
+    SegmentedProgressSegment,
     Badge,
     Table,
     TableColumn,
+    LineChart,
+    Image,
 
     # Interactive
     Button,
@@ -158,6 +163,8 @@ from ContaraNAS.core.ui import (
     SelectOption,
     Toggle,
     Checkbox,
+    Tabs,
+    Tab,
 
     # Modal
     Modal,

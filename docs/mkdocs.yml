@@ -36,8 +36,11 @@ nav:
   - Home: index.md
   - Module Development:
       - Overview: modules/index.md
+      - Lifecycle: modules/lifecycle.md
       - State Management: modules/state.md
       - Actions: modules/actions.md
+      - module.json Reference: modules/module-json.md
+      - Publishing: modules/publishing.md
       - Declarative UI:
           - Overview: modules/ui/index.md
           - Layout: modules/ui/layout.md

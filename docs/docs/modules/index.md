@@ -108,21 +108,21 @@ class MyModule(Module):
 ```json
 // my_module/module.json
 {
-	"name": "my_module",
-	"displayName": "My Module",
-	"version": "1.0.0",
-	"author": "Your Name",
-	"description": "A simple example module",
-	"icon": "wrench",
-	"engine": {
-		"contaranas": "^0.1.0"
-	},
-	"platforms": [
-		"linux",
-		"windows",
-		"darwin"
-	],
-	"dependencies": {}
+ "name": "my_module",
+ "displayName": "My Module",
+ "version": "1.0.0",
+ "author": "Your Name",
+ "description": "A simple example module",
+ "icon": "wrench",
+ "engine": {
+  "contaranas": "^0.1.0"
+ },
+ "platforms": [
+  "linux",
+  "windows",
+  "darwin"
+ ],
+ "dependencies": {}
 }
 ```
 
@@ -137,11 +137,12 @@ class MyModule(Module):
 
 ## Key Concepts
 
-| Concept         | Description                                                                              |
-|-----------------|------------------------------------------------------------------------------------------|
-| **ModuleState** | A Pydantic model that holds your module's data. Changes are tracked automatically.       |
-| **Component**   | A UI building block (Button, Card, Table, etc.) defined in Python, rendered in frontend. |
-| **Action**      | A method decorated with `@action` that can be called from the frontend.                  |
-| **Tile**        | The card shown on the dashboard representing your module.                                |
-| **Modal**       | A popup dialog for detailed views or forms.                                              |
-| **commit()**    | Signals that state changes should be pushed to the frontend.                             |
+| Concept          | Description                                                                              |
+|------------------|------------------------------------------------------------------------------------------|
+| **ModuleState**  | A Pydantic model that holds your module's data. Changes are tracked automatically.       |
+| **Component**    | A UI building block (Button, Card, Table, etc.) defined in Python, rendered in frontend. |
+| **Action**       | A method decorated with `@action` that can be called from the frontend.                  |
+| **Tile**         | The card shown on the dashboard representing your module.                                |
+| **Modal**        | A popup dialog for detailed views or forms.                                              |
+| **get_modals()** | Method returning list of Modal definitions. See [Modal](ui/modal.md#providing-modals).   |
+| **commit()**     | Signals that state changes should be pushed to the frontend.                             |
