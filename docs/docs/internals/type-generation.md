@@ -35,7 +35,7 @@ ContaraNAS uses FastAPI, which automatically generates OpenAPI schemas from Pyda
 ```mermaid
 flowchart TB
     A[Python Pydantic Models] --> B[FastAPI App]
-    B --> C[OpenAPI Schema\n/openapi.json]
+    B --> C[OpenAPI Schema<br>/openapi.json]
     C --> D[openapi-typescript npm]
     D --> E[TypeScript Types]
 ```

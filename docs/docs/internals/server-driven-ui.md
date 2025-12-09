@@ -8,7 +8,7 @@ In a typical single-page application, the frontend owns the UI:
 
 ```mermaid
 flowchart LR
-    B[Backend\ndata API] <-->|JSON| F[Frontend\nUI logic]
+    B[Backend<br>data API] <-->|JSON| F[Frontend<br>UI logic]
 ```
 
 The backend is a dumb data pipe. The frontend fetches data, decides how to display it, handles routing, manages local state. This works, but it has costs:
@@ -26,7 +26,7 @@ ContaraNAS flips the model:
 
 ```mermaid
 flowchart LR
-    B[Backend\ndata + UI definitions] -->|JSON| F[Frontend\nrenderer]
+    B[Backend<br>data + UI definitions] -->|JSON| F[Frontend<br>renderer]
 ```
 
 The backend sends complete UI descriptions. The frontend is a generic renderer that knows how to display a `Button`, `Table`, `Chart` — but doesn't know anything about modules or business logic.

@@ -19,9 +19,9 @@ ContaraNAS follows a **server-driven UI** pattern. The backend is the source of 
 ```mermaid
 flowchart TB
     subgraph Backend
-        M1[Module\nState] --> SM[StreamManager]
-        M2[Module\nState] --> SM
-        M3[Module\nState] --> SM
+        M1[Module<br>State] --> SM[StreamManager]
+        M2[Module<br>State] --> SM
+        M3[Module<br>State] --> SM
         C[commit] -.->|triggers| SM
     end
 
