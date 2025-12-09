@@ -247,4 +247,4 @@ Only list platforms you've actually tested:
 
 - [Module Development Overview](index.md) — Getting started with modules
 - [Module Lifecycle](lifecycle.md) — How modules are initialized and managed
-- [Community Modules](community.md) — Publishing and installing community modules
+- [Publishing](publishing.md) — Publishing community modules

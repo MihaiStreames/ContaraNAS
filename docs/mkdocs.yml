@@ -34,20 +34,20 @@ theme:
 
 nav:
   - Home: index.md
-  - Module Development:
-      - Overview: modules/index.md
+  - Modules:
+      - Getting Started: modules/index.md
       - Lifecycle: modules/lifecycle.md
-      - State Management: modules/state.md
+      - State: modules/state.md
       - Actions: modules/actions.md
-      - module.json Reference: modules/module-json.md
+      - module.json: modules/module-json.md
       - Publishing: modules/publishing.md
-      - Declarative UI:
-          - Overview: modules/ui/index.md
+      - UI Components:
+          - Concepts: modules/ui/index.md
           - Layout: modules/ui/layout.md
           - Cards: modules/ui/cards.md
           - Display: modules/ui/display.md
           - Interactive: modules/ui/interactive.md
-          - Modal: modules/ui/modal.md
+          - Modals: modules/ui/modal.md
           - Feedback: modules/ui/feedback.md
 
 markdown_extensions:

@@ -1,9 +1,5 @@
 # Module Lifecycle
 
-This guide explains the complete lifecycle of a ContaraNAS module, from registration to shutdown.
-
-## Lifecycle Overview
-
 Every module goes through a predictable sequence of states:
 
 ```mermaid

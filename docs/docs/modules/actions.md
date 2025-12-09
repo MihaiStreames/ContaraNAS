@@ -1,9 +1,5 @@
 # Actions
 
-This page explains how to handle user interactions in your ContaraNAS module.
-
-## Overview
-
 Actions are module methods that can be called from the frontend. When a user clicks a button, submits a form, or
 triggers any interactive element, an action is invoked.
 

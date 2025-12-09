@@ -1,9 +1,5 @@
 # State Management
 
-This page explains how to define and manage state in your ContaraNAS module.
-
-## Overview
-
 Every module can define a **typed state** using Pydantic models. The state system provides:
 
 - **Type safety** — Your state fields are validated at runtime

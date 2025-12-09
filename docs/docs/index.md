@@ -21,12 +21,24 @@ Built-in modules track Steam libraries, system resources, and more. Community mo
 
 ### For Module Developers
 
-Build your own modules to extend ContaraNAS:
+Build your own modules to extend ContaraNAS. Start here:
 
-- **[Module Development](modules/index.md)** — Overview and getting started
-- **[State Management](modules/state.md)** — Typed state with dirty tracking
-- **[Declarative UI](modules/ui/index.md)** — Build UIs in Python
-- **[Actions](modules/actions.md)** — Handle user interactions
+→ **[Getting Started](modules/index.md)** — Module structure, quick start example, key concepts
+
+Then explore:
+
+- [State](modules/state.md) — Typed state with dirty tracking
+- [Actions](modules/actions.md) — Handle user interactions
+- [UI Components](modules/ui/index.md) — Build UIs in Python
+- [Lifecycle](modules/lifecycle.md) — Module initialization and monitoring
+
+<!-- TODO: Uncomment when internals section is created
+### For the Curious
+
+Want to understand how ContaraNAS works under the hood?
+
+→ **[Internals](internals/index.md)** — Render pipeline, WebSocket protocol, type generation
+-->
 
 ## Development Setup
 

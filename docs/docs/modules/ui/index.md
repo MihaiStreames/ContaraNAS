@@ -1,9 +1,5 @@
 # Declarative UI
 
-This section explains how to build user interfaces for your ContaraNAS module.
-
-## Overview
-
 ContaraNAS uses a **server-driven UI** approach. Instead of writing HTML, CSS, or frontend code, you define your UI in
 Python using component classes. The framework serializes these to JSON and the frontend renders them automatically.
 
@@ -298,8 +294,7 @@ def get_tile(self) -> Tile:
 
 ### Loading States
 
-Show loading indicators during async operations. See [Feedback Components](feedback.md#loading-states) for detailed
-patterns with Spinner.
+Show loading indicators during async operations. See [Feedback Components](feedback.md) for Spinner usage.
 
 ## Best Practices
 

@@ -1,9 +1,5 @@
 # Module Development
 
-This section covers everything you need to know to build modules for ContaraNAS.
-
-## Overview
-
 ContaraNAS uses a **modular architecture** where functionality is provided through independent modules. Each module is a
 self-contained Python package that:
 

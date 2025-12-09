@@ -2,61 +2,71 @@
 
 ---
 
-## 🟢 Low Priority - Enhancements
+## Module Developer Docs
 
-### 1. Remove Redundant Examples
+> Arch Wiki style + your voice. Practical, reference-oriented, scannable.
 
-**Files to update:** `actions.md`, `modal.md`
-
-- [ ] TaskModule example appears in both `actions.md` (complete) and partially in other files
-- [ ] Consider moving complete examples to a dedicated `examples.md` or keeping in one place only
-- [ ] Add cross-references instead of duplicating
-
-### 2. Architecture Overview Page
-
-**File to create:** `docs/docs/architecture.md` (NEW)
-
-- [ ] Diagram showing: Module → State → commit() → WebSocket → Frontend render
-- [ ] Explain the server-driven UI concept
-- [ ] Document type generation pipeline (Python → OpenAPI → TypeScript)
-- [ ] Document WebSocket message types (`module_ui`, `app_state`, `full_state`)
-
-### 3. API Reference
-
-**File to create:** `docs/docs/api/reference.md` (NEW)
-
-- [ ] Document REST endpoints:
-  - `GET /api/modules` - list modules
-  - `GET /api/modules/{name}/ui` - get module UI
-  - `POST /api/modules/{name}/enable` - enable module
-  - `POST /api/modules/{name}/disable` - disable module
-  - `POST /api/modules/{name}/action/{action}` - execute action
-  - `GET /api/state` - full app state
-- [ ] Document WebSocket protocol
-- [ ] Document authentication (pairing flow)
-
----
-
-## 🔵 Style & Consistency
-
-### 4. Unify Documentation Style
+### Style Pass
 
 **Files to update:** All docs in `docs/docs/`
 
-- [ ] Mix Arch Wiki style (concise, direct, no fluff) with current style across entire documentation
-- [ ] Remove unnecessary prose and filler text
-- [ ] Keep code examples and tables
-- [ ] Ensure consistent formatting across all pages
+**What to cut (bad verbosity):**
+
+- "This page explains how to..." / "The following section covers..."
+- Empty intro sentences that don't add information
+- Redundant explanations of things already shown in code
+
+**What to keep (good content):**
+
+- Short intro sentences explaining purpose
+- "When to use" / "Why" guidance where it helps
+- Patterns and examples sections
+- Notes on common mistakes or important behaviors
+- The explanatory context (e.g., how auto-commit timing works, when to use ActionRef)
+
+**Style:**
+
+- [x] Apply to all docs
+- [x] Keep structure clean with tables and code examples
+- [x] Ensure consistent formatting
+
+**Main index.md:**
+
+- [x] Point module developers to the Modules section
+- [x] Point curious readers to the Internals section (once created) — added as HTML comment
+
+### Cleanup
+
+- [x] ~~Remove redundant TaskModule example~~ — Reviewed: no actual duplication found. Examples in `actions.md` (action results) and `modal.md` (modal definitions) serve distinct purposes with appropriate cross-references already in place.
+
+### Verification
+
+- [x] All "See Also" links work
+- [x] All internal doc links are valid
+- [x] Navigation structure in mkdocs.yml matches actual files
 
 ---
 
-## 🔵 Verification Tasks
+## Internals / Architecture (Blog-style)
 
-### 5. Cross-Reference Check
+> Narrative, explanatory, interesting reads for the curious. Not required for module authors.
 
-- [ ] All "See Also" links work
-- [ ] All internal doc links are valid
-- [ ] Navigation structure in mkdocs.yml matches actual files
+**Location:** `docs/docs/internals/` (NEW)
+
+- [ ] **Render Pipeline** - Module → State → commit() → WebSocket → Frontend
+- [ ] **Server-Driven UI** - The concept and why it works this way
+- [ ] **Type Generation** - Python → OpenAPI → TypeScript pipeline
+- [ ] **WebSocket Protocol** - Message types (`module_ui`, `app_state`, `full_state`)
+- [ ] **REST API** - Endpoints overview (modules, actions, state)
+- [ ] **Authentication** - Pairing flow
+
+---
+
+## Core Contributor Docs
+
+> The code is the documentation. Self-selecting audience.
+
+- [ ] `CONTRIBUTING.md` - Setup instructions, conventions, how to run locally
 
 ---
 
@@ -148,10 +158,8 @@
 
 ## Summary
 
-| Priority | Count | Description |
-|----------|-------|-------------|
-| 🟢 Low | 3 | Architecture, API reference, redundant examples |
-| 🔵 Style | 1 | Unify documentation style |
-| 🔵 Verify | 1 | Cross-references |
-
-**Total remaining: ~5 tasks**
+| Scope | Tasks | Notes |
+|-------|-------|-------|
+| Module Docs | 0 | ✅ Complete |
+| Internals | 6 | Blog-style articles (low priority) |
+| Contributor | 1 | CONTRIBUTING.md |
