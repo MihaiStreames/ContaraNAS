@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
 > **Estimated time:** 1-2 weeks remaining
-> **Status:** In Progress (Phase 9 Complete)
+> **Status:** In Progress (Phase 10 Complete)
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -395,30 +395,34 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 10.1 ComponentRenderer
 
-- [ ] Create `ComponentRenderer.svelte`
-- [ ] Look up component from registry by type
-- [ ] Pass props to component
-- [ ] Recursively render children
-- [ ] Handle action props (convert to handlers)
+- [x] Create `ComponentRenderer.svelte`
+- [x] Look up component from registry by type
+- [x] Pass props to component
+- [x] Recursively render children
+- [x] Handle action props (convert to handlers)
 
 ### 10.2 Action handling
 
-- [ ] Create `actions.ts` utility
-- [ ] Convert action references to click handlers
-- [ ] POST to action endpoint on trigger
-- [ ] Handle action results (open modal, notify, etc.)
+- [x] Create `actions.ts` utility
+- [x] Convert action references to click handlers
+- [x] POST to action endpoint on trigger
+- [x] Handle action results (open modal, notify, etc.)
 
 ### 10.3 UI store
 
-- [ ] Create store for module UIs
-- [ ] Handle incoming WebSocket updates
-- [ ] Provide UI state to components
+- [x] Create store for module UIs (`ui.svelte.ts`)
+- [x] Create auth store (`auth.svelte.ts`)
+- [x] Handle incoming WebSocket updates
+- [x] Provide UI state to components
 
 ### 10.4 Integration
 
-- [ ] Update dashboard to use ComponentRenderer for tiles
-- [ ] Render modals from module definitions
-- [ ] Handle module enable/disable
+- [x] Create pairing screen for initial authentication
+- [x] Update dashboard to use ComponentRenderer for tiles
+- [x] Render modals from module definitions
+- [x] Handle module enable/disable
+- [x] Create WebSocket service for real-time updates
+- [x] Create API client for REST endpoints
 
 **Deliverable:** End-to-end rendering works.
 

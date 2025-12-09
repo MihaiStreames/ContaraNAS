@@ -1,19 +1,21 @@
 <script lang="ts">
-	import '$lib/design/tokens.css';
-	import '$lib/design/components.css';
+  import "$lib/design/tokens.css";
+  import "$lib/design/components.css";
 
-	let { children } = $props();
+  let { children } = $props();
 </script>
 
 <div class="app" data-theme="dark">
-	{@render children()}
+  {@render children()}
 </div>
 
 <style>
-	.app {
-		min-height: 100vh;
-		background: var(--bg-base);
-		color: var(--text-primary);
-		transition: background var(--transition-slow), color var(--transition-slow);
-	}
+  .app {
+    min-height: 100vh;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    transition:
+      background var(--transition-slow),
+      color var(--transition-slow);
+  }
 </style>
