@@ -8,7 +8,9 @@
   "paths": {
     "/api/modules": {
       "get": {
-        "tags": ["commands"],
+        "tags": [
+          "commands"
+        ],
         "summary": "List Modules",
         "description": "List all registered modules with their current state",
         "operationId": "list_modules_api_modules_get",
@@ -33,7 +35,9 @@
     },
     "/api/modules/{name}/enable": {
       "post": {
-        "tags": ["commands"],
+        "tags": [
+          "commands"
+        ],
         "summary": "Enable Module",
         "description": "Enable a registered module",
         "operationId": "enable_module_api_modules__name__enable_post",
@@ -79,7 +83,9 @@
     },
     "/api/modules/{name}/disable": {
       "post": {
-        "tags": ["commands"],
+        "tags": [
+          "commands"
+        ],
         "summary": "Disable Module",
         "description": "Disable an enabled module",
         "operationId": "disable_module_api_modules__name__disable_post",
@@ -125,7 +131,9 @@
     },
     "/api/auth/pair": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Pair",
         "description": "Exchange a pairing code for an API token",
         "operationId": "pair_api_auth_pair_post",
@@ -165,7 +173,9 @@
     },
     "/api/auth/unpair": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Unpair",
         "description": "Unpair the app from this NAS. Requires authentication",
         "operationId": "unpair_api_auth_unpair_post",
@@ -190,7 +200,9 @@
     },
     "/api/marketplace/modules": {
       "get": {
-        "tags": ["marketplace"],
+        "tags": [
+          "marketplace"
+        ],
         "summary": "List Modules",
         "description": "List all available modules from marketplace",
         "operationId": "list_modules_api_marketplace_modules_get",
@@ -213,7 +225,9 @@
     },
     "/api/marketplace/modules/{module_id}": {
       "get": {
-        "tags": ["marketplace"],
+        "tags": [
+          "marketplace"
+        ],
         "summary": "Get Module",
         "description": "Get detailed information about a specific module",
         "operationId": "get_module_api_marketplace_modules__module_id__get",
@@ -257,7 +271,9 @@
     },
     "/api/marketplace/refresh": {
       "post": {
-        "tags": ["marketplace"],
+        "tags": [
+          "marketplace"
+        ],
         "summary": "Refresh Registry",
         "description": "Force refresh the marketplace registry cache",
         "operationId": "refresh_registry_api_marketplace_refresh_post",
@@ -280,7 +296,9 @@
     },
     "/api/modules/{name}/ui": {
       "get": {
-        "tags": ["modules"],
+        "tags": [
+          "modules"
+        ],
         "summary": "Get Module Ui",
         "description": "Get full UI for a module (tile + modals)",
         "operationId": "get_module_ui_api_modules__name__ui_get",
@@ -326,7 +344,9 @@
     },
     "/api/modules/{name}/tile": {
       "get": {
-        "tags": ["modules"],
+        "tags": [
+          "modules"
+        ],
         "summary": "Get Module Tile",
         "description": "Get just the tile for a module",
         "operationId": "get_module_tile_api_modules__name__tile_get",
@@ -372,7 +392,9 @@
     },
     "/api/modules/{name}/modals": {
       "get": {
-        "tags": ["modules"],
+        "tags": [
+          "modules"
+        ],
         "summary": "Get Module Modals",
         "description": "Get just the modals for a module",
         "operationId": "get_module_modals_api_modules__name__modals_get",
@@ -418,7 +440,9 @@
     },
     "/api/modules/{name}/action/{action_name}": {
       "post": {
-        "tags": ["modules"],
+        "tags": [
+          "modules"
+        ],
         "summary": "Invoke Action",
         "description": "Invoke an action on a module",
         "operationId": "invoke_action_api_modules__name__action__action_name__post",
@@ -493,7 +517,9 @@
     },
     "/api/modules/{name}/actions": {
       "get": {
-        "tags": ["modules"],
+        "tags": [
+          "modules"
+        ],
         "summary": "List Module Actions",
         "description": "List available actions for a module",
         "operationId": "list_module_actions_api_modules__name__actions_get",
@@ -541,7 +567,9 @@
     },
     "/api/state": {
       "get": {
-        "tags": ["state"],
+        "tags": [
+          "state"
+        ],
         "summary": "Get App State",
         "description": "Get full application state",
         "operationId": "get_app_state_api_state_get",
@@ -564,11 +592,11 @@
         ]
       }
     },
-    "/health": {
+    "/api/health": {
       "get": {
         "summary": "Health",
         "description": "Health check endpoint",
-        "operationId": "health_health_get",
+        "operationId": "health_api_health_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -583,11 +611,11 @@
         }
       }
     },
-    "/info": {
+    "/api/info": {
       "get": {
         "summary": "Info",
         "description": "Server information",
-        "operationId": "info_info_get",
+        "operationId": "info_api_info_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -613,7 +641,9 @@
           }
         },
         "type": "object",
-        "required": ["__action__"],
+        "required": [
+          "__action__"
+        ],
         "title": "ActionRef",
         "description": "Reference to a callable action"
       },
@@ -631,7 +661,12 @@
           },
           "variant": {
             "type": "string",
-            "enum": ["info", "success", "warning", "error"],
+            "enum": [
+              "info",
+              "success",
+              "warning",
+              "error"
+            ],
             "title": "Variant",
             "default": "info"
           },
@@ -648,7 +683,9 @@
           }
         },
         "type": "object",
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "title": "AlertSchema",
         "description": "Alert message"
       },
@@ -674,7 +711,9 @@
           }
         },
         "type": "object",
-        "required": ["modules"],
+        "required": [
+          "modules"
+        ],
         "title": "AppStateResponse",
         "description": "Full application state response"
       },
@@ -705,7 +744,9 @@
           }
         },
         "type": "object",
-        "required": ["text"],
+        "required": [
+          "text"
+        ],
         "title": "BadgeSchema",
         "description": "Small label badge"
       },
@@ -733,13 +774,22 @@
           },
           "variant": {
             "type": "string",
-            "enum": ["primary", "secondary", "ghost", "danger"],
+            "enum": [
+              "primary",
+              "secondary",
+              "ghost",
+              "danger"
+            ],
             "title": "Variant",
             "default": "primary"
           },
           "size": {
             "type": "string",
-            "enum": ["sm", "md", "lg"],
+            "enum": [
+              "sm",
+              "md",
+              "lg"
+            ],
             "title": "Size",
             "default": "md"
           },
@@ -771,7 +821,9 @@
           }
         },
         "type": "object",
-        "required": ["label"],
+        "required": [
+          "label"
+        ],
         "title": "ButtonSchema",
         "description": "Clickable button"
       },
@@ -1039,7 +1091,9 @@
           }
         },
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "CheckboxSchema",
         "description": "Checkbox input"
       },
@@ -1065,7 +1119,16 @@
           },
           "gap": {
             "type": "string",
-            "enum": ["0", "1", "2", "3", "4", "5", "6", "8"],
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "8"
+            ],
             "title": "Gap",
             "default": "4"
           },
@@ -1200,7 +1263,11 @@
           }
         },
         "type": "object",
-        "required": ["status", "timestamp", "checks"],
+        "required": [
+          "status",
+          "timestamp",
+          "checks"
+        ],
         "title": "HealthResponse",
         "description": "Health check response"
       },
@@ -1220,7 +1287,11 @@
           }
         },
         "type": "object",
-        "required": ["name", "version", "timestamp"],
+        "required": [
+          "name",
+          "version",
+          "timestamp"
+        ],
         "title": "InfoResponse",
         "description": "Server information response"
       },
@@ -1254,7 +1325,12 @@
           },
           "input_type": {
             "type": "string",
-            "enum": ["text", "password", "email", "number"],
+            "enum": [
+              "text",
+              "password",
+              "email",
+              "number"
+            ],
             "title": "Input Type",
             "default": "text"
           },
@@ -1276,7 +1352,9 @@
           }
         },
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "InputSchema",
         "description": "Text input field"
       },
@@ -1295,6 +1373,17 @@
           "title": {
             "type": "string",
             "title": "Title"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "md",
+              "lg",
+              "xl"
+            ],
+            "title": "Size",
+            "default": "md"
           },
           "children": {
             "items": {
@@ -1497,7 +1586,10 @@
           }
         },
         "type": "object",
-        "required": ["id", "title"],
+        "required": [
+          "id",
+          "title"
+        ],
         "title": "ModalSchema",
         "description": "Modal dialog"
       },
@@ -1564,7 +1656,9 @@
           }
         },
         "type": "object",
-        "required": ["modules"],
+        "required": [
+          "modules"
+        ],
         "title": "ModuleListResponse",
         "description": "Response listing all modules"
       },
@@ -1583,7 +1677,10 @@
           }
         },
         "type": "object",
-        "required": ["module", "modals"],
+        "required": [
+          "module",
+          "modals"
+        ],
         "title": "ModuleModalsResponse",
         "description": "Modals-only response for a module"
       },
@@ -1617,7 +1714,12 @@
           }
         },
         "type": "object",
-        "required": ["name", "display_name", "enabled", "initialized"],
+        "required": [
+          "name",
+          "display_name",
+          "enabled",
+          "initialized"
+        ],
         "title": "ModuleSnapshot",
         "description": "Snapshot of a module's current state including UI"
       },
@@ -1632,7 +1734,10 @@
           }
         },
         "type": "object",
-        "required": ["module", "tile"],
+        "required": [
+          "module",
+          "tile"
+        ],
         "title": "ModuleTileResponse",
         "description": "Tile-only response for a module"
       },
@@ -1652,7 +1757,11 @@
           }
         },
         "type": "object",
-        "required": ["success", "module", "enabled"],
+        "required": [
+          "success",
+          "module",
+          "enabled"
+        ],
         "title": "ModuleToggleResponse",
         "description": "Response for module enable/disable toggle"
       },
@@ -1692,7 +1801,10 @@
           }
         },
         "type": "object",
-        "required": ["module", "ui"],
+        "required": [
+          "module",
+          "ui"
+        ],
         "title": "ModuleUIResponse",
         "description": "Full UI response for a module"
       },
@@ -1704,7 +1816,9 @@
           }
         },
         "type": "object",
-        "required": ["pairing_code"],
+        "required": [
+          "pairing_code"
+        ],
         "title": "PairRequest",
         "description": "Request to pair with the NAS"
       },
@@ -1724,7 +1838,11 @@
           }
         },
         "type": "object",
-        "required": ["success", "api_token", "message"],
+        "required": [
+          "success",
+          "api_token",
+          "message"
+        ],
         "title": "PairResponse",
         "description": "Response containing API token after successful pairing"
       },
@@ -1783,19 +1901,29 @@
           },
           "color": {
             "type": "string",
-            "enum": ["default", "success", "warning", "error"],
+            "enum": [
+              "default",
+              "success",
+              "warning",
+              "error"
+            ],
             "title": "Color",
             "default": "default"
           },
           "size": {
             "type": "string",
-            "enum": ["sm", "lg"],
+            "enum": [
+              "sm",
+              "lg"
+            ],
             "title": "Size",
             "default": "sm"
           }
         },
         "type": "object",
-        "required": ["value"],
+        "required": [
+          "value"
+        ],
         "title": "ProgressSchema",
         "description": "Progress bar with optional labels"
       },
@@ -1817,7 +1945,10 @@
           }
         },
         "type": "object",
-        "required": ["value", "label"],
+        "required": [
+          "value",
+          "label"
+        ],
         "title": "SelectOptionSchema",
         "description": "Option for Select component"
       },
@@ -1869,7 +2000,10 @@
           }
         },
         "type": "object",
-        "required": ["name", "options"],
+        "required": [
+          "name",
+          "options"
+        ],
         "title": "SelectSchema",
         "description": "Dropdown select"
       },
@@ -1883,7 +2017,11 @@
           },
           "size": {
             "type": "string",
-            "enum": ["sm", "md", "lg"],
+            "enum": [
+              "sm",
+              "md",
+              "lg"
+            ],
             "title": "Size",
             "default": "md"
           },
@@ -1913,25 +2051,48 @@
           },
           "direction": {
             "type": "string",
-            "enum": ["horizontal", "vertical"],
+            "enum": [
+              "horizontal",
+              "vertical"
+            ],
             "title": "Direction",
             "default": "vertical"
           },
           "gap": {
             "type": "string",
-            "enum": ["0", "1", "2", "3", "4", "5", "6", "8"],
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "8"
+            ],
             "title": "Gap",
             "default": "4"
           },
           "align": {
             "type": "string",
-            "enum": ["start", "center", "end", "stretch"],
+            "enum": [
+              "start",
+              "center",
+              "end",
+              "stretch"
+            ],
             "title": "Align",
             "default": "stretch"
           },
           "justify": {
             "type": "string",
-            "enum": ["start", "center", "end", "between", "around"],
+            "enum": [
+              "start",
+              "center",
+              "end",
+              "between",
+              "around"
+            ],
             "title": "Justify",
             "default": "start"
           },
@@ -2073,7 +2234,12 @@
           },
           "color": {
             "type": "string",
-            "enum": ["default", "success", "warning", "error"],
+            "enum": [
+              "default",
+              "success",
+              "warning",
+              "error"
+            ],
             "title": "Color",
             "default": "default"
           },
@@ -2083,7 +2249,10 @@
                 "prefixItems": [
                   {
                     "type": "string",
-                    "enum": ["up", "down"]
+                    "enum": [
+                      "up",
+                      "down"
+                    ]
                   },
                   {
                     "type": "string"
@@ -2101,7 +2270,10 @@
           }
         },
         "type": "object",
-        "required": ["label", "value"],
+        "required": [
+          "label",
+          "value"
+        ],
         "title": "StatCardSchema",
         "description": "Standalone stat card with icon and optional trend"
       },
@@ -2133,7 +2305,10 @@
           }
         },
         "type": "object",
-        "required": ["label", "value"],
+        "required": [
+          "label",
+          "value"
+        ],
         "title": "StatSchema",
         "description": "Inline stat display (value + label) for tiles"
       },
@@ -2149,7 +2324,10 @@
           }
         },
         "type": "object",
-        "required": ["success", "message"],
+        "required": [
+          "success",
+          "message"
+        ],
         "title": "SuccessResponse",
         "description": "Generic success response"
       },
@@ -2182,13 +2360,20 @@
           },
           "align": {
             "type": "string",
-            "enum": ["left", "center", "right"],
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ],
             "title": "Align",
             "default": "left"
           }
         },
         "type": "object",
-        "required": ["key", "label"],
+        "required": [
+          "key",
+          "label"
+        ],
         "title": "TableColumnSchema",
         "description": "Column definition for Table"
       },
@@ -2222,7 +2407,10 @@
           }
         },
         "type": "object",
-        "required": ["columns", "data"],
+        "required": [
+          "columns",
+          "data"
+        ],
         "title": "TableSchema",
         "description": "Data table"
       },
@@ -2240,13 +2428,20 @@
           },
           "variant": {
             "type": "string",
-            "enum": ["body", "secondary", "muted", "code"],
+            "enum": [
+              "body",
+              "secondary",
+              "muted",
+              "code"
+            ],
             "title": "Variant",
             "default": "body"
           }
         },
         "type": "object",
-        "required": ["content"],
+        "required": [
+          "content"
+        ],
         "title": "TextSchema",
         "description": "Text with styling variants"
       },
@@ -2480,7 +2675,10 @@
           }
         },
         "type": "object",
-        "required": ["icon", "title"],
+        "required": [
+          "icon",
+          "title"
+        ],
         "title": "TileSchema",
         "description": "Module tile - specialized card for dashboard modules"
       },
@@ -2519,7 +2717,9 @@
           }
         },
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "ToggleSchema",
         "description": "Toggle switch"
       },
@@ -2549,7 +2749,11 @@
           }
         },
         "type": "object",
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError"
       }
     },

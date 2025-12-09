@@ -96,15 +96,21 @@
 
   // Action handler for components
   async function handleAction(moduleName: string, actionRef: ActionRef) {
+    console.log("[Dashboard] handleAction:", moduleName, actionRef.__action__);
     try {
       const result = await api.executeAction(moduleName, actionRef.__action__);
+      console.log("[Dashboard] Action result:", result);
       processActionResult(result, {
-        openModal: (id) => uiStore.openModal(id),
+        openModal: (id) => {
+          console.log("[Dashboard] Opening modal:", id);
+          uiStore.openModal(id);
+        },
         closeModal: (id) => uiStore.closeModal(id),
         notify: (msg, variant) => uiStore.notify(msg, variant),
         refresh: () => connectToNAS(),
       });
     } catch (e) {
+      console.error("[Dashboard] Action error:", e);
       uiStore.notify(e instanceof Error ? e.message : "Action failed", "error");
     }
   }
@@ -132,7 +138,7 @@
   const allModules = $derived(Array.from(uiStore.modules.values()));
 
   // Find the current active modal's data
-  const activeModalData = $derived(() => {
+  const activeModalData = $derived.by(() => {
     if (!uiStore.activeModal) return null;
     for (const { module, modal } of uiStore.allModals) {
       if (modal.id === uiStore.activeModal) {
@@ -271,11 +277,13 @@
   </main>
 
   <!-- Modals -->
-  {#if activeModalData()}
-    {@const { module: modalModule, modal } = activeModalData()!}
+  {#if activeModalData}
+    {@const { module: modalModule, modal } = activeModalData}
     <Modal
+      open={true}
       id={modal.id}
       title={modal.title}
+      size={modal.size ?? "md"}
       closable={modal.closable ?? true}
       onclose={() => uiStore.closeModal()}
     >

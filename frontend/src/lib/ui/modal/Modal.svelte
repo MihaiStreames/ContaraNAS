@@ -14,6 +14,7 @@
   let {
     id = "modal",
     title = "",
+    size = "md",
     closable = true,
     open = false,
     onclose,
@@ -47,7 +48,7 @@
     aria-labelledby="{id}-title"
     tabindex="-1"
   >
-    <div class="modal">
+    <div class="modal modal-{size}">
       <div class="modal-header">
         <h3 class="modal-title" id="{id}-title">{title}</h3>
         {#if closable}

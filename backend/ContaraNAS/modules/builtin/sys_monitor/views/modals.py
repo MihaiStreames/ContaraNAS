@@ -21,7 +21,6 @@ def build_details_modal(
     open_cpu_action,
     open_memory_action,
     open_disk_action,
-    refresh_action,
 ) -> Modal:
     """Build the main details modal"""
     stat_cards = []
@@ -72,6 +71,7 @@ def build_details_modal(
     return Modal(
         id="sys_monitor_details",
         title="System Overview",
+        size="md",
         children=[
             Grid(columns=2, gap="4", children=stat_cards),
             Stack(
@@ -87,10 +87,6 @@ def build_details_modal(
                 ],
             ),
         ],
-        footer=[
-            Button(label="Refresh", variant="secondary", icon="RefreshCw", on_click=refresh_action),
-            Button(label="Close", variant="ghost"),
-        ],
     )
 
 
@@ -100,6 +96,7 @@ def build_cpu_modal(cpu: dict | None) -> Modal:
         return Modal(
             id="sys_monitor_cpu",
             title="CPU Details",
+            size="lg",
             children=[Text(content="No CPU data available", variant="muted")],
         )
 
@@ -118,6 +115,7 @@ def build_cpu_modal(cpu: dict | None) -> Modal:
     return Modal(
         id="sys_monitor_cpu",
         title="CPU Details",
+        size="lg",
         children=[
             Stack(
                 direction="vertical",
@@ -171,7 +169,6 @@ def build_cpu_modal(cpu: dict | None) -> Modal:
                 ],
             ),
         ],
-        footer=[Button(label="Close", variant="ghost")],
     )
 
 
@@ -181,6 +178,7 @@ def build_memory_modal(mem: dict | None) -> Modal:
         return Modal(
             id="sys_monitor_memory",
             title="Memory Details",
+            size="md",
             children=[Text(content="No memory data available", variant="muted")],
         )
 
@@ -194,6 +192,7 @@ def build_memory_modal(mem: dict | None) -> Modal:
     return Modal(
         id="sys_monitor_memory",
         title="Memory Details",
+        size="md",
         children=[
             Stack(
                 direction="vertical",
@@ -240,7 +239,6 @@ def build_memory_modal(mem: dict | None) -> Modal:
                 ],
             ),
         ],
-        footer=[Button(label="Close", variant="ghost")],
     )
 
 
@@ -250,6 +248,7 @@ def build_disks_modal(disks: list[dict]) -> Modal:
         return Modal(
             id="sys_monitor_disks",
             title="Disk Details",
+            size="lg",
             children=[Text(content="No disk data available", variant="muted")],
         )
 
@@ -294,6 +293,6 @@ def build_disks_modal(disks: list[dict]) -> Modal:
     return Modal(
         id="sys_monitor_disks",
         title="Disk Details",
+        size="lg",
         children=[Stack(direction="vertical", gap="4", children=disk_cards)],
-        footer=[Button(label="Close", variant="ghost")],
     )

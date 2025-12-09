@@ -284,7 +284,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/health": {
+    "/api/health": {
         parameters: {
             query?: never;
             header?: never;
@@ -295,7 +295,7 @@ export interface paths {
          * Health
          * @description Health check endpoint
          */
-        get: operations["health_health_get"];
+        get: operations["health_api_health_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -304,7 +304,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/info": {
+    "/api/info": {
         parameters: {
             query?: never;
             header?: never;
@@ -315,7 +315,7 @@ export interface paths {
          * Info
          * @description Server information
          */
-        get: operations["info_info_get"];
+        get: operations["info_api_info_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -581,6 +581,12 @@ export interface components {
             id: string;
             /** Title */
             title: string;
+            /**
+             * Size
+             * @default md
+             * @enum {string}
+             */
+            size: "sm" | "md" | "lg" | "xl";
             /**
              * Children
              * @default []
@@ -1423,7 +1429,7 @@ export interface operations {
             };
         };
     };
-    health_health_get: {
+    health_api_health_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -1443,7 +1449,7 @@ export interface operations {
             };
         };
     };
-    info_info_get: {
+    info_api_info_get: {
         parameters: {
             query?: never;
             header?: never;

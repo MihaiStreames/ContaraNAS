@@ -256,8 +256,8 @@ class SteamModule(Module):
     def get_modals(self) -> list[Modal]:
         """Return modal definitions for this module"""
         return [
-            build_games_modal(self.state.games, self.refresh),
-            build_libraries_modal(self.state.libraries, self.refresh),
+            build_games_modal(self.state.games),
+            build_libraries_modal(self.state.libraries),
         ]
 
     # --- Actions ---

@@ -710,6 +710,23 @@
   z-index: var(--z-modal);
 }
 
+/* Modal sizes */
+.modal-sm {
+  max-width: 400px;
+}
+
+.modal-md {
+  max-width: 560px;
+}
+
+.modal-lg {
+  max-width: 800px;
+}
+
+.modal-xl {
+  max-width: 1000px;
+}
+
 [data-theme="dark"] .modal {
   box-shadow: var(--shadow-xl), var(--edge-highlight);
 }

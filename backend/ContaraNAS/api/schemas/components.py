@@ -190,6 +190,7 @@ class ModalSchema(BaseModel):
     type: Literal["modal"] = "modal"
     id: str
     title: str
+    size: Literal["sm", "md", "lg", "xl"] = "md"
     children: list["ComponentSchema"] = []
     footer: list["ComponentSchema"] | None = None
     closable: bool = True

@@ -1,7 +1,6 @@
 """Modal views for the Steam module"""
 
 from ContaraNAS.core.ui import (
-    Button,
     Grid,
     Modal,
     Progress,
@@ -16,14 +15,14 @@ from ContaraNAS.core.ui import (
 from .helpers import format_bytes
 
 
-def build_games_modal(games: list[dict], refresh_action) -> Modal:
+def build_games_modal(games: list[dict]) -> Modal:
     """Build the games list modal"""
     if not games:
         return Modal(
             id="steam_games",
             title="Steam Games",
+            size="lg",
             children=[Text(content="No games found", variant="muted")],
-            footer=[Button(label="Close", variant="ghost")],
         )
 
     # Summary stats
@@ -54,6 +53,7 @@ def build_games_modal(games: list[dict], refresh_action) -> Modal:
     return Modal(
         id="steam_games",
         title=f"Steam Games ({len(games)})",
+        size="lg",
         children=[
             Stack(
                 direction="vertical",
@@ -81,21 +81,17 @@ def build_games_modal(games: list[dict], refresh_action) -> Modal:
                 ],
             ),
         ],
-        footer=[
-            Button(label="Refresh", variant="secondary", icon="RefreshCw", on_click=refresh_action),
-            Button(label="Close", variant="ghost"),
-        ],
     )
 
 
-def build_libraries_modal(libraries: list[dict], refresh_action) -> Modal:
+def build_libraries_modal(libraries: list[dict]) -> Modal:
     """Build the libraries list modal"""
     if not libraries:
         return Modal(
             id="steam_libraries",
             title="Steam Libraries",
+            size="md",
             children=[Text(content="No libraries found", variant="muted")],
-            footer=[Button(label="Close", variant="ghost")],
         )
 
     library_cards = []
@@ -139,9 +135,6 @@ def build_libraries_modal(libraries: list[dict], refresh_action) -> Modal:
     return Modal(
         id="steam_libraries",
         title=f"Steam Libraries ({len(libraries)})",
+        size="md",
         children=[Stack(direction="vertical", gap="4", children=library_cards)],
-        footer=[
-            Button(label="Refresh", variant="secondary", icon="RefreshCw", on_click=refresh_action),
-            Button(label="Close", variant="ghost"),
-        ],
     )

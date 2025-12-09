@@ -131,7 +131,6 @@ class SysMonitorModule(Module):
                 open_cpu_action=self.open_cpu_details,
                 open_memory_action=self.open_memory_details,
                 open_disk_action=self.open_disk_details,
-                refresh_action=self.refresh,
             ),
             build_cpu_modal(self.state.cpu),
             build_memory_modal(self.state.memory),
