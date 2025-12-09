@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
-> **Estimated time:** 1-2 weeks remaining
-> **Status:** In Progress (Phase 10 Complete)
+> **Estimated time:** 1 week remaining
+> **Status:** In Progress (Phase 11 Complete)
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -441,25 +441,29 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 11.1 Steam module
 
-- [ ] Define `SteamState(ModuleState)`
-- [ ] Move state from controller instance vars to state class
-- [ ] Implement `get_tile()`
-- [ ] Implement `get_modals()` (games list, libraries)
-- [ ] Convert actions (refresh, etc.)
-- [ ] Test thoroughly
+- [x] Define `SteamState(ModuleState)`
+- [x] Move state from controller instance vars to state class
+- [x] Implement `get_tile()`
+- [x] Implement `get_modals()` (games list, libraries)
+- [x] Convert actions (refresh, etc.)
+- [x] Delete SteamController (logic moved to module)
+- [x] Create views package for UI separation
 
 ### 11.2 System Monitor module
 
-- [ ] Define `SysMonitorState(ModuleState)`
-- [ ] Move state from controller instance vars to state class
-- [ ] Implement `get_tile()`
-- [ ] Implement `get_modals()` (system details, processes, etc.)
-- [ ] Convert actions (refresh, etc.)
-- [ ] Test thoroughly
+- [x] Define `SysMonitorState(ModuleState)`
+- [x] Move state from controller instance vars to state class
+- [x] Implement `get_tile()`
+- [x] Implement `get_modals()` (system details, processes, etc.)
+- [x] Convert actions (refresh, etc.)
+- [x] Delete SysMonitorController (logic moved to module)
+- [x] Create views package for UI separation
 
 ### 11.3 Cleanup
 
-- [ ] Remove EventBus entirely
+- [x] Remove EventBus (not used by modules)
+- [x] All 57 tests passing
+- [x] Frontend build successful
 
 **Deliverable:** All modules use new system.
 

@@ -1,5 +1,4 @@
 from .config import settings
-from .event_bus import EventBus, event_bus
 from .exceptions import (
     ChecksumMismatchError,
     ContaraNASError,
@@ -19,9 +18,6 @@ from .state_manager import StateManager, state_manager
 __all__ = [
     # Config
     "settings",
-    # Event Bus
-    "EventBus",
-    "event_bus",
     # Exceptions
     "ContaraNASError",
     "ModuleError",

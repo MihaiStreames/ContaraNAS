@@ -34,6 +34,11 @@ class UIStore {
    * Initialize store with full app state
    */
   setAppState(modules: ModuleSnapshot[], activeModal: string | null = null) {
+    console.log(
+      "[UIStore] setAppState called with",
+      modules?.length,
+      "modules"
+    );
     const moduleMap = new Map<string, ModuleSnapshot>();
     for (const mod of modules) {
       moduleMap.set(mod.name, mod);
@@ -42,6 +47,7 @@ class UIStore {
     this.activeModal = activeModal;
     this.loading = false;
     this.error = null;
+    console.log("[UIStore] loading is now:", this.loading);
   }
 
   /**
@@ -83,6 +89,24 @@ class UIStore {
       if (mod.ui?.tile) {
         result.push({ module: mod.name, tile: mod.ui.tile });
       }
+    }
+    return result;
+  }
+
+  /**
+   * Get all modules with their tile data
+   */
+  get allModulesWithTiles(): Array<{
+    module: ModuleSnapshot;
+    tile: TileSchema | null;
+  }> {
+    const result: Array<{ module: ModuleSnapshot; tile: TileSchema | null }> =
+      [];
+    for (const mod of this.modules.values()) {
+      result.push({
+        module: mod,
+        tile: mod.ui?.tile ?? null,
+      });
     }
     return result;
   }

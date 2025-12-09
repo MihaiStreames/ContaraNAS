@@ -18,7 +18,7 @@
 
 <div class="alert alert-{variant}">
   <span class="alert-icon">
-    <svelte:component this={IconComponent} size={16} />
+    <IconComponent size={16} />
   </span>
   <div class="alert-content">
     {#if title}

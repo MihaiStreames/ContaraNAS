@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"author": "MihaiStreames",
 	"description": "Monitor your Steam game libraries",
-	"icon": "gamepad-2",
+	"icon": "Gamepad2",
 	"engine": {
 		"contaranas": "^0.1.0"
 	},

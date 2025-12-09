@@ -22,12 +22,7 @@
 </script>
 
 {#if IconComponent}
-  <svelte:component
-    this={IconComponent}
-    {size}
-    {strokeWidth}
-    class={className}
-  />
+  <IconComponent {size} {strokeWidth} class={className} />
 {:else}
   <span class="icon-placeholder" style="width: {size}px; height: {size}px;"
   ></span>

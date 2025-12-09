@@ -1,5 +1,6 @@
 // Component Renderer
 export { default as ComponentRenderer } from "./ComponentRenderer.svelte";
+export { default as ModuleRenderer } from "./ModuleRenderer.svelte";
 export { componentRegistry, isRenderableType } from "./registry";
 
 // Icon Helper

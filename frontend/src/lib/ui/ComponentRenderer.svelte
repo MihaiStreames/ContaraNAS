@@ -14,7 +14,7 @@
 </script>
 
 {#if Component}
-  <svelte:component this={Component} {...component} />
+  <Component {...component} />
 {:else}
   <div class="unknown-component">
     Unknown component type: {component.type}

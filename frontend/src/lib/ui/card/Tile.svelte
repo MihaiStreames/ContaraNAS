@@ -1,8 +1,14 @@
 <script lang="ts">
-  import type { TileSchema, BadgeSchema, StatSchema } from "$lib/api";
+  import type {
+    TileSchema,
+    BadgeSchema,
+    StatSchema,
+    ComponentSchema,
+  } from "$lib/api";
   import type { Snippet } from "svelte";
   import Icon from "../Icon.svelte";
   import Badge from "../display/Badge.svelte";
+  import ComponentRenderer from "../ComponentRenderer.svelte";
 
   interface Props
     extends Partial<
@@ -10,8 +16,8 @@
     > {
     badge?: BadgeSchema | null;
     stats?: StatSchema[];
-    content?: Snippet;
-    actions?: Snippet;
+    content?: Snippet | ComponentSchema[];
+    actions?: Snippet | ComponentSchema[];
   }
 
   let {
@@ -22,6 +28,9 @@
     content,
     actions,
   }: Props = $props();
+
+  // Check if value is a Snippet (function) or an array of components
+  const isSnippet = (val: unknown): val is Snippet => typeof val === "function";
 </script>
 
 <div class="module-tile">
@@ -50,13 +59,25 @@
 
   {#if content}
     <div class="tile-content">
-      {@render content()}
+      {#if isSnippet(content)}
+        {@render content()}
+      {:else if Array.isArray(content)}
+        {#each content as child}
+          <ComponentRenderer component={child} />
+        {/each}
+      {/if}
     </div>
   {/if}
 
   {#if actions}
     <div class="tile-actions">
-      {@render actions()}
+      {#if isSnippet(actions)}
+        {@render actions()}
+      {:else if Array.isArray(actions)}
+        {#each actions as action}
+          <ComponentRenderer component={action} />
+        {/each}
+      {/if}
     </div>
   {/if}
 </div>

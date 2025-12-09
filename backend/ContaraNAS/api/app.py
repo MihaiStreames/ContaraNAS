@@ -123,7 +123,7 @@ def create_app() -> FastAPI:
         logger.exception("Unhandled exception")
         return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
-    @app.get("/health", response_model=HealthResponse)
+    @app.get("/api/health", response_model=HealthResponse)
     async def health(request: Request) -> HealthResponse:
         """Health check endpoint"""
         checks = {
@@ -136,7 +136,7 @@ def create_app() -> FastAPI:
 
         return HealthResponse(status=status, timestamp=datetime.now().isoformat(), checks=checks)
 
-    @app.get("/info", response_model=InfoResponse)
+    @app.get("/api/info", response_model=InfoResponse)
     async def info() -> InfoResponse:
         """Server information"""
         return InfoResponse(

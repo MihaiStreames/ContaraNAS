@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Grid, Stack, Modal, Alert, Spinner, Text, Button } from "$lib/ui";
-  import { ComponentRenderer } from "$lib/ui";
+  import { ModuleRenderer } from "$lib/ui";
   import { uiStore, authStore } from "$lib/stores";
-  import { api, wsService } from "$lib/services";
+  import { api, wsService, ApiError } from "$lib/services";
   import { processActionResult } from "$lib/actions";
   import type { ActionRef } from "$lib/api";
 
@@ -61,15 +61,33 @@
     // Fetch initial state via REST (WebSocket will also send it, but this is faster)
     try {
       const state = await api.getState();
+      console.log("[Dashboard] Got state:", state.modules?.length, "modules");
       uiStore.setAppState(state.modules, state.active_modal);
+      console.log("[Dashboard] After setAppState, loading:", uiStore.loading);
     } catch (e) {
+      console.error("[Dashboard] Error fetching state:", e);
+      // If we get a 401, the token is invalid - clear credentials and go back to pairing
+      if (e instanceof ApiError && e.status === 401) {
+        authStore.clearCredentials();
+        uiStore.clear();
+        onDisconnect();
+        return;
+      }
       uiStore.setError(
         e instanceof Error ? e.message : "Failed to fetch state"
       );
     }
   }
 
-  function handleDisconnect() {
+  async function handleUnpair() {
+    // Unpair from the NAS first
+    try {
+      await api.unpair();
+    } catch (e) {
+      // Ignore errors - we're disconnecting anyway
+      console.warn("Failed to unpair:", e);
+    }
+
     wsService.disconnect();
     authStore.clearCredentials();
     uiStore.clear();
@@ -90,6 +108,28 @@
       uiStore.notify(e instanceof Error ? e.message : "Action failed", "error");
     }
   }
+
+  // Toggle module enabled state
+  async function toggleModule(moduleName: string, currentlyEnabled: boolean) {
+    try {
+      if (currentlyEnabled) {
+        await api.disableModule(moduleName);
+      } else {
+        await api.enableModule(moduleName);
+      }
+      // Refresh state after toggle
+      const state = await api.getState();
+      uiStore.setAppState(state.modules, state.active_modal);
+    } catch (e) {
+      uiStore.notify(
+        e instanceof Error ? e.message : "Failed to toggle module",
+        "error"
+      );
+    }
+  }
+
+  // Get all modules (enabled and disabled)
+  const allModules = $derived(Array.from(uiStore.modules.values()));
 
   // Find the current active modal's data
   const activeModalData = $derived(() => {
@@ -115,11 +155,11 @@
           <span class="connection-status disconnected">Disconnected</span>
         {/if}
         <Button
-          label="Disconnect"
+          label="Unpair"
           variant="ghost"
           size="sm"
-          icon="log-out"
-          onclick={handleDisconnect}
+          icon="LogOut"
+          onclick={handleUnpair}
         />
       </Stack>
     </div>
@@ -136,20 +176,95 @@
         <Alert variant="error" title="Error" message={uiStore.error} />
         <Button label="Retry" variant="primary" onclick={connectToNAS} />
       </div>
-    {:else if uiStore.tiles.length === 0}
+    {:else if allModules.length === 0}
       <div class="empty-container">
-        <Text content="No modules enabled" variant="muted" />
+        <Text content="No modules available" variant="muted" />
       </div>
     {:else}
       <Grid columns={3} gap="4">
-        {#each uiStore.tiles as { module, tile } (module)}
-          <ComponentRenderer
-            component={{
-              ...tile,
-              // Wire up actions to our handler
-              // TODO: Deep transform ActionRefs in the component tree
-            }}
-          />
+        {#each uiStore.allModulesWithTiles as { module: mod, tile } (mod.name)}
+          <div class="tile-wrapper" class:tile-disabled={!mod.enabled}>
+            {#if tile}
+              <ModuleRenderer
+                moduleName={mod.name}
+                component={tile}
+                onAction={handleAction}
+              />
+              <!-- Disabled overlay -->
+              {#if !mod.enabled}
+                <div class="tile-disabled-overlay">
+                  <Button
+                    label="Enable Module"
+                    variant="primary"
+                    onclick={() => toggleModule(mod.name, false)}
+                  />
+                </div>
+              {/if}
+            {:else}
+              <!-- Placeholder tile for uninitialized modules -->
+              <div class="module-tile placeholder-tile">
+                <div class="tile-header">
+                  <div class="tile-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8" />
+                      <path d="M3 16.2V21h4.8" />
+                      <path d="M21 7.8V3h-4.8" />
+                      <path d="M3 7.8V3h4.8" />
+                    </svg>
+                  </div>
+                  <div class="tile-title-group">
+                    <h3 class="tile-title">{mod.display_name}</h3>
+                  </div>
+                </div>
+                <div class="placeholder-tile-content">
+                  <Text
+                    content="Enable module to start collecting data"
+                    variant="muted"
+                  />
+                </div>
+                <div class="tile-actions">
+                  <Button
+                    label="Enable"
+                    variant="primary"
+                    size="sm"
+                    onclick={() => toggleModule(mod.name, false)}
+                  />
+                </div>
+              </div>
+            {/if}
+            {#if mod.enabled}
+              <button
+                class="tile-disable-btn"
+                onclick={() => toggleModule(mod.name, true)}
+                title="Disable module"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            {/if}
+          </div>
         {/each}
       </Grid>
     {/if}
@@ -157,7 +272,7 @@
 
   <!-- Modals -->
   {#if activeModalData()}
-    {@const { module, modal } = activeModalData()!}
+    {@const { module: modalModule, modal } = activeModalData()!}
     <Modal
       id={modal.id}
       title={modal.title}
@@ -167,14 +282,22 @@
       {#snippet children()}
         {#if modal.children}
           {#each modal.children as child}
-            <ComponentRenderer component={child} />
+            <ModuleRenderer
+              moduleName={modalModule}
+              component={child}
+              onAction={handleAction}
+            />
           {/each}
         {/if}
       {/snippet}
       {#snippet footer()}
         {#if modal.footer}
           {#each modal.footer as footerChild}
-            <ComponentRenderer component={footerChild} />
+            <ModuleRenderer
+              moduleName={modalModule}
+              component={footerChild}
+              onAction={handleAction}
+            />
           {/each}
         {/if}
       {/snippet}
@@ -266,5 +389,68 @@
     gap: var(--space-2);
     z-index: 1000;
     max-width: 400px;
+  }
+
+  .tile-wrapper {
+    position: relative;
+    height: 100%;
+  }
+
+  .tile-disable-btn {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: all var(--transition-fast);
+  }
+
+  .tile-wrapper:hover .tile-disable-btn {
+    opacity: 1;
+  }
+
+  .tile-disable-btn:hover {
+    background: var(--color-error-subtle);
+    border-color: var(--color-error);
+    color: var(--color-error-text);
+  }
+
+  .tile-disabled {
+    opacity: 0.7;
+  }
+
+  .tile-disabled-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: var(--radius-xl);
+    z-index: 10;
+  }
+
+  .placeholder-tile {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .placeholder-tile-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    text-align: center;
   }
 </style>

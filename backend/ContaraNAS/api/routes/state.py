@@ -29,9 +29,8 @@ def create_state_routes() -> APIRouter:
 
         modules = []
         for name, module in manager.modules.items():
-            ui = None
-            if module.enable_flag:
-                ui = module.render_ui()
+            # Always render UI - even for disabled modules (shows last known state)
+            ui = module.render_ui() if module.init_flag else None
 
             modules.append(
                 ModuleSnapshot(

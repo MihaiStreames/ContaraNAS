@@ -5,15 +5,35 @@
 
 import type { ActionRef } from "$lib/api";
 
+// Individual result types from the backend
+interface OpenModalResult {
+  type: "open_modal";
+  modal_id: string;
+}
+
+interface CloseModalResult {
+  type: "close_modal";
+  modal_id?: string;
+}
+
+interface NotifyResult {
+  type: "notify";
+  message: string;
+  variant: "info" | "success" | "warning" | "error";
+  title?: string;
+}
+
+interface RefreshResult {
+  type: "refresh";
+}
+
+type ResultItem = OpenModalResult | CloseModalResult | NotifyResult | RefreshResult;
+
 export interface ActionResult {
   success: boolean;
-  open_modal?: string;
-  close_modal?: string;
-  notify?: {
-    message: string;
-    variant: "info" | "success" | "warning" | "error";
-  };
-  refresh?: boolean;
+  module?: string;
+  action?: string;
+  results?: ResultItem[];
   error?: string;
 }
 
@@ -96,16 +116,22 @@ export function processActionResult(
     refresh?: () => void;
   }
 ): void {
-  if (result.open_modal && handlers.openModal) {
-    handlers.openModal(result.open_modal);
-  }
-  if (result.close_modal && handlers.closeModal) {
-    handlers.closeModal(result.close_modal);
-  }
-  if (result.notify && handlers.notify) {
-    handlers.notify(result.notify.message, result.notify.variant);
-  }
-  if (result.refresh && handlers.refresh) {
-    handlers.refresh();
+  if (!result.results) return;
+
+  for (const item of result.results) {
+    switch (item.type) {
+      case "open_modal":
+        handlers.openModal?.(item.modal_id);
+        break;
+      case "close_modal":
+        handlers.closeModal?.(item.modal_id ?? "");
+        break;
+      case "notify":
+        handlers.notify?.(item.message, item.variant);
+        break;
+      case "refresh":
+        handlers.refresh?.();
+        break;
+    }
   }
 }
