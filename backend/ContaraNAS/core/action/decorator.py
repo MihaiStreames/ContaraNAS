@@ -7,7 +7,7 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
-def action(func: Callable[P, R]) -> Callable[P, Coroutine[Any, Any, R]]:
+def action[**P, R](func: Callable[P, R]) -> Callable[P, Coroutine[Any, Any, R]]:
     """Decorator to mark a method as an action callable from frontend"""
 
     @wraps(func)
@@ -27,8 +27,8 @@ def action(func: Callable[P, R]) -> Callable[P, Coroutine[Any, Any, R]]:
         return result
 
     # Mark as action
-    setattr(wrapper, "__action__", True)
-    setattr(wrapper, "__action_name__", func.__name__)
+    wrapper.__action__ = True
+    wrapper.__action_name__ = func.__name__
 
     return wrapper
 

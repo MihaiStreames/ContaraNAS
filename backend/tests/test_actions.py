@@ -11,7 +11,7 @@ from ContaraNAS.core.action import (
     get_actions,
 )
 from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Tile, Stat
+from ContaraNAS.core.ui import Stat, Tile
 
 
 class MockState(ModuleState):

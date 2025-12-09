@@ -1,16 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 from warnings import warn
 
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
+from ContaraNAS.core.ui import Modal, Tile
 from ContaraNAS.core.utils import get_logger
 
 from .metadata import ModuleMetadata
 from .state import ModuleState
-
-if TYPE_CHECKING:
-    from ContaraNAS.core.ui import Tile
 
 
 logger = get_logger(__name__)
@@ -72,11 +70,31 @@ class Module(ABC):
     async def stop_monitoring(self):
         """Stop all event handlers/watchers"""
 
-    def get_tile(self) -> "Tile":
+    def get_tile(self) -> Tile:
         """Return the dashboard tile UI component"""
-        raise NotImplementedError(
-            f"Module {self.name} must implement get_tile()"
-        )
+        raise NotImplementedError(f"Module {self.name} must implement get_tile()")
+
+    def get_modals(self) -> list[Modal]:
+        """Return modal definitions for this module"""
+        return []
+
+    def render_tile(self) -> dict[str, Any]:
+        """Serialize tile to dict for frontend"""
+        try:
+            return self.get_tile().to_dict()
+        except NotImplementedError:
+            return {}
+
+    def render_modals(self) -> list[dict[str, Any]]:
+        """Serialize modals to dicts for frontend"""
+        return [modal.to_dict() for modal in self.get_modals()]
+
+    def render_ui(self) -> dict[str, Any]:
+        """Return complete UI state for frontend"""
+        return {
+            "tile": self.render_tile(),
+            "modals": self.render_modals(),
+        }
 
     async def get_tile_data(self) -> dict[str, Any]:
         """Get data for dashboard tile display
@@ -172,7 +190,7 @@ class Module(ABC):
         return None
 
     def _on_state_commit(self) -> None:
-        """Called when typed state is committed"""
+        """Called when typed state is committed - triggers UI re-render"""
         if self._typed_state is None:
             return
 
@@ -181,35 +199,15 @@ class Module(ABC):
             {
                 "name": self.name,
                 "state": self._typed_state.to_dict(),
+                "ui": self.render_ui(),
             },
         )
 
-    def _get_tile_data_compat(self) -> dict[str, Any]:
-        """Get tile data with backwards compatibility.
-
-        Tries get_tile() first, falls back to get_tile_data() for legacy modules.
-        """
-        try:
-            tile = self.get_tile()
-            return tile.to_dict()
-        except NotImplementedError:
-            # Fall back to legacy get_tile_data() - will emit deprecation warning
-            import asyncio
-
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                # We're in an async context, need to handle differently
-                # For now, return empty dict - the async version will be called
-                return {}
-            return loop.run_until_complete(self.get_tile_data())
-
     async def _emit_event(self, change_type: str, data: dict | None = None):
         """Emit state change event"""
-        # Try get_tile() first, fall back to get_tile_data() for backwards compat
-        try:
-            tile = self.get_tile()
-            tile_data = tile.to_dict()
-        except NotImplementedError:
+        # Try new render methods first, fall back to get_tile_data() for legacy
+        tile_data = self.render_tile()
+        if not tile_data:
             # Legacy module using get_tile_data()
             tile_data = await self.get_tile_data()
 
@@ -220,10 +218,10 @@ class Module(ABC):
             "initialized": self.init_flag,
             "state": self.state.copy(),
             "tile_data": tile_data,
+            "modals": self.render_modals(),
             "change_type": change_type,
         }
 
-        # Include metadata if available
         if self._metadata:
             event_data["metadata"] = self.metadata.to_dict()
 

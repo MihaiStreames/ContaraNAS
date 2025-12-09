@@ -1,6 +1,6 @@
 from ContaraNAS.core.event_bus import event_bus
 from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Tile, Stat
+from ContaraNAS.core.ui import Stat, Tile
 
 
 class SampleState(ModuleState):
@@ -27,7 +27,9 @@ class SampleModule(Module):
         return Tile(
             icon="box",
             title="Sample",
-            stats=[Stat(label="Counter", value=self.typed_state.counter if self.typed_state else 0)],
+            stats=[
+                Stat(label="Counter", value=self.typed_state.counter if self.typed_state else 0)
+            ],
         )
 
 

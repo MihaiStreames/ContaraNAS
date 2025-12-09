@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
 > **Estimated time:** 4-6 weeks  
-> **Status:** In Progress (Phase 3 Complete)  
+> **Status:** In Progress (Phase 4 Complete)  
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -166,10 +166,10 @@ backend defines UI structure, frontend renders it.
 ### 4.1 Module base class updates
 
 - [x] Add `get_tile(self) -> Tile` method (sync - just builds UI from state)
-- [ ] Add `get_modals(self) -> list[Modal]` method (sync - just builds UI from state)
-- [ ] Add `render_tile()` - serializes tile to dict
-- [ ] Add `render_modals()` - serializes modals to dicts
-- [ ] Add `render_ui()` - returns complete UI state
+- [x] Add `get_modals(self) -> list[Modal]` method (sync - just builds UI from state)
+- [x] Add `render_tile()` - serializes tile to dict
+- [x] Add `render_modals()` - serializes modals to dicts
+- [x] Add `render_ui()` - returns complete UI state
 
 **Note:** `get_tile()` and `get_modals()` are synchronous because they only construct UI objects from existing state. No
 I/O is needed - state is already loaded via `start_monitoring()` or updated via actions.
@@ -182,17 +182,17 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 4.3 UI rendering pipeline
 
-- [ ] On `commit()`, trigger UI re-render
-- [ ] Call `get_tile()` and `get_modals()`
-- [ ] Serialize component tree
+- [x] On `commit()`, trigger UI re-render
+- [x] Call `get_tile()` and `get_modals()`
+- [x] Serialize component tree
 - [ ] Compare with previous (optional optimization)
-- [ ] Emit update event
+- [x] Emit update event
 
 ### 4.4 Tests
 
-- [ ] Test `get_tile()` returns Component
-- [ ] Test `render_ui()` serialization
-- [ ] Test backwards compatibility with `get_tile_data()`
+- [x] Test `get_tile()` returns Component
+- [x] Test `render_ui()` serialization
+- [x] Test backwards compatibility with `get_tile_data()`
 
 **Deliverable:** Modules can define UI, serializes to JSON.
 
