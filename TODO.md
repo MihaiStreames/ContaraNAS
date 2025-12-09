@@ -422,11 +422,20 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 - [ ] Remove old `get_tile_data()`
 - [ ] Test thoroughly
 
-### 11.2 Other modules
+### 11.2 System Monitor module
 
-- [ ] List all modules to migrate
-- [ ] Migrate one by one
+- [ ] Define `SysMonitorState(ModuleState)`
+- [ ] Move state from controller instance vars to state class
+- [ ] Implement `get_tile()`
+- [ ] Implement `get_modals()` (system details, processes, etc.)
+- [ ] Convert actions (refresh, etc.)
+- [ ] Remove old `get_tile_data()`
+- [ ] Test thoroughly
+
+### 11.3 Cleanup
+
 - [ ] Remove legacy code paths when all migrated
+- [ ] Remove EventBus (replaced by commit/WebSocket updates)
 
 **Deliverable:** All modules use new system.
 
@@ -438,24 +447,24 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 12.1 Module development guide
 
-- [ ] Defining state
-- [ ] Available components
-- [ ] Building tiles
-- [ ] Building modals
-- [ ] Actions and interactions
-- [ ] Forms and user input
-- [ ] Best practices
+- [x] Defining state
+- [x] Available components
+- [x] Building tiles
+- [x] Building modals
+- [x] Actions and interactions
+- [x] Forms and user input
+- [x] Best practices
 
 ### 12.2 Component reference
 
-- [ ] Document each component
-- [ ] Props, examples, do's and don'ts
+- [x] Document each component
+- [x] Props, examples, do's and don'ts
 
-### 12.3 Example module
+### 12.3 Example module / template
 
-- [ ] Create minimal example module
-- [ ] Create more complex example module
-- [ ] Template repository or cookiecutter
+- [x] Create minimal example module (in docs)
+- [x] Create more complex example module (TaskModule in actions.md)
+- [ ] Template repository or cookiecutter (optional, for later)
 
 **Deliverable:** Docs ready for community.
 
