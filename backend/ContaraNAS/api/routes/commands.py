@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
-from ContaraNAS.api.responses import ModuleActionResponse, ModuleInfo, ModuleListResponse
+from ContaraNAS.api.responses import ModuleInfo, ModuleListResponse, ModuleToggleResponse
 from ContaraNAS.core.utils import get_logger
 
 from .auth import require_auth
@@ -48,12 +48,12 @@ def create_command_routes() -> APIRouter:
 
         return ModuleListResponse(modules=modules)
 
-    @router.post("/modules/{name}/enable", response_model=ModuleActionResponse)
+    @router.post("/modules/{name}/enable", response_model=ModuleToggleResponse)
     async def enable_module(
         name: str,
         request: Request,
         _: None = Depends(require_auth),
-    ) -> ModuleActionResponse:
+    ) -> ModuleToggleResponse:
         """Enable a registered module"""
         manager = get_manager(request)
 
@@ -62,17 +62,17 @@ def create_command_routes() -> APIRouter:
 
         try:
             await manager.enable_module(name)
-            return ModuleActionResponse(success=True, module=name, enabled=True)
+            return ModuleToggleResponse(success=True, module=name, enabled=True)
         except Exception as e:
             logger.error(f"Failed to enable {name}: {e}")
             raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e)) from e
 
-    @router.post("/modules/{name}/disable", response_model=ModuleActionResponse)
+    @router.post("/modules/{name}/disable", response_model=ModuleToggleResponse)
     async def disable_module(
         name: str,
         request: Request,
         _: None = Depends(require_auth),
-    ) -> ModuleActionResponse:
+    ) -> ModuleToggleResponse:
         """Disable an enabled module"""
         manager = get_manager(request)
 
@@ -81,7 +81,7 @@ def create_command_routes() -> APIRouter:
 
         try:
             await manager.disable_module(name)
-            return ModuleActionResponse(success=True, module=name, enabled=False)
+            return ModuleToggleResponse(success=True, module=name, enabled=False)
         except Exception as e:
             logger.error(f"Failed to disable {name}: {e}")
             raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e)) from e

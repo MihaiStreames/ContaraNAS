@@ -35,8 +35,8 @@ class ModuleListResponse(BaseModel):
     modules: list[ModuleInfo]
 
 
-class ModuleActionResponse(BaseModel):
-    """Response for module enable/disable actions"""
+class ModuleToggleResponse(BaseModel):
+    """Response for module enable/disable toggle"""
 
     success: bool
     module: str
@@ -57,3 +57,57 @@ class InfoResponse(BaseModel):
     name: str
     version: str
     timestamp: str
+
+
+class ModuleUIResponse(BaseModel):
+    """Full UI response for a module"""
+
+    module: str
+    ui: dict
+
+
+class ModuleTileResponse(BaseModel):
+    """Tile-only response for a module"""
+
+    module: str
+    tile: dict
+
+
+class ModuleModalsResponse(BaseModel):
+    """Modals-only response for a module"""
+
+    module: str
+    modals: list[dict]
+
+
+class ActionResultResponse(BaseModel):
+    """Response from invoking an action"""
+
+    success: bool
+    module: str
+    action: str
+    results: list[dict]
+
+
+class ActionListResponse(BaseModel):
+    """List of available actions for a module"""
+
+    module: str
+    actions: list[str]
+
+
+class ModuleSnapshot(BaseModel):
+    """Snapshot of a module's current state including UI"""
+
+    name: str
+    display_name: str
+    enabled: bool
+    initialized: bool
+    ui: dict | None = None
+
+
+class AppStateResponse(BaseModel):
+    """Full application state response"""
+
+    modules: list[ModuleSnapshot]
+    active_modal: str | None = None

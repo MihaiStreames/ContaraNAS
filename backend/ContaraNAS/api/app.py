@@ -8,12 +8,19 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
 from ContaraNAS.core import MarketplaceClient, ModuleManager, settings
+from ContaraNAS.core.action import ActionDispatcher
 from ContaraNAS.core.auth import AuthService, PairingConfig
 from ContaraNAS.core.exceptions import ContaraNASError
 from ContaraNAS.core.utils import get_logger, setup_logging
 
 from .responses import HealthResponse, InfoResponse
-from .routes import create_auth_routes, create_command_routes, create_marketplace_routes
+from .routes import (
+    create_auth_routes,
+    create_command_routes,
+    create_marketplace_routes,
+    create_module_routes,
+    create_state_routes,
+)
 from .stream import StreamManager
 
 
@@ -42,6 +49,11 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     # Module manager
     app.state.module_manager = ModuleManager()
     app.state.stream_manager = StreamManager(app.state.module_manager)
+
+    # Action dispatcher - register all modules
+    app.state.action_dispatcher = ActionDispatcher()
+    for module in app.state.module_manager.modules.values():
+        app.state.action_dispatcher.register_module(module)
 
     # Marketplace client
     app.state.marketplace_client = MarketplaceClient(
@@ -91,6 +103,8 @@ def create_app() -> FastAPI:
     app.include_router(create_command_routes())
     app.include_router(create_auth_routes())
     app.include_router(create_marketplace_routes())
+    app.include_router(create_module_routes())
+    app.include_router(create_state_routes())
 
     @app.exception_handler(ContaraNASError)
     async def contaranas_error_handler(_request: Request, exc: ContaraNASError):

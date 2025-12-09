@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
 > **Estimated time:** 4-6 weeks  
-> **Status:** In Progress (Phase 4 Complete)  
+> **Status:** In Progress (Phase 5 Complete)  
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -204,22 +204,22 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ### 5.1 UI endpoints
 
-- [ ] `GET /api/modules/{name}/ui` - full UI (tile + modals)
-- [ ] `GET /api/modules/{name}/tile` - just tile
-- [ ] `GET /api/modules/{name}/modals` - just modals
+- [x] `GET /api/modules/{name}/ui` - full UI (tile + modals)
+- [x] `GET /api/modules/{name}/tile` - just tile
+- [x] `GET /api/modules/{name}/modals` - just modals
 
 ### 5.2 Action endpoint
 
-- [ ] `POST /api/modules/{name}/action/{action_name}`
-- [ ] Accept JSON payload for action arguments
-- [ ] Return action results (success, open_modal, notify, etc.)
-- [ ] Error responses
+- [x] `POST /api/modules/{name}/action/{action_name}`
+- [x] Accept JSON payload for action arguments
+- [x] Return action results (success, open_modal, notify, etc.)
+- [x] Error responses
 
 ### 5.3 Initial state endpoint
 
-- [ ] `GET /api/state` - full app state on connect
-- [ ] All modules' UI in one response
-- [ ] App-level state (active modal, etc.)
+- [x] `GET /api/state` - full app state on connect
+- [x] All modules' UI in one response
+- [x] App-level state (active modal, etc.)
 
 **Deliverable:** Can curl the API and get UI JSON back.
 
