@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from ContaraNAS.api.routes.auth import require_auth
+from ContaraNAS.core import MarketplaceClient
 from ContaraNAS.core.exceptions import ChecksumMismatchError, MarketplaceError
-from ContaraNAS.core.marketplace import MarketplaceClient
 from ContaraNAS.core.utils import get_logger
 
 

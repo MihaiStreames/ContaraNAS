@@ -1,4 +1,9 @@
+from typing import Any
+
 from pydantic import BaseModel
+
+from .schemas.components import ModalSchema, TileSchema
+from .schemas.ui import ModuleUI
 
 
 class SuccessResponse(BaseModel):
@@ -63,21 +68,31 @@ class ModuleUIResponse(BaseModel):
     """Full UI response for a module"""
 
     module: str
-    ui: dict
+    ui: ModuleUI
 
 
 class ModuleTileResponse(BaseModel):
     """Tile-only response for a module"""
 
     module: str
-    tile: dict
+    tile: TileSchema
 
 
 class ModuleModalsResponse(BaseModel):
     """Modals-only response for a module"""
 
     module: str
-    modals: list[dict]
+    modals: list[ModalSchema]
+
+
+class ActionResultItem(BaseModel):
+    """Single action result item"""
+
+    type: str
+    # Optional fields depending on type
+    modal_id: str | None = None
+    message: str | None = None
+    variant: str | None = None
 
 
 class ActionResultResponse(BaseModel):
@@ -86,7 +101,7 @@ class ActionResultResponse(BaseModel):
     success: bool
     module: str
     action: str
-    results: list[dict]
+    results: list[dict[str, Any]]
 
 
 class ActionListResponse(BaseModel):
@@ -103,7 +118,7 @@ class ModuleSnapshot(BaseModel):
     display_name: str
     enabled: bool
     initialized: bool
-    ui: dict | None = None
+    ui: ModuleUI | None = None
 
 
 class AppStateResponse(BaseModel):

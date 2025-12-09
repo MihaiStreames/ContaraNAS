@@ -1,7 +1,7 @@
 # Declarative UI System - Implementation Plan
 
 > **Estimated time:** 2-3 weeks remaining
-> **Status:** In Progress (Phase 6 Complete)
+> **Status:** In Progress (Phase 7 Complete)
 > **Goal:** Module authors write Python only, UI renders automatically with consistent design
 
 ---
@@ -258,32 +258,33 @@ I/O is needed - state is already loaded via `start_monitoring()` or updated via 
 
 ## Phase 7: Type Generation
 
-**Goal:** TypeScript types auto-generated from Python.
+**Goal:** TypeScript types auto-generated from Python via OpenAPI.
 
-### 7.1 Generation script
+### 7.1 OpenAPI Schema Generation
 
-- [ ] Create `scripts/generate_ui_types.py`
-- [ ] Read all Component subclasses
-- [ ] Convert Pydantic fields to TypeScript types
-- [ ] Handle Literal types (unions)
-- [ ] Handle nested types
-- [ ] Handle list/dict types
-- [ ] Handle optional types
+- [x] Create `backend/ContaraNAS/api/schemas/` with typed Pydantic models
+- [x] Create `scripts/generate_api_types.py` to export OpenAPI JSON
+- [x] Schemas mirror UI components for JSON serialization
+- [x] Handle discriminated unions with `type` field
+- [x] Handle nested component types
+- [x] Handle all field types (Literal, Optional, list, dict, tuple)
 
-### 7.2 Output
+### 7.2 TypeScript Generation
 
-- [ ] Generate `frontend/src/lib/ui/types.generated.ts`
-- [ ] Export all component prop interfaces
-- [ ] Export `ComponentNode` union type
-- [ ] Export action-related types
+- [x] Install `openapi-typescript` for type generation
+- [x] Generate `frontend/src/lib/api/types.generated.ts` from OpenAPI
+- [x] Generate `frontend/src/lib/api/index.ts` with convenient aliases
+- [x] Export `ComponentSchema` union type
+- [x] Export all response types
+- [x] Export `isComponentType` type guard
 
 ### 7.3 Build integration
 
-- [ ] Add npm script to run generation
-- [ ] Run on `npm run dev` and `npm run build`
-- [ ] Git-ignore or commit generated file (decide)
+- [x] Create `scripts/generate-types.sh` that runs all steps
+- [x] Add `pnpm run generate` to call the shell script
+- [x] TypeScript compilation check verifies generated types
 
-**Deliverable:** TypeScript types match Python, auto-updated.
+**Deliverable:** TypeScript types match Python, auto-updated via `pnpm run generate`.
 
 ---
 

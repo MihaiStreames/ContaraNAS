@@ -1,0 +1,2756 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ContaraNAS API",
+    "description": "Backend API for ContaraNAS",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/modules": {
+      "get": {
+        "tags": [
+          "commands"
+        ],
+        "summary": "List Modules",
+        "description": "List all registered modules with their current state",
+        "operationId": "list_modules_api_modules_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleListResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/modules/{name}/enable": {
+      "post": {
+        "tags": [
+          "commands"
+        ],
+        "summary": "Enable Module",
+        "description": "Enable a registered module",
+        "operationId": "enable_module_api_modules__name__enable_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleToggleResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/modules/{name}/disable": {
+      "post": {
+        "tags": [
+          "commands"
+        ],
+        "summary": "Disable Module",
+        "description": "Disable an enabled module",
+        "operationId": "disable_module_api_modules__name__disable_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleToggleResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/pair": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Pair",
+        "description": "Exchange a pairing code for an API token",
+        "operationId": "pair_api_auth_pair_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PairRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/unpair": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Unpair",
+        "description": "Unpair the app from this NAS. Requires authentication",
+        "operationId": "unpair_api_auth_unpair_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/marketplace/modules": {
+      "get": {
+        "tags": [
+          "marketplace"
+        ],
+        "summary": "List Modules",
+        "description": "List all available modules from marketplace",
+        "operationId": "list_modules_api_marketplace_modules_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/marketplace/modules/{module_id}": {
+      "get": {
+        "tags": [
+          "marketplace"
+        ],
+        "summary": "Get Module",
+        "description": "Get detailed information about a specific module",
+        "operationId": "get_module_api_marketplace_modules__module_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "module_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Module Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/marketplace/refresh": {
+      "post": {
+        "tags": [
+          "marketplace"
+        ],
+        "summary": "Refresh Registry",
+        "description": "Force refresh the marketplace registry cache",
+        "operationId": "refresh_registry_api_marketplace_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/modules/{name}/ui": {
+      "get": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "Get Module Ui",
+        "description": "Get full UI for a module (tile + modals)",
+        "operationId": "get_module_ui_api_modules__name__ui_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleUIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/modules/{name}/tile": {
+      "get": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "Get Module Tile",
+        "description": "Get just the tile for a module",
+        "operationId": "get_module_tile_api_modules__name__tile_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleTileResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/modules/{name}/modals": {
+      "get": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "Get Module Modals",
+        "description": "Get just the modals for a module",
+        "operationId": "get_module_modals_api_modules__name__modals_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleModalsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/modules/{name}/action/{action_name}": {
+      "post": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "Invoke Action",
+        "description": "Invoke an action on a module",
+        "operationId": "invoke_action_api_modules__name__action__action_name__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "action_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Action Name"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Invoke Action Api Modules  Name  Action  Action Name  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/modules/{name}/actions": {
+      "get": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "List Module Actions",
+        "description": "List available actions for a module",
+        "operationId": "list_module_actions_api_modules__name__actions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response List Module Actions Api Modules  Name  Actions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/state": {
+      "get": {
+        "tags": [
+          "state"
+        ],
+        "summary": "Get App State",
+        "description": "Get full application state",
+        "operationId": "get_app_state_api_state_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppStateResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "description": "Health check endpoint",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "summary": "Info",
+        "description": "Server information",
+        "operationId": "info_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActionRef": {
+        "properties": {
+          "__action__": {
+            "type": "string",
+            "title": "Action"
+          }
+        },
+        "type": "object",
+        "required": [
+          "__action__"
+        ],
+        "title": "ActionRef",
+        "description": "Reference to a callable action"
+      },
+      "AlertSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "alert",
+            "title": "Type",
+            "default": "alert"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "info",
+              "success",
+              "warning",
+              "error"
+            ],
+            "title": "Variant",
+            "default": "info"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "AlertSchema",
+        "description": "Alert message"
+      },
+      "AppStateResponse": {
+        "properties": {
+          "modules": {
+            "items": {
+              "$ref": "#/components/schemas/ModuleSnapshot"
+            },
+            "type": "array",
+            "title": "Modules"
+          },
+          "active_modal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Modal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "modules"
+        ],
+        "title": "AppStateResponse",
+        "description": "Full application state response"
+      },
+      "BadgeSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "badge",
+            "title": "Type",
+            "default": "badge"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "default",
+              "primary",
+              "success",
+              "warning",
+              "error",
+              "info"
+            ],
+            "title": "Variant",
+            "default": "default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "BadgeSchema",
+        "description": "Small label badge"
+      },
+      "ButtonSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "button",
+            "title": "Type",
+            "default": "button"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "on_click": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ActionRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "secondary",
+              "ghost",
+              "danger"
+            ],
+            "title": "Variant",
+            "default": "primary"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "md",
+              "lg"
+            ],
+            "title": "Size",
+            "default": "md"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon"
+          },
+          "icon_only": {
+            "type": "boolean",
+            "title": "Icon Only",
+            "default": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "default": false
+          },
+          "loading": {
+            "type": "boolean",
+            "title": "Loading",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "label"
+        ],
+        "title": "ButtonSchema",
+        "description": "Clickable button"
+      },
+      "CardSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "card",
+            "title": "Type",
+            "default": "card"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "children": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StackSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GridSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TileSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatCardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/BadgeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ButtonSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/InputSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectOptionSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ToggleSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CheckboxSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ModalSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AlertSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SpinnerSchema"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "alert": "#/components/schemas/AlertSchema",
+                  "badge": "#/components/schemas/BadgeSchema",
+                  "button": "#/components/schemas/ButtonSchema",
+                  "card": "#/components/schemas/CardSchema",
+                  "checkbox": "#/components/schemas/CheckboxSchema",
+                  "grid": "#/components/schemas/GridSchema",
+                  "input": "#/components/schemas/InputSchema",
+                  "modal": "#/components/schemas/ModalSchema",
+                  "progress": "#/components/schemas/ProgressSchema",
+                  "select": "#/components/schemas/SelectSchema",
+                  "select_option": "#/components/schemas/SelectOptionSchema",
+                  "spinner": "#/components/schemas/SpinnerSchema",
+                  "stack": "#/components/schemas/StackSchema",
+                  "stat": "#/components/schemas/StatSchema",
+                  "stat_card": "#/components/schemas/StatCardSchema",
+                  "table": "#/components/schemas/TableSchema",
+                  "table_column": "#/components/schemas/TableColumnSchema",
+                  "text": "#/components/schemas/TextSchema",
+                  "tile": "#/components/schemas/TileSchema",
+                  "toggle": "#/components/schemas/ToggleSchema"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          },
+          "footer": {
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/StackSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GridSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CardSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TileSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatCardSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProgressSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BadgeSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TableSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TableColumnSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ButtonSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InputSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SelectSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SelectOptionSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ToggleSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CheckboxSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ModalSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AlertSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SpinnerSchema"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "alert": "#/components/schemas/AlertSchema",
+                      "badge": "#/components/schemas/BadgeSchema",
+                      "button": "#/components/schemas/ButtonSchema",
+                      "card": "#/components/schemas/CardSchema",
+                      "checkbox": "#/components/schemas/CheckboxSchema",
+                      "grid": "#/components/schemas/GridSchema",
+                      "input": "#/components/schemas/InputSchema",
+                      "modal": "#/components/schemas/ModalSchema",
+                      "progress": "#/components/schemas/ProgressSchema",
+                      "select": "#/components/schemas/SelectSchema",
+                      "select_option": "#/components/schemas/SelectOptionSchema",
+                      "spinner": "#/components/schemas/SpinnerSchema",
+                      "stack": "#/components/schemas/StackSchema",
+                      "stat": "#/components/schemas/StatSchema",
+                      "stat_card": "#/components/schemas/StatCardSchema",
+                      "table": "#/components/schemas/TableSchema",
+                      "table_column": "#/components/schemas/TableColumnSchema",
+                      "text": "#/components/schemas/TextSchema",
+                      "tile": "#/components/schemas/TileSchema",
+                      "toggle": "#/components/schemas/ToggleSchema"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Footer"
+          }
+        },
+        "type": "object",
+        "title": "CardSchema",
+        "description": "Card container with optional header and footer"
+      },
+      "CheckboxSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "checkbox",
+            "title": "Type",
+            "default": "checkbox"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked",
+            "default": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CheckboxSchema",
+        "description": "Checkbox input"
+      },
+      "GridSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "grid",
+            "title": "Type",
+            "default": "grid"
+          },
+          "columns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Columns",
+            "default": 2
+          },
+          "gap": {
+            "type": "string",
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "8"
+            ],
+            "title": "Gap",
+            "default": "4"
+          },
+          "children": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StackSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GridSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TileSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatCardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/BadgeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ButtonSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/InputSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectOptionSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ToggleSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CheckboxSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ModalSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AlertSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SpinnerSchema"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "alert": "#/components/schemas/AlertSchema",
+                  "badge": "#/components/schemas/BadgeSchema",
+                  "button": "#/components/schemas/ButtonSchema",
+                  "card": "#/components/schemas/CardSchema",
+                  "checkbox": "#/components/schemas/CheckboxSchema",
+                  "grid": "#/components/schemas/GridSchema",
+                  "input": "#/components/schemas/InputSchema",
+                  "modal": "#/components/schemas/ModalSchema",
+                  "progress": "#/components/schemas/ProgressSchema",
+                  "select": "#/components/schemas/SelectSchema",
+                  "select_option": "#/components/schemas/SelectOptionSchema",
+                  "spinner": "#/components/schemas/SpinnerSchema",
+                  "stack": "#/components/schemas/StackSchema",
+                  "stat": "#/components/schemas/StatSchema",
+                  "stat_card": "#/components/schemas/StatCardSchema",
+                  "table": "#/components/schemas/TableSchema",
+                  "table_column": "#/components/schemas/TableColumnSchema",
+                  "text": "#/components/schemas/TextSchema",
+                  "tile": "#/components/schemas/TileSchema",
+                  "toggle": "#/components/schemas/ToggleSchema"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "GridSchema",
+        "description": "CSS Grid layout"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "checks": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Checks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "timestamp",
+          "checks"
+        ],
+        "title": "HealthResponse",
+        "description": "Health check response"
+      },
+      "InfoResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "version",
+          "timestamp"
+        ],
+        "title": "InfoResponse",
+        "description": "Server information response"
+      },
+      "InputSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "input",
+            "title": "Type",
+            "default": "input"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value",
+            "default": ""
+          },
+          "input_type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "password",
+              "email",
+              "number"
+            ],
+            "title": "Input Type",
+            "default": "text"
+          },
+          "placeholder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Placeholder"
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "InputSchema",
+        "description": "Text input field"
+      },
+      "ModalSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "modal",
+            "title": "Type",
+            "default": "modal"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "children": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StackSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GridSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TileSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatCardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/BadgeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ButtonSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/InputSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectOptionSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ToggleSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CheckboxSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ModalSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AlertSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SpinnerSchema"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "alert": "#/components/schemas/AlertSchema",
+                  "badge": "#/components/schemas/BadgeSchema",
+                  "button": "#/components/schemas/ButtonSchema",
+                  "card": "#/components/schemas/CardSchema",
+                  "checkbox": "#/components/schemas/CheckboxSchema",
+                  "grid": "#/components/schemas/GridSchema",
+                  "input": "#/components/schemas/InputSchema",
+                  "modal": "#/components/schemas/ModalSchema",
+                  "progress": "#/components/schemas/ProgressSchema",
+                  "select": "#/components/schemas/SelectSchema",
+                  "select_option": "#/components/schemas/SelectOptionSchema",
+                  "spinner": "#/components/schemas/SpinnerSchema",
+                  "stack": "#/components/schemas/StackSchema",
+                  "stat": "#/components/schemas/StatSchema",
+                  "stat_card": "#/components/schemas/StatCardSchema",
+                  "table": "#/components/schemas/TableSchema",
+                  "table_column": "#/components/schemas/TableColumnSchema",
+                  "text": "#/components/schemas/TextSchema",
+                  "tile": "#/components/schemas/TileSchema",
+                  "toggle": "#/components/schemas/ToggleSchema"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          },
+          "footer": {
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/StackSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GridSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CardSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TileSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatCardSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProgressSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BadgeSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TableSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TableColumnSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ButtonSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InputSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SelectSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SelectOptionSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ToggleSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CheckboxSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ModalSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AlertSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SpinnerSchema"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "alert": "#/components/schemas/AlertSchema",
+                      "badge": "#/components/schemas/BadgeSchema",
+                      "button": "#/components/schemas/ButtonSchema",
+                      "card": "#/components/schemas/CardSchema",
+                      "checkbox": "#/components/schemas/CheckboxSchema",
+                      "grid": "#/components/schemas/GridSchema",
+                      "input": "#/components/schemas/InputSchema",
+                      "modal": "#/components/schemas/ModalSchema",
+                      "progress": "#/components/schemas/ProgressSchema",
+                      "select": "#/components/schemas/SelectSchema",
+                      "select_option": "#/components/schemas/SelectOptionSchema",
+                      "spinner": "#/components/schemas/SpinnerSchema",
+                      "stack": "#/components/schemas/StackSchema",
+                      "stat": "#/components/schemas/StatSchema",
+                      "stat_card": "#/components/schemas/StatCardSchema",
+                      "table": "#/components/schemas/TableSchema",
+                      "table_column": "#/components/schemas/TableColumnSchema",
+                      "text": "#/components/schemas/TextSchema",
+                      "tile": "#/components/schemas/TileSchema",
+                      "toggle": "#/components/schemas/ToggleSchema"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Footer"
+          },
+          "closable": {
+            "type": "boolean",
+            "title": "Closable",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ModalSchema",
+        "description": "Modal dialog"
+      },
+      "ModuleInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "initialized": {
+            "type": "boolean",
+            "title": "Initialized"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "removable": {
+            "type": "boolean",
+            "title": "Removable"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "system_deps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "System Deps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "display_name",
+          "enabled",
+          "initialized",
+          "source",
+          "removable",
+          "version",
+          "system_deps"
+        ],
+        "title": "ModuleInfo",
+        "description": "Information about a module"
+      },
+      "ModuleListResponse": {
+        "properties": {
+          "modules": {
+            "items": {
+              "$ref": "#/components/schemas/ModuleInfo"
+            },
+            "type": "array",
+            "title": "Modules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "modules"
+        ],
+        "title": "ModuleListResponse",
+        "description": "Response listing all modules"
+      },
+      "ModuleModalsResponse": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "modals": {
+            "items": {
+              "$ref": "#/components/schemas/ModalSchema"
+            },
+            "type": "array",
+            "title": "Modals"
+          }
+        },
+        "type": "object",
+        "required": [
+          "module",
+          "modals"
+        ],
+        "title": "ModuleModalsResponse",
+        "description": "Modals-only response for a module"
+      },
+      "ModuleSnapshot": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "initialized": {
+            "type": "boolean",
+            "title": "Initialized"
+          },
+          "ui": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ModuleUI"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "display_name",
+          "enabled",
+          "initialized"
+        ],
+        "title": "ModuleSnapshot",
+        "description": "Snapshot of a module's current state including UI"
+      },
+      "ModuleTileResponse": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "tile": {
+            "$ref": "#/components/schemas/TileSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "module",
+          "tile"
+        ],
+        "title": "ModuleTileResponse",
+        "description": "Tile-only response for a module"
+      },
+      "ModuleToggleResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "module",
+          "enabled"
+        ],
+        "title": "ModuleToggleResponse",
+        "description": "Response for module enable/disable toggle"
+      },
+      "ModuleUI": {
+        "properties": {
+          "tile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TileSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "modals": {
+            "items": {
+              "$ref": "#/components/schemas/ModalSchema"
+            },
+            "type": "array",
+            "title": "Modals",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "ModuleUI",
+        "description": "Full UI state for a module"
+      },
+      "ModuleUIResponse": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "ui": {
+            "$ref": "#/components/schemas/ModuleUI"
+          }
+        },
+        "type": "object",
+        "required": [
+          "module",
+          "ui"
+        ],
+        "title": "ModuleUIResponse",
+        "description": "Full UI response for a module"
+      },
+      "PairRequest": {
+        "properties": {
+          "pairing_code": {
+            "type": "string",
+            "title": "Pairing Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pairing_code"
+        ],
+        "title": "PairRequest",
+        "description": "Request to pair with the NAS"
+      },
+      "PairResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "api_token": {
+            "type": "string",
+            "title": "Api Token"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "api_token",
+          "message"
+        ],
+        "title": "PairResponse",
+        "description": "Response containing API token after successful pairing"
+      },
+      "ProgressSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "progress",
+            "title": "Type",
+            "default": "progress"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Value"
+          },
+          "max": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Max",
+            "default": 100
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "sublabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sublabel"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "default",
+              "success",
+              "warning",
+              "error"
+            ],
+            "title": "Color",
+            "default": "default"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "lg"
+            ],
+            "title": "Size",
+            "default": "sm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "ProgressSchema",
+        "description": "Progress bar with optional labels"
+      },
+      "SelectOptionSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "select_option",
+            "title": "Type",
+            "default": "select_option"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "label"
+        ],
+        "title": "SelectOptionSchema",
+        "description": "Option for Select component"
+      },
+      "SelectSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "select",
+            "title": "Type",
+            "default": "select"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/SelectOptionSchema"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "options"
+        ],
+        "title": "SelectSchema",
+        "description": "Dropdown select"
+      },
+      "SpinnerSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "spinner",
+            "title": "Type",
+            "default": "spinner"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "sm",
+              "md",
+              "lg"
+            ],
+            "title": "Size",
+            "default": "md"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "title": "SpinnerSchema",
+        "description": "Loading spinner"
+      },
+      "StackSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "stack",
+            "title": "Type",
+            "default": "stack"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "horizontal",
+              "vertical"
+            ],
+            "title": "Direction",
+            "default": "vertical"
+          },
+          "gap": {
+            "type": "string",
+            "enum": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "8"
+            ],
+            "title": "Gap",
+            "default": "4"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "start",
+              "center",
+              "end",
+              "stretch"
+            ],
+            "title": "Align",
+            "default": "stretch"
+          },
+          "justify": {
+            "type": "string",
+            "enum": [
+              "start",
+              "center",
+              "end",
+              "between",
+              "around"
+            ],
+            "title": "Justify",
+            "default": "start"
+          },
+          "children": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StackSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GridSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TileSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatCardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/BadgeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ButtonSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/InputSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectOptionSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ToggleSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CheckboxSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ModalSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AlertSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SpinnerSchema"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "alert": "#/components/schemas/AlertSchema",
+                  "badge": "#/components/schemas/BadgeSchema",
+                  "button": "#/components/schemas/ButtonSchema",
+                  "card": "#/components/schemas/CardSchema",
+                  "checkbox": "#/components/schemas/CheckboxSchema",
+                  "grid": "#/components/schemas/GridSchema",
+                  "input": "#/components/schemas/InputSchema",
+                  "modal": "#/components/schemas/ModalSchema",
+                  "progress": "#/components/schemas/ProgressSchema",
+                  "select": "#/components/schemas/SelectSchema",
+                  "select_option": "#/components/schemas/SelectOptionSchema",
+                  "spinner": "#/components/schemas/SpinnerSchema",
+                  "stack": "#/components/schemas/StackSchema",
+                  "stat": "#/components/schemas/StatSchema",
+                  "stat_card": "#/components/schemas/StatCardSchema",
+                  "table": "#/components/schemas/TableSchema",
+                  "table_column": "#/components/schemas/TableColumnSchema",
+                  "text": "#/components/schemas/TextSchema",
+                  "tile": "#/components/schemas/TileSchema",
+                  "toggle": "#/components/schemas/ToggleSchema"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "StackSchema",
+        "description": "Flex container for vertical or horizontal layouts"
+      },
+      "StatCardSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "stat_card",
+            "title": "Type",
+            "default": "stat_card"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Value"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "default",
+              "success",
+              "warning",
+              "error"
+            ],
+            "title": "Color",
+            "default": "default"
+          },
+          "trend": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "up",
+                      "down"
+                    ]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trend"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "StatCardSchema",
+        "description": "Standalone stat card with icon and optional trend"
+      },
+      "StatSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "stat",
+            "title": "Type",
+            "default": "stat"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "StatSchema",
+        "description": "Inline stat display (value + label) for tiles"
+      },
+      "SuccessResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "message"
+        ],
+        "title": "SuccessResponse",
+        "description": "Generic success response"
+      },
+      "TableColumnSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "table_column",
+            "title": "Type",
+            "default": "table_column"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ],
+            "title": "Align",
+            "default": "left"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "TableColumnSchema",
+        "description": "Column definition for Table"
+      },
+      "TableSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "table",
+            "title": "Type",
+            "default": "table"
+          },
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/TableColumnSchema"
+            },
+            "type": "array",
+            "title": "Columns"
+          },
+          "data": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "empty_message": {
+            "type": "string",
+            "title": "Empty Message",
+            "default": "No data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "columns",
+          "data"
+        ],
+        "title": "TableSchema",
+        "description": "Data table"
+      },
+      "TextSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "text",
+            "title": "Type",
+            "default": "text"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "body",
+              "secondary",
+              "muted",
+              "code"
+            ],
+            "title": "Variant",
+            "default": "body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "title": "TextSchema",
+        "description": "Text with styling variants"
+      },
+      "TileSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "tile",
+            "title": "Type",
+            "default": "tile"
+          },
+          "icon": {
+            "type": "string",
+            "title": "Icon"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "badge": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BadgeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/StatSchema"
+            },
+            "type": "array",
+            "title": "Stats",
+            "default": []
+          },
+          "content": {
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/StackSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GridSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CardSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TileSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/StatCardSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProgressSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BadgeSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TableSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TableColumnSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ButtonSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InputSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SelectSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SelectOptionSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ToggleSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CheckboxSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ModalSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AlertSchema"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SpinnerSchema"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                      "alert": "#/components/schemas/AlertSchema",
+                      "badge": "#/components/schemas/BadgeSchema",
+                      "button": "#/components/schemas/ButtonSchema",
+                      "card": "#/components/schemas/CardSchema",
+                      "checkbox": "#/components/schemas/CheckboxSchema",
+                      "grid": "#/components/schemas/GridSchema",
+                      "input": "#/components/schemas/InputSchema",
+                      "modal": "#/components/schemas/ModalSchema",
+                      "progress": "#/components/schemas/ProgressSchema",
+                      "select": "#/components/schemas/SelectSchema",
+                      "select_option": "#/components/schemas/SelectOptionSchema",
+                      "spinner": "#/components/schemas/SpinnerSchema",
+                      "stack": "#/components/schemas/StackSchema",
+                      "stat": "#/components/schemas/StatSchema",
+                      "stat_card": "#/components/schemas/StatCardSchema",
+                      "table": "#/components/schemas/TableSchema",
+                      "table_column": "#/components/schemas/TableColumnSchema",
+                      "text": "#/components/schemas/TextSchema",
+                      "tile": "#/components/schemas/TileSchema",
+                      "toggle": "#/components/schemas/ToggleSchema"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "actions": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/StackSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/GridSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TileSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TextSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/StatCardSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ProgressSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/BadgeSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/TableColumnSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ButtonSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/InputSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SelectOptionSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ToggleSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/CheckboxSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/ModalSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/AlertSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/SpinnerSchema"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "alert": "#/components/schemas/AlertSchema",
+                  "badge": "#/components/schemas/BadgeSchema",
+                  "button": "#/components/schemas/ButtonSchema",
+                  "card": "#/components/schemas/CardSchema",
+                  "checkbox": "#/components/schemas/CheckboxSchema",
+                  "grid": "#/components/schemas/GridSchema",
+                  "input": "#/components/schemas/InputSchema",
+                  "modal": "#/components/schemas/ModalSchema",
+                  "progress": "#/components/schemas/ProgressSchema",
+                  "select": "#/components/schemas/SelectSchema",
+                  "select_option": "#/components/schemas/SelectOptionSchema",
+                  "spinner": "#/components/schemas/SpinnerSchema",
+                  "stack": "#/components/schemas/StackSchema",
+                  "stat": "#/components/schemas/StatSchema",
+                  "stat_card": "#/components/schemas/StatCardSchema",
+                  "table": "#/components/schemas/TableSchema",
+                  "table_column": "#/components/schemas/TableColumnSchema",
+                  "text": "#/components/schemas/TextSchema",
+                  "tile": "#/components/schemas/TileSchema",
+                  "toggle": "#/components/schemas/ToggleSchema"
+                }
+              }
+            },
+            "type": "array",
+            "title": "Actions",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "icon",
+          "title"
+        ],
+        "title": "TileSchema",
+        "description": "Module tile - specialized card for dashboard modules"
+      },
+      "ToggleSchema": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "toggle",
+            "title": "Type",
+            "default": "toggle"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked",
+            "default": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "ToggleSchema",
+        "description": "Toggle switch"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

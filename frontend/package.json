@@ -9,7 +9,8 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"tauri": "tauri"
+		"tauri": "tauri",
+		"generate": "../scripts/generate-types.sh"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -22,6 +23,7 @@
 		"@sveltejs/kit": "^2.9.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tauri-apps/cli": "^2",
+		"openapi-typescript": "^7.10.1",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "~5.6.2",
