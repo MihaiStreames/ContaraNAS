@@ -44,6 +44,23 @@ pnpm tauri dev
 
 The backend runs on `localhost:8000`. The frontend will open automatically and prompt for pairing.
 
+### Type Generation
+
+TypeScript types are auto-generated from Python Pydantic models via OpenAPI:
+
+```bash
+cd frontend
+pnpm run generate
+```
+
+This generates:
+
+- `src/lib/api/types.generated.ts` — Full OpenAPI types
+- `src/lib/api/ui.ts` — UI component types (`TileSchema`, `ButtonSchema`, etc.)
+- `src/lib/api/responses.ts` — API response types (`AppStateResponse`, etc.)
+
+Run this after modifying backend schemas in `backend/ContaraNAS/api/schemas/`.
+
 ### Requirements
 
 | Component | Version            |
