@@ -1206,7 +1206,6 @@ export interface components {
              * @enum {integer}
              */
             rowspan: 1 | 2 | 3;
-            badge?: components["schemas"]["BadgeSchema"] | null;
             /**
              * Stats
              * @default []

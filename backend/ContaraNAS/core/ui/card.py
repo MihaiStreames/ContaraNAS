@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import ClassVar
 
 from .base import Component
-from .display import Badge
 
 
 class Stat(Component):
@@ -35,7 +34,6 @@ class Tile(Component):
     title: str
     colspan: int = 1  # Number of columns to span (1, 2, or 3)
     rowspan: int = 1  # Number of rows to span (1, 2, or 3)
-    badge: Badge | None = None
     stats: list[Stat] = []
     content: list[Component] | None = None  # Alternative to stats (e.g., progress bar)
     actions: list[Component] = []

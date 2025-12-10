@@ -1,6 +1,5 @@
 from ContaraNAS.core.ui import (
     Alert,
-    Badge,
     SegmentedProgress,
     SegmentedProgressSegment,
     Stack,
@@ -25,7 +24,6 @@ def build_tile(
         return Tile(
             icon="Gamepad2",
             title="Steam",
-            badge=Badge(text="Not Found", variant="warning"),
             content=[
                 Alert(
                     message="Steam is not installed on this system",
@@ -144,7 +142,6 @@ def build_tile(
     return Tile(
         icon="Gamepad2",
         title="Steam",
-        badge=Badge(text="Ready", variant="success") if status == "ready" else None,
         stats=stats,
         content=(
             [Stack(direction="vertical", gap="3", children=library_content)]

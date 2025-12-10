@@ -1,4 +1,4 @@
-from ContaraNAS.core.ui import Badge, Tabs, Tile
+from ContaraNAS.core.ui import Tabs, Tile
 
 from .cpu_tab import build_cpu_tab
 from .disk_tab import build_disk_tab
@@ -31,7 +31,6 @@ def build_tile(
         title="System Monitor",
         colspan=2,
         rowspan=2,
-        badge=Badge(text="Live", variant="success") if last_update else None,
         content=[
             Tabs(
                 tabs=tabs,

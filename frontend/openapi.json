@@ -3185,16 +3185,6 @@
             "title": "Rowspan",
             "default": 1
           },
-          "badge": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/BadgeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "stats": {
             "items": {
               "$ref": "#/components/schemas/StatSchema"

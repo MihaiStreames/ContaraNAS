@@ -1,20 +1,11 @@
 <script lang="ts">
-  import type {
-    TileSchema,
-    BadgeSchema,
-    StatSchema,
-    ComponentSchema,
-  } from "$lib/api";
+  import type { TileSchema, StatSchema, ComponentSchema } from "$lib/api";
   import type { Snippet } from "svelte";
   import Icon from "../Icon.svelte";
-  import Badge from "../display/Badge.svelte";
   import ComponentRenderer from "../ComponentRenderer.svelte";
 
   interface Props
-    extends Partial<
-      Omit<TileSchema, "type" | "badge" | "stats" | "content" | "actions">
-    > {
-    badge?: BadgeSchema | null;
+    extends Partial<Omit<TileSchema, "type" | "stats" | "content" | "actions">> {
     stats?: StatSchema[];
     content?: Snippet | ComponentSchema[];
     actions?: Snippet | ComponentSchema[];
@@ -25,7 +16,6 @@
     title = "",
     colspan = 1,
     rowspan = 1,
-    badge = null,
     stats = [],
     content,
     actions,
@@ -45,9 +35,6 @@
     </div>
     <div class="tile-title-group">
       <h3 class="tile-title">{title}</h3>
-      {#if badge}
-        <Badge text={badge.text} variant={badge.variant} />
-      {/if}
     </div>
   </div>
 

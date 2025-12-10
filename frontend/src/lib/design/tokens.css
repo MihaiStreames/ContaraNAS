@@ -52,6 +52,10 @@
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
 
+  /* Letter spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: -0.01em;
+
   /* Transitions */
   --transition-fast: 100ms ease;
   --transition-base: 150ms ease;
@@ -218,16 +222,30 @@
    Base Styles
    ======================================== */
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* Force font inheritance on form elements */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
 }
 
 html {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
   color-scheme: var(--color-scheme);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

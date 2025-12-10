@@ -48,7 +48,7 @@
     aria-labelledby="{id}-title"
     tabindex="-1"
   >
-    <div class="modal modal-{size}">
+    <div class="modal modal-{size} modal-enter">
       <div class="modal-header">
         <h3 class="modal-title" id="{id}-title">{title}</h3>
         {#if closable}

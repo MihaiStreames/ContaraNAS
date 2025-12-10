@@ -64,14 +64,13 @@ class CardSchema(BaseModel):
 
 
 class TileSchema(BaseModel):
-    """Module tile - specialized card for dashboard modules"""
+    """Specialized card for dashboard modules"""
 
     type: Literal["tile"] = "tile"
     icon: str
     title: str
     colspan: Literal[1, 2, 3] = 1
     rowspan: Literal[1, 2, 3] = 1
-    badge: BadgeSchema | None = None
     stats: list[StatSchema] = []
     content: list["ComponentSchema"] | None = None
     actions: list["ComponentSchema"] = []
