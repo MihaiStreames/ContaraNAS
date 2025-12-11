@@ -10,7 +10,7 @@ from ContaraNAS.core.ui import (
     Text,
 )
 
-from .helpers import format_bytes
+from .helpers import convert_date_to_string, format_bytes
 
 
 def _get_image_path(app_id: int) -> str:
@@ -56,28 +56,23 @@ def build_library_modal(library: dict, games: list[dict]) -> Modal:
     # Build table data (use _sort suffix for sortable values)
     table_data = []
     for game in library_games:
-        app_id = game.get("app_id")
+        app_id = game.get("app_id", 0)
         game_size = game.get("total_size", 0)
-
-        last_played = game.get("last_played_date")
-        if last_played:
-            last_played_str = last_played if isinstance(last_played, str) else "—"
-        else:
-            last_played_str = "Never"
+        last_played = convert_date_to_string(game.get("last_played", 0))
 
         table_data.append(
             {
                 "image": _get_image_path(app_id),
                 "name": game.get("name", "Unknown"),
                 "size": format_bytes(game_size),
-                "size_sort": game_size,  # Raw bytes for sorting
-                "last_played": last_played_str,
+                "size_sort": game_size,
+                "last_played": last_played,
             }
         )
 
     return Modal(
         id=modal_id,
-        title=path,  # Full path as title
+        title=path.upper(),
         size="lg",
         children=[
             Stack(

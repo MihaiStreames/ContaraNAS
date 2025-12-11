@@ -12,7 +12,6 @@ def build_tile(
     cpu_history: list[float],
     memory_history: list[float],
     disk_history: dict[str, list[float]],
-    last_update,
 ) -> Tile:
     """Build the dashboard tile UI component with tabs"""
     tabs = [

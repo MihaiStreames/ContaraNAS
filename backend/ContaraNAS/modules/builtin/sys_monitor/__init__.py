@@ -26,12 +26,10 @@ class SysMonitorModule(Module):
         """System monitor state"""
 
         initialized_at: datetime | None = None
-        last_update: datetime | None = None
         cpu: dict | None = None
         memory: dict | None = None
         disks: list[dict] = []
         error: str | None = None
-        # History buffers for graphs
         cpu_history: list[float] = []
         memory_history: list[float] = []
         disk_history: dict[str, list[float]] = {}  # device -> busy_time history
@@ -100,7 +98,6 @@ class SysMonitorModule(Module):
             self.state.cpu = asdict(cpu_info) if cpu_info else None
             self.state.memory = asdict(mem_info) if mem_info else None
             self.state.disks = [asdict(d) for d in disk_info] if disk_info else []
-            self.state.last_update = datetime.now()
             self.state.error = None
 
             # Update history buffers
@@ -142,7 +139,6 @@ class SysMonitorModule(Module):
             cpu_history=self.state.cpu_history,
             memory_history=self.state.memory_history,
             disk_history=self.state.disk_history,
-            last_update=self.state.last_update,
         )
 
     # --- Actions ---

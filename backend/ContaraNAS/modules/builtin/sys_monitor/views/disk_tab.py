@@ -46,7 +46,7 @@ def build_disk_tab(disk: dict, index: int, disk_history: list[float]) -> Tab:
             max=100,
             min=0,
             height=170,
-            color="primary",
+            color="warning",
             fill=True,
             label=f"{busy_time:.1f}%",
         )

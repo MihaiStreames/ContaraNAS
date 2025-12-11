@@ -33,10 +33,10 @@ def build_tile(
             actions=[],
         )
 
-    # Build library cards for inline display (max 2 visible, rest scrollable)
+    # Build library cards
     library_content = []
 
-    for lib in libraries[:2]:  # Show first 2 inline
+    for lib in libraries:
         path = lib.get("path", "Unknown")
         game_count = lib.get("game_count", 0)
         games_size = lib.get("total_games_size", 0)
@@ -119,15 +119,6 @@ def build_tile(
                         variant="muted",
                     ),
                 ],
-            )
-        )
-
-    # Add "more libraries" indicator if there are more than 2
-    if len(libraries) > 2:
-        library_content.append(
-            Text(
-                content=f"+ {len(libraries) - 2} more libraries",
-                variant="muted",
             )
         )
 
