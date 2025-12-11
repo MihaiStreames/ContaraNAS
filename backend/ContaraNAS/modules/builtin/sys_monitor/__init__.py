@@ -1,4 +1,5 @@
-from dataclasses import asdict
+from collections import deque
+from dataclasses import field
 from datetime import datetime
 
 from ContaraNAS.core.action import Notify, action
@@ -7,6 +8,7 @@ from ContaraNAS.core.ui import Tile
 from ContaraNAS.core.utils import get_logger
 
 from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL, HISTORY_SIZE
+from .dtos import CPUInfo, DiskInfo, MemoryInfo
 from .services import (
     CPUService,
     DiskService,
@@ -26,13 +28,13 @@ class SysMonitorModule(Module):
         """System monitor state"""
 
         initialized_at: datetime | None = None
-        cpu: dict | None = None
-        memory: dict | None = None
-        disks: list[dict] = []
+        cpu: CPUInfo | None = None
+        memory: MemoryInfo | None = None
+        disks: list[DiskInfo] = field(default_factory=list)
         error: str | None = None
-        cpu_history: list[float] = []
-        memory_history: list[float] = []
-        disk_history: dict[str, list[float]] = {}  # device -> busy_time history
+        cpu_history: deque[float] = field(default_factory=lambda: deque(maxlen=HISTORY_SIZE))
+        memory_history: deque[float] = field(default_factory=lambda: deque(maxlen=HISTORY_SIZE))
+        disk_history: dict[str, deque[float]] = field(default_factory=dict)
 
     def __init__(
         self,
@@ -95,33 +97,26 @@ class SysMonitorModule(Module):
             disk_info = self._disk_service.get_disk_info()
 
             # Convert dataclasses to dicts for state storage
-            self.state.cpu = asdict(cpu_info) if cpu_info else None
-            self.state.memory = asdict(mem_info) if mem_info else None
-            self.state.disks = [asdict(d) for d in disk_info] if disk_info else []
+            self.state.cpu = cpu_info
+            self.state.memory = mem_info
+            self.state.disks = disk_info if disk_info else []
             self.state.error = None
 
             # Update history buffers
             if cpu_info:
                 self.state.cpu_history.append(cpu_info.total_usage)
-                if len(self.state.cpu_history) > HISTORY_SIZE:
-                    self.state.cpu_history = self.state.cpu_history[-HISTORY_SIZE:]
 
             if mem_info:
                 self.state.memory_history.append(mem_info.usage)
-                if len(self.state.memory_history) > HISTORY_SIZE:
-                    self.state.memory_history = self.state.memory_history[-HISTORY_SIZE:]
 
             # Update disk history (keyed by device)
             if disk_info:
                 for disk in disk_info:
                     device = disk.device
                     if device not in self.state.disk_history:
-                        self.state.disk_history[device] = []
+                        # Create new deque for this device
+                        self.state.disk_history[device] = deque(maxlen=HISTORY_SIZE)
                     self.state.disk_history[device].append(disk.busy_time)
-                    if len(self.state.disk_history[device]) > HISTORY_SIZE:
-                        self.state.disk_history[device] = self.state.disk_history[device][
-                            -HISTORY_SIZE:
-                        ]
 
             self.state.commit()
 

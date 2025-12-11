@@ -1,17 +1,20 @@
+from collections.abc import Sequence
+
 from ContaraNAS.core.ui import Tabs, Tile
 
+from ..dtos import CPUInfo, DiskInfo, MemoryInfo
 from .cpu_tab import build_cpu_tab
 from .disk_tab import build_disk_tab
 from .memory_tab import build_memory_tab
 
 
 def build_tile(
-    cpu: dict | None,
-    mem: dict | None,
-    disks: list[dict],
-    cpu_history: list[float],
-    memory_history: list[float],
-    disk_history: dict[str, list[float]],
+    cpu: CPUInfo | None,
+    mem: MemoryInfo | None,
+    disks: list[DiskInfo],
+    cpu_history: Sequence[float],
+    memory_history: Sequence[float],
+    disk_history: dict[str, Sequence[float]],
 ) -> Tile:
     """Build the dashboard tile UI component with tabs"""
     tabs = [
@@ -21,7 +24,7 @@ def build_tile(
 
     # Add a tab for each disk
     for i, disk in enumerate(disks):
-        device = disk.get("device", "")
+        device = disk.device
         history = disk_history.get(device, [])
         tabs.append(build_disk_tab(disk, i, history))
 
