@@ -1,8 +1,6 @@
 from .config import settings
 from .exceptions import (
-    ChecksumMismatchError,
     ContaraNASError,
-    MarketplaceError,
     ModuleError,
     ModuleInitializationError,
     ServiceError,
@@ -24,8 +22,6 @@ __all__ = [
     "ServiceError",
     "SteamError",
     "SteamNotFoundError",
-    "MarketplaceError",
-    "ChecksumMismatchError",
     # Module System
     "Module",
     "ModuleMetadata",

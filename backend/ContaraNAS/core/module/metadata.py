@@ -15,29 +15,24 @@ class ModuleDependencies:
 class ModuleMetadata:
     """Module metadata from module.json"""
 
-    # Identity
     id: str
     name: str
     version: str
     author: str
     description: str
-    icon: str  # Lucide icon name (e.g., "gamepad-2", "monitor")
+    icon: str  # Lucide icon name (e.g., "Gamepad2", "Monitor")
 
-    # Requirements
     min_backend_version: str
     platforms: list[str]
 
-    # Dependencies
     dependencies: ModuleDependencies
 
-    # Source
     source: str  # "builtin" or "community"
 
     @classmethod
     def from_json(cls, data: dict[str, Any], source: str) -> "ModuleMetadata":
         """Create metadata from module.json"""
         deps_data = data.get("dependencies", {})
-
         python_deps = deps_data.get("python", {})
         python_platform = deps_data.get("python_platform", {})
         system_deps = deps_data.get("system", [])
@@ -51,7 +46,6 @@ class ModuleMetadata:
         # Parse min_backend_version from engine field
         engine = data.get("engine", {})
         min_version = engine.get("contaranas", "0.0.0")
-        # Strip ^ or >= prefix if present
         min_version = min_version.lstrip("^>=<~")
 
         return cls(

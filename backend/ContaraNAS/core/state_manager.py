@@ -32,6 +32,7 @@ class StateManager:
                     )
             else:
                 logger.info("No previous module states found")
+
         except Exception as e:
             logger.error(f"Failed to load module states: {e}")
             self._enabled_modules = set()
@@ -46,6 +47,7 @@ class StateManager:
                 json.dump(data, f, indent=2)
 
             logger.debug(f"Saved module states: {len(self._enabled_modules)} enabled modules")
+
         except Exception as e:
             logger.error(f"Failed to save module states: {e}")
 
@@ -68,5 +70,4 @@ class StateManager:
         return self._enabled_modules.copy()
 
 
-# Global state manager instance
 state_manager = StateManager()

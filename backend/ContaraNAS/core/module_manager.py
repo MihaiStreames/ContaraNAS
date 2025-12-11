@@ -25,13 +25,17 @@ class ModuleManager:
         for module_id, (metadata, _) in discovered.items():
             try:
                 module_class = self._loader.load_module_class(module_id)
+
                 instance = module_class(
                     name=metadata.id,
                     display_name=metadata.name,
                     metadata=metadata,
                 )
+
                 self.modules[module_id] = instance
+
                 logger.info(f"Registered module: {module_id} v{metadata.version}")
+
             except Exception as e:
                 logger.error(f"Failed to register {module_id}: {e}")
 
@@ -76,6 +80,7 @@ class ModuleManager:
 
             try:
                 await self.enable_module(module_name)
+
             except Exception as e:
                 logger.error(f"Failed to restore '{module_name}': {e}")
                 state_manager.mark_disabled(module_name)
@@ -88,6 +93,7 @@ class ModuleManager:
             if module.enable_flag:
                 try:
                     await module.disable()
+
                 except Exception as e:
                     logger.error(f"Error shutting down {name}: {e}")
 
@@ -97,6 +103,7 @@ class ModuleManager:
             return None
 
         module = self.modules[module_name]
+
         return {
             "name": module_name,
             "display_name": module.display_name,

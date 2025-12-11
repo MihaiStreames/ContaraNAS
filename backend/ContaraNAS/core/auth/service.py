@@ -132,7 +132,9 @@ class AuthService:
 
         self._paired_app = None
         self._save_paired_app()
+
         logger.info("App unpaired")
+
         return True
 
     def _verify_pairing_code(self, normalized_code: str) -> bool:

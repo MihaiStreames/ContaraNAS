@@ -18,6 +18,7 @@ def _get_manager(request: Request) -> ModuleManager:
 def _require_module(request: Request, name: str) -> None:
     """Raise 404 if module doesn't exist"""
     manager = _get_manager(request)
+
     if name not in manager.modules:
         raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
 
@@ -36,7 +37,6 @@ def create_command_routes() -> APIRouter:
 
         modules = []
         for name, module in manager.modules.items():
-            # Get metadata info
             metadata = module.metadata
             source = metadata.source if metadata else "builtin"
             version = metadata.version if metadata else "0.0.0"
@@ -70,6 +70,7 @@ def create_command_routes() -> APIRouter:
         try:
             await manager.enable_module(name)
             return ModuleToggleResponse(success=True, module=name, enabled=True)
+
         except Exception as e:
             logger.error(f"Failed to enable {name}: {e}")
             raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e)) from e
@@ -87,6 +88,7 @@ def create_command_routes() -> APIRouter:
         try:
             await manager.disable_module(name)
             return ModuleToggleResponse(success=True, module=name, enabled=False)
+
         except Exception as e:
             logger.error(f"Failed to disable {name}: {e}")
             raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e)) from e

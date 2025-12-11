@@ -30,12 +30,7 @@ class Module(ABC):
         self.enable_flag: bool = False
         self.init_flag: bool = False
 
-        # Store metadata
         self._metadata: ModuleMetadata | None = metadata
-
-        # If metadata was provided, use it to update display_name if not explicitly set
-        if metadata and not display_name:
-            self.display_name = metadata.name
 
         # Initialize typed state if State class is defined
         self._typed_state: ModuleState | None = None
@@ -45,6 +40,7 @@ class Module(ABC):
     def _init_typed_state(self) -> None:
         """Initialize typed state from State inner class"""
         state_class = self._get_state_class()
+
         if state_class is None:
             return
 
@@ -60,6 +56,7 @@ class Module(ABC):
                 state_cls = cls.__dict__["State"]
                 if isinstance(state_cls, type) and issubclass(state_cls, ModuleState):
                     return state_cls
+
         return None
 
     def _on_state_commit(self) -> None:
@@ -91,6 +88,7 @@ class Module(ABC):
                 self.name,
                 "Metadata not available",
             )
+
         return self._metadata
 
     @property
@@ -119,13 +117,14 @@ class Module(ABC):
         raise NotImplementedError(f"Module {self.name} must implement get_tile()")
 
     def get_modals(self) -> list[Modal]:
-        """Return modal definitions for this module"""
+        """Return the modal UI components"""
         return []
 
     def render_tile(self) -> dict[str, Any]:
-        """Serialize tile to dict for frontend - catches errors gracefully"""
+        """Serialize tile to dict for frontend"""
         try:
             return self.get_tile().to_dict()
+
         except NotImplementedError:
             return {}
         except Exception as e:
@@ -133,9 +132,10 @@ class Module(ABC):
             return self._error_tile(str(e)).to_dict()
 
     def render_modals(self) -> list[dict[str, Any]]:
-        """Serialize modals to dicts for frontend - catches errors gracefully"""
+        """Serialize modals to dicts for frontend"""
         try:
             return [modal.to_dict() for modal in self.get_modals()]
+
         except Exception:
             logger.exception(f"Error rendering modals for module {self.name}")
             return []
@@ -167,11 +167,11 @@ class Module(ABC):
             await self.start_monitoring()
             self.enable_flag = True
             logger.info(f"Module {self.name} enabled successfully")
+            self._on_state_commit()
+
         except Exception as e:
             logger.error(f"Failed to enable module {self.name}: {e!s}")
             raise ModuleInitializationError(self.name, str(e)) from e
-
-        self._on_state_commit()
 
     async def disable(self):
         """Disable the module and stop monitoring"""
@@ -186,6 +186,7 @@ class Module(ABC):
             self.enable_flag = False
             logger.info(f"Module {self.name} disabled successfully")
             self._on_state_commit()
+
         except Exception as e:
             logger.error(f"Failed to disable module {self.name}: {e!s}")
             raise ModuleError(self.name, str(e)) from e

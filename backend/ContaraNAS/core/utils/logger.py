@@ -7,19 +7,18 @@ from ContaraNAS.core import settings
 
 
 def setup_logging(
-    level: str = "DEBUG",
-    rotation: str = "10 MB",
-    retention: str = "1 week",
-    compression: str = "zip",
+    level: str,
+    rotation: str,
+    retention: str,
+    compression: str,
 ) -> None:
     """Call once at startup"""
     log_dir = settings.log_dir
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    # Remove default handler
     logger.remove()
 
-    # Console handler - INFO and above, colored
+    # Console handler
     logger.add(
         sys.stderr,
         level="INFO",
@@ -32,7 +31,7 @@ def setup_logging(
         colorize=True,
     )
 
-    # File handler - DEBUG and above, with rotation
+    # File handler
     logger.add(
         log_dir / "contaranas.log",
         level=level,
@@ -44,7 +43,7 @@ def setup_logging(
         enqueue=True,
     )
 
-    # Separate error log for easier debugging
+    # Separate error logs
     logger.add(
         log_dir / "errors.log",
         level="ERROR",

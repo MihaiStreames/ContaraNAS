@@ -31,6 +31,7 @@ class ModuleLoader:
                 continue
 
             metadata = self._load_metadata(module_dir, source)
+
             if metadata:
                 self._discovered[metadata.id] = (metadata, module_dir)
 
@@ -46,7 +47,9 @@ class ModuleLoader:
         try:
             with metadata_file.open(encoding="utf-8") as f:
                 data = json.load(f)
+
             return ModuleMetadata.from_json(data, source=source)
+
         except Exception as e:
             logger.error(f"Failed to load metadata for {module_dir.name}: {e}")
             return None
@@ -88,10 +91,12 @@ class ModuleLoader:
             # Find Module subclass
             for attr_name in dir(module):
                 attr = getattr(module, attr_name)
+
                 if isinstance(attr, type) and issubclass(attr, Module) and attr is not Module:
                     return attr
 
             raise ImportError(f"No Module subclass in {import_path}")
+
         except Exception as e:
             logger.error(f"Failed to load module {module_id}: {e}")
             raise ImportError(f"Failed to load module {module_id}") from e
@@ -100,8 +105,8 @@ class ModuleLoader:
         """Get metadata for a specific module"""
         if module_id in self._discovered:
             return self._discovered[module_id][0]
+
         return None
 
 
-# Global module loader instance
 module_loader = ModuleLoader()

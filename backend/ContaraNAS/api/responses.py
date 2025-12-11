@@ -89,7 +89,6 @@ class ActionResultItem(BaseModel):
     """Single action result item"""
 
     type: str
-    # Optional fields depending on type
     modal_id: str | None = None
     message: str | None = None
     variant: str | None = None
