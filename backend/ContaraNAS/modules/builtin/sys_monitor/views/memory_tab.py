@@ -86,17 +86,13 @@ def build_memory_tab(mem: MemoryInfo | None, memory_history: Sequence[float]) ->
 
     # RAM stick details
     grid2_children = []
-    for i, stick in enumerate(ram_sticks[:4]):
+    for i, stick in enumerate(ram_sticks):
         locator = stick.locator if hasattr(stick, "locator") else f"Slot {i}"
         size = stick.size if hasattr(stick, "size") else 0
         stick_type = stick.type if hasattr(stick, "type") else "Unknown"
         speed = stick.speed if hasattr(stick, "speed") else 0
-
-        label = locator
-        value = f"{size:.0f} GB {stick_type}"
-        if speed:
-            value += f" @ {speed}"
-        grid2_children.append(StatSmall(label=label, value=value))
+        value = f"{size} GB\u00a0\u00a0\u00a0{stick_type}\u00a0\u00a0\u00a0{speed} MT/s"
+        grid2_children.append(StatSmall(label=locator, value=value))
 
     if not grid2_children:
         grid2_children.append(StatSmall(label="RAM", value="Info unavailable"))
