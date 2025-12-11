@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from ContaraNAS.core.ui import (
     Grid,
     LineChart,
@@ -8,41 +10,41 @@ from ContaraNAS.core.ui import (
     Text,
 )
 
+from ..dtos import DiskInfo
 from .helpers import format_bytes, format_io_time
 
 
-def build_disk_tab(disk: dict, index: int, disk_history: list[float]) -> Tab:
+def build_disk_tab(disk: DiskInfo, index: int, disk_history: Sequence[float]) -> Tab:
     """Build a single disk tab content"""
     children = []
 
     # Extract disk data
-    device = disk.get("device", "")
-    mountpoint = disk.get("mountpoint", f"Disk {index}")
-    filesystem = disk.get("filesystem", "")
-    disk_type = disk.get("type", "Unknown")
-    model = disk.get("model", "")
+    device = disk.device
+    mountpoint = disk.mountpoint or f"Disk {index}"
+    filesystem = disk.filesystem
+    disk_type = disk.type
+    model = disk.model
 
-    total_gb = disk.get("total_gb", 0)
-    used_gb = disk.get("used_gb", 0)
-    free_gb = disk.get("free_gb", 0)
-    usage = disk.get("usage_percent", 0)
+    total_gb = disk.total_gb
+    used_gb = disk.used_gb
+    free_gb = disk.free_gb
+    usage = disk.usage_percent
 
-    read_speed = disk.get("read_speed", 0)
-    write_speed = disk.get("write_speed", 0)
-    busy_time = disk.get("busy_time", 0)
+    read_speed = disk.read_speed
+    write_speed = disk.write_speed
+    busy_time = disk.busy_time
 
-    read_bytes = disk.get("read_bytes", 0)
-    write_bytes = disk.get("write_bytes", 0)
-    io_time = disk.get("io_time", 0)
+    read_bytes = disk.read_bytes
+    write_bytes = disk.write_bytes
+    io_time = disk.io_time
 
-    # Tab label and ID
     tab_label = device.split("/")[-1] if device else mountpoint
     tab_id = f"disk_{index}"
 
-    # Line chart showing busy_time % history
+    # Line chart for disk busy time history
     children.append(
         LineChart(
-            data=disk_history if disk_history else [0],
+            data=list(disk_history) if disk_history else [0],
             max=100,
             min=0,
             height=170,
@@ -52,7 +54,7 @@ def build_disk_tab(disk: dict, index: int, disk_history: list[float]) -> Tab:
         )
     )
 
-    # Model name as summary text
+    # Model name
     summary = model if model else f"{disk_type} Disk"
     children.append(
         Text(
@@ -62,9 +64,8 @@ def build_disk_tab(disk: dict, index: int, disk_history: list[float]) -> Tab:
         )
     )
 
-    # Two grids side by side
-    # Grid 1: Main stats (3x3)
-    # Grid 2: Hardware info (StatSmall stack)
+    # Grid 1: Main stats
+    # Grid 2: Hardware info
     grid1_children = [
         # Row 1: Usage, Used, Free
         Stat(label="Usage", value=f"{usage:.1f}%"),
@@ -82,7 +83,7 @@ def build_disk_tab(disk: dict, index: int, disk_history: list[float]) -> Tab:
 
     # Hardware info
     grid2_children = [
-        StatSmall(label="Type", value=disk_type),
+        StatSmall(label="Type", value=disk_type if disk_type else "Unknown"),
         StatSmall(label="Filesystem", value=filesystem if filesystem else "N/A"),
         StatSmall(label="Device", value=device if device else "N/A"),
         StatSmall(label="Mountpoint", value=mountpoint),

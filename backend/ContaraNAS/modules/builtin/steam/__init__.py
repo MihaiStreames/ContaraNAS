@@ -263,11 +263,8 @@ class SteamModule(Module):
         )
 
     def get_modals(self) -> list[Modal]:
-        """Return modal definitions for this module - one per library"""
-        modals = []
-        for lib in self.state.libraries:
-            modals.append(build_library_modal(lib, self.state.games))
-        return modals
+        """Return modal definitions for this module (one per library)"""
+        return [build_library_modal(lib, self.state.games) for lib in self.state.libraries]
 
     # --- Actions ---
 

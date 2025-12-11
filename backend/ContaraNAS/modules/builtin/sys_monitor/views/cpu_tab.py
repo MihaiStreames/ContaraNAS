@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from ContaraNAS.core.ui import (
     Grid,
     LineChart,
@@ -8,10 +10,11 @@ from ContaraNAS.core.ui import (
     Text,
 )
 
+from ..dtos import CPUInfo
 from .helpers import format_uptime
 
 
-def build_cpu_tab(cpu: dict | None, cpu_history: list[float]) -> Tab:
+def build_cpu_tab(cpu: CPUInfo | None, cpu_history: Sequence[float]) -> Tab:
     """Build the CPU tab content"""
     children = []
 
@@ -20,22 +23,22 @@ def build_cpu_tab(cpu: dict | None, cpu_history: list[float]) -> Tab:
         return Tab(id="cpu", label="CPU", icon="Cpu", children=children)
 
     # Extract CPU data
-    usage = cpu.get("total_usage", 0)
-    current_speed = cpu.get("current_speed_ghz", 0)
-    min_speed = cpu.get("min_speed_ghz", 0)  # Base speed
-    max_speed = cpu.get("max_speed_ghz", 0)  # Max turbo speed
-    cpu_name = cpu.get("name", "Unknown CPU")
-    processes = cpu.get("processes", 0)
-    threads = cpu.get("threads", 0)
-    file_descriptors = cpu.get("file_descriptors", 0)
-    uptime = cpu.get("uptime", 0)
-    physical_cores = cpu.get("physical_cores", 0)
-    logical_cores = cpu.get("logical_cores", 0)
+    usage = cpu.total_usage
+    current_speed = cpu.current_speed_ghz
+    min_speed = cpu.min_speed_ghz  # Base speed
+    max_speed = cpu.max_speed_ghz  # Max turbo speed
+    cpu_name = cpu.name
+    processes = cpu.processes
+    threads = cpu.threads
+    file_descriptors = cpu.file_descriptors
+    uptime = cpu.uptime
+    physical_cores = cpu.physical_cores
+    logical_cores = cpu.logical_cores
 
-    # Line chart showing CPU usage history (taller)
+    # Line chart for CPU usage history
     children.append(
         LineChart(
-            data=cpu_history if cpu_history else [0],
+            data=list(cpu_history) if cpu_history else [0],
             max=100,
             min=0,
             height=170,
@@ -45,7 +48,7 @@ def build_cpu_tab(cpu: dict | None, cpu_history: list[float]) -> Tab:
         )
     )
 
-    # CPU name (large text)
+    # CPU Name
     children.append(
         Text(
             content=cpu_name,
@@ -54,9 +57,8 @@ def build_cpu_tab(cpu: dict | None, cpu_history: list[float]) -> Tab:
         )
     )
 
-    # Two grids side by side
-    # Grid 1: Main stats (3x3, not all filled)
-    # Grid 2: Hardware specs (4 rows, shown as vertical list)
+    # Grid 1: Main stats
+    # Grid 2: Hardware specs
     grid1_children = [
         # Row 1
         Stat(label="Usage", value=f"{usage:.1f}%"),

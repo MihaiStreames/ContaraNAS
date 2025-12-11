@@ -66,14 +66,15 @@ class CPUServiceLinux(CPUService):
         # Collect dynamic info
         usage_per_core = psutil.cpu_percent(interval=None, percpu=True)
         total_usage = psutil.cpu_percent(interval=None)
-        current_freq = psutil.cpu_freq()
-        current_speed_ghz = current_freq.current / 1000 if current_freq else 0
+
+        with Path.open(Path("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq")) as f:
+            current_speed_ghz = int(f.read().strip()) / 1_000_000  # kHz to GHz
 
         processes = len(psutil.pids())
 
-        with open('/proc/loadavg') as f:
+        with Path.open(Path("/proc/loadavg")) as f:
             parts = f.read().split()
-            threads = int(parts[3].split('/')[1])
+            threads = int(parts[3].split("/")[1])
 
         file_descriptors = psutil.Process().num_fds() if hasattr(psutil.Process(), "num_fds") else 0
         uptime = time.time() - psutil.boot_time()
