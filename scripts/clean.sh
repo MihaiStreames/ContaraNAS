@@ -23,6 +23,7 @@ find "$PROJECT_ROOT" -type d -name "dist" -exec rm -rf {} + 2>/dev/null || true
 find "$PROJECT_ROOT" -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
 
 # Node caches
+find "$PROJECT_ROOT" -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
 find "$PROJECT_ROOT" -type d -name ".svelte-kit" -exec rm -rf {} + 2>/dev/null || true
 
 echo "Done."

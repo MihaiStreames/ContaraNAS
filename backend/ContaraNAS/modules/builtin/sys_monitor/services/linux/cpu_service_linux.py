@@ -70,7 +70,7 @@ class CPUServiceLinux(CPUService):
         current_speed_ghz = current_freq.current / 1000 if current_freq else 0
 
         processes = len(psutil.pids())
-        threads = sum(p.num_threads() for p in psutil.process_iter())
+        threads = sum(1 for _ in Path("/proc").glob("*/task/*"))
         file_descriptors = psutil.Process().num_fds() if hasattr(psutil.Process(), "num_fds") else 0
         uptime = time.time() - psutil.boot_time()
 

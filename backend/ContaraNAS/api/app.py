@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
-from ContaraNAS.core import MarketplaceClient, ModuleManager, settings
+from ContaraNAS.core import ModuleManager, settings
 from ContaraNAS.core.action import ActionDispatcher
 from ContaraNAS.core.auth import AuthService, PairingConfig
 from ContaraNAS.core.exceptions import ContaraNASError
@@ -17,7 +17,6 @@ from .responses import HealthResponse, InfoResponse
 from .routes import (
     create_auth_routes,
     create_command_routes,
-    create_marketplace_routes,
     create_module_routes,
     create_state_routes,
 )
@@ -50,21 +49,15 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     app.state.module_manager = ModuleManager()
     app.state.stream_manager = StreamManager(app.state.module_manager)
 
-    # Wire up UI updates: modules -> stream manager
+    # Wire up UI updates
     app.state.module_manager.set_ui_update_callback(
         app.state.stream_manager.notify_module_ui_update
     )
 
-    # Action dispatcher - register all modules
+    # Action dispatcher
     app.state.action_dispatcher = ActionDispatcher()
     for module in app.state.module_manager.modules.values():
         app.state.action_dispatcher.register_module(module)
-
-    # Marketplace client
-    app.state.marketplace_client = MarketplaceClient(
-        base_url=settings.marketplace_url,
-        backend_version=settings.backend_version,
-    )
 
     # Restore previously enabled modules
     await app.state.module_manager.restore_module_states()
@@ -107,7 +100,6 @@ def create_app() -> FastAPI:
     # Include routers
     app.include_router(create_command_routes())
     app.include_router(create_auth_routes())
-    app.include_router(create_marketplace_routes())
     app.include_router(create_module_routes())
     app.include_router(create_state_routes())
 

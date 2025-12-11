@@ -9,7 +9,6 @@ from .exceptions import (
     SteamError,
     SteamNotFoundError,
 )
-from .marketplace_client import MarketplaceClient
 from .module import Module, ModuleMetadata, ModuleState
 from .module_manager import ModuleManager
 from .state_manager import StateManager, state_manager
@@ -27,8 +26,6 @@ __all__ = [
     "SteamNotFoundError",
     "MarketplaceError",
     "ChecksumMismatchError",
-    # Marketplace Client
-    "MarketplaceClient",
     # Module System
     "Module",
     "ModuleMetadata",
