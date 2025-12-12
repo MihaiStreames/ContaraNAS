@@ -1,6 +1,6 @@
 /*
  * ContaraNAS Design System - Design Tokens
- * 
+ *
  * Light theme: White/Blue
  * Dark theme: Black/Yellow
  */
@@ -9,7 +9,7 @@
   /* ========================================
      Base Scale
      ======================================== */
-  
+
   /* Spacing (4px base) */
   --space-0: 0;
   --space-1: 0.25rem;   /* 4px */
@@ -75,67 +75,67 @@
 
 [data-theme="light"], :root {
   --color-scheme: light;
-  
+
   /* Backgrounds - layered surfaces */
   --bg-base: #f5f7fa;
   --bg-surface-1: #ffffff;
   --bg-surface-2: #f8fafc;
   --bg-surface-3: #f1f5f9;
-  
+
   /* Text */
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
   --text-inverse: #ffffff;
-  
+
   /* Borders */
   --border-subtle: rgba(0, 0, 0, 0.06);
   --border-default: rgba(0, 0, 0, 0.1);
   --border-strong: rgba(0, 0, 0, 0.15);
-  
+
   /* Primary - Blue */
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
   --color-primary-active: #1e40af;
   --color-primary-subtle: #eff6ff;
   --color-primary-muted: #bfdbfe;
-  
+
   /* Secondary */
   --color-secondary: #64748b;
   --color-secondary-hover: #475569;
   --color-secondary-subtle: #f1f5f9;
-  
+
   /* Status Colors */
   --color-success: #10b981;
   --color-success-subtle: #ecfdf5;
   --color-success-text: #065f46;
-  
+
   --color-warning: #f59e0b;
   --color-warning-subtle: #fffbeb;
   --color-warning-text: #92400e;
-  
+
   --color-error: #ef4444;
   --color-error-subtle: #fef2f2;
   --color-error-text: #991b1b;
-  
+
   --color-info: #3b82f6;
   --color-info-subtle: #eff6ff;
   --color-info-text: #1e40af;
-  
+
   /* Shadows - soft and diffused */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-  
+
   /* Inner shadows for depth */
   --shadow-inner: inset 0 1px 2px rgba(0, 0, 0, 0.06);
   --shadow-inner-lg: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-  
+
   /* Glow for focus states */
   --glow-primary: 0 0 0 3px rgba(37, 99, 235, 0.15);
-  
+
   /* Interactive states */
   --hover-overlay: rgba(0, 0, 0, 0.03);
   --active-overlay: rgba(0, 0, 0, 0.06);
@@ -148,70 +148,70 @@
 
 [data-theme="dark"] {
   --color-scheme: dark;
-  
+
   /* Backgrounds - layered surfaces */
   --bg-base: #09090b;
   --bg-surface-1: #18181b;
   --bg-surface-2: #1f1f23;
   --bg-surface-3: #27272a;
-  
+
   /* Text */
   --text-primary: #fafafa;
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
   --text-inverse: #09090b;
-  
+
   /* Borders */
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-default: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.15);
-  
+
   /* Primary - Yellow/Gold */
   --color-primary: #facc15;
   --color-primary-hover: #fde047;
   --color-primary-active: #eab308;
   --color-primary-subtle: rgba(250, 204, 21, 0.1);
   --color-primary-muted: rgba(250, 204, 21, 0.2);
-  
+
   /* Secondary */
   --color-secondary: #71717a;
   --color-secondary-hover: #a1a1aa;
   --color-secondary-subtle: #27272a;
-  
+
   /* Status Colors */
   --color-success: #22c55e;
   --color-success-subtle: rgba(34, 197, 94, 0.1);
   --color-success-text: #4ade80;
-  
+
   --color-warning: #f59e0b;
   --color-warning-subtle: rgba(245, 158, 11, 0.1);
   --color-warning-text: #fbbf24;
-  
+
   --color-error: #ef4444;
   --color-error-subtle: rgba(239, 68, 68, 0.1);
   --color-error-text: #f87171;
-  
+
   --color-info: #3b82f6;
   --color-info-subtle: rgba(59, 130, 246, 0.1);
   --color-info-text: #60a5fa;
-  
+
   /* Shadows - subtle glow effect in dark mode */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-  
+
   /* Subtle top edge highlight for depth */
   --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  
+
   /* Inner shadows */
   --shadow-inner: inset 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-inner-lg: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-  
+
   /* Glow for focus states */
   --glow-primary: 0 0 0 3px rgba(250, 204, 21, 0.2);
-  
+
   /* Interactive states */
   --hover-overlay: rgba(255, 255, 255, 0.03);
   --active-overlay: rgba(255, 255, 255, 0.06);
