@@ -20,6 +20,18 @@ class CPUServiceLinux(CPUService):
         self._hardware_cache = HardwareCacheService(cache_name="cpu")
         self._cpu_static_info: dict | None = None
 
+    @staticmethod
+    def _get_cpu_name() -> str:
+        """Get CPU name from /proc/cpuinfo"""
+        try:
+            with Path("/proc/cpuinfo").open() as f:
+                for line in f:
+                    if "model name" in line:
+                        return str(line.split(":", 1)[1].strip())
+            return "Unknown"
+        except FileNotFoundError:
+            return "Unknown"
+
     def _collect_cpu_hardware_info(self) -> dict[str, Any]:
         """Collect static CPU hardware info"""
         name = self._get_cpu_name()
@@ -38,18 +50,6 @@ class CPUServiceLinux(CPUService):
             "max_speed_ghz": max_speed_ghz,
             "min_speed_ghz": min_speed_ghz,
         }
-
-    @staticmethod
-    def _get_cpu_name() -> str:
-        """Get CPU name from /proc/cpuinfo"""
-        try:
-            with Path("/proc/cpuinfo").open() as f:
-                for line in f:
-                    if "model name" in line:
-                        return str(line.split(":", 1)[1].strip())
-            return "Unknown"
-        except FileNotFoundError:
-            return "Unknown"
 
     def _load_static_cpu_info(self) -> None:
         """Load CPU static info from cache or collect it"""

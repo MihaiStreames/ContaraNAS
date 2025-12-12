@@ -26,6 +26,33 @@ class Module(ABC):
     # Subclasses can define a State inner class
     State: ClassVar[type[ModuleState] | None] = None
 
+    def _get_state_class(self) -> type[ModuleState] | None:
+        """Get the State class defined on this module"""
+        for cls in type(self).__mro__:
+            if cls is Module:
+                break
+            if "State" in cls.__dict__:
+                state_cls = cls.__dict__["State"]
+                if isinstance(state_cls, type) and issubclass(state_cls, ModuleState):
+                    return state_cls
+
+        return None
+
+    def _on_state_commit(self) -> None:
+        """Called when typed state is committed"""
+        if self._ui_update_callback is not None:
+            self._ui_update_callback(self)
+
+    def _init_typed_state(self) -> None:
+        """Initialize typed state from State inner class"""
+        state_class = self._get_state_class()
+
+        if state_class is None:
+            return
+
+        self._typed_state = state_class()
+        self._typed_state.set_commit_callback(self._on_state_commit)
+
     def __init__(
         self,
         name: str,
@@ -43,33 +70,6 @@ class Module(ABC):
         self._typed_state: ModuleState | None = None
         self._ui_update_callback: Callable[[Module], None] | None = None
         self._init_typed_state()
-
-    def _init_typed_state(self) -> None:
-        """Initialize typed state from State inner class"""
-        state_class = self._get_state_class()
-
-        if state_class is None:
-            return
-
-        self._typed_state = state_class()
-        self._typed_state.set_commit_callback(self._on_state_commit)
-
-    def _get_state_class(self) -> type[ModuleState] | None:
-        """Get the State class defined on this module"""
-        for cls in type(self).__mro__:
-            if cls is Module:
-                break
-            if "State" in cls.__dict__:
-                state_cls = cls.__dict__["State"]
-                if isinstance(state_cls, type) and issubclass(state_cls, ModuleState):
-                    return state_cls
-
-        return None
-
-    def _on_state_commit(self) -> None:
-        """Called when typed state is committed"""
-        if self._ui_update_callback is not None:
-            self._ui_update_callback(self)
 
     def _error_tile(self, error_message: str) -> Tile:
         """Return an error tile when get_tile() fails"""

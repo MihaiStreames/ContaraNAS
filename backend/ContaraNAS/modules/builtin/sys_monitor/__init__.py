@@ -63,6 +63,37 @@ class SysMonitorModule(Module):
         assert self._typed_state is not None
         return self._typed_state
 
+    async def _collect_stats(self) -> None:
+        """Collect all system stats and update state"""
+        try:
+            cpu_info = self._cpu_service.get_cpu_info()
+            mem_info = self._mem_service.get_memory_info()
+            disk_info = self._disk_service.get_disk_info()
+
+            self.state.cpu = cpu_info
+            self.state.memory = mem_info
+            self.state.disks = disk_info if disk_info else []
+            self.state.error = None
+
+            if cpu_info:
+                self.state.cpu_history.append(cpu_info.total_usage)
+            if mem_info:
+                self.state.memory_history.append(mem_info.usage)
+            if disk_info:
+                for disk in disk_info:
+                    device = disk.device
+                    if device not in self.state.disk_history:
+                        # Create new deque for this device
+                        self.state.disk_history[device] = deque(maxlen=HISTORY_SIZE)
+                    self.state.disk_history[device].append(disk.busy_time)
+
+            self.state.commit()
+
+        except Exception as e:
+            logger.error(f"Error collecting system stats: {e}")
+            self.state.error = str(e)
+            self.state.commit()
+
     async def initialize(self) -> None:
         """Initialize the SysMonitor module"""
         logger.info("Initializing System Monitor module...")
@@ -94,37 +125,6 @@ class SysMonitorModule(Module):
         self._disk_service.cleanup()
 
         logger.info("System monitoring stopped")
-
-    async def _collect_stats(self) -> None:
-        """Collect all system stats and update state"""
-        try:
-            cpu_info = self._cpu_service.get_cpu_info()
-            mem_info = self._mem_service.get_memory_info()
-            disk_info = self._disk_service.get_disk_info()
-
-            self.state.cpu = cpu_info
-            self.state.memory = mem_info
-            self.state.disks = disk_info if disk_info else []
-            self.state.error = None
-
-            if cpu_info:
-                self.state.cpu_history.append(cpu_info.total_usage)
-            if mem_info:
-                self.state.memory_history.append(mem_info.usage)
-            if disk_info:
-                for disk in disk_info:
-                    device = disk.device
-                    if device not in self.state.disk_history:
-                        # Create new deque for this device
-                        self.state.disk_history[device] = deque(maxlen=HISTORY_SIZE)
-                    self.state.disk_history[device].append(disk.busy_time)
-
-            self.state.commit()
-
-        except Exception as e:
-            logger.error(f"Error collecting system stats: {e}")
-            self.state.error = str(e)
-            self.state.commit()
 
     def get_tile(self) -> Tile:
         """Return the dashboard tile UI component"""

@@ -28,6 +28,14 @@ API_TOKEN_LENGTH = 64  # 256-bit tokens
 class AuthService:
     """Manages app pairing and API token authentication - One NAS can only be paired with one app"""
 
+    def _load_paired_app(self) -> None:
+        """Load paired app from disk"""
+        data = load_file(self._paired_app_file, PairedApp)
+
+        if data:
+            self._paired_app = data
+            logger.info("Loaded paired app configuration")
+
     def __init__(self, config: PairingConfig | None = None):
         self.config = config or PairingConfig()
         self._state = AuthState()
@@ -57,6 +65,23 @@ class AuthService:
         if not self.is_locked_out():
             return 0
         return int(self._state.lockout_until - time.time())
+
+    @staticmethod
+    def _display_pairing_code(code: str) -> None:
+        """Display pairing code on stdout"""
+        print()
+        print("╔══════════════════════════════════════════════════╗")
+        print("║          CONTARANAS PAIRING CODE                 ║")
+        print("╠══════════════════════════════════════════════════╣")
+        print("║                                                  ║")
+        print(f"║{code.center(50)}║")
+        print("║                                                  ║")
+        print("╠══════════════════════════════════════════════════╣")
+        print("║  Enter this code in the ContaraNAS app to pair   ║")
+        print("║  This code expires in 5 minutes                  ║")
+        print("╚══════════════════════════════════════════════════╝")
+        print()
+        logger.info(f"Pairing code generated: {code}")
 
     def generate_pairing_code(self) -> str:
         """Generate a new pairing code and display it on stdout"""
@@ -89,6 +114,56 @@ class AuthService:
 
         self._display_pairing_code(display_token)
         return display_token
+
+    def _verify_pairing_code(self, normalized_code: str) -> bool:
+        """Verify a pairing code"""
+        if self._state.active_pairing is None:
+            return False
+
+        active = self._state.active_pairing
+
+        if time.time() > active.expires_at:
+            logger.warning("Pairing attempt with expired code")
+            self._state.active_pairing = None
+            return False
+
+        if active.used:
+            logger.warning("Pairing attempt with used code")
+            return False
+
+        # Constant-time comparison
+        return secrets.compare_digest(normalized_code, active.raw_token)
+
+    @staticmethod
+    def _hash_token(token: str) -> str:
+        """Hash a token for storage"""
+        return hashlib.sha256(token.encode()).hexdigest()
+
+    def _record_failed_attempt(self) -> None:
+        """Record failed attempt and lock out if threshold reached"""
+        self._state.failed_attempts += 1
+        logger.warning(
+            f"Failed pairing attempt {self._state.failed_attempts}/{self.config.max_failed_attempts}"
+        )
+
+        if self._state.failed_attempts >= self.config.max_failed_attempts:
+            self._state.lockout_until = time.time() + self.config.lockout_duration_seconds
+            self._state.active_pairing = None
+            logger.error(
+                f"Pairing locked out for {self.config.lockout_duration_seconds}s "
+                f"after {self._state.failed_attempts} failed attempts"
+            )
+
+    def _save_paired_app(self) -> None:
+        """Save paired app to disk"""
+        self._paired_app_file.parent.mkdir(parents=True, exist_ok=True)
+
+        if self._paired_app is None:
+            if self._paired_app_file.exists():
+                self._paired_app_file.unlink()
+            return
+
+        save_file(self._paired_app_file, self._paired_app, pretty=True)
 
     def pair(self, pairing_code: str) -> str:
         """Exchange a pairing code for an API token"""
@@ -141,25 +216,6 @@ class AuthService:
 
         return True
 
-    def _verify_pairing_code(self, normalized_code: str) -> bool:
-        """Verify a pairing code"""
-        if self._state.active_pairing is None:
-            return False
-
-        active = self._state.active_pairing
-
-        if time.time() > active.expires_at:
-            logger.warning("Pairing attempt with expired code")
-            self._state.active_pairing = None
-            return False
-
-        if active.used:
-            logger.warning("Pairing attempt with used code")
-            return False
-
-        # Constant-time comparison
-        return secrets.compare_digest(normalized_code, active.raw_token)
-
     def verify_token(self, token: str) -> bool:
         """Verify an API token"""
         if self._paired_app is None:
@@ -180,59 +236,3 @@ class AuthService:
         if not token:
             return False
         return self.verify_token(token)
-
-    @staticmethod
-    def _hash_token(token: str) -> str:
-        """Hash a token for storage"""
-        return hashlib.sha256(token.encode()).hexdigest()
-
-    def _record_failed_attempt(self) -> None:
-        """Record failed attempt and lock out if threshold reached"""
-        self._state.failed_attempts += 1
-        logger.warning(
-            f"Failed pairing attempt {self._state.failed_attempts}/{self.config.max_failed_attempts}"
-        )
-
-        if self._state.failed_attempts >= self.config.max_failed_attempts:
-            self._state.lockout_until = time.time() + self.config.lockout_duration_seconds
-            self._state.active_pairing = None
-            logger.error(
-                f"Pairing locked out for {self.config.lockout_duration_seconds}s "
-                f"after {self._state.failed_attempts} failed attempts"
-            )
-
-    def _save_paired_app(self) -> None:
-        """Save paired app to disk"""
-        self._paired_app_file.parent.mkdir(parents=True, exist_ok=True)
-
-        if self._paired_app is None:
-            if self._paired_app_file.exists():
-                self._paired_app_file.unlink()
-            return
-
-        save_file(self._paired_app_file, self._paired_app, pretty=True)
-
-    def _load_paired_app(self) -> None:
-        """Load paired app from disk"""
-        data = load_file(self._paired_app_file, PairedApp)
-
-        if data:
-            self._paired_app = data
-            logger.info("Loaded paired app configuration")
-
-    @staticmethod
-    def _display_pairing_code(code: str) -> None:
-        """Display pairing code on stdout"""
-        print()
-        print("╔══════════════════════════════════════════════════╗")
-        print("║          CONTARANAS PAIRING CODE                 ║")
-        print("╠══════════════════════════════════════════════════╣")
-        print("║                                                  ║")
-        print(f"║{code.center(50)}║")
-        print("║                                                  ║")
-        print("╠══════════════════════════════════════════════════╣")
-        print("║  Enter this code in the ContaraNAS app to pair   ║")
-        print("║  This code expires in 5 minutes                  ║")
-        print("╚══════════════════════════════════════════════════╝")
-        print()
-        logger.info(f"Pairing code generated: {code}")

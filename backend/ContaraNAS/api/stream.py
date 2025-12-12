@@ -24,6 +24,33 @@ class StreamManager:
         self._client: WebSocket | None = None
         self._loop: asyncio.AbstractEventLoop | None = None
 
+    async def _send(self, data: dict) -> None:
+        """Send JSON message to client"""
+        if not self._client:
+            return
+
+        try:
+            data["timestamp"] = datetime.now().isoformat()
+            await self._client.send_bytes(encode(data))
+
+        except Exception as e:
+            logger.error(f"Send failed: {e}")
+
+    async def _push_module_ui(self, module: Module) -> None:
+        """Push full UI update for a single module"""
+        ui = module.render_ui() if module.enable_flag else None
+
+        await self._send(
+            {
+                "type": "module_ui",
+                "module": module.name,
+                "display_name": module.display_name,
+                "enabled": module.enable_flag,
+                "initialized": module.init_flag,
+                "ui": ui,
+            }
+        )
+
     def notify_module_ui_update(self, module: Module) -> None:
         """Push a module's UI update on WebSocket"""
         if not self._client or not self._loop:
@@ -33,6 +60,38 @@ class StreamManager:
             self._push_module_ui(module),
             self._loop,
         )
+
+    async def _send_full_state(self) -> None:
+        """Push complete app state on WebSocket"""
+        modules = []
+
+        for name, module in self._manager.modules.items():
+            ui = None
+            if module.enable_flag:
+                ui = module.render_ui()
+
+            modules.append(
+                {
+                    "name": name,
+                    "display_name": module.display_name,
+                    "enabled": module.enable_flag,
+                    "initialized": module.init_flag,
+                    "ui": ui,
+                }
+            )
+
+        await self._send(
+            {
+                "type": "full_state",
+                "modules": modules,
+                "active_modal": None,
+            }
+        )
+
+    async def _handle_message(self, msg: dict) -> None:
+        """Handle incoming message from client"""
+        if msg.get("type") == "ping":
+            await self._send({"type": "pong"})
 
     async def handle_connection(
         self, websocket: WebSocket, auth_service: AuthService, token: str | None
@@ -78,65 +137,6 @@ class StreamManager:
         finally:
             self._client = None
             self._loop = None
-
-    async def _push_module_ui(self, module: Module) -> None:
-        """Push full UI update for a single module"""
-        ui = module.render_ui() if module.enable_flag else None
-
-        await self._send(
-            {
-                "type": "module_ui",
-                "module": module.name,
-                "display_name": module.display_name,
-                "enabled": module.enable_flag,
-                "initialized": module.init_flag,
-                "ui": ui,
-            }
-        )
-
-    async def _send_full_state(self) -> None:
-        """Push complete app state on WebSocket"""
-        modules = []
-
-        for name, module in self._manager.modules.items():
-            ui = None
-            if module.enable_flag:
-                ui = module.render_ui()
-
-            modules.append(
-                {
-                    "name": name,
-                    "display_name": module.display_name,
-                    "enabled": module.enable_flag,
-                    "initialized": module.init_flag,
-                    "ui": ui,
-                }
-            )
-
-        await self._send(
-            {
-                "type": "full_state",
-                "modules": modules,
-                "active_modal": None,
-            }
-        )
-
-    async def _send(self, data: dict) -> None:
-        """Send JSON message to client"""
-        if not self._client:
-            return
-
-        try:
-            data["timestamp"] = datetime.now().isoformat()
-            await self._client.send_bytes(encode(data))
-
-        except Exception as e:
-            logger.error(f"Send failed: {e}")
-
-    async def _handle_message(self, msg: dict) -> None:
-        """Handle incoming message from client"""
-        if msg.get("type") == "ping":
-            await self._send({"type": "pong"})
 
     async def shutdown(self) -> None:
         """Shutdown the stream manager"""

@@ -18,6 +18,14 @@ logger = get_logger(__name__)
 class DiskServiceWindows(DiskService):
     """Windows-specific Disk monitoring implementation"""
 
+    def _load_existing_disk_cache(self):
+        """Load previously cached disk hardware info"""
+        cached_data = self._hardware_cache.load_cache()
+        if cached_data:
+            self._disk_models = cached_data.get("disk_models", {})
+            self._disk_types = cached_data.get("disk_types", {})
+            logger.debug(f"Loaded cached info for {len(self._disk_models)} disks")
+
     def __init__(self):
         self._hardware_cache = HardwareCacheService(cache_name="disk")
         self._previous_stats: dict[str, dict[str, Any]] = {}
@@ -80,6 +88,15 @@ class DiskServiceWindows(DiskService):
 
         return disk_info
 
+    def _save_disk_cache(self):
+        """Save current disk hardware info to cache"""
+        hardware_data = {
+            "disk_models": self._disk_models,
+            "disk_types": self._disk_types,
+        }
+        self._hardware_cache.save_cache(hardware_data)
+        logger.debug(f"Saved disk cache with {len(self._disk_models)} disks")
+
     def _get_disk_hardware_info(self, device: str) -> tuple[str, str]:
         """Get model and type for a disk, using cache or collecting fresh data"""
         # For partitions like C:, we need to map to physical disk
@@ -108,23 +125,6 @@ class DiskServiceWindows(DiskService):
             ), self._disk_types.get(device, self._disk_types[first_key])
 
         return "Unknown", "Unknown"
-
-    def _save_disk_cache(self):
-        """Save current disk hardware info to cache"""
-        hardware_data = {
-            "disk_models": self._disk_models,
-            "disk_types": self._disk_types,
-        }
-        self._hardware_cache.save_cache(hardware_data)
-        logger.debug(f"Saved disk cache with {len(self._disk_models)} disks")
-
-    def _load_existing_disk_cache(self):
-        """Load previously cached disk hardware info"""
-        cached_data = self._hardware_cache.load_cache()
-        if cached_data:
-            self._disk_models = cached_data.get("disk_models", {})
-            self._disk_types = cached_data.get("disk_types", {})
-            logger.debug(f"Loaded cached info for {len(self._disk_models)} disks")
 
     def get_disk_info(self) -> list[DiskInfo]:
         """Get information for all disk partitions"""

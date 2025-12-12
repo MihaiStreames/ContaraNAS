@@ -21,27 +21,6 @@ class SteamGameLoaderService:
     def __init__(self, parsing_service: SteamParsingService):
         self.parsing_service: SteamParsingService = parsing_service
 
-    async def load_games_from_library(self, library_path: Path) -> list[SteamGame]:
-        """Load all games from a library with complete size information"""
-        steamapps_path = library_path / STEAMAPPS_DIR
-        games: list[SteamGame] = []
-
-        # Parse all games in this library
-        if not steamapps_path.exists():
-            logger.warning(f"Steamapps directory not found: {steamapps_path}")
-            return games
-
-        for manifest_path in steamapps_path.glob(APP_MANIFEST_PATTERN):
-            game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
-            if game:
-                games.append(game)
-
-        # Calculate shader and workshop sizes asynchronously for all games in parallel
-        if games:
-            await self._calculate_additional_sizes(library_path, games)
-
-        return games
-
     @staticmethod
     async def _calculate_additional_sizes(library_path: Path, games: list[SteamGame]) -> None:
         """Calculate shader and workshop sizes for all games in parallel"""
@@ -77,3 +56,24 @@ class SteamGameLoaderService:
             shader_size, workshop_size = await asyncio.gather(shader_task, workshop_task)
             game.shader_cache_size = shader_size or 0
             game.workshop_content_size = workshop_size or 0
+
+    async def load_games_from_library(self, library_path: Path) -> list[SteamGame]:
+        """Load all games from a library with complete size information"""
+        steamapps_path = library_path / STEAMAPPS_DIR
+        games: list[SteamGame] = []
+
+        # Parse all games in this library
+        if not steamapps_path.exists():
+            logger.warning(f"Steamapps directory not found: {steamapps_path}")
+            return games
+
+        for manifest_path in steamapps_path.glob(APP_MANIFEST_PATTERN):
+            game = self.parsing_service.create_game_from_manifest(manifest_path, library_path)
+            if game:
+                games.append(game)
+
+        # Calculate shader and workshop sizes asynchronously for all games in parallel
+        if games:
+            await self._calculate_additional_sizes(library_path, games)
+
+        return games

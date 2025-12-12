@@ -10,11 +10,6 @@ logger = get_logger(__name__)
 class StateManager:
     """Manages persistent state for modules across application restarts"""
 
-    def __init__(self):
-        self._state_file = settings.cache_dir / "module_states.json"
-        self._enabled_modules: set[str] = set()
-        self._load_state()
-
     def _load_state(self) -> None:
         """Load module states from disk"""
         data = load_file(self._state_file)
@@ -24,6 +19,11 @@ class StateManager:
             logger.info(f"Loaded module states: {len(self._enabled_modules)} modules were enabled")
         else:
             logger.info("No previous module states found")
+
+    def __init__(self):
+        self._state_file = settings.cache_dir / "module_states.json"
+        self._enabled_modules: set[str] = set()
+        self._load_state()
 
     def _save_state(self) -> None:
         """Save module states to disk"""

@@ -19,45 +19,6 @@ class ModuleState(BaseModel):
     _on_commit: Callable[[], Any] | None = PrivateAttr(default=None)
     _last_committed: dict[str, Any] | None = PrivateAttr(default=None)
 
-    def model_post_init(self, __context: Any) -> None:
-        self._last_committed = self._serialize()
-
-    def __setattr__(self, name: str, value: Any) -> None:
-        if name.startswith("_"):
-            object.__setattr__(self, name, value)
-            return
-
-        if name in type(self).model_fields:
-            try:
-                old_value = getattr(self, name, None)
-                if old_value != value:
-                    self._dirty = True
-            except AttributeError:
-                pass
-
-        super().__setattr__(name, value)
-
-    @property
-    def is_dirty(self) -> bool:
-        """Check if state has unsaved changes"""
-        return self._dirty
-
-    def mark_dirty(self) -> None:
-        """Manually mark state as dirty"""
-        self._dirty = True
-
-    def commit(self) -> None:
-        """Signal that current state should be pushed to frontend"""
-        if self._on_commit is not None:
-            self._on_commit()
-
-        self._last_committed = self._serialize()
-        self._dirty = False
-
-    def set_commit_callback(self, callback: Callable[[], Any]) -> None:
-        """Set callback to be called on commit"""
-        self._on_commit = callback
-
     def _serialize_value(self, value: Any) -> Any:
         """Recursively serialize a value, handling msgspec Structs and collections"""
         if isinstance(value, msgspec.Struct):
@@ -86,6 +47,30 @@ class ModuleState(BaseModel):
             result[field_name] = self._serialize_value(value)
 
         return result
+
+    def model_post_init(self, __context: Any) -> None:
+        self._last_committed = self._serialize()
+
+    @property
+    def is_dirty(self) -> bool:
+        """Check if state has unsaved changes"""
+        return self._dirty
+
+    def mark_dirty(self) -> None:
+        """Manually mark state as dirty"""
+        self._dirty = True
+
+    def commit(self) -> None:
+        """Signal that current state should be pushed to frontend"""
+        if self._on_commit is not None:
+            self._on_commit()
+
+        self._last_committed = self._serialize()
+        self._dirty = False
+
+    def set_commit_callback(self, callback: Callable[[], Any]) -> None:
+        """Set callback to be called on commit"""
+        self._on_commit = callback
 
     def to_dict(self) -> dict[str, Any]:
         """Convert state to dictionary"""
@@ -121,3 +106,18 @@ class ModuleState(BaseModel):
                 setattr(self, field_name, field_info.default_factory())
 
         self._dirty = True
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name.startswith("_"):
+            object.__setattr__(self, name, value)
+            return
+
+        if name in type(self).model_fields:
+            try:
+                old_value = getattr(self, name, None)
+                if old_value != value:
+                    self._dirty = True
+            except AttributeError:
+                pass
+
+        super().__setattr__(name, value)

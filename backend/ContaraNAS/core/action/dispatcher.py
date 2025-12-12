@@ -39,6 +39,29 @@ class ActionDispatcher:
             return []
         return list(get_actions(module).keys())
 
+    def _process_results(self, result: Any) -> list[dict[str, Any]]:
+        """Process action results into serializable format"""
+        if result is None:
+            return []
+
+        if isinstance(result, ActionResult):
+            return [result.to_dict()]
+
+        if isinstance(result, list):
+            return [item.to_dict() for item in result if isinstance(item, ActionResult)]
+
+        return []
+
+    def _error_result(self, action_name: str, error_message: str) -> list[dict[str, Any]]:
+        """Create an error notification result"""
+        return [
+            Notify(
+                message=f"Action failed: {error_message}",
+                variant="error",
+                title=f"{action_name} error",
+            ).to_dict()
+        ]
+
     async def dispatch(
         self,
         module_name: str,
@@ -71,26 +94,3 @@ class ActionDispatcher:
             raise ActionError(action_name, str(e)) from e
 
         return self._process_results(result)
-
-    def _process_results(self, result: Any) -> list[dict[str, Any]]:
-        """Process action results into serializable format"""
-        if result is None:
-            return []
-
-        if isinstance(result, ActionResult):
-            return [result.to_dict()]
-
-        if isinstance(result, list):
-            return [item.to_dict() for item in result if isinstance(item, ActionResult)]
-
-        return []
-
-    def _error_result(self, action_name: str, error_message: str) -> list[dict[str, Any]]:
-        """Create an error notification result"""
-        return [
-            Notify(
-                message=f"Action failed: {error_message}",
-                variant="error",
-                title=f"{action_name} error",
-            ).to_dict()
-        ]

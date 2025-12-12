@@ -12,14 +12,6 @@ logger = get_logger(__name__)
 class ModuleManager:
     """Central manager for all system modules"""
 
-    def __init__(self) -> None:
-        # Delay import to avoid circular dependency
-        from ContaraNAS.modules import module_loader
-
-        self._loader = module_loader
-        self.modules: dict[str, Module] = {}
-        self._discover_and_register()
-
     def _discover_and_register(self) -> None:
         """Discover and register all available modules"""
         discovered = self._loader.discover()
@@ -40,6 +32,14 @@ class ModuleManager:
 
             except Exception as e:
                 logger.error(f"Failed to register {module_id}: {e}")
+
+    def __init__(self) -> None:
+        # Delay import to avoid circular dependency
+        from ContaraNAS.modules import module_loader
+
+        self._loader = module_loader
+        self.modules: dict[str, Module] = {}
+        self._discover_and_register()
 
     def set_ui_update_callback(self, callback: Callable[[Module], None]) -> None:
         """Set UI update callback on all modules"""
