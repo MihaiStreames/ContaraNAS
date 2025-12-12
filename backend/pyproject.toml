@@ -86,7 +86,7 @@ docstring-code-format = true
 docstring-code-line-length = 80
 
 [tool.ruff.lint.isort]
-force-single-line = false
+force-single-line = true
 force-sort-within-sections = true
 lines-after-imports = 2
 section-order = [

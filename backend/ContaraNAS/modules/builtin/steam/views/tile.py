@@ -1,14 +1,13 @@
-from ContaraNAS.core.ui import (
-    Alert,
-    SegmentedProgress,
-    SegmentedProgressSegment,
-    Stack,
-    Stat,
-    Text,
-    Tile,
-)
+from ContaraNAS.core.ui import Alert
+from ContaraNAS.core.ui import SegmentedProgress
+from ContaraNAS.core.ui import SegmentedProgressSegment
+from ContaraNAS.core.ui import Stack
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Text
+from ContaraNAS.core.ui import Tile
 
-from .helpers import format_bytes, get_mountpoint
+from .helpers import format_bytes
+from .helpers import get_mountpoint
 
 
 def build_tile(

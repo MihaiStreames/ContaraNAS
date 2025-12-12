@@ -3,19 +3,18 @@ import time
 from typing import Any
 
 import psutil
-from win32pdh import (
-    PDH_FMT_DOUBLE,
-    AddCounter,
-    CloseQuery,
-    CollectQueryData,
-    GetFormattedCounterValue,
-    OpenQuery,
-)
+from win32pdh import PDH_FMT_DOUBLE
+from win32pdh import AddCounter
+from win32pdh import CloseQuery
+from win32pdh import CollectQueryData
+from win32pdh import GetFormattedCounterValue
+from win32pdh import OpenQuery
 import wmi
 
 from ContaraNAS.core import get_logger
 from ContaraNAS.modules.builtin.sys_monitor.dtos import CPUInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import CPUService, HardwareCacheService
+from ContaraNAS.modules.builtin.sys_monitor.services import CPUService
+from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
 
 
 logger = get_logger(__name__)

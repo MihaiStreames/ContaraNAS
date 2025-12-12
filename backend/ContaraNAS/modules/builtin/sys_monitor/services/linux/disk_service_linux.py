@@ -7,16 +7,12 @@ from typing import Any
 import psutil
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.constants import (
-    DEFAULT_IO_UPDATE_INTERVAL,
-    DISK_SECTOR_SIZE,
-    IO_TIME_MS_DIVISOR,
-)
+from ContaraNAS.modules.builtin.sys_monitor.constants import DEFAULT_IO_UPDATE_INTERVAL
+from ContaraNAS.modules.builtin.sys_monitor.constants import DISK_SECTOR_SIZE
+from ContaraNAS.modules.builtin.sys_monitor.constants import IO_TIME_MS_DIVISOR
 from ContaraNAS.modules.builtin.sys_monitor.dtos import DiskInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import (
-    DiskService,
-    HardwareCacheService,
-)
+from ContaraNAS.modules.builtin.sys_monitor.services import DiskService
+from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
 
 
 logger = get_logger(__name__)

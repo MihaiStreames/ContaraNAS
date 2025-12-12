@@ -1,10 +1,17 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from collections.abc import Callable
-from typing import Any, ClassVar
+from typing import Any
+from typing import ClassVar
 
-from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
-from ContaraNAS.core.ui import Alert, Badge, Modal, Stat, Tile
 from ContaraNAS.core import get_logger
+from ContaraNAS.core.exceptions import ModuleError
+from ContaraNAS.core.exceptions import ModuleInitializationError
+from ContaraNAS.core.ui import Alert
+from ContaraNAS.core.ui import Badge
+from ContaraNAS.core.ui import Modal
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Tile
 
 from .metadata import ModuleMetadata
 from .state import ModuleState

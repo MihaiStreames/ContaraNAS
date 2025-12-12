@@ -1,9 +1,10 @@
-from pathlib import Path
-from typing import Any, TypeVar
-
 import json
+from pathlib import Path
+from typing import Any
+from typing import TypeVar
 
 import msgspec
+
 
 T = TypeVar("T")
 
@@ -21,7 +22,7 @@ def encode_str(obj: Any) -> str:
     return _encoder.encode(obj).decode("utf-8")
 
 
-def decode(data: bytes | str, type_: type[T] | None = None) -> T | Any:
+def decode[T](data: bytes | str, type_: type[T] | None = None) -> T | Any:
     """Decode JSON data, optionally to a specific type"""
     if isinstance(data, str):
         data = data.encode("utf-8")
@@ -37,7 +38,7 @@ def to_builtins(obj: Any) -> Any:
     return msgspec.to_builtins(obj)
 
 
-def load_file(path: Path, type_: type[T] | None = None) -> T | dict | None:
+def load_file[T](path: Path, type_: type[T] | None = None) -> T | dict | None:
     """Load JSON from file"""
     if not path.exists():
         return None

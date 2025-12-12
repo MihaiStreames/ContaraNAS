@@ -1,8 +1,14 @@
 import pytest
 
-from ContaraNAS.core.action import ActionDispatcher, ActionError, Notify, action
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Button, Stat, Tile
+from ContaraNAS.core.action import ActionDispatcher
+from ContaraNAS.core.action import ActionError
+from ContaraNAS.core.action import Notify
+from ContaraNAS.core.action import action
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Button
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Tile
 
 
 class WorkingModule(Module):

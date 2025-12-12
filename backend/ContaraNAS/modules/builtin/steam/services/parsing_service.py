@@ -4,7 +4,9 @@ from typing import Any
 import vdf
 
 from ContaraNAS.core import get_logger
-from ..constants import LIBRARY_FOLDERS_FILE, STEAMAPPS_DIR
+
+from ..constants import LIBRARY_FOLDERS_FILE
+from ..constants import STEAMAPPS_DIR
 from ..dtos import SteamGame
 
 

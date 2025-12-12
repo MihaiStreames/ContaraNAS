@@ -6,7 +6,9 @@ from unittest.mock import patch
 import pytest
 
 from ContaraNAS.core.auth.config import PairingConfig
-from ContaraNAS.core.auth.models import AuthState, PairedApp, PairingToken
+from ContaraNAS.core.auth.models import AuthState
+from ContaraNAS.core.auth.models import PairedApp
+from ContaraNAS.core.auth.models import PairingToken
 from ContaraNAS.core.auth.service import AuthService
 from ContaraNAS.core.exceptions import PairingError
 

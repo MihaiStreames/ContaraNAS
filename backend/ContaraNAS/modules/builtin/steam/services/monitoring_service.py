@@ -4,8 +4,8 @@ from pathlib import Path
 from watchdog.observers import Observer
 
 from ContaraNAS.core import get_logger
-from ..constants import OBSERVER_JOIN_TIMEOUT
 
+from ..constants import OBSERVER_JOIN_TIMEOUT
 from .manifest_handler import SteamManifestHandler
 
 

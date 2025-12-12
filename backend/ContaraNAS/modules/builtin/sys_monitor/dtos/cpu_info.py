@@ -1,5 +1,6 @@
 import msgspec
 
+
 class CPUInfo(msgspec.Struct, gc=False, frozen=True):
     """Data transfer object for CPU information"""
 

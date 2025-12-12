@@ -1,33 +1,31 @@
-from ContaraNAS.core.ui import (
-    Alert,
-    Badge,
-    Button,
-    Card,
-    Checkbox,
-    Component,
-    Grid,
-    Image,
-    Input,
-    LineChart,
-    Modal,
-    Progress,
-    SegmentedProgress,
-    SegmentedProgressSegment,
-    Select,
-    SelectOption,
-    Spinner,
-    Stack,
-    Stat,
-    StatCard,
-    StatSmall,
-    Tab,
-    Table,
-    TableColumn,
-    Tabs,
-    Text,
-    Tile,
-    Toggle,
-)
+from ContaraNAS.core.ui import Alert
+from ContaraNAS.core.ui import Badge
+from ContaraNAS.core.ui import Button
+from ContaraNAS.core.ui import Card
+from ContaraNAS.core.ui import Checkbox
+from ContaraNAS.core.ui import Component
+from ContaraNAS.core.ui import Grid
+from ContaraNAS.core.ui import Image
+from ContaraNAS.core.ui import Input
+from ContaraNAS.core.ui import LineChart
+from ContaraNAS.core.ui import Modal
+from ContaraNAS.core.ui import Progress
+from ContaraNAS.core.ui import SegmentedProgress
+from ContaraNAS.core.ui import SegmentedProgressSegment
+from ContaraNAS.core.ui import Select
+from ContaraNAS.core.ui import SelectOption
+from ContaraNAS.core.ui import Spinner
+from ContaraNAS.core.ui import Stack
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import StatCard
+from ContaraNAS.core.ui import StatSmall
+from ContaraNAS.core.ui import Tab
+from ContaraNAS.core.ui import Table
+from ContaraNAS.core.ui import TableColumn
+from ContaraNAS.core.ui import Tabs
+from ContaraNAS.core.ui import Text
+from ContaraNAS.core.ui import Tile
+from ContaraNAS.core.ui import Toggle
 
 
 def test_component_base():

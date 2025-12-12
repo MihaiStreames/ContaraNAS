@@ -1,16 +1,18 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi import status
 
-from ContaraNAS.api.responses import (
-    ModuleModalsResponse,
-    ModuleTileResponse,
-    ModuleUIResponse,
-)
+from ContaraNAS.api.responses import ModuleModalsResponse
+from ContaraNAS.api.responses import ModuleTileResponse
+from ContaraNAS.api.responses import ModuleUIResponse
+from ContaraNAS.core import get_logger
 from ContaraNAS.core.action import ActionDispatcher
 from ContaraNAS.core.exceptions import ActionError
 from ContaraNAS.core.module import Module
-from ContaraNAS.core import get_logger
 
 from .auth import require_auth
 from .commands import _get_manager

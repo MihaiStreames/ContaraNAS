@@ -1,16 +1,15 @@
 import hashlib
 
 from ContaraNAS.core import settings
-from ContaraNAS.core.ui import (
-    Modal,
-    Stack,
-    Stat,
-    Table,
-    TableColumn,
-    Text,
-)
+from ContaraNAS.core.ui import Modal
+from ContaraNAS.core.ui import Stack
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Table
+from ContaraNAS.core.ui import TableColumn
+from ContaraNAS.core.ui import Text
 
-from .helpers import convert_date_to_string, format_bytes
+from .helpers import convert_date_to_string
+from .helpers import format_bytes
 
 
 def _get_image_path(app_id: int) -> str:

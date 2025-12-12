@@ -3,7 +3,7 @@ import sys
 import loguru
 from loguru import logger
 
-from ContaraNAS.core import settings
+from ContaraNAS.core.config import settings
 
 
 def setup_logging(

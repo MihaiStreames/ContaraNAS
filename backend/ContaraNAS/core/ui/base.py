@@ -1,8 +1,10 @@
 from collections.abc import Callable
-from typing import Any, ClassVar
+from typing import Any
+from typing import ClassVar
 
 import msgspec
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
+from pydantic import ConfigDict
 
 
 class Component(BaseModel):

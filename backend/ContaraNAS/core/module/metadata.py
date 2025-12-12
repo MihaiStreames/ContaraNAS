@@ -29,7 +29,7 @@ class ModuleMetadata(msgspec.Struct, gc=False, frozen=True):
     def from_json(cls, data: dict[str, Any], source: str) -> "ModuleMetadata":
         """Create metadata from module.json"""
         deps_data = data.get("dependencies", {})
-        
+
         dependencies = ModuleDependencies(
             python=deps_data.get("python", {}),
             python_platform=deps_data.get("python_platform", {}),

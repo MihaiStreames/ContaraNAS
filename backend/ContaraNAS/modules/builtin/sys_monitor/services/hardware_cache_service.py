@@ -4,7 +4,10 @@ from typing import Any
 
 import psutil
 
-from ContaraNAS.core import settings, get_logger, load_file, save_file
+from ContaraNAS.core import get_logger
+from ContaraNAS.core import load_file
+from ContaraNAS.core import save_file
+from ContaraNAS.core import settings
 
 
 logger = get_logger(__name__)
@@ -64,9 +67,7 @@ class HardwareCacheService:
                 logger.debug(f"Using cached hardware info from {self._cache_file}")
                 return cached_data
 
-        logger.debug(
-            f"Collecting fresh hardware info (may require sudo) for {self._cache_file}"
-        )
+        logger.debug(f"Collecting fresh hardware info (may require sudo) for {self._cache_file}")
         hardware_data = collect_fn()
         self.save_cache(hardware_data)
         return hardware_data

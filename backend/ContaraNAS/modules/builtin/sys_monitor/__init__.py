@@ -2,19 +2,22 @@ from collections import deque
 from dataclasses import field
 from datetime import datetime
 
-from ContaraNAS.core.action import Notify, action
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Tile
 from ContaraNAS.core import get_logger
+from ContaraNAS.core.action import Notify
+from ContaraNAS.core.action import action
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Tile
 
-from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL, HISTORY_SIZE
-from .dtos import CPUInfo, DiskInfo, MemoryInfo
-from .services import (
-    CPUService,
-    DiskService,
-    MemService,
-    SysMonitorMonitoringService,
-)
+from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL
+from .constants import HISTORY_SIZE
+from .dtos import CPUInfo
+from .dtos import DiskInfo
+from .dtos import MemoryInfo
+from .services import CPUService
+from .services import DiskService
+from .services import MemService
+from .services import SysMonitorMonitoringService
 from .views import build_tile
 
 

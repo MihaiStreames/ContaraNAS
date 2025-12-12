@@ -1,8 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi import status
 
-from ContaraNAS.api.responses import ModuleInfo, ModuleListResponse, ModuleToggleResponse
-from ContaraNAS.core.module_manager import ModuleManager
+from ContaraNAS.api.responses import ModuleInfo
+from ContaraNAS.api.responses import ModuleListResponse
+from ContaraNAS.api.responses import ModuleToggleResponse
 from ContaraNAS.core import get_logger
+from ContaraNAS.core.module_manager import ModuleManager
 
 from .auth import require_auth
 

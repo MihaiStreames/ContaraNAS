@@ -1,14 +1,12 @@
 from collections.abc import Sequence
 
-from ContaraNAS.core.ui import (
-    Grid,
-    LineChart,
-    Stack,
-    Stat,
-    StatSmall,
-    Tab,
-    Text,
-)
+from ContaraNAS.core.ui import Grid
+from ContaraNAS.core.ui import LineChart
+from ContaraNAS.core.ui import Stack
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import StatSmall
+from ContaraNAS.core.ui import Tab
+from ContaraNAS.core.ui import Text
 
 from ..dtos import MemoryInfo
 from .helpers import format_bytes

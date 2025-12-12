@@ -2,19 +2,19 @@ import contextlib
 from typing import Any
 
 import psutil
-from win32pdh import (
-    PDH_FMT_DOUBLE,
-    AddCounter,
-    CloseQuery,
-    CollectQueryData,
-    GetFormattedCounterValue,
-    OpenQuery,
-)
+from win32pdh import PDH_FMT_DOUBLE
+from win32pdh import AddCounter
+from win32pdh import CloseQuery
+from win32pdh import CollectQueryData
+from win32pdh import GetFormattedCounterValue
+from win32pdh import OpenQuery
 import wmi
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo, RAMInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService, MemService
+from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo
+from ContaraNAS.modules.builtin.sys_monitor.dtos import RAMInfo
+from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
+from ContaraNAS.modules.builtin.sys_monitor.services import MemService
 
 
 logger = get_logger(__name__)

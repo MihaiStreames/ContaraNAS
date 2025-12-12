@@ -17,9 +17,7 @@ class ModuleInitializationError(ModuleError):
     def __init__(self, module_name: str, reason: str):
         super().__init__(module_name, reason)
         # Override the message for initialization errors
-        Exception.__init__(
-            self, f"Failed to initialize module '{module_name}': {reason}"
-        )
+        Exception.__init__(self, f"Failed to initialize module '{module_name}': {reason}")
 
 
 class ServiceError(ContaraNASError):

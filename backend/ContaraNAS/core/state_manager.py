@@ -1,7 +1,8 @@
-import json
-from pathlib import Path
+from ContaraNAS.core.config import settings
+from ContaraNAS.core.logger import get_logger
+from ContaraNAS.core.serialization import load_file
+from ContaraNAS.core.serialization import save_file
 
-from ContaraNAS.core import settings, get_logger, load_file, save_file
 
 logger = get_logger(__name__)
 
@@ -17,7 +18,7 @@ class StateManager:
     def _load_state(self) -> None:
         """Load module states from disk"""
         data = load_file(self._state_file)
-        
+
         if data:
             self._enabled_modules = set(data.get("enabled_modules", []))
             logger.info(f"Loaded module states: {len(self._enabled_modules)} modules were enabled")

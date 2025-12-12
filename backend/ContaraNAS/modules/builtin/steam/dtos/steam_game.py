@@ -24,7 +24,9 @@ class SteamGame(msgspec.Struct, gc=False):
     installed_depots: dict[str, dict[str, str]] = msgspec.field(default_factory=dict)
 
     @property
-    def install_state(self) -> Literal["installed", "updating", "downloading", "paused", "uninstalled"]:
+    def install_state(
+        self,
+    ) -> Literal["installed", "updating", "downloading", "paused", "uninstalled"]:
         """Determine current install state"""
         if self.state_flags == 4:
             if self.bytes_to_download > 0:

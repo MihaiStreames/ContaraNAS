@@ -1,5 +1,6 @@
 from collections.abc import Callable
-from typing import ClassVar, Literal
+from typing import ClassVar
+from typing import Literal
 
 from .base import Component
 

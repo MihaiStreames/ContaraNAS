@@ -15,7 +15,7 @@ class RAMInfo(msgspec.Struct, gc=False, frozen=True):
 
 class MemoryInfo(msgspec.Struct, gc=False, frozen=True):
     """Data transfer object for Memory information"""
-    
+
     total: float
     available: float
     free: float

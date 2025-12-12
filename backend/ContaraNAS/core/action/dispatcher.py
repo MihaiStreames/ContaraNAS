@@ -1,10 +1,12 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
 
-from ContaraNAS.core.exceptions import ActionError
 from ContaraNAS.core import get_logger
+from ContaraNAS.core.exceptions import ActionError
 
 from .decorator import get_actions
-from .results import ActionResult, Notify
+from .results import ActionResult
+from .results import Notify
 
 
 if TYPE_CHECKING:

@@ -2,9 +2,11 @@ from collections.abc import Callable
 from pathlib import Path
 import traceback
 
-from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.events import FileSystemEvent
+from watchdog.events import FileSystemEventHandler
 
 from ContaraNAS.core import get_logger
+
 from ..utils import is_manifest_file
 
 

@@ -6,7 +6,8 @@ import psutil
 
 from ContaraNAS.core import get_logger
 from ContaraNAS.modules.builtin.sys_monitor.dtos import CPUInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import CPUService, HardwareCacheService
+from ContaraNAS.modules.builtin.sys_monitor.services import CPUService
+from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
 
 
 logger = get_logger(__name__)

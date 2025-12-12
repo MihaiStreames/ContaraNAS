@@ -6,8 +6,10 @@ from typing import Any
 import psutil
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo, RAMInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService, MemService
+from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo
+from ContaraNAS.modules.builtin.sys_monitor.dtos import RAMInfo
+from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
+from ContaraNAS.modules.builtin.sys_monitor.services import MemService
 
 
 logger = get_logger(__name__)

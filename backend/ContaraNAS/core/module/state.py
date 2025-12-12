@@ -2,7 +2,9 @@ from collections.abc import Callable
 from typing import Any
 
 import msgspec
-from pydantic import BaseModel, ConfigDict, PrivateAttr
+from pydantic import BaseModel
+from pydantic import ConfigDict
+from pydantic import PrivateAttr
 
 
 class ModuleState(BaseModel):
@@ -62,13 +64,17 @@ class ModuleState(BaseModel):
             return msgspec.to_builtins(value)
         if isinstance(value, (list, tuple)):
             return [self._serialize_value(v) for v in value]
-        if hasattr(value, '__iter__') and hasattr(value, 'append') and not isinstance(value, (str, bytes, dict)):
+        if (
+            hasattr(value, "__iter__")
+            and hasattr(value, "append")
+            and not isinstance(value, (str, bytes, dict))
+        ):
             return [self._serialize_value(v) for v in value]
         if isinstance(value, dict):
             return {k: self._serialize_value(v) for k, v in value.items()}
         if isinstance(value, BaseModel):
             return value.model_dump(mode="json")
-        
+
         return value
 
     def _serialize(self) -> dict[str, Any]:

@@ -1,17 +1,16 @@
 from collections.abc import Sequence
 
-from ContaraNAS.core.ui import (
-    Grid,
-    LineChart,
-    Stack,
-    Stat,
-    StatSmall,
-    Tab,
-    Text,
-)
+from ContaraNAS.core.ui import Grid
+from ContaraNAS.core.ui import LineChart
+from ContaraNAS.core.ui import Stack
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import StatSmall
+from ContaraNAS.core.ui import Tab
+from ContaraNAS.core.ui import Text
 
 from ..dtos import DiskInfo
-from .helpers import format_bytes, format_io_time
+from .helpers import format_bytes
+from .helpers import format_io_time
 
 
 def build_disk_tab(disk: DiskInfo, index: int, disk_history: Sequence[float]) -> Tab:

@@ -2,7 +2,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from .schemas.components import ModalSchema, TileSchema
+from .schemas.components import ModalSchema
+from .schemas.components import TileSchema
 from .schemas.ui import ModuleUI
 
 

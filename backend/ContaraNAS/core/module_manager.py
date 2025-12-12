@@ -1,10 +1,9 @@
 from collections.abc import Callable
 from typing import Any
 
+from ContaraNAS.core.logger import get_logger
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.state_manager import state_manager
-from ContaraNAS.core import get_logger
-from ContaraNAS.modules import module_loader
 
 
 logger = get_logger(__name__)
@@ -14,6 +13,9 @@ class ModuleManager:
     """Central manager for all system modules"""
 
     def __init__(self) -> None:
+        # Delay import to avoid circular dependency
+        from ContaraNAS.modules import module_loader
+
         self._loader = module_loader
         self.modules: dict[str, Module] = {}
         self._discover_and_register()

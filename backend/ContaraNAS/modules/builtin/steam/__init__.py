@@ -2,21 +2,28 @@ import asyncio
 from datetime import datetime
 from pathlib import Path
 
-from ContaraNAS.core.action import ActionRef, Notify, OpenModal, action
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Modal, Tile
-from ContaraNAS.core import get_logger, to_builtins
+from ContaraNAS.core import get_logger
+from ContaraNAS.core import to_builtins
+from ContaraNAS.core.action import ActionRef
+from ContaraNAS.core.action import Notify
+from ContaraNAS.core.action import OpenModal
+from ContaraNAS.core.action import action
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Modal
+from ContaraNAS.core.ui import Tile
 
-from .services import (
-    SteamCacheService,
-    SteamGameLoaderService,
-    SteamImageService,
-    SteamLibraryService,
-    SteamMonitoringService,
-    SteamParsingService,
-)
-from .utils import extract_app_id, get_drive_info
-from .views import build_library_modal, build_tile, get_library_modal_id
+from .services import SteamCacheService
+from .services import SteamGameLoaderService
+from .services import SteamImageService
+from .services import SteamLibraryService
+from .services import SteamMonitoringService
+from .services import SteamParsingService
+from .utils import extract_app_id
+from .utils import get_drive_info
+from .views import build_library_modal
+from .views import build_tile
+from .views import get_library_modal_id
 
 
 logger = get_logger(__name__)

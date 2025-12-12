@@ -1,10 +1,16 @@
 import asyncio
 from datetime import datetime
 
-from fastapi import WebSocket, WebSocketDisconnect, status
+from fastapi import WebSocket
+from fastapi import WebSocketDisconnect
+from fastapi import status
 
+from ContaraNAS.core import Module
+from ContaraNAS.core import ModuleManager
+from ContaraNAS.core import decode
+from ContaraNAS.core import encode
+from ContaraNAS.core import get_logger
 from ContaraNAS.core.auth import AuthService
-from ContaraNAS.core import Module, ModuleManager, get_logger, decode, encode
 
 
 logger = get_logger(__name__)
@@ -53,7 +59,7 @@ class StreamManager:
 
         self._client = websocket
         self._loop = asyncio.get_running_loop()
-    
+
         logger.info("Client connected")
 
         try:
