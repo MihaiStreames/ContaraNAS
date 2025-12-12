@@ -5,7 +5,7 @@ from datetime import datetime
 from ContaraNAS.core.action import Notify, action
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Tile
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 from .constants import DEFAULT_MONITOR_UPDATE_INTERVAL, HISTORY_SIZE
 from .dtos import CPUInfo, DiskInfo, MemoryInfo
@@ -28,10 +28,13 @@ class SysMonitorModule(Module):
         """System monitor state"""
 
         initialized_at: datetime | None = None
+
         cpu: CPUInfo | None = None
         memory: MemoryInfo | None = None
         disks: list[DiskInfo] = field(default_factory=list)
+
         error: str | None = None
+
         cpu_history: deque[float] = field(default_factory=lambda: deque(maxlen=HISTORY_SIZE))
         memory_history: deque[float] = field(default_factory=lambda: deque(maxlen=HISTORY_SIZE))
         disk_history: dict[str, deque[float]] = field(default_factory=dict)
@@ -44,10 +47,10 @@ class SysMonitorModule(Module):
     ) -> None:
         super().__init__(name, display_name or "System Monitor", metadata)
 
-        # Initialize services (platform-specific)
         self._cpu_service = CPUService.create()
         self._mem_service = MemService.create()
         self._disk_service = DiskService.create()
+
         self._monitoring_service: SysMonitorMonitoringService | None = None
         self._update_interval = DEFAULT_MONITOR_UPDATE_INTERVAL
 
@@ -96,20 +99,15 @@ class SysMonitorModule(Module):
             mem_info = self._mem_service.get_memory_info()
             disk_info = self._disk_service.get_disk_info()
 
-            # Convert dataclasses to dicts for state storage
             self.state.cpu = cpu_info
             self.state.memory = mem_info
             self.state.disks = disk_info if disk_info else []
             self.state.error = None
 
-            # Update history buffers
             if cpu_info:
                 self.state.cpu_history.append(cpu_info.total_usage)
-
             if mem_info:
                 self.state.memory_history.append(mem_info.usage)
-
-            # Update disk history (keyed by device)
             if disk_info:
                 for disk in disk_info:
                     device = disk.device

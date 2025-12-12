@@ -10,7 +10,9 @@ def is_manifest_file(path: str) -> bool:
     """Check if the path is a Steam manifest file"""
     if not path.endswith(".acf"):
         return False
+
     filename = Path(path).name
+
     return filename.startswith("appmanifest_")
 
 
@@ -20,6 +22,7 @@ def extract_app_id(manifest_path: Path) -> str | None:
     filename = manifest_path.name
     if filename.startswith("appmanifest_") and filename.endswith(".acf"):
         return filename[12:-4]  # Remove 'appmanifest_' and '.acf'
+
     return None
 
 
@@ -44,14 +47,17 @@ def _get_dir_size_win(directory: str | Path) -> int | None:
         shell=True,
         check=True,
     )
+
     lines = result.stdout.split("\n")
 
     for line in reversed(lines):
         if "bytes" in line and "Total Files Listed:" in line:
             # Extract number before "bytes"
             match = re.search(r"([\d,]+) bytes", line)
+
             if match:
                 return int(match.group(1).replace(",", ""))
+
     return None
 
 
@@ -60,10 +66,12 @@ async def get_dir_size(directory: str | Path) -> int | None:
 
     def _sync_get_dir_size() -> int | None:
         system = platform.system()
+
         if system in ["Linux", "Darwin"]:
             return _get_dir_size_unix(directory)
         if system == "Windows":
             return _get_dir_size_win(directory)
+
         return None
 
     return await asyncio.to_thread(_sync_get_dir_size)

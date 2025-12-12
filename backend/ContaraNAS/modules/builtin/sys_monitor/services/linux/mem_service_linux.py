@@ -5,7 +5,7 @@ from typing import Any
 
 import psutil
 
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo, RAMInfo
 from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService, MemService
 

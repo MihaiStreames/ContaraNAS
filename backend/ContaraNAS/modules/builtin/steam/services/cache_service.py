@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from ContaraNAS.core import settings
-from ContaraNAS.core.utils import get_logger, load_json, save_json
-from ContaraNAS.modules.builtin.steam.utils import extract_app_id
+from ContaraNAS.core import settings, get_logger, load_file, save_file
+from ..utils import extract_app_id
 
 
 logger = get_logger(__name__)
@@ -79,16 +78,17 @@ class SteamCacheService:
 
     def _save_cache(self) -> None:
         """Save manifest cache to JSON file"""
-        cache_data = {"manifests": self._manifest_cache}
-        save_json(self._cache_file, cache_data)
+        save_file(
+            self._cache_file,
+            {"manifests": self._manifest_cache},
+            pretty=False,  # This file can be large, skip pretty printing
+        )
         logger.debug(f"Saved cache to {self._cache_file}")
 
     def _load_cache(self) -> bool:
         """Load manifest cache from JSON file"""
-        if not self._cache_file.exists():
-            return False
-
-        cache_data = load_json(self._cache_file)
+        cache_data = load_file(self._cache_file)
+        
         if not cache_data or "manifests" not in cache_data:
             return False
 

@@ -1,9 +1,7 @@
 import json
 from pathlib import Path
 
-from ContaraNAS.core import settings
-from ContaraNAS.core.utils import get_logger
-
+from ContaraNAS.core import settings, get_logger, load_file, save_file
 
 logger = get_logger(__name__)
 
@@ -16,36 +14,25 @@ class StateManager:
         self._enabled_modules: set[str] = set()
         self._load_state()
 
-    @staticmethod
-    def _ensure_cache_dir() -> None:
-        settings.cache_dir.mkdir(parents=True, exist_ok=True)
-
     def _load_state(self) -> None:
         """Load module states from disk"""
-        try:
-            if self._state_file.exists():
-                with Path.open(self._state_file, encoding="utf-8") as f:
-                    data = json.load(f)
-                    self._enabled_modules = set(data.get("enabled_modules", []))
-                    logger.info(
-                        f"Loaded module states: {len(self._enabled_modules)} modules were enabled"
-                    )
-            else:
-                logger.info("No previous module states found")
-
-        except Exception as e:
-            logger.error(f"Failed to load module states: {e}")
-            self._enabled_modules = set()
+        data = load_file(self._state_file)
+        
+        if data:
+            self._enabled_modules = set(data.get("enabled_modules", []))
+            logger.info(f"Loaded module states: {len(self._enabled_modules)} modules were enabled")
+        else:
+            logger.info("No previous module states found")
 
     def _save_state(self) -> None:
         """Save module states to disk"""
         try:
-            self._ensure_cache_dir()
-            data = {"enabled_modules": list(self._enabled_modules)}
-
-            with Path.open(self._state_file, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-
+            settings.cache_dir.mkdir(parents=True, exist_ok=True)
+            save_file(
+                self._state_file,
+                {"enabled_modules": list(self._enabled_modules)},
+                pretty=True,
+            )
             logger.debug(f"Saved module states: {len(self._enabled_modules)} enabled modules")
 
         except Exception as e:

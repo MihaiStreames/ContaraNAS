@@ -3,7 +3,7 @@ from typing import Any
 
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.state_manager import state_manager
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 from ContaraNAS.modules import module_loader
 
 

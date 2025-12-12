@@ -1,8 +1,9 @@
-from dataclasses import dataclass, field
+import msgspec
 
 
-@dataclass
-class RAMInfo:
+class RAMInfo(msgspec.Struct, gc=False, frozen=True):
+    """Data transfer object for RAM stick information"""
+
     locator: str
     bank_locator: str
     size: float
@@ -12,8 +13,9 @@ class RAMInfo:
     part_number: str
 
 
-@dataclass
-class MemoryInfo:
+class MemoryInfo(msgspec.Struct, gc=False, frozen=True):
+    """Data transfer object for Memory information"""
+    
     total: float
     available: float
     free: float
@@ -26,4 +28,4 @@ class MemoryInfo:
     swap_used: float
     swap_free: float
     swap_usage: float
-    ram_sticks: list[RAMInfo] = field(default_factory=list)
+    ram_sticks: tuple[RAMInfo, ...] = ()

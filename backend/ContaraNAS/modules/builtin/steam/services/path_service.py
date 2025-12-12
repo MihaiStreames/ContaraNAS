@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import platform
 
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 
 logger = get_logger(__name__)

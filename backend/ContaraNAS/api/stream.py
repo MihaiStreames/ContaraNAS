@@ -4,9 +4,7 @@ from datetime import datetime
 from fastapi import WebSocket, WebSocketDisconnect, status
 
 from ContaraNAS.core.auth import AuthService
-from ContaraNAS.core.module import Module
-from ContaraNAS.core.module_manager import ModuleManager
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import Module, ModuleManager, get_logger, decode, encode
 
 
 logger = get_logger(__name__)
@@ -62,7 +60,8 @@ class StreamManager:
             await self._send_full_state()
 
             while True:
-                msg = await websocket.receive_json()
+                data = await websocket.receive_bytes()
+                msg = decode(data)
                 await self._handle_message(msg)
 
         except WebSocketDisconnect:
@@ -92,6 +91,7 @@ class StreamManager:
     async def _send_full_state(self) -> None:
         """Push complete app state on WebSocket"""
         modules = []
+
         for name, module in self._manager.modules.items():
             ui = None
             if module.enable_flag:
@@ -122,7 +122,7 @@ class StreamManager:
 
         try:
             data["timestamp"] = datetime.now().isoformat()
-            await self._client.send_json(data)
+            await self._client.send_bytes(encode(data))
 
         except Exception as e:
             logger.error(f"Send failed: {e}")

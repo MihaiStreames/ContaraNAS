@@ -4,8 +4,7 @@ from typing import Any
 
 import psutil
 
-from ContaraNAS.core import settings
-from ContaraNAS.core.utils import get_logger, load_json, save_json
+from ContaraNAS.core import settings, get_logger, load_file, save_file
 
 
 logger = get_logger(__name__)
@@ -22,22 +21,17 @@ class HardwareCacheService:
 
     def needs_refresh(self) -> bool:
         """Check if cache needs refresh (based on system boot time)"""
-        if not self._cache_file.exists():
-            logger.warning(f"Hardware cache does not exist: {self._cache_file}")
-            return True
+        cache_data = load_file(self._cache_file)
 
-        cache_data = load_json(self._cache_file)
         if not cache_data:
             logger.warning(f"Hardware cache is corrupted or empty: {self._cache_file}")
             return True
 
         cached_boot_time = cache_data.get("boot_time")
         if cached_boot_time is None:
-            logger.warning(f"No boot time in cache: {self._cache_file}")
             return True
 
-        # If boot time changed, system was rebooted
-        if abs(cached_boot_time - self._boot_time) > 1.0:  # Allow 1 second tolerance
+        if abs(cached_boot_time - self._boot_time) > 1.0:
             logger.debug(
                 f"System rebooted: cached boot time {cached_boot_time} != current {self._boot_time}"
             )
@@ -53,30 +47,25 @@ class HardwareCacheService:
             "cached_at": time.time(),
             "hardware": hardware_data,
         }
-        save_json(self._cache_file, cache_data)
-        logger.info(f"Saved hardware cache to {self._cache_file}")
+
+        save_file(self._cache_file, cache_data, pretty=True)
+        logger.debug(f"Saved hardware cache to {self._cache_file}")
 
     def load_cache(self) -> dict[str, Any] | None:
         """Load hardware information from cache"""
-        if not self._cache_file.exists():
-            return None
-
-        cache_data = load_json(self._cache_file)
-        if not cache_data:
-            return None
-
-        return cache_data.get("hardware")
+        cache_data = load_file(self._cache_file)
+        return cache_data.get("hardware") if cache_data else None
 
     def get_or_collect_hardware_info(self, collect_fn: Callable) -> dict[str, Any]:
         """Get hardware info from cache or collect it (requiring sudo)"""
         if not self.needs_refresh():
             cached_data = self.load_cache()
             if cached_data:
-                logger.info(f"Using cached hardware information from {self._cache_file}")
+                logger.debug(f"Using cached hardware info from {self._cache_file}")
                 return cached_data
 
-        logger.info(
-            f"Collecting fresh hardware information (may require sudo) for {self._cache_file}"
+        logger.debug(
+            f"Collecting fresh hardware info (may require sudo) for {self._cache_file}"
         )
         hardware_data = collect_fn()
         self.save_cache(hardware_data)

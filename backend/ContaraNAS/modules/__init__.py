@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 from ContaraNAS.core.module import Module, ModuleMetadata
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 
 logger = get_logger(__name__)

@@ -6,7 +6,7 @@ from typing import Any
 
 import psutil
 
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 from ContaraNAS.modules.builtin.sys_monitor.constants import (
     DEFAULT_IO_UPDATE_INTERVAL,
     DISK_SECTOR_SIZE,

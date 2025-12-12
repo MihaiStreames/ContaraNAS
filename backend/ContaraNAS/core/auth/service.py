@@ -2,9 +2,8 @@ import hashlib
 import secrets
 import time
 
-from ContaraNAS.core import settings
+from ContaraNAS.core import settings, get_logger, load_file, save_file
 from ContaraNAS.core.exceptions import PairingError
-from ContaraNAS.core.utils import get_logger, load_json, save_json
 
 from .config import PairingConfig
 from .models import AuthState, PairedApp, PairingToken
@@ -202,27 +201,18 @@ class AuthService:
         self._paired_app_file.parent.mkdir(parents=True, exist_ok=True)
 
         if self._paired_app is None:
-            # Delete the file if unpaired
             if self._paired_app_file.exists():
                 self._paired_app_file.unlink()
             return
 
-        data = {
-            "token_hash": self._paired_app.token_hash,
-            "paired_at": self._paired_app.paired_at,
-            "last_seen": self._paired_app.last_seen,
-        }
-        save_json(self._paired_app_file, data)
+        save_file(self._paired_app_file, self._paired_app, pretty=True)
 
     def _load_paired_app(self) -> None:
         """Load paired app from disk"""
-        data = load_json(self._paired_app_file)
+        data = load_file(self._paired_app_file, PairedApp)
+
         if data:
-            self._paired_app = PairedApp(
-                token_hash=data["token_hash"],
-                paired_at=data["paired_at"],
-                last_seen=data.get("last_seen"),
-            )
+            self._paired_app = data
             logger.info("Loaded paired app configuration")
 
     @staticmethod

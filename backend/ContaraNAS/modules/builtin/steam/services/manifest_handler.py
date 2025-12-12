@@ -4,8 +4,8 @@ import traceback
 
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 
-from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.builtin.steam.utils import is_manifest_file
+from ContaraNAS.core import get_logger
+from ..utils import is_manifest_file
 
 
 logger = get_logger(__name__)
@@ -15,6 +15,7 @@ def _ensure_str(path: str | bytes) -> str:
     """Convert path to string, handling bytes if necessary"""
     if isinstance(path, bytes):
         return path.decode("utf-8")
+
     return path
 
 

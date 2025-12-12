@@ -10,7 +10,7 @@ from ContaraNAS.api.responses import (
 from ContaraNAS.core.action import ActionDispatcher
 from ContaraNAS.core.exceptions import ActionError
 from ContaraNAS.core.module import Module
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 from .auth import require_auth
 from .commands import _get_manager

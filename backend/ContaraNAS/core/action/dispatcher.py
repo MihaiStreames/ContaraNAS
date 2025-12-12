@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any
 
 from ContaraNAS.core.exceptions import ActionError
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 from .decorator import get_actions
 from .results import ActionResult, Notify

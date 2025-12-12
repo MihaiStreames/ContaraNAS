@@ -4,7 +4,7 @@ from typing import Any, ClassVar
 
 from ContaraNAS.core.exceptions import ModuleError, ModuleInitializationError
 from ContaraNAS.core.ui import Alert, Badge, Modal, Stat, Tile
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 from .metadata import ModuleMetadata
 from .state import ModuleState

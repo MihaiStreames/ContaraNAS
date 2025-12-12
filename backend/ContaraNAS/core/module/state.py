@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from typing import Any
 
+import msgspec
 from pydantic import BaseModel, ConfigDict, PrivateAttr
 
 
@@ -55,9 +56,30 @@ class ModuleState(BaseModel):
         """Set callback to be called on commit"""
         self._on_commit = callback
 
+    def _serialize_value(self, value: Any) -> Any:
+        """Recursively serialize a value, handling msgspec Structs and collections"""
+        if isinstance(value, msgspec.Struct):
+            return msgspec.to_builtins(value)
+        if isinstance(value, (list, tuple)):
+            return [self._serialize_value(v) for v in value]
+        if hasattr(value, '__iter__') and hasattr(value, 'append') and not isinstance(value, (str, bytes, dict)):
+            return [self._serialize_value(v) for v in value]
+        if isinstance(value, dict):
+            return {k: self._serialize_value(v) for k, v in value.items()}
+        if isinstance(value, BaseModel):
+            return value.model_dump(mode="json")
+        
+        return value
+
     def _serialize(self) -> dict[str, Any]:
         """Serialize state to dictionary"""
-        return self.model_dump(mode="json")
+        result = {}
+
+        for field_name in type(self).model_fields:
+            value = getattr(self, field_name)
+            result[field_name] = self._serialize_value(value)
+
+        return result
 
     def to_dict(self) -> dict[str, Any]:
         """Convert state to dictionary"""
@@ -84,9 +106,12 @@ class ModuleState(BaseModel):
 
     def reset(self) -> None:
         """Reset state to default values"""
-        for field_name, field_info in self.model_fields.items():
+        fields = type(self).model_fields
+
+        for field_name, field_info in fields.items():
             if field_info.default is not None:
                 setattr(self, field_name, field_info.default)
             elif field_info.default_factory is not None:
                 setattr(self, field_name, field_info.default_factory())
+
         self._dirty = True

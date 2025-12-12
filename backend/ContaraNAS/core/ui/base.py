@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from typing import Any, ClassVar
 
+import msgspec
 from pydantic import BaseModel, ConfigDict
 
 
@@ -12,7 +13,6 @@ class Component(BaseModel):
         extra="forbid",
     )
 
-    # Component type name, set by subclasses
     _type: ClassVar[str] = "component"
 
     def to_dict(self) -> dict[str, Any]:
@@ -28,6 +28,8 @@ class Component(BaseModel):
 
     def _serialize_value(self, value: Any) -> Any:
         """Serialize a value, handling special types"""
+        if isinstance(value, msgspec.Struct):
+            return msgspec.to_builtins(value)
         if isinstance(value, Component):
             return value.to_dict()
         if isinstance(value, list):

@@ -8,7 +8,7 @@ from ContaraNAS.api.requests import PairRequest
 from ContaraNAS.api.responses import PairResponse, SuccessResponse
 from ContaraNAS.core.auth import AuthService
 from ContaraNAS.core.exceptions import PairingError
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 
 logger = get_logger(__name__)

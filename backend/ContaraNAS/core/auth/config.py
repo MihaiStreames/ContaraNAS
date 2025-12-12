@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+import msgspec
 
 
-@dataclass
-class PairingConfig:
+class PairingConfig(msgspec.Struct, frozen=True):
     """Configuration for pairing service"""
 
     token_validity_seconds: int = 300

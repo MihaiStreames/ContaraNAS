@@ -7,11 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
-from ContaraNAS.core import ModuleManager, settings
+from ContaraNAS.core import ModuleManager, settings, get_logger, setup_logging
 from ContaraNAS.core.action import ActionDispatcher
 from ContaraNAS.core.auth import AuthService, PairingConfig
 from ContaraNAS.core.exceptions import ContaraNASError
-from ContaraNAS.core.utils import get_logger, setup_logging
 
 from .responses import HealthResponse, InfoResponse
 from .routes import (

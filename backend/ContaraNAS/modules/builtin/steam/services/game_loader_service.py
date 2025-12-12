@@ -1,7 +1,7 @@
 import asyncio
 from pathlib import Path
 
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 from ContaraNAS.modules.builtin.steam.constants import (
     APP_MANIFEST_PATTERN,
     SHADERCACHE_DIR,

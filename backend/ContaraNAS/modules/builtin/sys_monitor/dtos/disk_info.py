@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+import msgspec
 
 
-@dataclass
-class DiskInfo:
+class DiskInfo(msgspec.Struct, gc=False, frozen=True):
+    """Data transfer object for Disk information"""
+
     device: str
     mountpoint: str
     filesystem: str

@@ -5,7 +5,7 @@ from pathlib import Path
 from ContaraNAS.core.action import ActionRef, Notify, OpenModal, action
 from ContaraNAS.core.module import Module, ModuleState
 from ContaraNAS.core.ui import Modal, Tile
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger, to_builtins
 
 from .services import (
     SteamCacheService,
@@ -195,7 +195,7 @@ class SteamModule(Module):
             "drive_used": drive_info["used"],
         }
 
-        games_data = [game.to_dict() for game in games]
+        games_data = [to_builtins(game) for game in games]
         return library_summary, games_data
 
     def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:

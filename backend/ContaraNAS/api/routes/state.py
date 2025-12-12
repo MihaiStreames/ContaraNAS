@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 
 from ContaraNAS.api.responses import AppStateResponse, ModuleSnapshot
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 from .auth import require_auth
 from .commands import _get_manager
