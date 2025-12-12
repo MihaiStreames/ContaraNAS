@@ -2,13 +2,12 @@ import json
 import sys
 from pathlib import Path
 
-# Add backend to path
+
 backend_path = Path(__file__).parent.parent / "backend"
 sys.path.insert(0, str(backend_path))
 
-from ContaraNAS.api.app import create_app
+from ContaraNAS.api.app import create_app  # noqa: E402 # isort:skip
 
-# UI Component schemas
 UI_COMPONENTS = {
     "layout": ["StackSchema", "GridSchema"],
     "card": ["CardSchema", "TileSchema", "StatSchema"],
@@ -39,10 +38,8 @@ UI_COMPONENTS = {
     "feedback": ["AlertSchema", "SpinnerSchema"],
 }
 
-# Helper types
 HELPER_TYPES = ["ActionRef"]
 
-# API Response/Request schemas
 API_SCHEMAS = {
     "state": ["AppStateResponse", "ModuleSnapshot", "ModuleUI"],
     "modules": [
@@ -66,37 +63,45 @@ HEADER = """\
 
 
 def generate_ui_ts(available: list[str]) -> str:
-    """Generate ui.ts with UI component types."""
+    """Generate ui.ts with UI component types"""
     lines = [HEADER, 'import type { components } from "./types.generated";', ""]
 
     # Helper types first
     helpers = [h for h in HELPER_TYPES if h in available]
+
     if helpers:
         lines.append("// Helper types")
+
         for name in helpers:
             lines.append(f'export type {name} = components["schemas"]["{name}"];')
+
         lines.append("")
 
     all_components = []
 
     for category, schemas in UI_COMPONENTS.items():
         present = [s for s in schemas if s in available]
+
         if not present:
             continue
 
         lines.append(f"// {category.replace('_', ' ').title()} components")
+
         for name in present:
             lines.append(f'export type {name} = components["schemas"]["{name}"];')
             all_components.append(name)
+
         lines.append("")
 
     # Component union
     lines.append("// Component union type")
     lines.append("export type ComponentSchema =")
+
     for i, name in enumerate(all_components):
         prefix = "\t| " if i > 0 else "\t  "
         suffix = ";" if i == len(all_components) - 1 else ""
         lines.append(f"{prefix}{name}{suffix}")
+
     lines.append("")
 
     # Type discriminator
@@ -115,24 +120,27 @@ def generate_ui_ts(available: list[str]) -> str:
 
 
 def generate_responses_ts(available: list[str]) -> str:
-    """Generate responses.ts with API response/request types."""
+    """Generate responses.ts with API response/request types"""
     lines = [HEADER, 'import type { components } from "./types.generated";', ""]
 
     for category, schemas in API_SCHEMAS.items():
         present = [s for s in schemas if s in available]
+
         if not present:
             continue
 
         lines.append(f"// {category.replace('_', ' ').title()}")
+
         for name in present:
             lines.append(f'export type {name} = components["schemas"]["{name}"];')
+
         lines.append("")
 
     return "\n".join(lines)
 
 
 def generate_index_ts() -> str:
-    """Generate index.ts that re-exports everything."""
+    """Generate index.ts that re-exports everything"""
     lines = [
         HEADER,
         "// UI component types",
@@ -148,7 +156,7 @@ def generate_index_ts() -> str:
 
 
 def main():
-    """Generate OpenAPI schema and TypeScript type files."""
+    """Generate OpenAPI schema and TypeScript type files"""
     app = create_app()
     schema = app.openapi()
 
