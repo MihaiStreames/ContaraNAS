@@ -1,8 +1,14 @@
 from ContaraNAS.core.exceptions import ActionError
 
-from .decorator import ActionRef, action, get_actions
+from .decorator import ActionRef
+from .decorator import action
+from .decorator import get_actions
 from .dispatcher import ActionDispatcher
-from .results import ActionResult, CloseModal, Notify, OpenModal, Refresh
+from .results import ActionResult
+from .results import CloseModal
+from .results import Notify
+from .results import OpenModal
+from .results import Refresh
 
 
 __all__ = [

@@ -1,18 +1,16 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import Request
 
-from ContaraNAS.api.responses import AppStateResponse, ModuleSnapshot
-from ContaraNAS.core.module_manager import ModuleManager
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
+from ..responses import AppStateResponse
+from ..responses import ModuleSnapshot
 from .auth import require_auth
+from .commands import _get_manager
 
 
 logger = get_logger(__name__)
-
-
-def _get_manager(request: Request) -> ModuleManager:
-    """Extract module manager from app state"""
-    return request.app.state.module_manager
 
 
 def create_state_routes() -> APIRouter:
@@ -29,7 +27,7 @@ def create_state_routes() -> APIRouter:
 
         modules = []
         for name, module in manager.modules.items():
-            # Always render UI - even for disabled modules (shows last known state)
+            # Always render UI even for disabled modules (shows last known state)
             ui = module.render_ui() if module.init_flag else None
 
             modules.append(

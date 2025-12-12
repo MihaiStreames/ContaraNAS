@@ -1,8 +1,9 @@
 import asyncio
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable
+from collections.abc import Callable
 import contextlib
 
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 
 logger = get_logger(__name__)
@@ -16,6 +17,19 @@ class SysMonitorMonitoringService:
         self._interval: float = interval
         self._monitor_flag: bool = False
         self._task: asyncio.Task[None] | None = None
+
+    async def _monitoring_loop(self) -> None:
+        """Background loop that polls system stats periodically"""
+        while self._monitor_flag:
+            try:
+                # Call the update callback to collect and update stats
+                await self._update_callback()
+                await asyncio.sleep(self._interval)
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"Error in monitoring loop: {e}")
+                await asyncio.sleep(self._interval)
 
     async def start_monitoring(self) -> None:
         """Start periodic system monitoring"""
@@ -46,16 +60,3 @@ class SysMonitorMonitoringService:
             self._task = None
 
         logger.info("System monitoring stopped")
-
-    async def _monitoring_loop(self) -> None:
-        """Background loop that polls system stats periodically"""
-        while self._monitor_flag:
-            try:
-                # Call the update callback to collect and update stats
-                await self._update_callback()
-                await asyncio.sleep(self._interval)
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                logger.error(f"Error in monitoring loop: {e}")
-                await asyncio.sleep(self._interval)

@@ -1,16 +1,27 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from typing import TYPE_CHECKING
 
-from ContaraNAS.api.responses import ModuleInfo, ModuleListResponse, ModuleToggleResponse
-from ContaraNAS.core.module_manager import ModuleManager
-from ContaraNAS.core.utils import get_logger
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi import status
 
+from ContaraNAS.core import get_logger
+
+
+if TYPE_CHECKING:
+    from ContaraNAS.core.module_manager import ModuleManager
+
+from ..responses import ModuleInfo
+from ..responses import ModuleListResponse
+from ..responses import ModuleToggleResponse
 from .auth import require_auth
 
 
 logger = get_logger(__name__)
 
 
-def _get_manager(request: Request) -> ModuleManager:
+def _get_manager(request: Request) -> "ModuleManager":
     """Extract module manager from app state"""
     return request.app.state.module_manager
 
@@ -18,6 +29,7 @@ def _get_manager(request: Request) -> ModuleManager:
 def _require_module(request: Request, name: str) -> None:
     """Raise 404 if module doesn't exist"""
     manager = _get_manager(request)
+
     if name not in manager.modules:
         raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
 
@@ -36,7 +48,6 @@ def create_command_routes() -> APIRouter:
 
         modules = []
         for name, module in manager.modules.items():
-            # Get metadata info
             metadata = module.metadata
             source = metadata.source if metadata else "builtin"
             version = metadata.version if metadata else "0.0.0"
@@ -70,6 +81,7 @@ def create_command_routes() -> APIRouter:
         try:
             await manager.enable_module(name)
             return ModuleToggleResponse(success=True, module=name, enabled=True)
+
         except Exception as e:
             logger.error(f"Failed to enable {name}: {e}")
             raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e)) from e
@@ -87,6 +99,7 @@ def create_command_routes() -> APIRouter:
         try:
             await manager.disable_module(name)
             return ModuleToggleResponse(success=True, module=name, enabled=False)
+
         except Exception as e:
             logger.error(f"Failed to disable {name}: {e}")
             raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e)) from e

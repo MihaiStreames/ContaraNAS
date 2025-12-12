@@ -1,10 +1,9 @@
 from collections.abc import Callable
 from typing import Any
 
+from ContaraNAS.core.logger import get_logger
 from ContaraNAS.core.module import Module
 from ContaraNAS.core.state_manager import state_manager
-from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules import module_loader
 
 
 logger = get_logger(__name__)
@@ -13,11 +12,6 @@ logger = get_logger(__name__)
 class ModuleManager:
     """Central manager for all system modules"""
 
-    def __init__(self) -> None:
-        self._loader = module_loader
-        self.modules: dict[str, Module] = {}
-        self._discover_and_register()
-
     def _discover_and_register(self) -> None:
         """Discover and register all available modules"""
         discovered = self._loader.discover()
@@ -25,15 +19,27 @@ class ModuleManager:
         for module_id, (metadata, _) in discovered.items():
             try:
                 module_class = self._loader.load_module_class(module_id)
+
                 instance = module_class(
                     name=metadata.id,
                     display_name=metadata.name,
                     metadata=metadata,
                 )
+
                 self.modules[module_id] = instance
+
                 logger.info(f"Registered module: {module_id} v{metadata.version}")
+
             except Exception as e:
                 logger.error(f"Failed to register {module_id}: {e}")
+
+    def __init__(self) -> None:
+        # Delay import to avoid circular dependency
+        from ContaraNAS.modules import module_loader
+
+        self._loader = module_loader
+        self.modules: dict[str, Module] = {}
+        self._discover_and_register()
 
     def set_ui_update_callback(self, callback: Callable[[Module], None]) -> None:
         """Set UI update callback on all modules"""
@@ -76,6 +82,7 @@ class ModuleManager:
 
             try:
                 await self.enable_module(module_name)
+
             except Exception as e:
                 logger.error(f"Failed to restore '{module_name}': {e}")
                 state_manager.mark_disabled(module_name)
@@ -88,6 +95,7 @@ class ModuleManager:
             if module.enable_flag:
                 try:
                     await module.disable()
+
                 except Exception as e:
                     logger.error(f"Error shutting down {name}: {e}")
 
@@ -97,6 +105,7 @@ class ModuleManager:
             return None
 
         module = self.modules[module_name]
+
         return {
             "name": module_name,
             "display_name": module.display_name,

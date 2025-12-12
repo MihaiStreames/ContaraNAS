@@ -2,21 +2,28 @@ import asyncio
 from datetime import datetime
 from pathlib import Path
 
-from ContaraNAS.core.action import ActionRef, Notify, OpenModal, action
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Modal, Tile
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
+from ContaraNAS.core import to_builtins
+from ContaraNAS.core.action import ActionRef
+from ContaraNAS.core.action import Notify
+from ContaraNAS.core.action import OpenModal
+from ContaraNAS.core.action import action
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Modal
+from ContaraNAS.core.ui import Tile
 
-from .services import (
-    SteamCacheService,
-    SteamGameLoaderService,
-    SteamImageService,
-    SteamLibraryService,
-    SteamMonitoringService,
-    SteamParsingService,
-)
-from .utils import extract_app_id, get_drive_info
-from .views import build_library_modal, build_tile, get_library_modal_id
+from .services import SteamCacheService
+from .services import SteamGameLoaderService
+from .services import SteamImageService
+from .services import SteamLibraryService
+from .services import SteamMonitoringService
+from .services import SteamParsingService
+from .utils import extract_app_id
+from .utils import get_drive_info
+from .views import build_library_modal
+from .views import build_tile
+from .views import get_library_modal_id
 
 
 logger = get_logger(__name__)
@@ -71,6 +78,103 @@ class SteamModule(Module):
         """Type-safe state accessor"""
         assert self._typed_state is not None
         return self._typed_state
+
+    async def _analyze_library(self, library_path: Path) -> tuple[dict, list[dict]]:
+        """Analyze a single library and return summary info with games list"""
+        games = await self._game_loader_service.load_games_from_library(library_path)
+
+        total_games_size = sum(game.size_on_disk for game in games)
+        total_shader_size = sum(game.shader_cache_size for game in games)
+        total_workshop_size = sum(game.workshop_content_size for game in games)
+        total_size = total_games_size + total_shader_size + total_workshop_size
+
+        drive_info = get_drive_info(library_path)
+
+        library_summary = {
+            "path": str(library_path),
+            "game_count": len(games),
+            "total_games_size": total_games_size,
+            "total_shader_size": total_shader_size,
+            "total_workshop_size": total_workshop_size,
+            "total_size": total_size,
+            "drive_total": drive_info["total"],
+            "drive_free": drive_info["free"],
+            "drive_used": drive_info["used"],
+        }
+
+        games_data = [to_builtins(game) for game in games]
+        return library_summary, games_data
+
+    async def _load_data(self) -> None:
+        """Load all Steam data into state"""
+        if not self.state.steam_available:
+            return
+
+        try:
+            libraries_data = []
+            all_games = []
+
+            for library_path in self._library_service.get_library_paths():
+                library_info, games = await self._analyze_library(library_path)
+                libraries_data.append(library_info)
+                all_games.extend(games)
+
+            total_size = sum(lib.get("total_size", 0) for lib in libraries_data)
+
+            self.state.libraries = libraries_data
+            self.state.games = all_games
+            self.state.total_games = len(all_games)
+            self.state.total_libraries = len(libraries_data)
+            self.state.total_size = total_size
+            self.state.error = None
+
+        except Exception as e:
+            logger.error(f"Error loading Steam data: {e}")
+            self.state.error = str(e)
+
+    async def _on_manifest_change(self, event_type: str, app_id: int) -> None:
+        """Handle manifest change - update state and reload data"""
+        self.state.last_change_at = datetime.now()
+        self.state.last_change_type = event_type
+        self.state.last_change_app_id = app_id
+
+        # Reload data to reflect changes
+        await self._load_data()
+        self.state.commit()
+
+    def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:
+        """Handle manifest file changes from the monitoring service"""
+        if not self.state.steam_available:
+            return
+
+        app_id_str = extract_app_id(manifest_path)
+        if not app_id_str:
+            return
+
+        app_id = int(app_id_str)
+        logger.info(f"Steam app {app_id} {event_type}: {manifest_path.name}")
+
+        cache_action = None
+
+        if event_type == "deleted":
+            if self._cache_service.remove_manifest(manifest_path):
+                cache_action = "removed"
+                self._image_service.remove_image(app_id)
+        elif event_type in ["created", "modified"]:
+            action = self._cache_service.update_manifest(manifest_path)
+            if action != "no_change":
+                cache_action = action
+                if action == "added" and self._event_loop:
+                    asyncio.run_coroutine_threadsafe(
+                        self._image_service.download_image(app_id),
+                        self._event_loop,
+                    )
+
+        if cache_action and self._event_loop:
+            asyncio.run_coroutine_threadsafe(
+                self._on_manifest_change(event_type, app_id),
+                self._event_loop,
+            )
 
     async def initialize(self) -> None:
         """Initialize the Steam module"""
@@ -144,103 +248,6 @@ class SteamModule(Module):
 
         await self._image_service.cleanup()
         logger.info("Steam monitoring stopped")
-
-    async def _load_data(self) -> None:
-        """Load all Steam data into state"""
-        if not self.state.steam_available:
-            return
-
-        try:
-            libraries_data = []
-            all_games = []
-
-            for library_path in self._library_service.get_library_paths():
-                library_info, games = await self._analyze_library(library_path)
-                libraries_data.append(library_info)
-                all_games.extend(games)
-
-            total_size = sum(lib.get("total_size", 0) for lib in libraries_data)
-
-            self.state.libraries = libraries_data
-            self.state.games = all_games
-            self.state.total_games = len(all_games)
-            self.state.total_libraries = len(libraries_data)
-            self.state.total_size = total_size
-            self.state.error = None
-
-        except Exception as e:
-            logger.error(f"Error loading Steam data: {e}")
-            self.state.error = str(e)
-
-    async def _analyze_library(self, library_path: Path) -> tuple[dict, list[dict]]:
-        """Analyze a single library and return summary info with games list"""
-        games = await self._game_loader_service.load_games_from_library(library_path)
-
-        total_games_size = sum(game.size_on_disk for game in games)
-        total_shader_size = sum(game.shader_cache_size for game in games)
-        total_workshop_size = sum(game.workshop_content_size for game in games)
-        total_size = total_games_size + total_shader_size + total_workshop_size
-
-        drive_info = get_drive_info(library_path)
-
-        library_summary = {
-            "path": str(library_path),
-            "game_count": len(games),
-            "total_games_size": total_games_size,
-            "total_shader_size": total_shader_size,
-            "total_workshop_size": total_workshop_size,
-            "total_size": total_size,
-            "drive_total": drive_info["total"],
-            "drive_free": drive_info["free"],
-            "drive_used": drive_info["used"],
-        }
-
-        games_data = [game.to_dict() for game in games]
-        return library_summary, games_data
-
-    def _handle_manifest_change(self, event_type: str, manifest_path: Path) -> None:
-        """Handle manifest file changes from the monitoring service"""
-        if not self.state.steam_available:
-            return
-
-        app_id_str = extract_app_id(manifest_path)
-        if not app_id_str:
-            return
-
-        app_id = int(app_id_str)
-        logger.info(f"Steam app {app_id} {event_type}: {manifest_path.name}")
-
-        cache_action = None
-
-        if event_type == "deleted":
-            if self._cache_service.remove_manifest(manifest_path):
-                cache_action = "removed"
-                self._image_service.remove_image(app_id)
-        elif event_type in ["created", "modified"]:
-            action = self._cache_service.update_manifest(manifest_path)
-            if action != "no_change":
-                cache_action = action
-                if action == "added" and self._event_loop:
-                    asyncio.run_coroutine_threadsafe(
-                        self._image_service.download_image(app_id),
-                        self._event_loop,
-                    )
-
-        if cache_action and self._event_loop:
-            asyncio.run_coroutine_threadsafe(
-                self._on_manifest_change(event_type, app_id),
-                self._event_loop,
-            )
-
-    async def _on_manifest_change(self, event_type: str, app_id: int) -> None:
-        """Handle manifest change - update state and reload data"""
-        self.state.last_change_at = datetime.now()
-        self.state.last_change_type = event_type
-        self.state.last_change_app_id = app_id
-
-        # Reload data to reflect changes
-        await self._load_data()
-        self.state.commit()
 
     def _get_library_open_actions(self) -> dict:
         """Build a map of library paths to their ActionRef objects"""

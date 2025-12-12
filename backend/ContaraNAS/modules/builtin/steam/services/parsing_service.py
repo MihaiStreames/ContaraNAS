@@ -3,9 +3,11 @@ from typing import Any
 
 import vdf
 
-from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.builtin.steam.constants import LIBRARY_FOLDERS_FILE, STEAMAPPS_DIR
-from ContaraNAS.modules.builtin.steam.dtos import SteamGame
+from ContaraNAS.core import get_logger
+
+from ..constants import LIBRARY_FOLDERS_FILE
+from ..constants import STEAMAPPS_DIR
+from ..dtos import SteamGame
 
 
 logger = get_logger(__name__)
@@ -84,7 +86,7 @@ class SteamParsingService:
                 app_id=app_id,
                 name=name,
                 install_dir=app_state.get("installdir", ""),
-                library_path=library_path,
+                library_path=str(library_path),
                 size_on_disk=int(app_state.get("SizeOnDisk", 0)),
                 last_updated=int(app_state.get("lastupdated", 0)),
                 last_played=int(app_state.get("LastPlayed", 0)),

@@ -1,18 +1,19 @@
 import pytest
 
-from ContaraNAS.core.action import (
-    ActionDispatcher,
-    ActionError,
-    ActionRef,
-    CloseModal,
-    Notify,
-    OpenModal,
-    Refresh,
-    action,
-    get_actions,
-)
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Button, Stat, Tile
+from ContaraNAS.core.action import ActionDispatcher
+from ContaraNAS.core.action import ActionError
+from ContaraNAS.core.action import ActionRef
+from ContaraNAS.core.action import CloseModal
+from ContaraNAS.core.action import Notify
+from ContaraNAS.core.action import OpenModal
+from ContaraNAS.core.action import Refresh
+from ContaraNAS.core.action import action
+from ContaraNAS.core.action import get_actions
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Button
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Tile
 
 
 class MockState(ModuleState):

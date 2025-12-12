@@ -1,26 +1,33 @@
+from typing import TYPE_CHECKING
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi import status
 
-from ContaraNAS.api.responses import (
-    ModuleModalsResponse,
-    ModuleTileResponse,
-    ModuleUIResponse,
-)
-from ContaraNAS.core.action import ActionDispatcher
+from ContaraNAS.core import get_logger
 from ContaraNAS.core.exceptions import ActionError
-from ContaraNAS.core.module import Module
-from ContaraNAS.core.utils import get_logger
 
+
+if TYPE_CHECKING:
+    from ContaraNAS.core.action import ActionDispatcher
+    from ContaraNAS.core.module import Module
+
+from ..responses import ModuleModalsResponse
+from ..responses import ModuleTileResponse
+from ..responses import ModuleUIResponse
 from .auth import require_auth
+from .commands import _get_manager
 
 
 logger = get_logger(__name__)
 
 
-def _get_enabled_module(request: Request, name: str) -> Module:
-    """Get an enabled module by name, raising appropriate HTTP errors"""
-    manager = request.app.state.module_manager
+def _get_enabled_module(request: Request, name: str) -> "Module":
+    """Get an enabled module by name"""
+    manager = _get_manager(request)
 
     if name not in manager.modules:
         raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
@@ -33,7 +40,7 @@ def _get_enabled_module(request: Request, name: str) -> Module:
     return module
 
 
-def _get_dispatcher(request: Request) -> ActionDispatcher:
+def _get_dispatcher(request: Request) -> "ActionDispatcher":
     """Extract action dispatcher from app state"""
     return request.app.state.action_dispatcher
 
@@ -48,7 +55,7 @@ def create_module_routes() -> APIRouter:
         request: Request,
         _: None = Depends(require_auth),
     ) -> ModuleUIResponse:
-        """Get full UI for a module (tile + modals)"""
+        """Get full UI for a module"""
         module = _get_enabled_module(request, name)
         return ModuleUIResponse(module=name, ui=module.render_ui())
 
@@ -58,7 +65,7 @@ def create_module_routes() -> APIRouter:
         request: Request,
         _: None = Depends(require_auth),
     ) -> ModuleTileResponse:
-        """Get just the tile for a module"""
+        """Get only the tile for a module"""
         module = _get_enabled_module(request, name)
         return ModuleTileResponse(module=name, tile=module.render_tile())
 
@@ -68,7 +75,7 @@ def create_module_routes() -> APIRouter:
         request: Request,
         _: None = Depends(require_auth),
     ) -> ModuleModalsResponse:
-        """Get just the modals for a module"""
+        """Get only the modals for a module"""
         module = _get_enabled_module(request, name)
         return {"module": name, "modals": module.render_modals()}
 
@@ -88,8 +95,9 @@ def create_module_routes() -> APIRouter:
             # catch_errors=True means action exceptions become error notifications
             results = await dispatcher.dispatch(name, action_name, payload, catch_errors=True)
             return {"success": True, "module": name, "action": action_name, "results": results}
+
         except ActionError as e:
-            # Infrastructure errors (module/action not found) - return 400
+            # Infrastructure errors (module/action not found)
             logger.error(f"Action error: {e}")
             raise HTTPException(status.HTTP_400_BAD_REQUEST, str(e)) from e
 
@@ -100,7 +108,8 @@ def create_module_routes() -> APIRouter:
         _: None = Depends(require_auth),
     ) -> dict[str, Any]:
         """List available actions for a module"""
-        manager = request.app.state.module_manager
+        manager = _get_manager(request)
+
         if name not in manager.modules:
             raise HTTPException(status.HTTP_404_NOT_FOUND, f"Module '{name}' not found")
 

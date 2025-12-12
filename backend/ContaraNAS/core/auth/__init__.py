@@ -1,5 +1,7 @@
 from .config import PairingConfig
-from .models import AuthState, PairedApp, PairingToken
+from .models import AuthState
+from .models import PairedApp
+from .models import PairingToken
 from .service import AuthService
 
 

@@ -1,5 +1,7 @@
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Stat, Tile
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Tile
 
 
 class SampleState(ModuleState):

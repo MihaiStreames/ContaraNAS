@@ -2,7 +2,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from .schemas.components import ModalSchema, TileSchema
+from .schemas.components import ModalSchema
+from .schemas.components import TileSchema
 from .schemas.ui import ModuleUI
 
 
@@ -89,7 +90,6 @@ class ActionResultItem(BaseModel):
     """Single action result item"""
 
     type: str
-    # Optional fields depending on type
     modal_id: str | None = None
     message: str | None = None
     variant: str | None = None

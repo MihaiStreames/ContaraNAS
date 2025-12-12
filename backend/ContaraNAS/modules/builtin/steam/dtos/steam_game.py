@@ -2,123 +2,81 @@ from datetime import datetime
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, Field, computed_field
+import msgspec
 
 
-class SteamGame(BaseModel):
-    """Steam Game Data Transfer Object (DTO)"""
+class SteamGame(msgspec.Struct, gc=False):
+    """Steam Game data transfer object"""
 
-    # Core identifiers
-    app_id: int = Field(..., description="Steam App ID")
-    name: str = Field(..., description="Game name")
-    install_dir: str = Field(..., description="Installation directory name")
+    app_id: int
+    name: str
+    install_dir: str
+    library_path: str
+    size_on_disk: int = 0
+    shader_cache_size: int = 0
+    workshop_content_size: int = 0
+    last_updated: int = 0
+    last_played: int = 0
+    build_id: str = ""
+    bytes_to_download: int = 0
+    bytes_downloaded: int = 0
+    state_flags: int = 4  # 4 = fully installed
+    installed_depots: dict[str, dict[str, str]] = msgspec.field(default_factory=dict)
 
-    # Paths
-    library_path: Path = Field(..., description="Steam library path")
-
-    # Size information
-    size_on_disk: int = Field(default=0, description="Size on disk in bytes")
-    shader_cache_size: int = Field(default=0, description="Shader cache size in bytes")
-    workshop_content_size: int = Field(default=0, description="Workshop content size in bytes")
-
-    # Timestamps
-    last_updated: int = Field(default=0, description="Last update timestamp")
-    last_played: int = Field(default=0, description="Last played timestamp")
-
-    # Build info
-    build_id: str = Field(default="", description="Current build ID")
-
-    # Update status
-    bytes_to_download: int = Field(default=0, description="Bytes still to download")
-    bytes_downloaded: int = Field(default=0, description="Bytes already downloaded")
-
-    # Install state
-    state_flags: int = Field(
-        default=4, description="State flags from manifest"
-    )  # 4 = fully installed
-
-    # Installed depots
-    installed_depots: dict[str, dict[str, str]] = Field(default_factory=dict)
-
-    class Config:
-        arbitrary_types_allowed = True
-
-    @computed_field
     @property
     def install_state(
         self,
     ) -> Literal["installed", "updating", "downloading", "paused", "uninstalled"]:
         """Determine current install state"""
-        if self.state_flags == 4:  # StateFlags "4" = fully installed
+        if self.state_flags == 4:
             if self.bytes_to_download > 0:
                 return "updating"
             return "installed"
-        if self.state_flags == 1026:  # Update required
+        if self.state_flags == 1026:
             return "updating"
         if 0 < self.bytes_downloaded < self.bytes_to_download:
             return "downloading"
         if self.bytes_to_download > 0:
             return "paused"
+
         return "uninstalled"
 
-    @computed_field
+    @property
+    def library_path_obj(self) -> Path:
+        """Get library path as Path object"""
+        return Path(self.library_path)
+
     @property
     def manifest_path(self) -> Path:
         """Path to the game's manifest file"""
-        return self.library_path / "steamapps" / f"appmanifest_{self.app_id}.acf"
+        return self.library_path_obj / "steamapps" / f"appmanifest_{self.app_id}.acf"
 
-    @computed_field
     @property
     def install_path(self) -> Path:
         """Full installation path"""
-        return self.library_path / "steamapps" / "common" / self.install_dir
+        return self.library_path_obj / "steamapps" / "common" / self.install_dir
 
-    @computed_field
     @property
     def total_size(self) -> int:
         """Total size including shader cache and workshop content"""
         return self.size_on_disk + self.shader_cache_size + self.workshop_content_size
 
-    @computed_field
     @property
     def update_size(self) -> int:
         """Size of pending updates"""
         return max(0, self.bytes_to_download - self.bytes_downloaded)
 
-    @computed_field
     @property
     def last_played_date(self) -> datetime | None:
         """Convert timestamp to datetime"""
         return datetime.fromtimestamp(self.last_played) if self.last_played > 0 else None
 
-    @computed_field
     @property
     def last_updated_date(self) -> datetime | None:
         """Convert timestamp to datetime"""
         return datetime.fromtimestamp(self.last_updated) if self.last_updated > 0 else None
 
-    @computed_field
     @property
     def store_url(self) -> str:
         """Steam store page URL"""
         return f"https://store.steampowered.com/app/{self.app_id}/"
-
-    def to_dict(self) -> dict:
-        """Convert to dictionary for serialization"""
-        return {
-            "app_id": self.app_id,
-            "name": self.name,
-            "install_dir": self.install_dir,
-            "library_path": str(self.library_path),
-            "size_on_disk": self.size_on_disk,
-            "shader_cache_size": self.shader_cache_size,
-            "workshop_content_size": self.workshop_content_size,
-            "total_size": self.total_size,
-            "update_size": self.update_size,
-            "install_state": self.install_state,
-            "last_updated": self.last_updated,
-            "last_played": self.last_played,
-            "build_id": self.build_id,
-            "store_url": self.store_url,
-            "installed_depots": self.installed_depots,
-        }

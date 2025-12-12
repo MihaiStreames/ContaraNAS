@@ -1,8 +1,11 @@
 from collections.abc import Sequence
 
-from ContaraNAS.core.ui import Tabs, Tile
+from ContaraNAS.core.ui import Tabs
+from ContaraNAS.core.ui import Tile
 
-from ..dtos import CPUInfo, DiskInfo, MemoryInfo
+from ..dtos import CPUInfo
+from ..dtos import DiskInfo
+from ..dtos import MemoryInfo
 from .cpu_tab import build_cpu_tab
 from .disk_tab import build_disk_tab
 from .memory_tab import build_memory_tab

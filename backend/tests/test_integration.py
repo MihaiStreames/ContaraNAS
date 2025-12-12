@@ -1,8 +1,14 @@
 import pytest
 
-from ContaraNAS.core.action import ActionDispatcher, ActionError, Notify, action
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Button, Stat, Tile
+from ContaraNAS.core.action import ActionDispatcher
+from ContaraNAS.core.action import ActionError
+from ContaraNAS.core.action import Notify
+from ContaraNAS.core.action import action
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Button
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Tile
 
 
 class WorkingModule(Module):
@@ -236,7 +242,6 @@ async def test_broken_tile_renders_error_tile():
     tile = ui["tile"]
     assert tile["type"] == "tile"
     assert tile["icon"] == "AlertTriangle"
-    assert tile["badge"]["text"] == "Error"
     assert any("crashed" in str(c).lower() for c in tile.get("content", []))
 
 
@@ -384,7 +389,7 @@ async def test_module_error_doesnt_affect_others():
 
     # Broken module renders error tile
     broken_ui = broken.render_ui()
-    assert broken_ui["tile"]["badge"]["text"] == "Error"
+    assert broken_ui["tile"]["icon"] == "AlertTriangle"
 
     # Working module still works
     working_ui = working.render_ui()

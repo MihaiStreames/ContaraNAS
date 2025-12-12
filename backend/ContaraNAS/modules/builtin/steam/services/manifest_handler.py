@@ -2,10 +2,12 @@ from collections.abc import Callable
 from pathlib import Path
 import traceback
 
-from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.events import FileSystemEvent
+from watchdog.events import FileSystemEventHandler
 
-from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.builtin.steam.utils import is_manifest_file
+from ContaraNAS.core import get_logger
+
+from ..utils import is_manifest_file
 
 
 logger = get_logger(__name__)
@@ -15,6 +17,7 @@ def _ensure_str(path: str | bytes) -> str:
     """Convert path to string, handling bytes if necessary"""
     if isinstance(path, bytes):
         return path.decode("utf-8")
+
     return path
 
 
@@ -24,6 +27,20 @@ class SteamManifestHandler(FileSystemEventHandler):
     def __init__(self, callback: Callable[[str, Path], None]):
         super().__init__()
         self._callback: Callable[[str, Path], None] = callback
+
+    def _handle_manifest_event(self, event_type: str, event_path: str):
+        """Common handler for manifest events"""
+        if not is_manifest_file(event_path):
+            return
+
+        path = Path(event_path)
+        logger.info(f"Processing manifest {event_type}: {path.name}")
+
+        try:
+            self._callback(event_type, path)
+        except Exception as e:
+            logger.error(f"Error in callback for {event_type} {path.name}: {e}")
+            logger.error(traceback.format_exc())
 
     def on_created(self, event: FileSystemEvent) -> None:
         if not event.is_directory:
@@ -55,17 +72,3 @@ class SteamManifestHandler(FileSystemEventHandler):
             # If moving FROM a manifest file (to backup/temp), treat as delete
             elif is_manifest_file(src_path_str):
                 self._handle_manifest_event("deleted", src_path_str)
-
-    def _handle_manifest_event(self, event_type: str, event_path: str):
-        """Common handler for manifest events"""
-        if not is_manifest_file(event_path):
-            return
-
-        path = Path(event_path)
-        logger.info(f"Processing manifest {event_type}: {path.name}")
-
-        try:
-            self._callback(event_type, path)
-        except Exception as e:
-            logger.error(f"Error in callback for {event_type} {path.name}: {e}")
-            logger.error(traceback.format_exc())

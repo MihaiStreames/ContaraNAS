@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-from .components import ModalSchema, TileSchema
+from .components import ModalSchema
+from .components import TileSchema
 
 
 class TileUI(BaseModel):

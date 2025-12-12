@@ -1,10 +1,12 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+from typing import Any
 
+from ContaraNAS.core import get_logger
 from ContaraNAS.core.exceptions import ActionError
-from ContaraNAS.core.utils import get_logger
 
 from .decorator import get_actions
-from .results import ActionResult, Notify
+from .results import ActionResult
+from .results import Notify
 
 
 if TYPE_CHECKING:
@@ -36,6 +38,29 @@ class ActionDispatcher:
         if module is None:
             return []
         return list(get_actions(module).keys())
+
+    def _process_results(self, result: Any) -> list[dict[str, Any]]:
+        """Process action results into serializable format"""
+        if result is None:
+            return []
+
+        if isinstance(result, ActionResult):
+            return [result.to_dict()]
+
+        if isinstance(result, list):
+            return [item.to_dict() for item in result if isinstance(item, ActionResult)]
+
+        return []
+
+    def _error_result(self, action_name: str, error_message: str) -> list[dict[str, Any]]:
+        """Create an error notification result"""
+        return [
+            Notify(
+                message=f"Action failed: {error_message}",
+                variant="error",
+                title=f"{action_name} error",
+            ).to_dict()
+        ]
 
     async def dispatch(
         self,
@@ -69,26 +94,3 @@ class ActionDispatcher:
             raise ActionError(action_name, str(e)) from e
 
         return self._process_results(result)
-
-    def _process_results(self, result: Any) -> list[dict[str, Any]]:
-        """Process action results into serializable format"""
-        if result is None:
-            return []
-
-        if isinstance(result, ActionResult):
-            return [result.to_dict()]
-
-        if isinstance(result, list):
-            return [item.to_dict() for item in result if isinstance(item, ActionResult)]
-
-        return []
-
-    def _error_result(self, action_name: str, error_message: str) -> list[dict[str, Any]]:
-        """Create an error notification result"""
-        return [
-            Notify(
-                message=f"Action failed: {error_message}",
-                variant="error",
-                title=f"{action_name} error",
-            ).to_dict()
-        ]

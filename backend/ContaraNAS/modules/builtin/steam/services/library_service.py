@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
 
 from .parsing_service import SteamParsingService
 from .path_service import SteamPathService

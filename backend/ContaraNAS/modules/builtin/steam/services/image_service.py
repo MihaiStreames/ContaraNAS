@@ -4,15 +4,14 @@ from pathlib import Path
 
 import aiohttp
 
+from ContaraNAS.core import get_logger
 from ContaraNAS.core import settings
-from ContaraNAS.core.utils import get_logger
-from ContaraNAS.modules.builtin.steam.constants import (
-    HTTP_RETRY_COUNT,
-    HTTP_TIMEOUT_SECONDS,
-    IMAGE_CACHE_DIR,
-    IMAGE_DOWNLOAD_DELAY,
-    MIN_VALID_IMAGE_SIZE,
-)
+
+from ..constants import HTTP_RETRY_COUNT
+from ..constants import HTTP_TIMEOUT_SECONDS
+from ..constants import IMAGE_CACHE_DIR
+from ..constants import IMAGE_DOWNLOAD_DELAY
+from ..constants import MIN_VALID_IMAGE_SIZE
 
 
 logger = get_logger(__name__)
@@ -45,6 +44,19 @@ class SteamImageService:
         if self._session and not self._session.closed:
             await self._session.close()
             self._session = None
+
+    async def _download_images(self, app_ids: list[int]) -> None:
+        """Download images in background"""
+        for app_id in app_ids:
+            try:
+                await self.download_image(app_id)
+                # Rate limit to be nice to Steam's servers
+                await asyncio.sleep(IMAGE_DOWNLOAD_DELAY)
+            except asyncio.CancelledError:
+                logger.debug("Image download task cancelled")
+                raise
+            except Exception as e:
+                logger.error(f"Error in background download for app {app_id}: {e}")
 
     async def sync_with_manifest_cache(self, installed_app_ids: list[int]) -> None:
         """Sync images with current manifest cache state"""
@@ -124,16 +136,3 @@ class SteamImageService:
         if image_path.exists():
             image_path.unlink()
             logger.debug(f"Removed cached image for app {app_id}")
-
-    async def _download_images(self, app_ids: list[int]) -> None:
-        """Download images in background"""
-        for app_id in app_ids:
-            try:
-                await self.download_image(app_id)
-                # Rate limit to be nice to Steam's servers
-                await asyncio.sleep(IMAGE_DOWNLOAD_DELAY)
-            except asyncio.CancelledError:
-                logger.debug("Image download task cancelled")
-                raise
-            except Exception as e:
-                logger.error(f"Error in background download for app {app_id}: {e}")

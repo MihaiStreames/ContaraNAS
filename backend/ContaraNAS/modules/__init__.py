@@ -2,8 +2,9 @@ import importlib
 import json
 from pathlib import Path
 
-from ContaraNAS.core.module import Module, ModuleMetadata
-from ContaraNAS.core.utils import get_logger
+from ContaraNAS.core import get_logger
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleMetadata
 
 
 logger = get_logger(__name__)
@@ -20,20 +21,6 @@ class ModuleLoader:
         # module_id -> (metadata, path)
         self._discovered: dict[str, tuple[ModuleMetadata, Path]] = {}
 
-    def _scan_directory(self, directory: Path, source: str) -> None:
-        """Scan a directory for valid modules"""
-        if not directory.exists():
-            logger.debug(f"Module directory does not exist: {directory}")
-            return
-
-        for module_dir in directory.iterdir():
-            if not module_dir.is_dir():
-                continue
-
-            metadata = self._load_metadata(module_dir, source)
-            if metadata:
-                self._discovered[metadata.id] = (metadata, module_dir)
-
     @staticmethod
     def _load_metadata(module_dir: Path, source: str) -> ModuleMetadata | None:
         """Load and validate metadata from a module directory"""
@@ -46,10 +33,27 @@ class ModuleLoader:
         try:
             with metadata_file.open(encoding="utf-8") as f:
                 data = json.load(f)
+
             return ModuleMetadata.from_json(data, source=source)
+
         except Exception as e:
             logger.error(f"Failed to load metadata for {module_dir.name}: {e}")
             return None
+
+    def _scan_directory(self, directory: Path, source: str) -> None:
+        """Scan a directory for valid modules"""
+        if not directory.exists():
+            logger.debug(f"Module directory does not exist: {directory}")
+            return
+
+        for module_dir in directory.iterdir():
+            if not module_dir.is_dir():
+                continue
+
+            metadata = self._load_metadata(module_dir, source)
+
+            if metadata:
+                self._discovered[metadata.id] = (metadata, module_dir)
 
     @staticmethod
     def _find_module_class(module) -> type[Module] | None:
@@ -88,10 +92,12 @@ class ModuleLoader:
             # Find Module subclass
             for attr_name in dir(module):
                 attr = getattr(module, attr_name)
+
                 if isinstance(attr, type) and issubclass(attr, Module) and attr is not Module:
                     return attr
 
             raise ImportError(f"No Module subclass in {import_path}")
+
         except Exception as e:
             logger.error(f"Failed to load module {module_id}: {e}")
             raise ImportError(f"Failed to load module {module_id}") from e
@@ -100,8 +106,8 @@ class ModuleLoader:
         """Get metadata for a specific module"""
         if module_id in self._discovered:
             return self._discovered[module_id][0]
+
         return None
 
 
-# Global module loader instance
 module_loader = ModuleLoader()

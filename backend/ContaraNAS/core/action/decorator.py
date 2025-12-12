@@ -1,6 +1,9 @@
-from collections.abc import Callable, Coroutine
+from collections.abc import Callable
+from collections.abc import Coroutine
 from functools import wraps
-from typing import Any, ParamSpec, TypeVar
+from typing import Any
+from typing import ParamSpec
+from typing import TypeVar
 
 
 P = ParamSpec("P")

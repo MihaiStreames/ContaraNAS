@@ -1,12 +1,13 @@
-from dataclasses import dataclass
+import msgspec
 
 
-@dataclass
-class CPUInfo:
+class CPUInfo(msgspec.Struct, gc=False, frozen=True):
+    """Data transfer object for CPU information"""
+
     name: str
     physical_cores: int
     logical_cores: int
-    usage_per_core: list[float]
+    usage_per_core: tuple[float, ...]  # tuple is faster than list for fixed data
     total_usage: float
     current_speed_ghz: float
     max_speed_ghz: float

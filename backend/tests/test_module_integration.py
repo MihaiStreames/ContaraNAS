@@ -1,5 +1,10 @@
-from ContaraNAS.core.module import Module, ModuleState
-from ContaraNAS.core.ui import Button, Modal, Stat, Text, Tile
+from ContaraNAS.core.module import Module
+from ContaraNAS.core.module import ModuleState
+from ContaraNAS.core.ui import Button
+from ContaraNAS.core.ui import Modal
+from ContaraNAS.core.ui import Stat
+from ContaraNAS.core.ui import Text
+from ContaraNAS.core.ui import Tile
 
 
 class SimpleModule(Module):

@@ -1,9 +1,9 @@
 class ContaraNASError(Exception):
-    """Base exception for ContaraNAS application."""
+    """Base exception for the application"""
 
 
 class ModuleError(ContaraNASError):
-    """Base exception for module-related errors"""
+    """Module-related errors"""
 
     def __init__(self, module_name: str, reason: str):
         self._module_name = module_name
@@ -21,23 +21,15 @@ class ModuleInitializationError(ModuleError):
 
 
 class ServiceError(ContaraNASError):
-    """Base exception for service-related errors"""
+    """Service-related errors"""
 
 
 class SteamError(ServiceError):
-    """Steam-specific errors"""
+    """Steam-related errors"""
 
 
 class SteamNotFoundError(SteamError):
     """Raised when Steam installation is not found"""
-
-
-class MarketplaceError(Exception):
-    """Marketplace-related errors"""
-
-
-class ChecksumMismatchError(MarketplaceError):
-    """Checksum verification failed"""
 
 
 class ConfigurationError(ContaraNASError):
@@ -49,7 +41,7 @@ class AuthError(ContaraNASError):
 
 
 class PairingError(AuthError):
-    """Pairing-specific errors"""
+    """Pairing-related errors"""
 
 
 class ActionError(ContaraNASError):

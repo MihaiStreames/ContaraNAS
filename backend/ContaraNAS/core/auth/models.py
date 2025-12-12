@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+import msgspec
 
 
-@dataclass
-class PairingToken:
+class PairingToken(msgspec.Struct):
     """Active pairing token"""
 
     raw_token: str
@@ -12,8 +11,7 @@ class PairingToken:
     used: bool = False
 
 
-@dataclass
-class PairedApp:
+class PairedApp(msgspec.Struct, gc=False):
     """The single paired app"""
 
     token_hash: str
@@ -21,10 +19,9 @@ class PairedApp:
     last_seen: float | None = None
 
 
-@dataclass
-class AuthState:
+class AuthState(msgspec.Struct):
     """Authentication state"""
 
     failed_attempts: int = 0
-    lockout_until: float = 0
+    lockout_until: float = 0.0
     active_pairing: PairingToken | None = None

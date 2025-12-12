@@ -1,17 +1,23 @@
 from .config import settings
-from .exceptions import (
-    ChecksumMismatchError,
-    ContaraNASError,
-    MarketplaceError,
-    ModuleError,
-    ModuleInitializationError,
-    ServiceError,
-    SteamError,
-    SteamNotFoundError,
-)
-from .module import Module, ModuleMetadata, ModuleState
+from .exceptions import ContaraNASError
+from .exceptions import ModuleError
+from .exceptions import ModuleInitializationError
+from .exceptions import ServiceError
+from .exceptions import SteamError
+from .exceptions import SteamNotFoundError
+from .logger import get_logger
+from .logger import setup_logging
+from .module import Module
+from .module import ModuleMetadata
+from .module import ModuleState
 from .module_manager import ModuleManager
-from .state_manager import StateManager, state_manager
+from .serialization import decode
+from .serialization import encode
+from .serialization import load_file
+from .serialization import save_file
+from .serialization import to_builtins
+from .state_manager import StateManager
+from .state_manager import state_manager
 
 
 __all__ = [
@@ -24,8 +30,15 @@ __all__ = [
     "ServiceError",
     "SteamError",
     "SteamNotFoundError",
-    "MarketplaceError",
-    "ChecksumMismatchError",
+    # Logger
+    "get_logger",
+    "setup_logging",
+    # Serialization
+    "load_file",
+    "save_file",
+    "decode",
+    "encode",
+    "to_builtins",
     # Module System
     "Module",
     "ModuleMetadata",

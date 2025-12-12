@@ -1,4 +1,5 @@
-from .modals import build_library_modal, get_library_modal_id
+from .modals import build_library_modal
+from .modals import get_library_modal_id
 from .tile import build_tile
 
 
