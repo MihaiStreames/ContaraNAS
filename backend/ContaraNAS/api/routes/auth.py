@@ -9,12 +9,13 @@ from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.security import HTTPBearer
 
-from ContaraNAS.api.requests import PairRequest
-from ContaraNAS.api.responses import PairResponse
-from ContaraNAS.api.responses import SuccessResponse
 from ContaraNAS.core import get_logger
 from ContaraNAS.core.auth import AuthService
 from ContaraNAS.core.exceptions import PairingError
+
+from ..requests import PairRequest
+from ..responses import PairResponse
+from ..responses import SuccessResponse
 
 
 logger = get_logger(__name__)

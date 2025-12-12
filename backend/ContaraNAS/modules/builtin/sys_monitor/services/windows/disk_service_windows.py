@@ -6,10 +6,11 @@ import psutil
 import wmi
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.constants import DEFAULT_IO_UPDATE_INTERVAL
-from ContaraNAS.modules.builtin.sys_monitor.dtos import DiskInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import DiskService
-from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
+
+from ...constants import DEFAULT_IO_UPDATE_INTERVAL
+from ...dtos import DiskInfo
+from .. import DiskService
+from .. import HardwareCacheService
 
 
 logger = get_logger(__name__)

@@ -11,10 +11,11 @@ from win32pdh import OpenQuery
 import wmi
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.dtos import MemoryInfo
-from ContaraNAS.modules.builtin.sys_monitor.dtos import RAMInfo
-from ContaraNAS.modules.builtin.sys_monitor.services import HardwareCacheService
-from ContaraNAS.modules.builtin.sys_monitor.services import MemService
+
+from ...dtos import MemoryInfo
+from ...dtos import RAMInfo
+from .. import HardwareCacheService
+from .. import MemService
 
 
 logger = get_logger(__name__)

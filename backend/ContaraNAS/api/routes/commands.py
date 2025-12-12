@@ -1,22 +1,27 @@
+from typing import TYPE_CHECKING
+
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi import Request
 from fastapi import status
 
-from ContaraNAS.api.responses import ModuleInfo
-from ContaraNAS.api.responses import ModuleListResponse
-from ContaraNAS.api.responses import ModuleToggleResponse
 from ContaraNAS.core import get_logger
-from ContaraNAS.core.module_manager import ModuleManager
 
+
+if TYPE_CHECKING:
+    from ContaraNAS.core.module_manager import ModuleManager
+
+from ..responses import ModuleInfo
+from ..responses import ModuleListResponse
+from ..responses import ModuleToggleResponse
 from .auth import require_auth
 
 
 logger = get_logger(__name__)
 
 
-def _get_manager(request: Request) -> ModuleManager:
+def _get_manager(request: Request) -> "ModuleManager":
     """Extract module manager from app state"""
     return request.app.state.module_manager
 

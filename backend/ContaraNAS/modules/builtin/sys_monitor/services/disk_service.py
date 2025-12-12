@@ -3,7 +3,8 @@ from abc import abstractmethod
 import platform
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.sys_monitor.dtos import DiskInfo
+
+from ..dtos import DiskInfo
 
 
 logger = get_logger(__name__)

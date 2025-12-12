@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from typing import Any
 
 from fastapi import APIRouter
@@ -6,14 +7,17 @@ from fastapi import HTTPException
 from fastapi import Request
 from fastapi import status
 
-from ContaraNAS.api.responses import ModuleModalsResponse
-from ContaraNAS.api.responses import ModuleTileResponse
-from ContaraNAS.api.responses import ModuleUIResponse
 from ContaraNAS.core import get_logger
-from ContaraNAS.core.action import ActionDispatcher
 from ContaraNAS.core.exceptions import ActionError
-from ContaraNAS.core.module import Module
 
+
+if TYPE_CHECKING:
+    from ContaraNAS.core.action import ActionDispatcher
+    from ContaraNAS.core.module import Module
+
+from ..responses import ModuleModalsResponse
+from ..responses import ModuleTileResponse
+from ..responses import ModuleUIResponse
 from .auth import require_auth
 from .commands import _get_manager
 
@@ -21,7 +25,7 @@ from .commands import _get_manager
 logger = get_logger(__name__)
 
 
-def _get_enabled_module(request: Request, name: str) -> Module:
+def _get_enabled_module(request: Request, name: str) -> "Module":
     """Get an enabled module by name"""
     manager = _get_manager(request)
 
@@ -36,7 +40,7 @@ def _get_enabled_module(request: Request, name: str) -> Module:
     return module
 
 
-def _get_dispatcher(request: Request) -> ActionDispatcher:
+def _get_dispatcher(request: Request) -> "ActionDispatcher":
     """Extract action dispatcher from app state"""
     return request.app.state.action_dispatcher
 

@@ -2,14 +2,15 @@ import asyncio
 from pathlib import Path
 
 from ContaraNAS.core import get_logger
-from ContaraNAS.modules.builtin.steam.constants import APP_MANIFEST_PATTERN
-from ContaraNAS.modules.builtin.steam.constants import SHADERCACHE_DIR
-from ContaraNAS.modules.builtin.steam.constants import STEAMAPPS_DIR
-from ContaraNAS.modules.builtin.steam.constants import WORKSHOP_CONTENT_DIR
-from ContaraNAS.modules.builtin.steam.constants import WORKSHOP_DIR
-from ContaraNAS.modules.builtin.steam.dtos import SteamGame
-from ContaraNAS.modules.builtin.steam.services.parsing_service import SteamParsingService
-from ContaraNAS.modules.builtin.steam.utils import get_dir_size
+
+from ..constants import APP_MANIFEST_PATTERN
+from ..constants import SHADERCACHE_DIR
+from ..constants import STEAMAPPS_DIR
+from ..constants import WORKSHOP_CONTENT_DIR
+from ..constants import WORKSHOP_DIR
+from ..dtos import SteamGame
+from ..utils import get_dir_size
+from .parsing_service import SteamParsingService
 
 
 logger = get_logger(__name__)
