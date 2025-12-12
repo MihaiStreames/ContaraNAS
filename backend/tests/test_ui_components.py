@@ -90,7 +90,6 @@ def test_tile():
     tile = Tile(
         icon="gamepad",
         title="Steam",
-        badge=Badge(text="Running", variant="success"),
         stats=[Stat(label="Games", value=127), Stat(label="Size", value="1.2 TB")],
         actions=[Button(label="View Games", variant="ghost", size="sm")],
     )
@@ -98,8 +97,6 @@ def test_tile():
 
     assert data["type"] == "tile"
     assert data["icon"] == "gamepad"
-    assert data["badge"]["type"] == "badge"
-    assert data["badge"]["text"] == "Running"
     assert len(data["stats"]) == 2
     assert data["stats"][0]["value"] == 127
     assert len(data["actions"]) == 1

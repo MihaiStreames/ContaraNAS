@@ -8,7 +8,6 @@ from ContaraNAS.core import get_logger
 from ContaraNAS.core.exceptions import ModuleError
 from ContaraNAS.core.exceptions import ModuleInitializationError
 from ContaraNAS.core.ui import Alert
-from ContaraNAS.core.ui import Badge
 from ContaraNAS.core.ui import Modal
 from ContaraNAS.core.ui import Stat
 from ContaraNAS.core.ui import Tile
@@ -76,7 +75,6 @@ class Module(ABC):
         return Tile(
             icon="AlertTriangle",
             title=self.display_name,
-            badge=Badge(text="Error", variant="error"),
             stats=[Stat(label="Status", value="Failed")],
             content=[
                 Alert(
