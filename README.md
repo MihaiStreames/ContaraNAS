@@ -2,7 +2,10 @@
 
 A modular desktop application for monitoring and managing NAS systems at home.
 
-## Features
+![GitHub License](https://img.shields.io/github/license/MihaiStreames/ContaraNAS) ![GitHub contributors](https://img.shields.io/github/contributors/MihaiStreames/ContaraNAS)
+
+
+# Features
 
 - **Steam Library Monitor** - Track game installations and library sizes
 - **System Monitor** - Real-time CPU, memory, and disk monitoring
@@ -21,7 +24,7 @@ Full documentation available at [contaranas.xyz](https://contaranas.xyz/) (or ru
 - [Declarative UI](https://contaranas.xyz/modules/ui/) - Build UIs in Python
 - [Actions](https://contaranas.xyz/modules/actions/) - Handle user interactions
 
-## Development Setup
+# Development Setup
 
 ### Backend
 
@@ -39,12 +42,15 @@ pnpm install
 pnpm tauri dev
 ```
 
-### Requirements
+## Requirements
 
 - Python 3.13+
 - Node.js 18+ / pnpm
 - Rust (for Tauri)
 
-## License
 
-MIT - [See LICENSE](LICENSE)
+# License
+
+> [!NOTE]  
+> ContaraNAS is licensed under the [GNU General Public License V3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
+> Consider reading the terms before modifying or redistributing this project.
