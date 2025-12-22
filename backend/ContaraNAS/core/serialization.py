@@ -8,29 +8,32 @@ import msgspec
 
 T = TypeVar("T")
 
-_encoder = msgspec.json.Encoder()
-_decoder = msgspec.json.Decoder()
+_msgpack_encoder = msgspec.msgpack.Encoder()
+_msgpack_decoder = msgspec.msgpack.Decoder()
+
+_json_encoder = msgspec.json.Encoder()
+_json_decoder = msgspec.json.Decoder()
 
 
 def encode(obj: Any) -> bytes:
-    """Encode object to JSON bytes"""
-    return _encoder.encode(obj)
+    """Encode object to MessagePack bytes"""
+    return _msgpack_encoder.encode(obj)
 
 
 def encode_str(obj: Any) -> str:
     """Encode object to JSON string"""
-    return _encoder.encode(obj).decode("utf-8")
+    return _json_encoder.encode(obj).decode("utf-8")
 
 
 def decode[T](data: bytes | str, type_: type[T] | None = None) -> T | Any:
-    """Decode JSON data, optionally to a specific type"""
+    """Decode MessagePack/JSON data, optionally to a specific type"""
     if isinstance(data, str):
         data = data.encode("utf-8")
 
     if type_ is None:
-        return _decoder.decode(data)
+        return _msgpack_decoder.decode(data)
 
-    return msgspec.json.decode(data, type=type_)
+    return msgspec.msgpack.decode(data, type=type_)
 
 
 def to_builtins(obj: Any) -> Any:
@@ -44,7 +47,11 @@ def load_file[T](path: Path, type_: type[T] | None = None) -> T | dict | None:
         return None
 
     try:
-        return decode(path.read_bytes(), type_)
+        data = path.read_bytes()
+        # files use JSON format for readability
+        if type_ is None:
+            return _json_decoder.decode(data)
+        return msgspec.json.decode(data, type=type_)
 
     except (msgspec.DecodeError, OSError):
         return None
@@ -61,4 +68,5 @@ def save_file(path: Path, data: Any, pretty: bool = False) -> None:
             encoding="utf-8",
         )
     else:
-        path.write_bytes(encode(data))
+        # files use JSON format for readability
+        path.write_bytes(_json_encoder.encode(data))

@@ -3,6 +3,7 @@ import shutil
 import subprocess
 from typing import Any
 
+import msgspec
 import psutil
 
 from ContaraNAS.core import get_logger
@@ -103,7 +104,7 @@ class MemServiceLinux(MemService):
             return {"ram_sticks": [], "dmidecode_available": False}
 
         ram_sticks = self._parse_dmidecode(dmidecode_out)
-        ram_sticks_data = [ram.__dict__ for ram in ram_sticks]
+        ram_sticks_data = [msgspec.to_builtins(ram) for ram in ram_sticks]
         return {"ram_sticks": ram_sticks_data, "dmidecode_available": True}
 
     def _load_ram_sticks(self) -> None:
@@ -137,5 +138,5 @@ class MemServiceLinux(MemService):
             swap_used=swap_mem.used,
             swap_free=swap_mem.free,
             swap_usage=swap_mem.percent,
-            ram_sticks=self.ram_sticks,
+            ram_sticks=tuple(self.ram_sticks) if self.ram_sticks else (),
         )
