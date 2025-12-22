@@ -1,18 +1,35 @@
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
+import webfontDownload from "vite-plugin-webfont-dl";
 
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vite.dev/config/
-export default defineConfig(async () => ({
-  plugins: [sveltekit()],
+// @ts-nocheck
+export default defineConfig({
+  plugins: [
+    sveltekit(),
 
-  // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-  //
-  // 1. prevent Vite from obscuring rust errors
+    // Download and self-host Google Fonts
+    webfontDownload([
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+    ]),
+  ],
+
+  build: {
+    target: "esnext",
+    minify: "esbuild",
+    sourcemap: false,
+  },
+
+  // Pre-bundle Tauri dependencies
+  optimizeDeps: {
+    include: ["@tauri-apps/api", "@tauri-apps/plugin-opener"],
+  },
+
+  // Tauri-specific configuration
   clearScreen: false,
-  // 2. tauri expects a fixed port, fail if that port is not available
   server: {
     port: 1420,
     strictPort: true,
@@ -25,8 +42,7 @@ export default defineConfig(async () => ({
         }
       : undefined,
     watch: {
-      // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
   },
-}));
+});

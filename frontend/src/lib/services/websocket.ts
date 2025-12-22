@@ -2,6 +2,7 @@
  * WebSocket service for real-time updates from the NAS
  */
 
+import { decode as msgpackDecode } from "@msgpack/msgpack";
 import type { ModuleUI } from "$lib/api";
 
 export type WebSocketMessageType =
@@ -94,9 +95,13 @@ class WebSocketService {
         this.callbacks.onConnect?.();
       };
 
-      this.ws.onmessage = (event) => {
+      this.ws.onmessage = async (event) => {
         try {
-          const message = JSON.parse(event.data) as WebSocketMessage;
+          // Decode MessagePack binary data
+          const arrayBuffer = await event.data.arrayBuffer();
+          const uint8Array = new Uint8Array(arrayBuffer);
+          const message = msgpackDecode(uint8Array) as WebSocketMessage;
+
           this.handleMessage(message);
         } catch (e) {
           console.error("Failed to parse WebSocket message:", e);
