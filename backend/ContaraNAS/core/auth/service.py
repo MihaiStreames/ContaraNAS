@@ -26,7 +26,7 @@ API_TOKEN_LENGTH = 64  # 256-bit tokens
 
 
 class AuthService:
-    """Manages app pairing and API token authentication - One NAS can only be paired with one app"""
+    """Manages app pairing and API token authentication"""
 
     def _load_paired_app(self) -> None:
         """Load paired app from disk"""
@@ -71,7 +71,7 @@ class AuthService:
         """Display pairing code on stdout"""
         print()
         print("╔══════════════════════════════════════════════════╗")
-        print("║          CONTARANAS PAIRING CODE                 ║")
+        print("║             CONTARANAS PAIRING CODE              ║")
         print("╠══════════════════════════════════════════════════╣")
         print("║                                                  ║")
         print(f"║{code.center(50)}║")

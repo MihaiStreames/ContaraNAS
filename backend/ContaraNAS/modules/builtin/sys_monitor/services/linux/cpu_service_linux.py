@@ -30,6 +30,7 @@ class CPUServiceLinux(CPUService):
                     if "model name" in line:
                         return str(line.split(":", 1)[1].strip())
             return "Unknown"
+
         except FileNotFoundError:
             return "Unknown"
 

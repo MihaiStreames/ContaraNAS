@@ -38,6 +38,7 @@ class SteamManifestHandler(FileSystemEventHandler):
 
         try:
             self._callback(event_type, path)
+
         except Exception as e:
             logger.error(f"Error in callback for {event_type} {path.name}: {e}")
             logger.error(traceback.format_exc())

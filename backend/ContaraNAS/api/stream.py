@@ -67,6 +67,7 @@ class StreamManager:
 
         for name, module in self._manager.modules.items():
             ui = None
+
             if module.enable_flag:
                 ui = module.render_ui()
 

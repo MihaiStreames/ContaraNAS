@@ -29,8 +29,10 @@ class MemServiceLinux(MemService):
         """Check if dmidecode is available on the system"""
         if self._dmidecode_flag is None:
             self._dmidecode_flag = shutil.which("dmidecode") is not None
+
             if not self._dmidecode_flag:
                 logger.warning("dmidecode not found - RAM stick details will be unavailable")
+
         return self._dmidecode_flag
 
     def _get_dmidecode_output(self) -> str | None:
@@ -44,6 +46,7 @@ class MemServiceLinux(MemService):
                 text=True,
                 timeout=30,
             )
+
         except subprocess.TimeoutExpired:
             logger.error("dmidecode timed out")
             return None
@@ -67,6 +70,7 @@ class MemServiceLinux(MemService):
 
         for block in blocks[1:]:
             size_str = get_field(block, "Size")
+
             if size_str in {"No Module Installed", ""}:
                 continue
 

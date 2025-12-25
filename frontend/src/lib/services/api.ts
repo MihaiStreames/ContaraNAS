@@ -68,16 +68,12 @@ class ApiClient {
     return response.json();
   }
 
-  // === Health endpoints ===
-
   /**
    * Check if the NAS is reachable
    */
   async health(): Promise<HealthResponse> {
     return this.request<HealthResponse>("/api/health");
   }
-
-  // === Auth endpoints ===
 
   /**
    * Pair with the NAS using a pairing code
@@ -96,16 +92,12 @@ class ApiClient {
     return this.request("/api/auth/unpair", { method: "POST" });
   }
 
-  // === State endpoints ===
-
   /**
    * Get full application state
    */
   async getState(): Promise<AppStateResponse> {
     return this.request<AppStateResponse>("/api/state");
   }
-
-  // === Module endpoints ===
 
   /**
    * Get UI for a specific module

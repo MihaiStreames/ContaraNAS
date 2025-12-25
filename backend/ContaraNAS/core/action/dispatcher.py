@@ -35,8 +35,10 @@ class ActionDispatcher:
     def get_module_actions(self, module_name: str) -> list[str]:
         """Get list of action names for a module"""
         module = self._modules.get(module_name)
+
         if module is None:
             return []
+
         return list(get_actions(module).keys())
 
     def _process_results(self, result: Any) -> list[dict[str, Any]]:
@@ -71,11 +73,13 @@ class ActionDispatcher:
     ) -> list[dict[str, Any]]:
         """Dispatch an action to a module method"""
         module = self._modules.get(module_name)
+
         if module is None:
             raise ActionError(action_name, f"Module '{module_name}' not found")
 
         actions = get_actions(module)
         action_method = actions.get(action_name)
+
         if action_method is None:
             raise ActionError(
                 action_name,
@@ -86,6 +90,7 @@ class ActionDispatcher:
 
         try:
             result = await action_method(**(payload or {}))
+
         except Exception as e:
             logger.exception(f"Action {module_name}.{action_name} failed: {e}")
             if catch_errors:

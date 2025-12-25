@@ -1,7 +1,8 @@
 /**
- * UI Store - Manages module UI state using Svelte 5 runes
+ * Manages module UI state
  */
 
+import { SvelteMap } from "svelte/reactivity";
 import type {
   ModuleSnapshot,
   ModuleUI,
@@ -18,7 +19,7 @@ export interface Notification {
 
 class UIStore {
   // Module state
-  modules = $state<Map<string, ModuleSnapshot>>(new Map());
+  modules = new SvelteMap<string, ModuleSnapshot>();
 
   // Modal state
   activeModal = $state<string | null>(null);
@@ -39,14 +40,16 @@ class UIStore {
       modules?.length,
       "modules"
     );
-    const moduleMap = new Map<string, ModuleSnapshot>();
+
+    this.modules.clear();
     for (const mod of modules) {
-      moduleMap.set(mod.name, mod);
+      this.modules.set(mod.name, mod);
     }
-    this.modules = moduleMap;
+
     this.activeModal = activeModal;
     this.loading = false;
     this.error = null;
+
     console.log("[UIStore] loading is now:", this.loading);
   }
 
@@ -57,8 +60,6 @@ class UIStore {
     const existing = this.modules.get(moduleName);
     if (existing) {
       this.modules.set(moduleName, { ...existing, ui });
-      // Trigger reactivity by reassigning
-      this.modules = new Map(this.modules);
     }
   }
 
@@ -69,7 +70,6 @@ class UIStore {
     const existing = this.modules.get(moduleName);
     if (existing) {
       this.modules.set(moduleName, { ...existing, enabled });
-      this.modules = new Map(this.modules);
     }
   }
 
@@ -152,7 +152,14 @@ class UIStore {
   ) {
     const id = crypto.randomUUID();
     const notification: Notification = { id, message, variant, timeout };
+
     this.notifications = [...this.notifications, notification];
+
+    // Prevent memory leaks
+    const MAX_NOTIFICATIONS = 10;
+    if (this.notifications.length > MAX_NOTIFICATIONS) {
+      this.notifications = this.notifications.slice(-MAX_NOTIFICATIONS);
+    }
 
     if (timeout > 0) {
       setTimeout(() => this.dismissNotification(id), timeout);
@@ -187,7 +194,7 @@ class UIStore {
    * Clear all state (for logout/disconnect)
    */
   clear() {
-    this.modules = new Map();
+    this.modules.clear();
     this.activeModal = null;
     this.notifications = [];
     this.loading = true;

@@ -160,10 +160,13 @@ class SteamModule(Module):
             if self._cache_service.remove_manifest(manifest_path):
                 cache_action = "removed"
                 self._image_service.remove_image(app_id)
+
         elif event_type in ["created", "modified"]:
             action = self._cache_service.update_manifest(manifest_path)
+
             if action != "no_change":
                 cache_action = action
+
                 if action == "added" and self._event_loop:
                     asyncio.run_coroutine_threadsafe(
                         self._image_service.download_image(app_id),
@@ -244,6 +247,7 @@ class SteamModule(Module):
 
         if self._monitoring_service:
             self._monitoring_service.stop_monitoring()
+
         self._monitor_flag = False
 
         await self._image_service.cleanup()
@@ -254,8 +258,10 @@ class SteamModule(Module):
         actions = {}
         for lib in self.state.libraries:
             path = lib.get("path", "")
+
             if path:
                 actions[path] = ActionRef(self.open_library, library_path=path)
+
         return actions
 
     def get_tile(self) -> Tile:
@@ -272,8 +278,6 @@ class SteamModule(Module):
     def get_modals(self) -> list[Modal]:
         """Return modal definitions for this module (one per library)"""
         return [build_library_modal(lib, self.state.games) for lib in self.state.libraries]
-
-    # --- Actions ---
 
     @action
     async def refresh(self) -> Notify:

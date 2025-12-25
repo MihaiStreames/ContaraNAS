@@ -61,6 +61,7 @@ def setup_pairing(app: FastAPI) -> None:
     """Setup pairing if not already paired"""
     if not app.state.auth_service.is_paired():
         logger.info("No app paired - generating pairing code...")
+
         try:
             app.state.auth_service.generate_pairing_code()
 

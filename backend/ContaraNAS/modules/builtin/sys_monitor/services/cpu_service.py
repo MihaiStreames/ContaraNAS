@@ -34,4 +34,5 @@ class CPUService(ABC):
             from .windows.cpu_service_windows import CPUServiceWindows  # noqa: PLC0415
 
             return CPUServiceWindows()
+
         raise NotImplementedError(f"OS '{system}' not supported for CPU monitoring")

@@ -24,8 +24,10 @@ class Component(BaseModel):
 
         if action_name:
             result: dict[str, Any] = {"__action__": action_name}
+
             if action_params:
                 result["__params__"] = action_params
+
             return result
 
         if hasattr(func, "__name__"):
@@ -37,14 +39,19 @@ class Component(BaseModel):
         """Serialize a value, handling special types"""
         if isinstance(value, msgspec.Struct):
             return msgspec.to_builtins(value)
+
         if isinstance(value, Component):
             return value.to_dict()
+
         if isinstance(value, list):
             return [self._serialize_value(v) for v in value]
+
         if isinstance(value, dict):
             return {k: self._serialize_value(v) for k, v in value.items()}
+
         if callable(value):
             return self._serialize_action(value)
+
         return value
 
     def to_dict(self) -> dict[str, Any]:

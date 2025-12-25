@@ -46,8 +46,10 @@ class DiskServiceLinux(DiskService):
         base_device = device.split("/")[-1]
         if base_device.startswith("nvme"):
             match = re.match(r"(nvme\d+n\d+)", base_device)
+
             if match:
                 base_device = match.group(1)
+
         else:
             base_device = base_device.rstrip("0123456789")
         return base_device
@@ -56,12 +58,14 @@ class DiskServiceLinux(DiskService):
     def _parse_diskstats(path: Path, device_name: str) -> dict[str, Any]:
         """Parse diskstats file for specific device"""
         diskstats = {}
+
         try:
             with Path.open(path, encoding="utf-8") as file:
                 content = file.read()
 
             for line in content.splitlines():
                 fields = line.split()
+
                 if len(fields) >= 14 and fields[2] == device_name:
                     diskstats["reads"] = int(fields[5])
                     diskstats["writes"] = int(fields[9])
@@ -69,6 +73,7 @@ class DiskServiceLinux(DiskService):
                     diskstats["write_time"] = int(fields[10])
                     diskstats["io_time"] = int(fields[12])
                     break
+
         except (FileNotFoundError, PermissionError, OSError):
             pass
 
@@ -89,11 +94,14 @@ class DiskServiceLinux(DiskService):
 
             if result.returncode == 0:
                 data = json.loads(result.stdout)
+
                 for block_device in data.get("blockdevices", []):
                     if block_device.get("name") == base_device:
                         model = str(block_device.get("model", "")).strip()
+
                         if model:
                             return model
+
         except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError, OSError):
             pass
 
@@ -113,6 +121,7 @@ class DiskServiceLinux(DiskService):
             try:
                 is_rotational = rotational_path.read_text().strip()
                 return "HDD" if is_rotational == "1" else "SSD"
+
             except Exception as e:
                 logger.debug(f"Error reading rotational info for {base_device}: {e}")
 
@@ -152,7 +161,7 @@ class DiskServiceLinux(DiskService):
         if base_device in self._disk_models and base_device in self._disk_types:
             return self._disk_models[base_device], self._disk_types[base_device]
 
-        # New disk discovered - collect its hardware info
+        # New disk discovered
         logger.debug(f"Discovering hardware info for new disk: {base_device}")
         model = self._get_device_model(device)
         disk_type = self._get_device_type(device)

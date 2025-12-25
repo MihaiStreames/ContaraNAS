@@ -25,6 +25,7 @@ class SysMonitorMonitoringService:
                 # Call the update callback to collect and update stats
                 await self._update_callback()
                 await asyncio.sleep(self._interval)
+
             except asyncio.CancelledError:
                 break
             except Exception as e:

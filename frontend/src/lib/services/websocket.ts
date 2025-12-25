@@ -57,12 +57,18 @@ export interface WebSocketCallbacks {
 class WebSocketService {
   private ws: WebSocket | null = null;
   private callbacks: WebSocketCallbacks = {};
+
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+
   private baseUrl: string = "";
   private token: string = "";
+
+  private moduleUIQueue: Map<string, ModuleUI> = new Map();
+  private moduleUIDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly MODULE_UI_DEBOUNCE_MS = 50;
 
   /**
    * Connect to the WebSocket server
@@ -138,7 +144,7 @@ class WebSocketService {
         this.callbacks.onFullState?.(message);
         break;
       case "module_ui":
-        this.callbacks.onModuleUI?.(message);
+        this.queueModuleUIUpdate(message);
         break;
       case "app_state":
         this.callbacks.onAppState?.(message);
@@ -149,6 +155,35 @@ class WebSocketService {
       default:
         console.warn("Unknown WebSocket message type:", message);
     }
+  }
+
+  /**
+   * Queue module UI update for debouncing
+   */
+  private queueModuleUIUpdate(message: WSModuleUIMessage) {
+    // Store the latest UI for this module
+    this.moduleUIQueue.set(message.module, message.ui);
+
+    // Clear existing timer
+    if (this.moduleUIDebounceTimer) {
+      clearTimeout(this.moduleUIDebounceTimer);
+    }
+
+    // Schedule batched update
+    this.moduleUIDebounceTimer = setTimeout(() => {
+      this.flushModuleUIQueue();
+    }, this.MODULE_UI_DEBOUNCE_MS);
+  }
+
+  /**
+   * Flush queued module UI updates
+   */
+  private flushModuleUIQueue() {
+    for (const [module, ui] of this.moduleUIQueue.entries()) {
+      this.callbacks.onModuleUI?.({ type: "module_ui", module, ui });
+    }
+    this.moduleUIQueue.clear();
+    this.moduleUIDebounceTimer = null;
   }
 
   /**
@@ -175,6 +210,12 @@ class WebSocketService {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
+
+    if (this.moduleUIDebounceTimer) {
+      clearTimeout(this.moduleUIDebounceTimer);
+      this.moduleUIDebounceTimer = null;
+    }
+    this.moduleUIQueue.clear();
 
     if (this.ws) {
       this.ws.close(1000, "Client disconnect");

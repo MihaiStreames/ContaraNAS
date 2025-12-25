@@ -52,8 +52,10 @@ def build_memory_tab(mem: MemoryInfo | None, memory_history: Sequence[float]) ->
         ram_type = first.type if hasattr(first, "type") else ""
         ram_speed = first.speed if hasattr(first, "speed") else 0
         summary = f"{format_bytes(total)} {ram_type}"
+
         if ram_speed:
             summary += f" @ {ram_speed} MT/s"
+
     else:
         summary = format_bytes(total)
 

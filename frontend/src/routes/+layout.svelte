@@ -1,6 +1,6 @@
 <script lang="ts">
-  import "$lib/design/tokens.css";
-  import "$lib/design/components.css";
+  import "$lib/tokens.css";
+  import "$lib/components.css";
 
   let { children } = $props();
 </script>

@@ -34,4 +34,5 @@ class MemService(ABC):
             from .windows.mem_service_windows import MemServiceWindows  # noqa: PLC0415
 
             return MemServiceWindows()
+
         raise NotImplementedError(f"OS '{system}' not supported for Memory monitoring")

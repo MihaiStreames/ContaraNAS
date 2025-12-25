@@ -31,11 +31,15 @@ class SteamGame(msgspec.Struct, gc=False):
         if self.state_flags == 4:
             if self.bytes_to_download > 0:
                 return "updating"
+
             return "installed"
+
         if self.state_flags == 1026:
             return "updating"
+
         if 0 < self.bytes_downloaded < self.bytes_to_download:
             return "downloading"
+
         if self.bytes_to_download > 0:
             return "paused"
 

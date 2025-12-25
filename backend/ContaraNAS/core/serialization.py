@@ -48,9 +48,10 @@ def load_file[T](path: Path, type_: type[T] | None = None) -> T | dict | None:
 
     try:
         data = path.read_bytes()
-        # files use JSON format for readability
+
         if type_ is None:
             return _json_decoder.decode(data)
+
         return msgspec.json.decode(data, type=type_)
 
     except (msgspec.DecodeError, OSError):
@@ -68,5 +69,4 @@ def save_file(path: Path, data: Any, pretty: bool = False) -> None:
             encoding="utf-8",
         )
     else:
-        # files use JSON format for readability
         path.write_bytes(_json_encoder.encode(data))

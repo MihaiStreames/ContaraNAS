@@ -45,6 +45,7 @@ class SteamCacheService:
 
         for library_path in library_paths:
             steamapps_path = library_path / "steamapps"
+
             if not steamapps_path.exists():
                 continue
 
@@ -96,6 +97,7 @@ class SteamCacheService:
 
         if was_cached:
             self._save_cache()
+
         return was_cached
 
     def _find_diff(self, current_manifests: dict[str, float]) -> tuple:
@@ -157,6 +159,8 @@ class SteamCacheService:
         app_ids = []
         for manifest_path_str in self._manifest_cache:
             app_id_str = extract_app_id(Path(manifest_path_str))
+
             if app_id_str:
                 app_ids.append(int(app_id_str))
+
         return app_ids

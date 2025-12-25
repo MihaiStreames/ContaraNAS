@@ -24,6 +24,7 @@ class SteamParsingService:
         """Get all Steam library paths from libraryfolders.vdf"""
         if not self._libraries:
             libraryfolders_file = self._steam_path / STEAMAPPS_DIR / LIBRARY_FOLDERS_FILE
+
             if not libraryfolders_file.exists():
                 logger.error(f"{LIBRARY_FOLDERS_FILE} not found at {libraryfolders_file}")
                 return []
@@ -40,6 +41,7 @@ class SteamParsingService:
 
                     if not self._libraries:
                         logger.warning("No library folders found in libraryfolders.vdf")
+
             except Exception as e:
                 logger.error(f"Error reading libraryfolders.vdf: {e}")
                 return []

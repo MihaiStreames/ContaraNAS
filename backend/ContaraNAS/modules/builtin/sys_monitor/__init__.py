@@ -77,14 +77,17 @@ class SysMonitorModule(Module):
 
             if cpu_info:
                 self.state.cpu_history.append(cpu_info.total_usage)
+
             if mem_info:
                 self.state.memory_history.append(mem_info.usage)
+
             if disk_info:
                 for disk in disk_info:
                     device = disk.device
                     if device not in self.state.disk_history:
                         # Create new deque for this device
                         self.state.disk_history[device] = deque(maxlen=HISTORY_SIZE)
+
                     self.state.disk_history[device].append(disk.busy_time)
 
             self.state.commit()
@@ -136,8 +139,6 @@ class SysMonitorModule(Module):
             memory_history=self.state.memory_history,
             disk_history=self.state.disk_history,
         )
-
-    # --- Actions ---
 
     @action
     async def refresh(self) -> Notify:

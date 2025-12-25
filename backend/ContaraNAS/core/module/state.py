@@ -23,16 +23,20 @@ class ModuleState(BaseModel):
         """Recursively serialize a value, handling msgspec Structs and collections"""
         if isinstance(value, msgspec.Struct):
             return msgspec.to_builtins(value)
+
         if isinstance(value, (list, tuple)):
             return [self._serialize_value(v) for v in value]
+
         if (
             hasattr(value, "__iter__")
             and hasattr(value, "append")
             and not isinstance(value, (str, bytes, dict))
         ):
             return [self._serialize_value(v) for v in value]
+
         if isinstance(value, dict):
             return {k: self._serialize_value(v) for k, v in value.items()}
+
         if isinstance(value, BaseModel):
             return value.model_dump(mode="json")
 
@@ -115,8 +119,10 @@ class ModuleState(BaseModel):
         if name in type(self).model_fields:
             try:
                 old_value = getattr(self, name, None)
+
                 if old_value != value:
                     self._dirty = True
+
             except AttributeError:
                 pass
 

@@ -75,10 +75,13 @@ class DiskServiceWindows(DiskService):
                     # Determine type based on BusType and MediaType
                     if "NVMe" in str(bus_type) or bus_type == 17:  # 17 = NVMe
                         disk_type = "NVMe"
+
                     elif media_type == 4 or "SSD" in str(media_type):  # 4 = SSD
                         disk_type = "SSD"
+
                     elif media_type == 3 or "HDD" in str(media_type):  # 3 = HDD
                         disk_type = "HDD"
+
                     else:
                         disk_type = "SSD"  # Default assumption for modern systems
 

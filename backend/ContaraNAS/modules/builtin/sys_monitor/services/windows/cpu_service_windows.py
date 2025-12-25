@@ -110,14 +110,18 @@ class CPUServiceWindows(CPUService):
         """Get total system handles (Windows equivalent of file descriptors)"""
         try:
             total_handles = 0
+
             for proc in psutil.process_iter(["num_handles"]):
                 try:
                     handles = proc.info.get("num_handles", 0)
+
                     if handles:
                         total_handles += handles
+
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     continue
             return total_handles
+
         except Exception as e:
             logger.debug(f"Error getting total handles: {e}")
             return 0

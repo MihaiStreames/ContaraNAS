@@ -12,7 +12,7 @@
     "tauri": "tauri",
     "generate": "../scripts/generate-types.sh"
   },
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@msgpack/msgpack": "^3.1.2",
     "@tauri-apps/api": "^2",

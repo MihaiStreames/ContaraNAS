@@ -3,7 +3,9 @@ def format_bytes(bytes_value: float) -> str:
     for unit in ["B", "KB", "MB", "GB", "TB"]:
         if abs(bytes_value) < 1024:
             return f"{bytes_value:.1f} {unit}"
+
         bytes_value /= 1024
+
     return f"{bytes_value:.1f} PB"
 
 
@@ -15,8 +17,10 @@ def format_uptime(seconds: float) -> str:
 
     if days > 0:
         return f"{days}d {hours}h {minutes}m"
+
     if hours > 0:
         return f"{hours}h {minutes}m"
+
     return f"{minutes}m"
 
 
@@ -28,6 +32,8 @@ def format_io_time(ms: int) -> str:
 
     if hours > 0:
         return f"{hours}h {minutes % 60}m"
+
     if minutes > 0:
         return f"{minutes}m"
+
     return f"{seconds}s"

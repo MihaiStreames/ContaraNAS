@@ -35,6 +35,7 @@ class SteamMonitoringService:
         # Watch each library's steamapps folder
         for library_path in library_paths:
             steamapps_path = library_path / "steamapps"
+
             if steamapps_path.exists():
                 self._observer.schedule(self.manifest_handler, str(steamapps_path), recursive=False)
                 logger.debug(f"Watching: {steamapps_path}")

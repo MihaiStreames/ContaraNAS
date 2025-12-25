@@ -58,6 +58,7 @@ def build_tile(
                     label=f"Games ({format_bytes(games_size)})",
                 )
             )
+
         if shader_size > 0:
             segments.append(
                 SegmentedProgressSegment(
@@ -66,6 +67,7 @@ def build_tile(
                     label=f"Shaders ({format_bytes(shader_size)})",
                 )
             )
+
         if workshop_size > 0:
             segments.append(
                 SegmentedProgressSegment(
@@ -74,6 +76,7 @@ def build_tile(
                     label=f"Workshop ({format_bytes(workshop_size)})",
                 )
             )
+
         if other_used > 0:
             segments.append(
                 SegmentedProgressSegment(

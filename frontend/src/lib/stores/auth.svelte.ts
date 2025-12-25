@@ -1,5 +1,5 @@
 /**
- * Auth Store - Manages authentication state using Svelte 5 runes
+ * Manages authentication state
  */
 
 const TOKEN_KEY = "contara_api_token";

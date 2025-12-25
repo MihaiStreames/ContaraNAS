@@ -31,6 +31,7 @@ class SteamImageService:
         if self._session is None or self._session.closed:
             timeout = aiohttp.ClientTimeout(total=HTTP_TIMEOUT_SECONDS)
             self._session = aiohttp.ClientSession(timeout=timeout)
+
         return self._session
 
     async def cleanup(self) -> None:
@@ -52,6 +53,7 @@ class SteamImageService:
                 await self.download_image(app_id)
                 # Rate limit to be nice to Steam's servers
                 await asyncio.sleep(IMAGE_DOWNLOAD_DELAY)
+
             except asyncio.CancelledError:
                 logger.debug("Image download task cancelled")
                 raise
@@ -66,9 +68,11 @@ class SteamImageService:
         for image_file in self._image_cache_dir.glob("*.jpg"):
             try:
                 app_id = int(image_file.stem)
+
                 if app_id not in installed_set:
                     image_file.unlink()
                     logger.debug(f"Removed orphaned image for app {app_id}")
+
             except ValueError:
                 continue
 
@@ -76,6 +80,7 @@ class SteamImageService:
         missing_app_ids = []
         for app_id in installed_app_ids:
             image_path = self._image_cache_dir / f"{app_id}.jpg"
+
             if not image_path.exists():
                 missing_app_ids.append(app_id)
 

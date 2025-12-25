@@ -34,4 +34,5 @@ class DiskService(ABC):
             from .windows.disk_service_windows import DiskServiceWindows  # noqa: PLC0415
 
             return DiskServiceWindows()
+
         raise NotImplementedError(f"OS '{system}' not supported for Disk monitoring")

@@ -63,6 +63,7 @@ class HardwareCacheService:
         """Get hardware info from cache or collect it (requiring sudo)"""
         if not self.needs_refresh():
             cached_data = self.load_cache()
+
             if cached_data:
                 logger.debug(f"Using cached hardware info from {self._cache_file}")
                 return cached_data
