@@ -1,18 +1,52 @@
-# Contributing to ContaraNAS
+<a id="contributing-top"></a>
 
+<!-- HEADER -->
+<br />
+<div align="center">
+  <h1>Contributing to ContaraNAS</h1>
+  <p>Thank you for your interest in contributing to ContaraNAS!</p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#development-setup">Development Setup</a>
+      <ul>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#running-locally">Running Locally</a></li>
+      </ul>
+    </li>
+    <li><a href="#type-generation">Type Generation</a></li>
+    <li><a href="#code-style">Code Style</a></li>
+    <li><a href="#project-structure">Project Structure</a></li>
+    <li><a href="#making-changes">Making Changes</a></li>
+    <li><a href="#testing">Testing</a></li>
+    <li><a href="#pull-requests">Pull Requests</a></li>
+    <li><a href="#documentation">Documentation</a></li>
+  </ol>
+</details>
+
+<!-- DEVELOPMENT SETUP -->
 ## Development Setup
 
 ### Requirements
 
-| Tool | Version |
-|------|---------|
-| Python | 3.13+ |
-| Node.js | 18+ |
-| pnpm | Latest |
-| Rust | Latest (for Tauri) |
-| uv | Latest (Python package manager) |
+| Tool | Version | Notes |
+|------|---------|-------|
+| Python | 3.13+ | |
+| Node.js | 18+ | |
+| pnpm | Latest | Package manager for frontend |
+| Rust | Latest | Required for Tauri |
+| uv | Latest | Python package manager |
 
-### Clone and Install
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/MihaiStreames/ContaraNAS.git
@@ -33,9 +67,11 @@ cd frontend
 pnpm install
 ```
 
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
 ### Running Locally
 
-Start both the backend and frontend:
+Start both the backend and frontend in separate terminals:
 
 ```bash
 # Terminal 1: Backend
@@ -49,7 +85,10 @@ pnpm tauri dev
 
 The backend runs on `http://localhost:8000`. The frontend connects via WebSocket.
 
-### Type Generation
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- TYPE GENERATION -->
+## Type Generation
 
 After changing Python schemas or components, regenerate TypeScript types:
 
@@ -64,11 +103,14 @@ This script:
 3. Runs `openapi-typescript` to create `types.generated.ts`
 4. Verifies compilation
 
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- CODE STYLE -->
 ## Code Style
 
 ### Python
 
-We use [Ruff](https://docs.astral.sh/ruff/) for linting and formatting.
+We use [Ruff](https://docs.astral.sh/ruff/) for linting and formatting:
 
 ```bash
 cd backend
@@ -78,10 +120,10 @@ uv run ruff format .
 
 Key conventions:
 
-- Line length: 100
-- Double quotes
-- Google-style docstrings
-- Type hints encouraged
+* Line length: 100
+* Double quotes
+* Google-style docstrings
+* Type hints encouraged
 
 ### TypeScript/Svelte
 
@@ -92,6 +134,9 @@ cd frontend
 pnpm check
 ```
 
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- PROJECT STRUCTURE -->
 ## Project Structure
 
 ```
@@ -114,6 +159,9 @@ ContaraNAS/
 └── docs/                  # MkDocs documentation
 ```
 
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- MAKING CHANGES -->
 ## Making Changes
 
 ### Adding a UI Component
@@ -133,7 +181,12 @@ Every new component requires a test. The test serves as living documentation sho
 2. Update schemas in `backend/ContaraNAS/api/schemas/`
 3. Regenerate types: `./scripts/generate-types.sh`
 
-### Writing Tests
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- TESTING -->
+## Testing
+
+Run the test suite:
 
 ```bash
 cd backend
@@ -142,6 +195,9 @@ uv run pytest
 
 Tests live in `backend/tests/`. We use pytest with async support.
 
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- PULL REQUESTS -->
 ## Pull Requests
 
 1. Fork the repository
@@ -152,18 +208,38 @@ Tests live in `backend/tests/`. We use pytest with async support.
 
 Keep PRs focused. One feature or fix per PR.
 
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+<!-- DOCUMENTATION -->
 ## Documentation
 
-Docs are built with MkDocs:
+Docs are built with MkDocs. To work on documentation:
 
-```bash
-cd docs
-pip install mkdocs-material
-mkdocs serve
-```
+1. **Install MkDocs and dependencies**
 
-Preview at `http://localhost:8000`.
+   ```bash
+   cd docs
+   pip install mkdocs-material
+   ```
 
-## Questions?
+2. **Serve locally**
 
-Open an issue at [github.com/MihaiStreames/ContaraNAS/issues](https://github.com/MihaiStreames/ContaraNAS/issues).
+   ```bash
+   mkdocs serve
+   ```
+
+   Preview at `http://localhost:8000`
+
+3. **Build static site**
+
+   ```bash
+   mkdocs build
+   ```
+
+<p align="right">(<a href="#contributing-top">back to top</a>)</p>
+
+---
+
+<div align="center">
+  <p>Questions? Open an issue at <a href="https://github.com/MihaiStreames/ContaraNAS/issues">github.com/MihaiStreames/ContaraNAS/issues</a></p>
+</div>
