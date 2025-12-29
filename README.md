@@ -11,7 +11,6 @@
 </div>
 
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
   <a href="https://github.com/MihaiStreames/ContaraNAS">
     <h1>ContaraNAS</h1>
