@@ -249,3 +249,16 @@ ContaraNAS features a powerful module system that allows you to extend functiona
 > See [LICENSE](LICENSE) for complete terms, or read the [official GPL-3.0 documentation](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+<div align="center">
+  <p>Made with ❤️</p>
+  <p>
+    <a href="https://github.com/MihaiStreames/ContaraNAS">GitHub</a>
+    ·
+    <a href="https://contaranas.xyz">Documentation</a>
+    ·
+    <a href="https://github.com/MihaiStreames/ContaraNAS/issues">Issues</a>
+  </p>
+</div>
