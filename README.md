@@ -72,14 +72,25 @@
 
 **Frontend:**
 
-* [Tauri](https://tauri.app/)
-* [SvelteKit](https://kit.svelte.dev/)
 * [TypeScript](https://www.typescriptlang.org/)
+* [Tauri](https://tauri.app/)
+* [Svelte 5](https://svelte.dev/)
+* [SvelteKit](https://kit.svelte.dev/)
+* [Vite](https://vite.dev/)
+* [MessagePack](https://msgpack.org/)
+* [Lucide Svelte](https://lucide.dev/)
 
 **Backend:**
 
 * [Python 3.13+](https://www.python.org/)
-* [WebSocket](https://websockets.readthedocs.io/)
+* [FastAPI](https://fastapi.tiangolo.com/)
+* [Uvicorn](https://www.uvicorn.org/)
+* [WebSockets](https://websockets.readthedocs.io/)
+* [aiohttp](https://docs.aiohttp.org/)
+* [msgspec](https://jcristharif.com/msgspec/)
+* [Pydantic](https://docs.pydantic.dev/)
+* [Loguru](https://loguru.readthedocs.io/)
+* [Click](https://click.palletsprojects.com/)
 
 **Documentation:**
 

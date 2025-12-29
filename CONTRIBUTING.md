@@ -1,7 +1,6 @@
 <a id="contributing-top"></a>
 
 <!-- HEADER -->
-<br />
 <div align="center">
   <h1>Contributing to ContaraNAS</h1>
   <p>Thank you for your interest in contributing to ContaraNAS!</p>
