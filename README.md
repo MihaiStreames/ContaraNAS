@@ -3,18 +3,16 @@
 <!-- PROJECT SHIELDS -->
 <div align="center">
 
-![GitHub License](https://img.shields.io/github/license/MihaiStreames/ContaraNAS)
-![GitHub contributors](https://img.shields.io/github/contributors/MihaiStreames/ContaraNAS)
-![GitHub Issues](https://img.shields.io/github/issues/MihaiStreames/ContaraNAS)
-![GitHub Stars](https://img.shields.io/github/stars/MihaiStreames/ContaraNAS)
+![Stars](https://img.shields.io/github/stars/MihaiStreames/ContaraNAS)
+![License](https://img.shields.io/github/license/MihaiStreames/ContaraNAS?label=License)
+![Contributors](https://img.shields.io/github/contributors/MihaiStreames/ContaraNAS?label=Contributors)
+![Issues](https://img.shields.io/github/issues/MihaiStreames/ContaraNAS?label=Issues)
 
 </div>
 
 <!-- PROJECT LOGO -->
 <div align="center">
-  <a href="https://github.com/MihaiStreames/ContaraNAS">
-    <h1>ContaraNAS</h1>
-  </a>
+  <h1>ContaraNAS</h1>
 
   <h3 align="center">Modular NAS Management Desktop Application</h3>
 
@@ -65,7 +63,6 @@
 * **Steam Library Monitor** - Track game installations and library sizes across your NAS
 * **System Monitor** - Real-time CPU, memory, and disk usage monitoring
 * **Real-time Updates** - WebSocket-based live data streaming for instant feedback
-* **Modular Architecture** - Enable or disable features based on your needs
 * **Extensible Design** - Build custom modules using the developer API
 * **Community Marketplace** - Share and discover community-built modules *(coming soon)*
 
@@ -75,19 +72,18 @@
 
 **Frontend:**
 
-* [Tauri](https://tauri.app/) - Desktop application framework
-* [SvelteKit](https://kit.svelte.dev/) - Web framework
-* [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
+* [Tauri](https://tauri.app/)
+* [SvelteKit](https://kit.svelte.dev/)
+* [TypeScript](https://www.typescriptlang.org/)
 
 **Backend:**
 
 * [Python 3.13+](https://www.python.org/)
-* [WebSocket](https://websockets.readthedocs.io/) - Real-time communication
-* Custom module system with typed state management
+* [WebSocket](https://websockets.readthedocs.io/)
 
 **Documentation:**
 
-* [MkDocs](https://www.mkdocs.org/) - Documentation site generator
+* [MkDocs](https://www.mkdocs.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
