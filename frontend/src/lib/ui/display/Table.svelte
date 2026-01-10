@@ -1,6 +1,15 @@
 <script lang="ts">
   import type { TableSchema } from "$lib/api";
-  import { convertFileSrc } from "@tauri-apps/api/core";
+  import { browser } from "$app/environment";
+
+  let convertFileSrc: ((path: string) => string) | null = null;
+
+  if (browser) {
+    (async () => {
+      const mod = await import("@tauri-apps/api/core");
+      convertFileSrc = mod.convertFileSrc;
+    })();
+  }
 
   interface Props extends Partial<Omit<TableSchema, "type">> {}
 
@@ -74,7 +83,10 @@
             <span class="th-content">
               {column.label}
               {#if columnSortable}
-                <span class="sort-indicator" class:active={sortKey === column.key}>
+                <span
+                  class="sort-indicator"
+                  class:active={sortKey === column.key}
+                >
                   {#if sortKey === column.key}
                     {sortDesc ? "▼" : "▲"}
                   {:else}
@@ -105,13 +117,12 @@
               >
                 {#if column.render === "image"}
                   {@const imgPath = row[column.key] as string}
-                  {@const imgSrc = imgPath ? convertFileSrc(imgPath) : ""}
+                  {@const imgSrc =
+                    browser && convertFileSrc && imgPath
+                      ? convertFileSrc(imgPath)
+                      : ""}
                   {@const imgAlt = row["name"] as string}
-                  <img
-                    src={imgSrc}
-                    alt={imgAlt ?? ""}
-                    class="table-image"
-                  />
+                  <img src={imgSrc} alt={imgAlt ?? ""} class="table-image" />
                 {:else}
                   {row[column.key] ?? ""}
                 {/if}
